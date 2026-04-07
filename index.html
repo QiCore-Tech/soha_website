@@ -396,6 +396,7 @@
             imuState.active = false;
             mobileCubeOffsetX = 0; mobileCubeOffsetY = 0;
             mobileCubeVelX = 0; mobileCubeVelY = 0;
+            mobileRollX = 0; mobileRollY = 0;
         }
 
         function syncViewMode() {
@@ -648,6 +649,7 @@
         let prevMouseX = mouseX; let prevMouseY = mouseY;
         let mobileCubeOffsetX = 0; let mobileCubeOffsetY = 0;
         let mobileCubeVelX = 0; let mobileCubeVelY = 0;
+        let mobileRollX = 0; let mobileRollY = 0;
         
         window.addEventListener('mousemove', (e) => {
             if (isMobileView) return;
@@ -706,12 +708,15 @@
                 const cubeAccelX = tiltX * 0.95 * frameScale * edgeFactorX;
                 const cubeAccelY = tiltY * 0.95 * frameScale * edgeFactorY;
                 const cubeFriction = Math.pow(0.955, frameScale);
-                const cubeMaxVel = 9;
+                const cubeMaxVel = 7;
+                const rollDegPerPixel = 2.8;
 
                 mobileCubeVelX = clamp((mobileCubeVelX + cubeAccelX) * cubeFriction, -cubeMaxVel, cubeMaxVel);
                 mobileCubeVelY = clamp((mobileCubeVelY + cubeAccelY) * cubeFriction, -cubeMaxVel, cubeMaxVel);
                 mobileCubeOffsetX += mobileCubeVelX * frameScale;
                 mobileCubeOffsetY += mobileCubeVelY * frameScale;
+                mobileRollY += mobileCubeVelX * frameScale * rollDegPerPixel;
+                mobileRollX -= mobileCubeVelY * frameScale * rollDegPerPixel;
 
                 if (mobileCubeOffsetX <= -cubeBoundaryX) {
                     mobileCubeOffsetX = -cubeBoundaryX;
@@ -759,8 +764,8 @@
 
             // 更新多色光标的物理坐标与旋转
             if (isMobileView) {
-                const mobileRotX = normY * -32 + mobileCubeVelY * -6;
-                const mobileRotY = normX * 32 + mobileCubeVelX * 6;
+                const mobileRotX = normY * -12 + mobileRollX;
+                const mobileRotY = normX * 12 + mobileRollY;
                 cursorWrapper.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
                 cursorCube.style.transform = `translate3d(${mobileCubeOffsetX}px, ${mobileCubeOffsetY}px, 0) scale(${1.02 + Math.min(speed * 0.015, 0.08)}) rotateX(${mobileRotX}deg) rotateY(${mobileRotY}deg)`;
             } else {
