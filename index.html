@@ -662,6 +662,8 @@
 
             let normX = 0, normY = 0;
             let scaleCube = 1;
+            let mobileTiltX = 0;
+            let mobileTiltY = 0;
 
             if (isMobileView) {
                 imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.06;
@@ -679,10 +681,12 @@
                     tiltX = Math.sin(now * 0.0007) * 0.14;
                     tiltY = Math.cos(now * 0.0009) * 0.14;
                 }
+                mobileTiltX = tiltX;
+                mobileTiltY = tiltY;
 
                 const cubeInset = 72;
-                const mobileRangeX = Math.min(window.innerWidth * 0.1, Math.max(32, window.innerWidth / 2 - cubeInset));
-                const mobileRangeY = Math.min(window.innerHeight * 0.09, Math.max(28, window.innerHeight / 2 - cubeInset));
+                const mobileRangeX = Math.min(window.innerWidth * 0.18, Math.max(56, window.innerWidth / 2 - cubeInset));
+                const mobileRangeY = Math.min(window.innerHeight * 0.16, Math.max(48, window.innerHeight / 2 - cubeInset));
                 const targetMobileX = window.innerWidth / 2 + tiltX * mobileRangeX;
                 const targetMobileY = window.innerHeight / 2 + tiltY * mobileRangeY;
 
@@ -745,8 +749,13 @@
             rotX -= 0.05 + vY * 8.0; 
             rotY += 0.08 + vX * 8.0;
 
-            normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
-            normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
+            if (isMobileView) {
+                normX = clamp(mobileTiltX * 0.42 + mobileCubeOffsetX / Math.max(1, window.innerWidth), -0.5, 0.5);
+                normY = clamp(mobileTiltY * 0.42 + mobileCubeOffsetY / Math.max(1, window.innerHeight), -0.5, 0.5);
+            } else {
+                normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
+                normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
+            }
 
             // 更新多色光标的物理坐标与旋转
             if (isMobileView) {
@@ -760,20 +769,27 @@
             }
 
             // ================== 公共渲染区 ==================
-            ambientGlow.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0) translate(-50%, -50%)`;
+            if (isMobileView) {
+                const glowX = window.innerWidth / 2 + mobileCubeOffsetX * 1.2 + mobileTiltX * window.innerWidth * 0.12;
+                const glowY = window.innerHeight / 2 + mobileCubeOffsetY * 1.2 + mobileTiltY * window.innerHeight * 0.12;
+                ambientGlow.style.transform = `translate3d(${glowX}px, ${glowY}px, 0) translate(-50%, -50%)`;
+            } else {
+                ambientGlow.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0) translate(-50%, -50%)`;
+            }
 
             // 全境 3D 倾斜
-            const sceneRotX = normY * -25; 
-            const sceneRotY = normX * 25;  
+            const sceneRotX = isMobileView ? normY * -38 : normY * -25; 
+            const sceneRotY = isMobileView ? normX * 38 : normX * 25;  
             paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
             
-            paperCanvas.style.boxShadow = `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
+            paperCanvas.style.boxShadow = isMobileView
+                ? `${normX * -120}px ${normY * -120 + 44}px 120px rgba(0, 0, 0, 0.72)`
+                : `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
             // 字体引力反馈
             const titleRect = plxTitle.getBoundingClientRect();
-            // 在移动端使用屏幕中心点计算引力，PC端使用鼠标/滚珠位置
-            const gravityX = isMobileView ? window.innerWidth / 2 : mouseX;
-            const gravityY = isMobileView ? window.innerHeight / 2 : mouseY;
+            const gravityX = isMobileView ? window.innerWidth / 2 + mobileCubeOffsetX : mouseX;
+            const gravityY = isMobileView ? window.innerHeight / 2 + mobileCubeOffsetY : mouseY;
             const distToTitle = Math.hypot(gravityX - (titleRect.left + titleRect.width / 2), gravityY - (titleRect.top + titleRect.height / 2));
             let dynamicWeight = 900 - (distToTitle / (window.innerWidth * 0.4)) * 700;
             plxTitle.style.fontWeight = Math.max(200, Math.min(900, dynamicWeight));
