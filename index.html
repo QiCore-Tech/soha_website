@@ -308,7 +308,9 @@
             .paper-canvas { top: 4vw; bottom: 4vw; left: 4vw; right: 4vw; background-size: 80px 80px, 16px 16px; }
             .slogan-bar { padding: 10px 24px; }
             .slogan-bar p { font-size: 0.75rem; }
-            #cursor-wrapper, .axis-h, .axis-v, .coord-tracker, .ambient-glow { display: none; }
+            
+            /* [修改] 移动端不再隐藏 cursor-wrapper，保留 3D 立方体显示。仅隐藏准星点、坐标轴和环境光 */
+            .cursor-dot, .axis-h, .axis-v, .coord-tracker, .ambient-glow { display: none; }
         }
     </style>
 </head>
@@ -389,6 +391,63 @@
         let bgLerpX = mouseX;
         let bgLerpY = mouseY;
 
+        // [新增] 触控控制接管 (Fallback)
+        window.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                mouseX = e.touches[0].clientX;
+                mouseY = e.touches[0].clientY;
+                cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+            }
+        }, { passive: true });
+
+        // [新增] 尝试在首次触摸屏幕时，向 iOS 请求陀螺仪权限
+        let imuPermissionGranted = false;
+        document.body.addEventListener('touchstart', () => {
+            if (!imuPermissionGranted && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(state => { if (state === 'granted') imuPermissionGranted = true; })
+                    .catch(console.error);
+            } else {
+                imuPermissionGranted = true; // Android 等非限制设备直接视为可用
+            }
+        }, { once: true });
+
+        // [新增] IMU 重力感应逻辑
+        let initBeta = null;
+        let initGamma = null;
+
+        window.addEventListener('deviceorientation', (e) => {
+            // 剔除空数据
+            if (e.beta === null || e.gamma === null) return;
+            
+            // 首次获取数据时，记录设备当前的物理拿持姿势作为屏幕中心 (0,0) 的基准
+            if (initBeta === null) {
+                initBeta = e.beta;
+                initGamma = e.gamma;
+                return;
+            }
+
+            // 计算相对物理倾斜偏移
+            let diffX = e.gamma - initGamma;
+            let diffY = e.beta - initBeta;
+
+            // 限制倾斜解析的极值（比如最大倾斜 25 度），避免立方体飞出视口边界
+            const maxTilt = 25; 
+            diffX = Math.max(-maxTilt, Math.min(maxTilt, diffX));
+            diffY = Math.max(-maxTilt, Math.min(maxTilt, diffY));
+
+            // 将角度映射为屏幕坐标。倾斜 25 度等同于移动屏幕宽度的 40%
+            const targetX = (window.innerWidth / 2) + (diffX / maxTilt) * (window.innerWidth * 0.4);
+            const targetY = (window.innerHeight / 2) + (diffY / maxTilt) * (window.innerHeight * 0.4);
+
+            // 应用低通滤波（小系数 Lerp），让重力感应变得极其柔和，消除手部自然抖动
+            mouseX += (targetX - mouseX) * 0.05;
+            mouseY += (targetY - mouseY) * 0.05;
+            
+            cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        });
+
+        // 原有的 PC 端鼠标监听
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
