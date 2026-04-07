@@ -674,7 +674,7 @@
 
                 if (hasActiveImu) {
                     tiltX = clamp(imuState.filteredGamma / 60, -1, 1);
-                    tiltY = clamp(-imuState.filteredBeta / 60, -1, 1);
+                    tiltY = clamp(imuState.filteredBeta / 60, -1, 1);
                 } else {
                     tiltX = Math.sin(now * 0.0007) * 0.14;
                     tiltY = Math.cos(now * 0.0009) * 0.14;
@@ -690,12 +690,19 @@
                 mouseY = clamp(targetMobileY, cubeInset, window.innerHeight - cubeInset);
 
                 const frameScale = dt / 16.67;
-                const cubeBoundaryX = Math.min(window.innerWidth * 0.22, Math.max(80, window.innerWidth / 2 - 72));
-                const cubeBoundaryY = Math.min(window.innerHeight * 0.18, Math.max(64, window.innerHeight / 2 - 72));
-                const cubeAccelX = tiltX * 0.65 * frameScale;
-                const cubeAccelY = tiltY * 0.65 * frameScale;
-                const cubeFriction = Math.pow(0.94, frameScale);
-                const cubeMaxVel = 7;
+                const cubeHalf = 24;
+                const cubeBoundaryX = Math.max(0, window.innerWidth / 2 - cubeHalf - 6);
+                const cubeBoundaryY = Math.max(0, window.innerHeight / 2 - cubeHalf - 6);
+                const edgeSoftZoneX = Math.min(120, cubeBoundaryX || 120);
+                const edgeSoftZoneY = Math.min(120, cubeBoundaryY || 120);
+                const remainingEdgeX = Math.max(0, cubeBoundaryX - Math.abs(mobileCubeOffsetX));
+                const remainingEdgeY = Math.max(0, cubeBoundaryY - Math.abs(mobileCubeOffsetY));
+                const edgeFactorX = clamp(remainingEdgeX / Math.max(1, edgeSoftZoneX), 0.18, 1);
+                const edgeFactorY = clamp(remainingEdgeY / Math.max(1, edgeSoftZoneY), 0.18, 1);
+                const cubeAccelX = tiltX * 0.95 * frameScale * edgeFactorX;
+                const cubeAccelY = tiltY * 0.95 * frameScale * edgeFactorY;
+                const cubeFriction = Math.pow(0.955, frameScale);
+                const cubeMaxVel = 9;
 
                 mobileCubeVelX = clamp((mobileCubeVelX + cubeAccelX) * cubeFriction, -cubeMaxVel, cubeMaxVel);
                 mobileCubeVelY = clamp((mobileCubeVelY + cubeAccelY) * cubeFriction, -cubeMaxVel, cubeMaxVel);
@@ -704,18 +711,18 @@
 
                 if (mobileCubeOffsetX <= -cubeBoundaryX) {
                     mobileCubeOffsetX = -cubeBoundaryX;
-                    if (mobileCubeVelX < 0) mobileCubeVelX = 0;
+                    if (mobileCubeVelX < 0) mobileCubeVelX *= 0.18;
                 } else if (mobileCubeOffsetX >= cubeBoundaryX) {
                     mobileCubeOffsetX = cubeBoundaryX;
-                    if (mobileCubeVelX > 0) mobileCubeVelX = 0;
+                    if (mobileCubeVelX > 0) mobileCubeVelX *= 0.18;
                 }
 
                 if (mobileCubeOffsetY <= -cubeBoundaryY) {
                     mobileCubeOffsetY = -cubeBoundaryY;
-                    if (mobileCubeVelY < 0) mobileCubeVelY = 0;
+                    if (mobileCubeVelY < 0) mobileCubeVelY *= 0.18;
                 } else if (mobileCubeOffsetY >= cubeBoundaryY) {
                     mobileCubeOffsetY = cubeBoundaryY;
-                    if (mobileCubeVelY > 0) mobileCubeVelY = 0;
+                    if (mobileCubeVelY > 0) mobileCubeVelY *= 0.18;
                 }
             } 
             
