@@ -397,6 +397,8 @@
             mobileCubeOffsetX = 0; mobileCubeOffsetY = 0;
             mobileCubeVelX = 0; mobileCubeVelY = 0;
             mobileRollX = 0; mobileRollY = 0;
+            mobileTapTargetX = 0; mobileTapTargetY = 0;
+            mobileTapActive = false;
         }
 
         function syncViewMode() {
@@ -414,7 +416,16 @@
         // 移动端首次触摸时仅申请陀螺仪权限，不改变重力立方体的位置基线
         window.addEventListener('touchstart', (e) => { 
             if (isMobileView) {
-                requestImuPermission(); 
+                requestImuPermission();
+                if (e.touches.length > 0) {
+                    const cubeHalf = 24;
+                    const boundaryX = Math.max(0, window.innerWidth / 2 - cubeHalf - 6);
+                    const boundaryY = Math.max(0, window.innerHeight / 2 - cubeHalf - 6);
+                    const touch = e.touches[0];
+                    mobileTapTargetX = clamp(touch.clientX - window.innerWidth / 2, -boundaryX, boundaryX);
+                    mobileTapTargetY = clamp(touch.clientY - window.innerHeight / 2, -boundaryY, boundaryY);
+                    mobileTapActive = true;
+                }
             }
         }, { passive: true });
 
@@ -650,6 +661,8 @@
         let mobileCubeOffsetX = 0; let mobileCubeOffsetY = 0;
         let mobileCubeVelX = 0; let mobileCubeVelY = 0;
         let mobileRollX = 0; let mobileRollY = 0;
+        let mobileTapTargetX = 0; let mobileTapTargetY = 0;
+        let mobileTapActive = false;
         
         window.addEventListener('mousemove', (e) => {
             if (isMobileView) return;
@@ -705,14 +718,30 @@
                 const remainingEdgeY = Math.max(0, cubeBoundaryY - Math.abs(mobileCubeOffsetY));
                 const edgeFactorX = clamp(remainingEdgeX / Math.max(1, edgeSoftZoneX), 0.18, 1);
                 const edgeFactorY = clamp(remainingEdgeY / Math.max(1, edgeSoftZoneY), 0.18, 1);
-                const cubeAccelX = tiltX * 0.95 * frameScale * edgeFactorX;
-                const cubeAccelY = tiltY * 0.95 * frameScale * edgeFactorY;
+                const cubeAccelX = tiltX * 1.2 * frameScale * edgeFactorX;
+                const cubeAccelY = tiltY * 1.2 * frameScale * edgeFactorY;
                 const cubeFriction = Math.pow(0.955, frameScale);
-                const cubeMaxVel = 7;
-                const rollDegPerPixel = 2.8;
+                const cubeMaxVel = 5.5;
+                const rollDegPerPixel = 1.9;
 
-                mobileCubeVelX = clamp((mobileCubeVelX + cubeAccelX) * cubeFriction, -cubeMaxVel, cubeMaxVel);
-                mobileCubeVelY = clamp((mobileCubeVelY + cubeAccelY) * cubeFriction, -cubeMaxVel, cubeMaxVel);
+                if (mobileTapActive) {
+                    const toTargetX = mobileTapTargetX - mobileCubeOffsetX;
+                    const toTargetY = mobileTapTargetY - mobileCubeOffsetY;
+                    const targetDistance = Math.hypot(toTargetX, toTargetY);
+                    if (targetDistance < 10) {
+                        mobileTapActive = false;
+                        mobileCubeOffsetX = mobileTapTargetX;
+                        mobileCubeOffsetY = mobileTapTargetY;
+                        mobileCubeVelX *= 0.4;
+                        mobileCubeVelY *= 0.4;
+                    } else {
+                        mobileCubeVelX = (toTargetX / targetDistance) * cubeMaxVel;
+                        mobileCubeVelY = (toTargetY / targetDistance) * cubeMaxVel;
+                    }
+                } else {
+                    mobileCubeVelX = clamp((mobileCubeVelX + cubeAccelX) * cubeFriction, -cubeMaxVel, cubeMaxVel);
+                    mobileCubeVelY = clamp((mobileCubeVelY + cubeAccelY) * cubeFriction, -cubeMaxVel, cubeMaxVel);
+                }
                 mobileCubeOffsetX += mobileCubeVelX * frameScale;
                 mobileCubeOffsetY += mobileCubeVelY * frameScale;
                 mobileRollY += mobileCubeVelX * frameScale * rollDegPerPixel;
@@ -721,17 +750,21 @@
                 if (mobileCubeOffsetX <= -cubeBoundaryX) {
                     mobileCubeOffsetX = -cubeBoundaryX;
                     if (mobileCubeVelX < 0) mobileCubeVelX *= 0.18;
+                    if (mobileTapActive && mobileTapTargetX <= -cubeBoundaryX) mobileTapActive = false;
                 } else if (mobileCubeOffsetX >= cubeBoundaryX) {
                     mobileCubeOffsetX = cubeBoundaryX;
                     if (mobileCubeVelX > 0) mobileCubeVelX *= 0.18;
+                    if (mobileTapActive && mobileTapTargetX >= cubeBoundaryX) mobileTapActive = false;
                 }
 
                 if (mobileCubeOffsetY <= -cubeBoundaryY) {
                     mobileCubeOffsetY = -cubeBoundaryY;
                     if (mobileCubeVelY < 0) mobileCubeVelY *= 0.18;
+                    if (mobileTapActive && mobileTapTargetY <= -cubeBoundaryY) mobileTapActive = false;
                 } else if (mobileCubeOffsetY >= cubeBoundaryY) {
                     mobileCubeOffsetY = cubeBoundaryY;
                     if (mobileCubeVelY > 0) mobileCubeVelY *= 0.18;
+                    if (mobileTapActive && mobileTapTargetY >= cubeBoundaryY) mobileTapActive = false;
                 }
             } 
             
