@@ -94,10 +94,10 @@
         /* 实体模块高级光照材质 */
         .voxel .face.top { width: 100%; height: 100%; background: #E8E8EB; box-shadow: inset 0 0 8px rgba(255,255,255,0.8); }
         .voxel .face.bottom { width: 100%; height: 100%; background: #222; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-        .voxel .face.front  { width: 100%; height: var(--voxel-depth); top: 0; transform-origin: top; background: #C4C4C8; }
-        .voxel .face.back   { width: 100%; height: var(--voxel-depth); bottom: 0; transform-origin: bottom; background: #A8A8AC; }
-        .voxel .face.left   { width: var(--voxel-depth); height: 100%; left: 0; transform-origin: left; background: #D0D0D4; }
-        .voxel .face.right  { width: var(--voxel-depth); height: 100%; right: 0; transform-origin: right; background: #B4B4B8; }
+        .voxel .face.front  { width: 100%; height: var(--voxel-depth); top: 0; transform-origin: top; transform: rotateX(90deg); background: #C4C4C8; }
+        .voxel .face.back   { width: 100%; height: var(--voxel-depth); bottom: 0; transform-origin: bottom; transform: rotateX(-90deg); background: #A8A8AC; }
+        .voxel .face.left   { width: var(--voxel-depth); height: 100%; left: 0; transform-origin: left; transform: rotateY(-90deg); background: #D0D0D4; }
+        .voxel .face.right  { width: var(--voxel-depth); height: 100%; right: 0; transform-origin: right; transform: rotateY(90deg); background: #B4B4B8; }
 
         /* 模块抓取态 (移动中) - 调整透明度并透传事件 */
         .voxel.moving { pointer-events: none !important; }
@@ -203,11 +203,19 @@
         .cursor-cube-face.top    { background: rgba(255, 100, 100, 0.15); transform: rotateX(90deg) translateZ(24px); }
         .cursor-cube-face.bottom { background: rgba(100, 100, 255, 0.15); transform: rotateX(-90deg) translateZ(24px); }
 
-        body.mobile-view .axis-h,
-        body.mobile-view .axis-v,
-        body.mobile-view .coord-tracker,
-        body.mobile-view .cursor-dot {
-            opacity: 0;
+        .debug-badge {
+            position: fixed; top: 16px; right: 16px; z-index: 10000;
+            padding: 6px 10px; border-radius: 999px;
+            background: rgba(5, 5, 5, 0.75); color: rgba(255, 255, 255, 0.88);
+            font: 600 11px/1 'Geist Mono', monospace; letter-spacing: 0.04em;
+            pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+        }
+
+        /* ✨ 移动端专属响应式修复：只隐藏白点和坐标仪，绝对保留 cursor-wrapper (多色立方体容器) ✨ */
+        @media (max-width: 768px) {
+            .axis-h, .axis-v, .coord-tracker { display: none; }
+            .cursor-dot { display: none; } /* 仅隐藏中心白点，保留彩色方块 */
+            body.mobile-view .debug-badge { opacity: 1; }
         }
 
     </style>
@@ -264,10 +272,12 @@
             <div class="cursor-cube-face bottom"></div>
         </div>
     </div>
+    
+    <div class="debug-badge" id="debug-badge">MOBILE VIEW</div>
 
     <script>
         // ==========================================
-        // 1. ✨ 数据驱动的沙盒建造引擎 (原生逆向坐标映射) ✨
+        // 1. ✨ 设备检测与 IMU (重力感应) 初始化 ✨
         // ==========================================
         const GRID_SIZE = 40; 
         const paperCanvas = document.getElementById('canvas-area');
@@ -279,10 +289,19 @@
         const axisH = document.getElementById('axis-h');
         const axisV = document.getElementById('axis-v');
         const coordTracker = document.getElementById('coord-tracker');
+        const debugBadge = document.getElementById('debug-badge');
         
         const coarsePointerMedia = window.matchMedia('(pointer: coarse)');
         const hoverNoneMedia = window.matchMedia('(hover: none)');
-        const detectMobileView = () => navigator.maxTouchPoints > 0 && coarsePointerMedia.matches && hoverNoneMedia.matches;
+        const mobileUaPattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|HarmonyOS/i;
+        
+        const detectMobileView = () => {
+            const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+            const coarsePointer = coarsePointerMedia.matches;
+            const noHover = hoverNoneMedia.matches;
+            const mobileUA = mobileUaPattern.test(navigator.userAgent);
+            return mobileUA || (hasTouch && (coarsePointer || noHover));
+        };
         let isMobileView = detectMobileView();
         
         const imuState = {
@@ -323,7 +342,9 @@
 
         function applyViewMode() {
             document.body.classList.toggle('mobile-view', isMobileView);
+            // ✨ 核心修复：移动端彻底禁用网格底板的指针事件，防止误触和滑动触发建造 ✨
             gridPlane.style.pointerEvents = isMobileView ? 'none' : 'auto';
+            debugBadge.textContent = isMobileView ? 'MOBILE VIEW' : 'DESKTOP VIEW';
             if (isMobileView) resetInteractionState();
         }
 
@@ -335,8 +356,8 @@
                 imuState.baseGamma = e.gamma;
             }
 
-            imuState.targetBeta = clamp(e.beta - imuState.baseBeta, -30, 30);
-            imuState.targetGamma = clamp(e.gamma - imuState.baseGamma, -30, 30);
+            imuState.targetBeta = clamp(e.beta - imuState.baseBeta, -45, 45);
+            imuState.targetGamma = clamp(e.gamma - imuState.baseGamma, -45, 45);
             imuState.active = true;
         }
 
@@ -350,7 +371,6 @@
             if (!isMobileView || !imuState.supported || imuState.permission === 'granted' || imuState.permission === 'denied') {
                 return;
             }
-
             if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
                 imuState.permission = 'pending';
                 try {
@@ -366,18 +386,21 @@
                 }
                 return;
             }
-
             imuState.permission = 'granted';
             startImuTracking();
         }
 
+        function ensureImuTracking() {
+            if (!isMobileView || !imuState.supported) return;
+            if (typeof window.DeviceOrientationEvent.requestPermission === 'function') return;
+            if (imuState.permission !== 'granted') imuState.permission = 'granted';
+            startImuTracking();
+        }
+
         function resetImuBaseline() {
-            imuState.baseBeta = null;
-            imuState.baseGamma = null;
-            imuState.targetBeta = 0;
-            imuState.targetGamma = 0;
-            imuState.filteredBeta = 0;
-            imuState.filteredGamma = 0;
+            imuState.baseBeta = null; imuState.baseGamma = null;
+            imuState.targetBeta = 0; imuState.targetGamma = 0;
+            imuState.filteredBeta = 0; imuState.filteredGamma = 0;
             imuState.active = false;
         }
 
@@ -387,16 +410,20 @@
             isMobileView = nextIsMobileView;
             resetImuBaseline();
             applyViewMode();
+            ensureImuTracking();
         }
 
         window.addEventListener('resize', syncViewMode);
         window.addEventListener('orientationchange', resetImuBaseline);
-        window.addEventListener('pointerdown', () => {
-            if (isMobileView) requestImuPermission();
-        }, { passive: true });
+        window.addEventListener('pointerdown', () => { if (isMobileView) requestImuPermission(); }, { passive: true });
+        window.addEventListener('touchstart', () => { if (isMobileView) requestImuPermission(); }, { passive: true });
 
         applyViewMode();
+        ensureImuTracking();
         
+        // ==========================================
+        // 2. ✨ 沙盒数据与建造逻辑 (仅 PC 端生效) ✨
+        // ==========================================
         function saveState() {
             historyStack.push(JSON.parse(JSON.stringify(voxels)));
             if (historyStack.length > 30) historyStack.shift(); 
@@ -427,7 +454,6 @@
             return maxZ;
         }
 
-        // 创建严格闭合的几何模块
         function createVoxelDOM(v, isPreview = false) {
             const el = document.createElement('div');
             el.className = `voxel ${isPreview ? 'preview' : ''}`;
@@ -435,18 +461,13 @@
             
             el.style.left = `${v.x * GRID_SIZE}px`; el.style.top = `${v.y * GRID_SIZE}px`;
             el.style.width = `${v.w * GRID_SIZE}px`; el.style.height = `${v.h * GRID_SIZE}px`;
-            el.dataset.id = v.id;
-            el.dataset.x = String(v.x);
-            el.dataset.y = String(v.y);
-            el.dataset.w = String(v.w);
-            el.dataset.h = String(v.h);
-            el.dataset.z = String(v.z);
+            el.dataset.id = v.id; el.dataset.x = String(v.x); el.dataset.y = String(v.y);
+            el.dataset.w = String(v.w); el.dataset.h = String(v.h); el.dataset.z = String(v.z);
 
             const faces = ['top', 'bottom', 'front', 'back', 'left', 'right'];
             faces.forEach(f => {
                 const face = document.createElement('div');
                 face.className = `face ${f}`;
-                // Z 轴深度数据直接下放到每个面，防止父级扁平化
                 if (f === 'bottom') face.style.transform = `translateZ(${v.z * 40}px)`;
                 else if (f === 'top') face.style.transform = `translateZ(${(v.z + 1) * 40}px)`;
                 else if (f === 'front') face.style.transform = `translateZ(${v.z * 40}px) rotateX(90deg)`;
@@ -463,14 +484,11 @@
             voxels.forEach(v => voxelsContainer.appendChild(createVoxelDOM(v)));
         }
 
-        // ✨ 核心机制：通过原生 offsetX 获取 3D 偏转平面的绝对二维坐标 ✨
         function resolveGridCoords(e) {
             const target = e.target;
-            // 命中底板
             if (target.id === 'grid-plane') {
                 return { x: Math.floor(e.offsetX / GRID_SIZE), y: Math.floor(e.offsetY / GRID_SIZE), z: 0 };
             }
-            // 命中模块顶面
             if (target.classList.contains('top')) {
                 const voxelEl = target.closest('.voxel');
                 if (!voxelEl) return null;
@@ -487,14 +505,11 @@
         paperCanvas.addEventListener('contextmenu', e => e.preventDefault());
 
         paperCanvas.addEventListener('pointerdown', (e) => {
-            if (isMobileView) return;
+            if (isMobileView) return; // 移动端拦截
             const target = e.target;
             
-            // 右键：进入批量删除模式
             if (e.button === 2) {
-                saveState();
-                mode = 'deleting';
-                document.body.classList.add('is-deleting');
+                saveState(); mode = 'deleting'; document.body.classList.add('is-deleting');
                 const voxelEl = target.closest('.voxel');
                 if (voxelEl && !voxelEl.classList.contains('preview')) {
                     voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
@@ -503,23 +518,18 @@
                 return;
             }
 
-            // 左键：交互逻辑
             if (e.button === 0) {
-                // 1. 如果抓的是侧面，进入抓取移动模式
                 if (target.classList.contains('face') && !target.classList.contains('top') && !target.classList.contains('bottom')) {
-                    saveState();
-                    mode = 'moving';
+                    saveState(); mode = 'moving';
                     const voxelEl = target.closest('.voxel');
                     activeVoxelId = parseInt(voxelEl.dataset.id);
-                    voxelEl.classList.add('moving'); // 释放自身鼠标事件，让射线穿透
+                    voxelEl.classList.add('moving'); 
                     return;
                 }
 
-                // 2. 点击底板或顶面，进入绘制模式
                 const coords = resolveGridCoords(e);
                 if (coords) {
-                    saveState();
-                    mode = 'drawing';
+                    saveState(); mode = 'drawing';
                     drawStartX = coords.x; drawStartY = coords.y; drawStartZ = coords.z;
                     previewContainer.innerHTML = '';
                     previewContainer.appendChild(createVoxelDOM({x: drawStartX, y: drawStartY, w: 1, h: 1, z: drawStartZ}, true));
@@ -528,11 +538,10 @@
         });
 
         window.addEventListener('pointermove', (e) => {
-            if (isMobileView) return;
-            // 获取实时的 3D 逆向映射坐标
+            if (isMobileView) return; // 移动端拦截
+            
             const coords = resolveGridCoords(e);
             
-            // 1. 更新 CAD 准星与磁力悬停
             if (coords) {
                 magneticPos = coords;
                 const crossX = coords.x * GRID_SIZE + GRID_SIZE/2; 
@@ -552,7 +561,6 @@
                 if (mode === 'none') magneticContainer.innerHTML = '';
             }
 
-            // 2. 执行批量删除
             if (mode === 'deleting') {
                 const voxelEl = e.target.closest('.voxel');
                 if (voxelEl && !voxelEl.classList.contains('preview')) {
@@ -562,7 +570,6 @@
                 return;
             }
 
-            // 3. 执行拖拽生成 (利用 magneticPos 防止透视畸变)
             if (mode === 'drawing' && magneticPos) {
                 magneticContainer.innerHTML = ''; 
                 const minX = Math.min(drawStartX, magneticPos.x); 
@@ -576,7 +583,6 @@
                 return;
             }
 
-            // 4. 执行抓取移动
             if (mode === 'moving' && activeVoxelId && magneticPos) {
                 magneticContainer.innerHTML = '';
                 const v = voxels.find(vx => vx.id === activeVoxelId);
@@ -600,7 +606,7 @@
         });
 
         window.addEventListener('pointerup', () => {
-            if (isMobileView) return;
+            if (isMobileView) return; // 移动端拦截
             if (mode === 'drawing') {
                 const preview = previewContainer.querySelector('.voxel');
                 if (preview) {
@@ -629,7 +635,7 @@
         });
 
         // ==========================================
-        // 2. ✨ 全局全境视差联动引擎 ✨
+        // 3. ✨ 全局全境视差与重力引擎 ✨
         // ==========================================
         const cursorWrapper = document.getElementById('cursor-wrapper');
         const cursorCube = document.getElementById('cursor-cube');
@@ -653,62 +659,81 @@
             const dt = Math.max(1, now - lastTime);
             lastTime = now;
 
+            let normX = 0, normY = 0;
+            let scaleCube = 1;
+
             if (isMobileView) {
-                imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.08;
-                imuState.filteredGamma += (imuState.targetGamma - imuState.filteredGamma) * 0.08;
+                // ✨ 手机端专属：重力 IMU 物理重构 ✨
+                imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.1;
+                imuState.filteredGamma += (imuState.targetGamma - imuState.filteredGamma) * 0.1;
 
                 const hasActiveImu = imuState.permission === 'granted' && imuState.active;
-                const fallbackTiltX = Math.sin(now * 0.00055) * 0.28;
-                const fallbackTiltY = Math.cos(now * 0.00043) * 0.22;
-                const tiltX = hasActiveImu ? clamp(imuState.filteredGamma / 30, -1, 1) : fallbackTiltX;
-                const tiltY = hasActiveImu ? clamp(imuState.filteredBeta / 30, -1, 1) : fallbackTiltY;
+                
+                let tiltX = 0;
+                let tiltY = 0;
 
-                mouseX = window.innerWidth / 2 + tiltX * window.innerWidth * 0.18;
-                mouseY = window.innerHeight / 2 + tiltY * window.innerHeight * 0.14;
-            }
+                if (hasActiveImu) {
+                    tiltX = clamp(imuState.filteredGamma / 45, -1, 1);
+                    tiltY = clamp(imuState.filteredBeta / 45, -1, 1);
+                } else {
+                    tiltX = Math.sin(now * 0.001) * 0.2;
+                    tiltY = Math.cos(now * 0.0013) * 0.2;
+                }
 
-            lerpX += (mouseX - lerpX) * 0.15; lerpY += (mouseY - lerpY) * 0.15;
-            const offsetX = lerpX - mouseX; const offsetY = lerpY - mouseY;
-            vX = (mouseX - prevMouseX) / dt; vY = (mouseY - prevMouseY) / dt;
-            prevMouseX = mouseX; prevMouseY = mouseY;
+                // 核心：将重力倾斜直接映射为持续的位移加速度 (Velocity)
+                // 这完美模拟了物理世界中的滚珠，允许飞出画布边界！
+                mouseX += tiltX * 15;
+                mouseY += tiltY * 15;
 
-            const speed = Math.sqrt(vX * vX + vY * vY);
-            const scaleCube = 1 + Math.min(speed * 0.05, 0.3); 
+                // 为了防止它永远飞丢，在屏幕四周设置极宽的冗余隐形空气墙
+                mouseX = clamp(mouseX, -80, window.innerWidth + 80);
+                mouseY = clamp(mouseY, -80, window.innerHeight + 80);
+            } 
             
-            const normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
-            const normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
+            // 下方这段物理缓动与自转逻辑，现在移动端与 PC 端完美共用！
+            lerpX += (mouseX - lerpX) * 0.15; 
+            lerpY += (mouseY - lerpY) * 0.15;
+            
+            const offsetX = lerpX - mouseX; 
+            const offsetY = lerpY - mouseY;
+            
+            vX = (mouseX - prevMouseX) / dt; 
+            vY = (mouseY - prevMouseY) / dt;
+            prevMouseX = mouseX; 
+            prevMouseY = mouseY;
 
-            cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+            // 无论 PC 还是移动端，都保留基于速度的旋转翻滚和最基础的自转！
+            const speed = Math.sqrt(vX * vX + vY * vY);
+            scaleCube = 1 + Math.min(speed * 0.05, 0.3); 
+            
+            rotX -= 0.05 + vY * 8.0; 
+            rotY += 0.08 + vX * 8.0;
 
+            normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
+            normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
+
+            // 更新多色光标的物理坐标与旋转
+            cursorWrapper.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0)`;
+            cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+
+            // ================== 公共渲染区 ==================
             ambientGlow.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0) translate(-50%, -50%)`;
 
-            // ✨ 核心再现：整个画板作为一个大平面在黑色背景前发生剧烈的物理倾斜 ✨
-            const sceneRotX = isMobileView ? normY * -40 : normY * -25; 
-            const sceneRotY = isMobileView ? normX * 40 : normX * 25;  
+            // 全境 3D 倾斜
+            const sceneRotX = normY * -25; 
+            const sceneRotY = normX * 25;  
             paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
             
-            // 随着画板的倾斜角度，投射在黑色背景上的巨型阴影产生动态偏移
-            paperCanvas.style.boxShadow = isMobileView
-                ? `${normX * -120}px ${normY * -120 + 48}px 120px rgba(0, 0, 0, 0.72)`
-                : `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
+            paperCanvas.style.boxShadow = `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
+            // 字体引力反馈
             const titleRect = plxTitle.getBoundingClientRect();
-            const distToTitle = Math.hypot(mouseX - (titleRect.left + titleRect.width / 2), mouseY - (titleRect.top + titleRect.height / 2));
+            // 在移动端使用屏幕中心点计算引力，PC端使用鼠标/滚珠位置
+            const gravityX = isMobileView ? window.innerWidth / 2 : mouseX;
+            const gravityY = isMobileView ? window.innerHeight / 2 : mouseY;
+            const distToTitle = Math.hypot(gravityX - (titleRect.left + titleRect.width / 2), gravityY - (titleRect.top + titleRect.height / 2));
             let dynamicWeight = 900 - (distToTitle / (window.innerWidth * 0.4)) * 700;
             plxTitle.style.fontWeight = Math.max(200, Math.min(900, dynamicWeight));
-
-            if (isMobileView) {
-                const centerOffsetX = (lerpX - window.innerWidth / 2) * 0.4;
-                const centerOffsetY = (lerpY - window.innerHeight / 2) * 0.4;
-                const mobileRotX = normY * -70 + vY * 6;
-                const mobileRotY = normX * 70 + vX * 6;
-                cursorCube.style.transform = `translate3d(${centerOffsetX}px, ${centerOffsetY}px, 0) scale(${1.06 + Math.min(speed * 0.04, 0.14)}) rotateX(${mobileRotX}deg) rotateY(${mobileRotY}deg)`;
-            } else {
-                // 多色立方体旋转
-                rotX -= 0.05 + vY * 8.0;
-                rotY += 0.08 + vX * 8.0;
-                cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-            }
 
             requestAnimationFrame(renderLoop);
         }
