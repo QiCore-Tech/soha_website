@@ -63,7 +63,7 @@
             left: 2.5vw;
             right: 2.5vw;
             background-color: var(--paper-bg);
-            /* [修改] 加深了十字虚线和底层点阵的透明度（从 0.06 提升至 0.15），显著增强网格存在感 */
+            /* 加深了十字虚线和底层点阵的透明度，显著增强网格存在感 */
             background-image: 
                 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40,0 L40,80 M0,40 L80,40' stroke='rgba(0,0,0,0.15)' stroke-width='1' stroke-dasharray='3 4' fill='none'/%3E%3C/svg%3E"),
                 radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
@@ -128,6 +128,7 @@
             flex-direction: column;
             align-items: center;
             pointer-events: none;
+            /* 保留基础定位 */
             transform: translateY(-5%);
         }
 
@@ -139,6 +140,8 @@
             line-height: 1;
             margin-bottom: 5vh;
             user-select: none;
+            /* 开启 GPU 加速，准备接收高频视差更新 */
+            will-change: transform;
         }
 
         .brand-title .qi { color: var(--text-black); }
@@ -152,6 +155,8 @@
             border-radius: 100px;
             border: 1px solid rgba(0, 0, 0, 0.04);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+            /* 开启 GPU 加速 */
+            will-change: transform;
         }
 
         .slogan-bar p {
@@ -161,19 +166,16 @@
             font-weight: 500;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            /* [新增] 使用 flex 布局以完美对齐文字与分隔符 */
             display: flex;
             align-items: center;
             gap: 14px;
         }
 
-        /* [新增] 定制的几何分隔符 */
         .slogan-separator {
             display: inline-block;
             width: 3px;
             height: 3px;
             background-color: rgba(0, 0, 0, 0.2);
-            /* 旋转 45 度形成一个小菱形/立方体暗示 */
             transform: rotate(45deg);
         }
 
@@ -184,11 +186,14 @@
             position: absolute;
             bottom: 3vh;
             left: 50%;
+            /* 基础定位，后续在 JS 中叠加视差 */
             transform: translateX(-50%);
             z-index: 10;
             pointer-events: none;
             display: flex;
             align-items: center;
+            /* 开启 GPU 加速 */
+            will-change: transform;
         }
 
         .terminal-footer {
@@ -241,7 +246,7 @@
         .slot-track {
             display: flex;
             flex-direction: column;
-            /* [修改] 仅在 hr 和 info 之间切换，缩短循环周期至 6s */
+            /* 仅在 hr 和 info 之间切换，缩短循环周期至 6s */
             animation: slotSpin 6s infinite cubic-bezier(0.7, 0, 0.3, 1);
         }
 
@@ -255,7 +260,7 @@
             letter-spacing: 0.05em;
         }
 
-        /* [修改] 状态停留与快速滚动：0 (info), -16px (hr), -32px (循环的 info) */
+        /* 状态停留与快速滚动：0 (info), -16px (hr), -32px (循环的 info) */
         @keyframes slotSpin {
             0%, 40%   { transform: translateY(0); }
             50%, 90%  { transform: translateY(-16px); }
@@ -309,7 +314,7 @@
             .slogan-bar { padding: 10px 24px; }
             .slogan-bar p { font-size: 0.75rem; }
             
-            /* [修改] 移动端不再隐藏 cursor-wrapper，保留 3D 立方体显示。仅隐藏准星点、坐标轴和环境光 */
+            /* 移动端不再隐藏 cursor-wrapper，保留 3D 立方体显示。仅隐藏准星点、坐标轴和环境光 */
             .cursor-dot, .axis-h, .axis-v, .coord-tracker, .ambient-glow { display: none; }
         }
     </style>
@@ -326,23 +331,23 @@
         <div class="coord-tracker" id="coord-tracker">X: 0.0 | Y: 0.0</div>
 
         <div class="content-layer">
-            <h1 class="brand-title">
+            <h1 class="brand-title" id="plx-title">
                 <span class="qi">Qi</span><span class="core">Core</span>
             </h1>
-            <div class="slogan-bar">
-                <!-- [修改] 移除普通斜杠，替换为带有 gap 的 flex 布局与几何分隔符 -->
+            <div class="slogan-bar" id="plx-slogan">
                 <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
             </div>
         </div>
 
         <!-- 底部联系信息改为单行滚轮，仅保留 info 和 hr -->
+        <div class="footer-signature" id="plx-footer">
             <div class="terminal-footer">
                 <div class="icon-indicator"></div>
                 <div class="slot-machine">
                     <div class="slot-track">
                         <span>info</span>
                         <span>hr</span>
-                        <span>info</span> <!-- 用于实现无缝首尾循环相接 -->
+                        <span>info</span>
                     </div>
                 </div>
                 <span class="domain">@qicore.ai</span>
@@ -365,7 +370,7 @@
 
     <script>
         // ==========================================
-        // 交互逻辑：平滑跟随 + 动力学旋转 + CAD 游标
+        // 交互逻辑：平滑跟随 + 动力学旋转 + CAD 游标 + 全局视差
         // ==========================================
         const cursorWrapper = document.getElementById('cursor-wrapper');
         const cube = document.getElementById('cube');
@@ -376,6 +381,12 @@
         const axisV = document.getElementById('axis-v');
         const coordTracker = document.getElementById('coord-tracker');
         
+        // 获取视差元素
+        const plxTitle = document.getElementById('plx-title');
+        const plxSlogan = document.getElementById('plx-slogan');
+        const plxFooter = document.getElementById('plx-footer');
+        
+        // [修复] 必须先声明鼠标位置变量
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
         let lerpX = mouseX;
@@ -391,7 +402,7 @@
         let bgLerpX = mouseX;
         let bgLerpY = mouseY;
 
-        // [新增] 触控控制接管 (Fallback)
+        // 触控控制接管 (Fallback)
         window.addEventListener('touchmove', (e) => {
             if(e.touches.length > 0) {
                 mouseX = e.touches[0].clientX;
@@ -400,7 +411,7 @@
             }
         }, { passive: true });
 
-        // [新增] 尝试在首次触摸屏幕时，向 iOS 请求陀螺仪权限
+        // 尝试在首次触摸屏幕时，向 iOS 请求陀螺仪权限
         let imuPermissionGranted = false;
         document.body.addEventListener('touchstart', () => {
             if (!imuPermissionGranted && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -412,7 +423,7 @@
             }
         }, { once: true });
 
-        // [新增] IMU 重力感应逻辑
+        // IMU 重力感应逻辑
         let initBeta = null;
         let initGamma = null;
 
@@ -475,20 +486,31 @@
             bgLerpX += (mouseX - bgLerpX) * 0.08;
             bgLerpY += (mouseY - bgLerpY) * 0.08;
             
-            // 外层环境漫反射光跟随
             ambientGlow.style.transform = `translate3d(${bgLerpX}px, ${bgLerpY}px, 0) translate(-50%, -50%)`;
 
-            // 获取画框边界以计算相对位置
+            // 计算相对于屏幕中心的归一化偏移量 (-0.5 到 0.5)
+            const normX = bgLerpX / window.innerWidth - 0.5;
+            const normY = bgLerpY / window.innerHeight - 0.5;
+
+            // 背景网格反向视差 (系数最强，且为负数)
+            const gridOffsetX = normX * -120; 
+            const gridOffsetY = normY * -120;
+            paperCanvas.style.backgroundPosition = `calc(50% + ${gridOffsetX}px) calc(50% + ${gridOffsetY}px)`;
+
+            // 3. 内部元素正向视差 (景深效果)
+            // 越“近”的元素系数越大。
+            // 大标题最活跃，Slogan次之，底部Footer最稳固
+            plxTitle.style.transform = `translate3d(${normX * 60}px, ${normY * 60}px, 0)`;
+            plxSlogan.style.transform = `translate3d(${normX * 30}px, ${normY * 30}px, 0)`;
+            
+            // Footer 自身带有 translateX(-50%) 的基础居中定位，需通过 calc 保留
+            plxFooter.style.transform = `translate3d(calc(-50% + ${normX * 15}px), ${normY * 15}px, 0)`;
+
             const rect = paperCanvas.getBoundingClientRect();
             const localX = bgLerpX - rect.left;
             const localY = bgLerpY - rect.top;
 
-            // 背景网格反向视差
-            const gridOffsetX = (bgLerpX / window.innerWidth - 0.5) * -120; 
-            const gridOffsetY = (bgLerpY / window.innerHeight - 0.5) * -120;
-            paperCanvas.style.backgroundPosition = `calc(50% + ${gridOffsetX}px) calc(50% + ${gridOffsetY}px)`;
-
-            // 十字游标定位 (防止溢出画框)
+            // 4. 十字游标定位
             if (localX >= 0 && localX <= rect.width && localY >= 0 && localY <= rect.height) {
                 axisH.style.transform = `translate3d(0, ${localY}px, 0)`;
                 axisV.style.transform = `translate3d(${localX}px, 0, 0)`;
@@ -500,13 +522,12 @@
                 axisV.style.opacity = '1';
                 coordTracker.style.opacity = '1';
             } else {
-                // 当鼠标离开内层画布时，隐藏十字游标
                 axisH.style.opacity = '0';
                 axisV.style.opacity = '0';
                 coordTracker.style.opacity = '0';
             }
 
-            // 3. 立方体旋转动力学
+            // 5. 立方体旋转动力学
             rotX -= 0.05;
             rotY += 0.08;
             rotX -= vY * 8.0; 
