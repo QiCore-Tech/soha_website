@@ -24,6 +24,7 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
+        /* body 作为全局摄像机视口 */
         body, html {
             width: 100%; height: 100%;
             background-color: var(--frame-bg);
@@ -57,6 +58,7 @@
             touch-action: none;
         }
 
+        /* 物理图纸底板 */
         #grid-plane {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
@@ -137,8 +139,7 @@
         .brand-title {
             font-family: 'Outfit', sans-serif; font-size: clamp(5rem, 14vw, 12rem); font-weight: 200; 
             letter-spacing: -0.02em; line-height: 1; margin-bottom: 5vh; 
-            transform: translateZ(80px) translateY(-10vh); 
-            will-change: font-weight, transform;
+            transform: translateZ(80px) translateY(-10vh); will-change: font-weight;
         }
         .brand-title .qi { color: var(--text-black); }
         .brand-title .core { color: var(--text-warm-gray); }
@@ -202,14 +203,15 @@
             pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
         }
 
-        /* ✨ 移动端修复：显著缩小画板比例，增强 3D 悬浮感 ✨ */
+        /* ✨ 核心修复：移动端专属尺寸调整 ✨ 
+           显著缩小了画板比例，确保纯黑背景与八个圆角完美呈现，增强 3D 悬浮感 */
         @media (max-width: 768px) {
             .paper-canvas { 
                 width: 82vw; 
                 height: 75vh; 
             }
             .axis-h, .axis-v, .coord-tracker { display: none; }
-            .cursor-dot { display: none; } 
+            .cursor-dot { display: none; } /* 仅隐藏中心白点，保留彩色方块 */
             body.mobile-view .debug-badge { opacity: 1; }
         }
 
@@ -267,6 +269,9 @@
     <div class="debug-badge" id="debug-badge">MOBILE VIEW</div>
 
     <script>
+        // ==========================================
+        // 1. ✨ 设备检测与 IMU (重力感应) 初始化 ✨
+        // ==========================================
         const GRID_SIZE = 40; 
         const paperCanvas = document.getElementById('canvas-area');
         const gridPlane = document.getElementById('grid-plane');
@@ -279,10 +284,16 @@
         const coordTracker = document.getElementById('coord-tracker');
         const debugBadge = document.getElementById('debug-badge');
         
+        const coarsePointerMedia = window.matchMedia('(pointer: coarse)');
+        const hoverNoneMedia = window.matchMedia('(hover: none)');
+        const mobileUaPattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|HarmonyOS/i;
+        
         const detectMobileView = () => {
             const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
-            const mobileUaPattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|HarmonyOS/i;
-            return mobileUaPattern.test(navigator.userAgent) || hasTouch;
+            const coarsePointer = coarsePointerMedia.matches;
+            const noHover = hoverNoneMedia.matches;
+            const mobileUA = mobileUaPattern.test(navigator.userAgent);
+            return mobileUA || (hasTouch && (coarsePointer || noHover));
         };
         let isMobileView = detectMobileView();
         
@@ -301,6 +312,7 @@
 
         let voxels = []; 
         let historyStack = []; 
+        
         let mode = 'none'; 
         let drawStartX = 0, drawStartY = 0, drawStartZ = 0;
         let activeVoxelId = null; 
@@ -309,11 +321,16 @@
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
         function resetInteractionState() {
-            mode = 'none'; activeVoxelId = null; magneticPos = null;
-            previewContainer.innerHTML = ''; magneticContainer.innerHTML = '';
+            mode = 'none';
+            activeVoxelId = null;
+            magneticPos = null;
+            previewContainer.innerHTML = '';
+            magneticContainer.innerHTML = '';
             document.body.classList.remove('is-deleting');
             document.querySelectorAll('.voxel.moving').forEach(el => el.classList.remove('moving'));
-            axisH.style.opacity = '0'; axisV.style.opacity = '0'; coordTracker.style.opacity = '0';
+            axisH.style.opacity = '0';
+            axisV.style.opacity = '0';
+            coordTracker.style.opacity = '0';
         }
 
         function applyViewMode() {
@@ -325,7 +342,12 @@
 
         function handleDeviceOrientation(e) {
             if (typeof e.beta !== 'number' || typeof e.gamma !== 'number') return;
-            if (imuState.baseBeta === null) { imuState.baseBeta = e.beta; imuState.baseGamma = e.gamma; }
+
+            if (imuState.baseBeta === null || imuState.baseGamma === null) {
+                imuState.baseBeta = e.beta;
+                imuState.baseGamma = e.gamma;
+            }
+
             imuState.targetBeta = clamp(e.beta - imuState.baseBeta, -45, 45);
             imuState.targetGamma = clamp(e.gamma - imuState.baseGamma, -45, 45);
             imuState.active = true;
@@ -338,34 +360,66 @@
         }
 
         async function requestImuPermission() {
-            if (!isMobileView || !imuState.supported || imuState.permission === 'granted' || imuState.permission === 'denied') return;
+            if (!isMobileView || !imuState.supported || imuState.permission === 'granted' || imuState.permission === 'denied') {
+                return;
+            }
             if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
                 imuState.permission = 'pending';
                 try {
                     const result = await window.DeviceOrientationEvent.requestPermission();
-                    if (result === 'granted') { imuState.permission = 'granted'; startImuTracking(); }
-                    else imuState.permission = 'denied';
-                } catch (error) { imuState.permission = 'denied'; }
+                    if (result === 'granted') {
+                        imuState.permission = 'granted';
+                        startImuTracking();
+                    } else {
+                        imuState.permission = 'denied';
+                    }
+                } catch (error) {
+                    imuState.permission = 'denied';
+                }
                 return;
             }
-            imuState.permission = 'granted'; startImuTracking();
+            imuState.permission = 'granted';
+            startImuTracking();
         }
 
+        function ensureImuTracking() {
+            if (!isMobileView || !imuState.supported) return;
+            if (typeof window.DeviceOrientationEvent.requestPermission === 'function') return;
+            if (imuState.permission !== 'granted') imuState.permission = 'granted';
+            startImuTracking();
+        }
+
+        function resetImuBaseline() {
+            imuState.baseBeta = null; imuState.baseGamma = null;
+            imuState.targetBeta = 0; imuState.targetGamma = 0;
+            imuState.filteredBeta = 0; imuState.filteredGamma = 0;
+            imuState.active = false;
+        }
+
+        function syncViewMode() {
+            const nextIsMobileView = detectMobileView();
+            if (nextIsMobileView === isMobileView) return;
+            isMobileView = nextIsMobileView;
+            resetImuBaseline();
+            applyViewMode();
+            ensureImuTracking();
+        }
+
+        window.addEventListener('resize', syncViewMode);
+        window.addEventListener('orientationchange', resetImuBaseline);
+        
+        // 移动端首次触摸时仅申请陀螺仪权限，不改变重力立方体的位置基线
         window.addEventListener('touchstart', (e) => { 
             if (isMobileView) {
                 requestImuPermission(); 
-                if (e.touches.length > 0) {
-                    mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY;
-                    lerpX = mouseX; lerpY = mouseY;
-                    vX = 0; vY = 0;
-                }
             }
         }, { passive: true });
 
         applyViewMode();
+        ensureImuTracking();
         
         // ==========================================
-        // 2. ✨ 沙盒核心逻辑 ✨
+        // 2. ✨ 沙盒数据与建造逻辑 (仅 PC 端生效) ✨
         // ==========================================
         function saveState() {
             historyStack.push(JSON.parse(JSON.stringify(voxels)));
@@ -373,17 +427,26 @@
         }
         
         function undo() {
-            if (historyStack.length > 0) { voxels = historyStack.pop(); renderAllVoxels(); }
+            if (historyStack.length > 0) {
+                voxels = historyStack.pop();
+                renderAllVoxels();
+            }
         }
 
-        window.addEventListener('keydown', (e) => { if ((e.ctrlKey || e.metaKey) && e.key === 'z') undo(); });
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z') undo();
+        });
 
         function getMaxZInArea(x1, y1, x2, y2, ignoreId = null) {
             let maxZ = 0;
-            const minX = Math.min(x1, x2), maxX = Math.max(x1, x2), minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+            const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
+            const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+            
             voxels.forEach(v => {
                 if (v.id === ignoreId) return;
-                if (minX < v.x + v.w && maxX >= v.x && minY < v.y + v.h && maxY >= v.y) maxZ = Math.max(maxZ, v.z + 1);
+                if (minX < v.x + v.w && maxX >= v.x && minY < v.y + v.h && maxY >= v.y) {
+                    maxZ = Math.max(maxZ, v.z + 1);
+                }
             });
             return maxZ;
         }
@@ -392,9 +455,12 @@
             const el = document.createElement('div');
             el.className = `voxel ${isPreview ? 'preview' : ''}`;
             if (!isPreview) el.id = `voxel-${v.id}`;
+            
             el.style.left = `${v.x * GRID_SIZE}px`; el.style.top = `${v.y * GRID_SIZE}px`;
             el.style.width = `${v.w * GRID_SIZE}px`; el.style.height = `${v.h * GRID_SIZE}px`;
-            el.dataset.id = v.id;
+            el.dataset.id = v.id; el.dataset.x = String(v.x); el.dataset.y = String(v.y);
+            el.dataset.w = String(v.w); el.dataset.h = String(v.h); el.dataset.z = String(v.z);
+
             const faces = ['top', 'bottom', 'front', 'back', 'left', 'right'];
             faces.forEach(f => {
                 const face = document.createElement('div');
@@ -417,12 +483,18 @@
 
         function resolveGridCoords(e) {
             const target = e.target;
-            if (target.id === 'grid-plane') return { x: Math.floor(e.offsetX / GRID_SIZE), y: Math.floor(e.offsetY / GRID_SIZE), z: 0 };
+            if (target.id === 'grid-plane') {
+                return { x: Math.floor(e.offsetX / GRID_SIZE), y: Math.floor(e.offsetY / GRID_SIZE), z: 0 };
+            }
             if (target.classList.contains('top')) {
                 const voxelEl = target.closest('.voxel');
                 if (!voxelEl) return null;
                 const v = voxels.find(vx => vx.id == voxelEl.dataset.id);
-                if (v) return { x: v.x + Math.floor(e.offsetX / GRID_SIZE), y: v.y + Math.floor(e.offsetY / GRID_SIZE), z: v.z + 1 };
+                if (v) return { 
+                    x: v.x + Math.floor(e.offsetX / GRID_SIZE), 
+                    y: v.y + Math.floor(e.offsetY / GRID_SIZE), 
+                    z: v.z + 1 
+                };
             }
             return null;
         }
@@ -432,17 +504,26 @@
         paperCanvas.addEventListener('pointerdown', (e) => {
             if (isMobileView) return; 
             const target = e.target;
+            
             if (e.button === 2) {
                 saveState(); mode = 'deleting'; document.body.classList.add('is-deleting');
                 const voxelEl = target.closest('.voxel');
-                if (voxelEl && !voxelEl.classList.contains('preview')) { voxels = voxels.filter(v => v.id != voxelEl.dataset.id); renderAllVoxels(); }
+                if (voxelEl && !voxelEl.classList.contains('preview')) {
+                    voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
+                    renderAllVoxels();
+                }
                 return;
             }
+
             if (e.button === 0) {
                 if (target.classList.contains('face') && !target.classList.contains('top') && !target.classList.contains('bottom')) {
-                    saveState(); mode = 'moving'; const voxelEl = target.closest('.voxel');
-                    activeVoxelId = parseInt(voxelEl.dataset.id); voxelEl.classList.add('moving'); return;
+                    saveState(); mode = 'moving';
+                    const voxelEl = target.closest('.voxel');
+                    activeVoxelId = parseInt(voxelEl.dataset.id);
+                    voxelEl.classList.add('moving'); 
+                    return;
                 }
+
                 const coords = resolveGridCoords(e);
                 if (coords) {
                     saveState(); mode = 'drawing';
@@ -455,38 +536,59 @@
 
         window.addEventListener('pointermove', (e) => {
             if (isMobileView) return; 
+            
             const coords = resolveGridCoords(e);
+            
             if (coords) {
                 magneticPos = coords;
-                const crossX = coords.x * GRID_SIZE + GRID_SIZE/2; const crossY = coords.y * GRID_SIZE + GRID_SIZE/2;
-                axisH.style.transform = `translate3d(0, ${crossY}px, 1px)`; axisV.style.transform = `translate3d(${crossX}px, 0, 1px)`;
+                const crossX = coords.x * GRID_SIZE + GRID_SIZE/2; 
+                const crossY = coords.y * GRID_SIZE + GRID_SIZE/2;
+                axisH.style.transform = `translate3d(0, ${crossY}px, 1px)`; 
+                axisV.style.transform = `translate3d(${crossX}px, 0, 1px)`;
                 coordTracker.style.transform = `translate3d(${crossX + 16}px, ${crossY - 24}px, 1px)`;
                 coordTracker.textContent = `X: ${coords.x} | Y: ${coords.y} | Z: ${coords.z}`;
                 axisH.style.opacity = '1'; axisV.style.opacity = '1'; coordTracker.style.opacity = '1';
-                if (mode === 'none') { magneticContainer.innerHTML = ''; magneticContainer.appendChild(createVoxelDOM({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z}, true)); }
+
+                if (mode === 'none') {
+                    magneticContainer.innerHTML = '';
+                    magneticContainer.appendChild(createVoxelDOM({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z}, true));
+                }
             } else {
                 axisH.style.opacity = '0'; axisV.style.opacity = '0'; coordTracker.style.opacity = '0';
                 if (mode === 'none') magneticContainer.innerHTML = '';
             }
+
             if (mode === 'deleting') {
                 const voxelEl = e.target.closest('.voxel');
-                if (voxelEl && !voxelEl.classList.contains('preview')) { voxels = voxels.filter(v => v.id != voxelEl.dataset.id); renderAllVoxels(); }
+                if (voxelEl && !voxelEl.classList.contains('preview')) {
+                    voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
+                    renderAllVoxels();
+                }
                 return;
             }
+
             if (mode === 'drawing' && magneticPos) {
                 magneticContainer.innerHTML = ''; 
-                const minX = Math.min(drawStartX, magneticPos.x); const minY = Math.min(drawStartY, magneticPos.y);
-                const w = Math.abs(magneticPos.x - drawStartX) + 1; const h = Math.abs(magneticPos.y - drawStartY) + 1;
+                const minX = Math.min(drawStartX, magneticPos.x); 
+                const minY = Math.min(drawStartY, magneticPos.y);
+                const w = Math.abs(magneticPos.x - drawStartX) + 1; 
+                const h = Math.abs(magneticPos.y - drawStartY) + 1;
                 const dynamicZ = Math.max(drawStartZ, getMaxZInArea(minX, minY, minX + w - 1, minY + h - 1));
-                previewContainer.innerHTML = ''; previewContainer.appendChild(createVoxelDOM({x: minX, y: minY, w: w, h: h, z: dynamicZ}, true));
+
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(createVoxelDOM({x: minX, y: minY, w: w, h: h, z: dynamicZ}, true));
                 return;
             }
+
             if (mode === 'moving' && activeVoxelId && magneticPos) {
-                magneticContainer.innerHTML = ''; const v = voxels.find(vx => vx.id === activeVoxelId);
+                magneticContainer.innerHTML = '';
+                const v = voxels.find(vx => vx.id === activeVoxelId);
                 const newZ = getMaxZInArea(magneticPos.x, magneticPos.y, magneticPos.x + v.w - 1, magneticPos.y + v.h - 1, v.id);
+                
                 const movingEl = document.getElementById(`voxel-${v.id}`);
                 if(movingEl) {
-                    movingEl.style.left = `${magneticPos.x * GRID_SIZE}px`; movingEl.style.top = `${magneticPos.y * GRID_SIZE}px`;
+                    movingEl.style.left = `${magneticPos.x * GRID_SIZE}px`;
+                    movingEl.style.top = `${magneticPos.y * GRID_SIZE}px`;
                     const faces = movingEl.querySelectorAll('.face');
                     faces.forEach(face => {
                         if (face.classList.contains('bottom')) face.style.transform = `translateZ(${newZ * 40}px)`;
@@ -501,21 +603,31 @@
         });
 
         window.addEventListener('pointerup', () => {
-            if (isMobileView) return; 
+            if (isMobileView) return; // 移动端拦截
             if (mode === 'drawing') {
                 const preview = previewContainer.querySelector('.voxel');
                 if (preview) {
-                    voxels.push({ id: Date.now(), x: parseInt(preview.dataset.x), y: parseInt(preview.dataset.y), w: parseInt(preview.dataset.w), h: parseInt(preview.dataset.h), z: parseInt(preview.dataset.z) });
-                    renderAllVoxels(); previewContainer.innerHTML = '';
+                    voxels.push({
+                        id: Date.now(),
+                        x: parseInt(preview.dataset.x), y: parseInt(preview.dataset.y),
+                        w: parseInt(preview.dataset.w), h: parseInt(preview.dataset.h),
+                        z: parseInt(preview.dataset.z)
+                    });
+                    renderAllVoxels();
+                    previewContainer.innerHTML = '';
                 }
             } else if (mode === 'moving' && activeVoxelId && magneticPos) {
                 const vIndex = voxels.findIndex(vx => vx.id === activeVoxelId);
                 if (vIndex !== -1) {
-                    voxels[vIndex].x = magneticPos.x; voxels[vIndex].y = magneticPos.y;
+                    voxels[vIndex].x = magneticPos.x;
+                    voxels[vIndex].y = magneticPos.y;
                     voxels[vIndex].z = getMaxZInArea(magneticPos.x, magneticPos.y, magneticPos.x + voxels[vIndex].w - 1, magneticPos.y + voxels[vIndex].h - 1, activeVoxelId);
                 }
-                renderAllVoxels(); activeVoxelId = null;
-            } else if (mode === 'deleting') document.body.classList.remove('is-deleting');
+                renderAllVoxels();
+                activeVoxelId = null;
+            } else if (mode === 'deleting') {
+                document.body.classList.remove('is-deleting');
+            }
             mode = 'none';
         });
 
@@ -530,80 +642,100 @@
         let mouseX = window.innerWidth / 2; let mouseY = window.innerHeight / 2;
         let lerpX = mouseX; let lerpY = mouseY;
         let rotX = 45; let rotY = 45;
-        let vX = 0; let vY = 0; let prevMouseX = mouseX; let prevMouseY = mouseY;
+        let vX = 0; let vY = 0; 
+        let prevMouseX = mouseX; let prevMouseY = mouseY;
         
-        window.addEventListener('mousemove', (e) => { if (!isMobileView) { mouseX = e.clientX; mouseY = e.clientY; } });
+        window.addEventListener('mousemove', (e) => {
+            if (isMobileView) return;
+            mouseX = e.clientX; mouseY = e.clientY;
+        });
 
         let lastTime = performance.now();
         function renderLoop() {
-            const now = performance.now(); const dt = Math.max(1, now - lastTime); lastTime = now;
+            const now = performance.now();
+            const dt = Math.max(1, now - lastTime);
+            lastTime = now;
+
             let normX = 0, normY = 0;
+            let scaleCube = 1;
 
             if (isMobileView) {
-                // ✨ 核心修正：移动端重力矢量修正 & 屏幕物理碰撞 ✨
                 imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.1;
                 imuState.filteredGamma += (imuState.targetGamma - imuState.filteredGamma) * 0.1;
+
                 const hasActiveImu = imuState.permission === 'granted' && imuState.active;
                 
-                let tiltX = hasActiveImu ? clamp(imuState.filteredGamma / 45, -1, 1) : Math.sin(now * 0.001) * 0.2;
-                let tiltY = hasActiveImu ? clamp(imuState.filteredBeta / 45, -1, 1) : Math.cos(now * 0.0013) * 0.2;
+                let tiltX = 0;
+                let tiltY = 0;
 
-                // 加速度累加：让它像滚珠一样滚动
-                mouseX += tiltX * 22;
-                mouseY -= tiltY * 22; 
+                if (hasActiveImu) {
+                    tiltX = clamp(imuState.filteredGamma / 45, -1, 1);
+                    // beta 正值时让重力趋向屏幕下方，避免竖直方向体感反转
+                    tiltY = clamp(-imuState.filteredBeta / 45, -1, 1);
+                } else {
+                    tiltX = Math.sin(now * 0.001) * 0.2;
+                    tiltY = Math.cos(now * 0.0013) * 0.2;
+                }
 
-                // ✨ 核心修复：严禁滚出屏幕，加入物理边界碰撞 ✨
-                const margin = 24; 
-                mouseX = clamp(mouseX, margin, window.innerWidth - margin);
-                mouseY = clamp(mouseY, margin, window.innerHeight - margin);
+                const cubeInset = 72;
+                const mobileRangeX = Math.min(window.innerWidth * 0.18, Math.max(48, window.innerWidth / 2 - cubeInset));
+                const mobileRangeY = Math.min(window.innerHeight * 0.16, Math.max(40, window.innerHeight / 2 - cubeInset));
+                const targetMobileX = window.innerWidth / 2 + tiltX * mobileRangeX;
+                const targetMobileY = window.innerHeight / 2 + tiltY * mobileRangeY;
+
+                mouseX = clamp(targetMobileX, cubeInset, window.innerWidth - cubeInset);
+                mouseY = clamp(targetMobileY, cubeInset, window.innerHeight - cubeInset);
             } 
             
-            // 物理平滑滤波器
-            lerpX += (mouseX - lerpX) * 0.15; lerpY += (mouseY - lerpY) * 0.15;
-            vX = (mouseX - prevMouseX) / dt; vY = (mouseY - prevMouseY) / dt;
-            prevMouseX = mouseX; prevMouseY = mouseY;
+            // 下方这段物理缓动与自转逻辑，现在移动端与 PC 端完美共用！
+            lerpX += (mouseX - lerpX) * 0.15; 
+            lerpY += (mouseY - lerpY) * 0.15;
+            
+            const offsetX = lerpX - mouseX; 
+            const offsetY = lerpY - mouseY;
+            
+            vX = (mouseX - prevMouseX) / dt; 
+            vY = (mouseY - prevMouseY) / dt;
+            prevMouseX = mouseX; 
+            prevMouseY = mouseY;
 
+            // 无论 PC 还是移动端，都保留基于速度的旋转翻滚和最基础的自转！
             const speed = Math.sqrt(vX * vX + vY * vY);
-            const scaleCube = 1 + Math.min(speed * 0.05, 0.3); 
-            rotX -= (0.05 + vY * 8.0); rotY += (0.08 + vX * 8.0);
+            scaleCube = 1 + Math.min(speed * 0.05, 0.3); 
+            
+            rotX -= 0.05 + vY * 8.0; 
+            rotY += 0.08 + vX * 8.0;
 
             normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
             normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
 
-            // 更新多色光标
+            // 更新多色光标的物理坐标与旋转
             cursorWrapper.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0)`;
-            cursorCube.style.transform = `translate3d(${lerpX - mouseX}px, ${lerpY - mouseY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
 
-            // 环境光与全境 3D 倾斜
+            // ================== 公共渲染区 ==================
             ambientGlow.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0) translate(-50%, -50%)`;
-            const sceneRotX = normY * -25; const sceneRotY = normX * 25;  
+
+            // 全境 3D 倾斜
+            const sceneRotX = normY * -25; 
+            const sceneRotY = normX * 25;  
             paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
+            
             paperCanvas.style.boxShadow = `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
-            // ✨ 核心修复：移动端丝滑字体联动 ✨
-            // 现在字体感应的是立方体渲染后的坐标 (lerpX, lerpY)，而非屏幕中心！
+            // 字体引力反馈
             const titleRect = plxTitle.getBoundingClientRect();
-            const tx = titleRect.left + titleRect.width / 2;
-            const ty = titleRect.top + titleRect.height / 2;
-            const distToTitle = Math.hypot(lerpX - tx, lerpY - ty);
-            
-            // 扩大感应半径，让过渡更线性
-            const senseRadius = window.innerWidth * 0.6;
-            let dynamicWeight = 900 - (distToTitle / senseRadius) * 750;
-            plxTitle.style.fontWeight = Math.max(150, Math.min(900, dynamicWeight));
-            
-            // 加入微弱的字体磁力形变，增加丝滑感
-            if (distToTitle < 200) {
-                const pullX = (lerpX - tx) * 0.05;
-                const pullY = (lerpY - ty) * 0.05;
-                plxTitle.style.transform = `translateZ(80px) translateY(-10vh) translate3d(${pullX}px, ${pullY}px, 0)`;
-            } else {
-                plxTitle.style.transform = `translateZ(80px) translateY(-10vh)`;
-            }
+            // 在移动端使用屏幕中心点计算引力，PC端使用鼠标/滚珠位置
+            const gravityX = isMobileView ? window.innerWidth / 2 : mouseX;
+            const gravityY = isMobileView ? window.innerHeight / 2 : mouseY;
+            const distToTitle = Math.hypot(gravityX - (titleRect.left + titleRect.width / 2), gravityY - (titleRect.top + titleRect.height / 2));
+            let dynamicWeight = 900 - (distToTitle / (window.innerWidth * 0.4)) * 700;
+            plxTitle.style.fontWeight = Math.max(200, Math.min(900, dynamicWeight));
 
             requestAnimationFrame(renderLoop);
         }
         requestAnimationFrame(renderLoop);
+
     </script>
 </body>
 </html>
