@@ -394,6 +394,8 @@
             imuState.targetBeta = 0; imuState.targetGamma = 0;
             imuState.filteredBeta = 0; imuState.filteredGamma = 0;
             imuState.active = false;
+            mobileCubeOffsetX = 0; mobileCubeOffsetY = 0;
+            mobileCubeVelX = 0; mobileCubeVelY = 0;
         }
 
         function syncViewMode() {
@@ -645,6 +647,7 @@
         let vX = 0; let vY = 0; 
         let prevMouseX = mouseX; let prevMouseY = mouseY;
         let mobileCubeOffsetX = 0; let mobileCubeOffsetY = 0;
+        let mobileCubeVelX = 0; let mobileCubeVelY = 0;
         
         window.addEventListener('mousemove', (e) => {
             if (isMobileView) return;
@@ -686,10 +689,34 @@
                 mouseX = clamp(targetMobileX, cubeInset, window.innerWidth - cubeInset);
                 mouseY = clamp(targetMobileY, cubeInset, window.innerHeight - cubeInset);
 
-                const cubeRangeX = Math.min(window.innerWidth * 0.08, 40);
-                const cubeRangeY = Math.min(window.innerHeight * 0.07, 32);
-                mobileCubeOffsetX += (tiltX * cubeRangeX - mobileCubeOffsetX) * 0.12;
-                mobileCubeOffsetY += (tiltY * cubeRangeY - mobileCubeOffsetY) * 0.12;
+                const frameScale = dt / 16.67;
+                const cubeBoundaryX = Math.min(window.innerWidth * 0.22, Math.max(80, window.innerWidth / 2 - 72));
+                const cubeBoundaryY = Math.min(window.innerHeight * 0.18, Math.max(64, window.innerHeight / 2 - 72));
+                const cubeAccelX = tiltX * 0.65 * frameScale;
+                const cubeAccelY = tiltY * 0.65 * frameScale;
+                const cubeFriction = Math.pow(0.94, frameScale);
+                const cubeMaxVel = 7;
+
+                mobileCubeVelX = clamp((mobileCubeVelX + cubeAccelX) * cubeFriction, -cubeMaxVel, cubeMaxVel);
+                mobileCubeVelY = clamp((mobileCubeVelY + cubeAccelY) * cubeFriction, -cubeMaxVel, cubeMaxVel);
+                mobileCubeOffsetX += mobileCubeVelX * frameScale;
+                mobileCubeOffsetY += mobileCubeVelY * frameScale;
+
+                if (mobileCubeOffsetX <= -cubeBoundaryX) {
+                    mobileCubeOffsetX = -cubeBoundaryX;
+                    if (mobileCubeVelX < 0) mobileCubeVelX = 0;
+                } else if (mobileCubeOffsetX >= cubeBoundaryX) {
+                    mobileCubeOffsetX = cubeBoundaryX;
+                    if (mobileCubeVelX > 0) mobileCubeVelX = 0;
+                }
+
+                if (mobileCubeOffsetY <= -cubeBoundaryY) {
+                    mobileCubeOffsetY = -cubeBoundaryY;
+                    if (mobileCubeVelY < 0) mobileCubeVelY = 0;
+                } else if (mobileCubeOffsetY >= cubeBoundaryY) {
+                    mobileCubeOffsetY = cubeBoundaryY;
+                    if (mobileCubeVelY > 0) mobileCubeVelY = 0;
+                }
             } 
             
             // 下方这段物理缓动与自转逻辑，现在移动端与 PC 端完美共用！
@@ -716,8 +743,8 @@
 
             // 更新多色光标的物理坐标与旋转
             if (isMobileView) {
-                const mobileRotX = normY * -36 + mobileCubeOffsetY * -0.25;
-                const mobileRotY = normX * 36 + mobileCubeOffsetX * 0.25;
+                const mobileRotX = normY * -32 + mobileCubeVelY * -6;
+                const mobileRotY = normX * 32 + mobileCubeVelX * 6;
                 cursorWrapper.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
                 cursorCube.style.transform = `translate3d(${mobileCubeOffsetX}px, ${mobileCubeOffsetY}px, 0) scale(${1.02 + Math.min(speed * 0.015, 0.08)}) rotateX(${mobileRotX}deg) rotateY(${mobileRotY}deg)`;
             } else {
