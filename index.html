@@ -644,6 +644,7 @@
         let rotX = 45; let rotY = 45;
         let vX = 0; let vY = 0; 
         let prevMouseX = mouseX; let prevMouseY = mouseY;
+        let mobileCubeOffsetX = 0; let mobileCubeOffsetY = 0;
         
         window.addEventListener('mousemove', (e) => {
             if (isMobileView) return;
@@ -670,7 +671,7 @@
 
                 if (hasActiveImu) {
                     tiltX = clamp(imuState.filteredGamma / 60, -1, 1);
-                    tiltY = clamp(imuState.filteredBeta / 60, -1, 1);
+                    tiltY = clamp(-imuState.filteredBeta / 60, -1, 1);
                 } else {
                     tiltX = Math.sin(now * 0.0007) * 0.14;
                     tiltY = Math.cos(now * 0.0009) * 0.14;
@@ -684,6 +685,11 @@
 
                 mouseX = clamp(targetMobileX, cubeInset, window.innerWidth - cubeInset);
                 mouseY = clamp(targetMobileY, cubeInset, window.innerHeight - cubeInset);
+
+                const cubeRangeX = Math.min(window.innerWidth * 0.08, 40);
+                const cubeRangeY = Math.min(window.innerHeight * 0.07, 32);
+                mobileCubeOffsetX += (tiltX * cubeRangeX - mobileCubeOffsetX) * 0.12;
+                mobileCubeOffsetY += (tiltY * cubeRangeY - mobileCubeOffsetY) * 0.12;
             } 
             
             // 下方这段物理缓动与自转逻辑，现在移动端与 PC 端完美共用！
@@ -709,8 +715,15 @@
             normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
 
             // 更新多色光标的物理坐标与旋转
-            cursorWrapper.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0)`;
-            cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            if (isMobileView) {
+                const mobileRotX = normY * -36 + mobileCubeOffsetY * -0.25;
+                const mobileRotY = normX * 36 + mobileCubeOffsetX * 0.25;
+                cursorWrapper.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
+                cursorCube.style.transform = `translate3d(${mobileCubeOffsetX}px, ${mobileCubeOffsetY}px, 0) scale(${1.02 + Math.min(speed * 0.015, 0.08)}) rotateX(${mobileRotX}deg) rotateY(${mobileRotY}deg)`;
+            } else {
+                cursorWrapper.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0)`;
+                cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            }
 
             // ================== 公共渲染区 ==================
             ambientGlow.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0) translate(-50%, -50%)`;
