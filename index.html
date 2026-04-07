@@ -31,7 +31,6 @@
             overflow: hidden;
             font-family: 'Outfit', 'MiSans', sans-serif;
             cursor: none;
-            /* 开启全局景深，让倾斜产生巨大的 3D 落差感 */
             perspective: 2000px; 
             display: flex; align-items: center; justify-content: center;
         }
@@ -48,7 +47,6 @@
            ========================================== */
         .paper-canvas {
             position: relative;
-            /* 缩小画布面积，露出深邃的黑色背景边框 */
             width: 90vw; height: 90vh;
             background-color: var(--paper-bg);
             border-radius: 8px;
@@ -69,7 +67,7 @@
             background-size: 80px 80px, 16px 16px;
             background-position: center center;
             transform: translateZ(0); 
-            pointer-events: auto; /* 接收点击生成指令 */
+            pointer-events: auto; 
             border-radius: inherit;
         }
 
@@ -91,7 +89,6 @@
             border: 1px solid rgba(0, 0, 0, 0.4); transition: background 0.1s, opacity 0.2s;
         }
 
-        /* 实体模块高级光照材质 */
         .voxel .face.top { width: 100%; height: 100%; background: #E8E8EB; box-shadow: inset 0 0 8px rgba(255,255,255,0.8); }
         .voxel .face.bottom { width: 100%; height: 100%; background: #222; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
         .voxel .face.front  { width: 100%; height: var(--voxel-depth); top: 0; transform-origin: top; transform: rotateX(90deg); background: #C4C4C8; }
@@ -99,11 +96,9 @@
         .voxel .face.left   { width: var(--voxel-depth); height: 100%; left: 0; transform-origin: left; transform: rotateY(-90deg); background: #D0D0D4; }
         .voxel .face.right  { width: var(--voxel-depth); height: 100%; right: 0; transform-origin: right; transform: rotateY(90deg); background: #B4B4B8; }
 
-        /* 模块抓取态 (移动中) - 调整透明度并透传事件 */
         .voxel.moving { pointer-events: none !important; }
         .voxel.moving .face { opacity: 0.5; }
 
-        /* ✨ 拖拽与磁吸预览框：改为契合主题的暖灰色 ✨ */
         .voxel.preview { pointer-events: none; z-index: 999; }
         .voxel.preview .face { 
             background: rgba(180, 180, 185, 0.4) !important; 
@@ -112,10 +107,9 @@
         .voxel.preview .face.top { box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4); }
         .voxel.preview .face.bottom { box-shadow: none; border: none; }
 
-        /* 悬停提示互动逻辑 */
         .voxel:hover .face.top { background: #F5F5F5; }
         .voxel:hover .face.front, .voxel:hover .face.back, .voxel:hover .face.left, .voxel:hover .face.right { 
-            background: #E8E8EB; cursor: move; /* 提示可抓取 */
+            background: #E8E8EB; cursor: move; 
         }
         body.is-deleting .voxel:hover .face { background: #FFBABA !important; border-color: #FF4444; }
 
@@ -145,7 +139,6 @@
         .brand-title {
             font-family: 'Outfit', sans-serif; font-size: clamp(5rem, 14vw, 12rem); font-weight: 200; 
             letter-spacing: -0.02em; line-height: 1; margin-bottom: 5vh; 
-            /* 利用 CSS 直接赋予高程，画布倾斜时浏览器会自动计算视差 */
             transform: translateZ(80px) translateY(-10vh); will-change: font-weight;
         }
         .brand-title .qi { color: var(--text-black); }
@@ -160,7 +153,6 @@
         .slogan-bar p { color: #66635E; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; }
         .slogan-separator { display: inline-block; width: 3px; height: 3px; background-color: rgba(0, 0, 0, 0.2); transform: rotate(45deg); }
 
-        /* 恢复底部终端邮箱 */
         .footer-signature {
             position: absolute; bottom: 3vh; left: 50%;
             z-index: 10; pointer-events: none; display: flex; align-items: center;
@@ -183,7 +175,7 @@
         @keyframes slotSpin { 0%, 40% { transform: translateY(0); } 50%, 90% { transform: translateY(-16px); } 100% { transform: translateY(-32px); } }
 
         /* ==========================================
-           ✨ 恢复：悬浮的多色 3D 准星立方体 ✨
+           ✨ 悬浮的多色 3D 准星立方体 ✨
            ========================================== */
         #cursor-wrapper {
             position: fixed; top: 0; left: 0; width: 1px; height: 1px;
@@ -211,8 +203,13 @@
             pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
         }
 
-        /* ✨ 移动端专属响应式修复：只隐藏白点和坐标仪，绝对保留 cursor-wrapper (多色立方体容器) ✨ */
+        /* ✨ 核心修复：移动端专属尺寸调整 ✨ 
+           显著缩小了画板比例，确保纯黑背景与八个圆角完美呈现，增强 3D 悬浮感 */
         @media (max-width: 768px) {
+            .paper-canvas { 
+                width: 82vw; 
+                height: 75vh; 
+            }
             .axis-h, .axis-v, .coord-tracker { display: none; }
             .cursor-dot { display: none; } /* 仅隐藏中心白点，保留彩色方块 */
             body.mobile-view .debug-badge { opacity: 1; }
@@ -224,11 +221,8 @@
 
     <div class="ambient-glow" id="ambient-glow"></div>
 
-    <!-- ✨ 核心画板：它作为一个整体在黑色物理空间中发生倾斜视差 ✨ -->
     <div class="paper-canvas" id="canvas-area">
-        
         <div id="grid-plane">
-            <!-- CAD 坐标仪 -->
             <div class="axis-h" id="axis-h"></div>
             <div class="axis-v" id="axis-v"></div>
             <div class="coord-tracker" id="coord-tracker">X: 0 | Y: 0 | Z: 0</div>
@@ -260,7 +254,6 @@
         </div>
     </div>
 
-    <!-- ✨ 恢复的多色悬浮光标 ✨ -->
     <div id="cursor-wrapper">
         <div class="cursor-dot"></div>
         <div class="cursor-cube-container" id="cursor-cube">
@@ -342,7 +335,6 @@
 
         function applyViewMode() {
             document.body.classList.toggle('mobile-view', isMobileView);
-            // ✨ 核心修复：移动端彻底禁用网格底板的指针事件，防止误触和滑动触发建造 ✨
             gridPlane.style.pointerEvents = isMobileView ? 'none' : 'auto';
             debugBadge.textContent = isMobileView ? 'MOBILE VIEW' : 'DESKTOP VIEW';
             if (isMobileView) resetInteractionState();
@@ -415,8 +407,21 @@
 
         window.addEventListener('resize', syncViewMode);
         window.addEventListener('orientationchange', resetImuBaseline);
-        window.addEventListener('pointerdown', () => { if (isMobileView) requestImuPermission(); }, { passive: true });
-        window.addEventListener('touchstart', () => { if (isMobileView) requestImuPermission(); }, { passive: true });
+        
+        // ✨ 核心修复：点击屏幕时不仅申请陀螺仪权限，还将多色立方体瞬间传送到点击位置 ✨
+        window.addEventListener('touchstart', (e) => { 
+            if (isMobileView) {
+                requestImuPermission(); 
+                if (e.touches.length > 0) {
+                    mouseX = e.touches[0].clientX;
+                    mouseY = e.touches[0].clientY;
+                    // 取消缓动延迟，瞬间传送到指尖位置
+                    lerpX = mouseX;
+                    lerpY = mouseY;
+                    vX = 0; vY = 0;
+                }
+            }
+        }, { passive: true });
 
         applyViewMode();
         ensureImuTracking();
@@ -505,7 +510,7 @@
         paperCanvas.addEventListener('contextmenu', e => e.preventDefault());
 
         paperCanvas.addEventListener('pointerdown', (e) => {
-            if (isMobileView) return; // 移动端拦截
+            if (isMobileView) return; 
             const target = e.target;
             
             if (e.button === 2) {
@@ -538,7 +543,7 @@
         });
 
         window.addEventListener('pointermove', (e) => {
-            if (isMobileView) return; // 移动端拦截
+            if (isMobileView) return; 
             
             const coords = resolveGridCoords(e);
             
@@ -663,7 +668,7 @@
             let scaleCube = 1;
 
             if (isMobileView) {
-                // ✨ 手机端专属：重力 IMU 物理重构 ✨
+                // ✨ 核心修复：重力陀螺仪方向修正，符合真实物理直觉 ✨
                 imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.1;
                 imuState.filteredGamma += (imuState.targetGamma - imuState.filteredGamma) * 0.1;
 
@@ -680,14 +685,14 @@
                     tiltY = Math.cos(now * 0.0013) * 0.2;
                 }
 
-                // 核心：将重力倾斜直接映射为持续的位移加速度 (Velocity)
-                // 这完美模拟了物理世界中的滚珠，允许飞出画布边界！
-                mouseX += tiltX * 15;
-                mouseY += tiltY * 15;
+                // 将重力倾斜直接映射为持续的位移加速度 (Velocity)
+                mouseX += tiltX * 18;
+                // ⚠️ 修复点：手机顶部向下倾斜时(Beta > 0)，重力应让球滚向屏幕顶部(-Y方向)
+                mouseY -= tiltY * 18; 
 
                 // 为了防止它永远飞丢，在屏幕四周设置极宽的冗余隐形空气墙
-                mouseX = clamp(mouseX, -80, window.innerWidth + 80);
-                mouseY = clamp(mouseY, -80, window.innerHeight + 80);
+                mouseX = clamp(mouseX, -120, window.innerWidth + 120);
+                mouseY = clamp(mouseY, -120, window.innerHeight + 120);
             } 
             
             // 下方这段物理缓动与自转逻辑，现在移动端与 PC 端完美共用！
