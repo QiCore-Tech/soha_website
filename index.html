@@ -660,8 +660,8 @@
             let scaleCube = 1;
 
             if (isMobileView) {
-                imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.1;
-                imuState.filteredGamma += (imuState.targetGamma - imuState.filteredGamma) * 0.1;
+                imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.06;
+                imuState.filteredGamma += (imuState.targetGamma - imuState.filteredGamma) * 0.06;
 
                 const hasActiveImu = imuState.permission === 'granted' && imuState.active;
                 
@@ -669,17 +669,16 @@
                 let tiltY = 0;
 
                 if (hasActiveImu) {
-                    tiltX = clamp(imuState.filteredGamma / 45, -1, 1);
-                    // beta 正值时让重力趋向屏幕下方，避免竖直方向体感反转
-                    tiltY = clamp(-imuState.filteredBeta / 45, -1, 1);
+                    tiltX = clamp(imuState.filteredGamma / 60, -1, 1);
+                    tiltY = clamp(imuState.filteredBeta / 60, -1, 1);
                 } else {
-                    tiltX = Math.sin(now * 0.001) * 0.2;
-                    tiltY = Math.cos(now * 0.0013) * 0.2;
+                    tiltX = Math.sin(now * 0.0007) * 0.14;
+                    tiltY = Math.cos(now * 0.0009) * 0.14;
                 }
 
                 const cubeInset = 72;
-                const mobileRangeX = Math.min(window.innerWidth * 0.18, Math.max(48, window.innerWidth / 2 - cubeInset));
-                const mobileRangeY = Math.min(window.innerHeight * 0.16, Math.max(40, window.innerHeight / 2 - cubeInset));
+                const mobileRangeX = Math.min(window.innerWidth * 0.1, Math.max(32, window.innerWidth / 2 - cubeInset));
+                const mobileRangeY = Math.min(window.innerHeight * 0.09, Math.max(28, window.innerHeight / 2 - cubeInset));
                 const targetMobileX = window.innerWidth / 2 + tiltX * mobileRangeX;
                 const targetMobileY = window.innerHeight / 2 + tiltY * mobileRangeY;
 
