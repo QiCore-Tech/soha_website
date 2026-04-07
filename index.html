@@ -663,6 +663,7 @@
         let mobileRollX = 0; let mobileRollY = 0;
         let mobileTapTargetX = 0; let mobileTapTargetY = 0;
         let mobileTapActive = false;
+        let titleWeightState = 360;
         
         window.addEventListener('mousemove', (e) => {
             if (isMobileView) return;
@@ -829,8 +830,14 @@
             const gravityX = isMobileView ? window.innerWidth / 2 + mobileCubeOffsetX : mouseX;
             const gravityY = isMobileView ? window.innerHeight / 2 + mobileCubeOffsetY : mouseY;
             const distToTitle = Math.hypot(gravityX - (titleRect.left + titleRect.width / 2), gravityY - (titleRect.top + titleRect.height / 2));
-            let dynamicWeight = 900 - (distToTitle / (window.innerWidth * 0.4)) * 700;
-            plxTitle.style.fontWeight = Math.max(200, Math.min(900, dynamicWeight));
+            const distRatio = distToTitle / (window.innerWidth * 0.4);
+            const focusWeight = clamp(900 - distRatio * 700, 260, 900);
+            const recoveryWeight = 360;
+            const recoveryMix = clamp((distRatio - 0.55) / 0.75, 0, 1);
+            const targetTitleWeight = focusWeight * (1 - recoveryMix) + recoveryWeight * recoveryMix;
+            const titleWeightLerp = recoveryMix > 0 ? 0.045 : 0.14;
+            titleWeightState += (targetTitleWeight - titleWeightState) * titleWeightLerp;
+            plxTitle.style.fontWeight = clamp(titleWeightState, 320, 900);
 
             requestAnimationFrame(renderLoop);
         }
