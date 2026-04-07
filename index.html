@@ -203,6 +203,13 @@
         .cursor-cube-face.top    { background: rgba(255, 100, 100, 0.15); transform: rotateX(90deg) translateZ(24px); }
         .cursor-cube-face.bottom { background: rgba(100, 100, 255, 0.15); transform: rotateX(-90deg) translateZ(24px); }
 
+        body.mobile-view .axis-h,
+        body.mobile-view .axis-v,
+        body.mobile-view .coord-tracker,
+        body.mobile-view .cursor-dot {
+            opacity: 0;
+        }
+
     </style>
 </head>
 <body>
@@ -272,6 +279,24 @@
         const axisH = document.getElementById('axis-h');
         const axisV = document.getElementById('axis-v');
         const coordTracker = document.getElementById('coord-tracker');
+        
+        const coarsePointerMedia = window.matchMedia('(pointer: coarse)');
+        const hoverNoneMedia = window.matchMedia('(hover: none)');
+        const detectMobileView = () => navigator.maxTouchPoints > 0 && coarsePointerMedia.matches && hoverNoneMedia.matches;
+        let isMobileView = detectMobileView();
+        
+        const imuState = {
+            supported: typeof window.DeviceOrientationEvent !== 'undefined',
+            permission: 'idle',
+            listening: false,
+            active: false,
+            baseBeta: null,
+            baseGamma: null,
+            targetBeta: 0,
+            targetGamma: 0,
+            filteredBeta: 0,
+            filteredGamma: 0
+        };
 
         let voxels = []; 
         let historyStack = []; 
@@ -281,6 +306,97 @@
         let activeVoxelId = null; 
         let magneticPos = null;
 
+        const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+        function resetInteractionState() {
+            mode = 'none';
+            activeVoxelId = null;
+            magneticPos = null;
+            previewContainer.innerHTML = '';
+            magneticContainer.innerHTML = '';
+            document.body.classList.remove('is-deleting');
+            document.querySelectorAll('.voxel.moving').forEach(el => el.classList.remove('moving'));
+            axisH.style.opacity = '0';
+            axisV.style.opacity = '0';
+            coordTracker.style.opacity = '0';
+        }
+
+        function applyViewMode() {
+            document.body.classList.toggle('mobile-view', isMobileView);
+            gridPlane.style.pointerEvents = isMobileView ? 'none' : 'auto';
+            if (isMobileView) resetInteractionState();
+        }
+
+        function handleDeviceOrientation(e) {
+            if (typeof e.beta !== 'number' || typeof e.gamma !== 'number') return;
+
+            if (imuState.baseBeta === null || imuState.baseGamma === null) {
+                imuState.baseBeta = e.beta;
+                imuState.baseGamma = e.gamma;
+            }
+
+            imuState.targetBeta = clamp(e.beta - imuState.baseBeta, -30, 30);
+            imuState.targetGamma = clamp(e.gamma - imuState.baseGamma, -30, 30);
+            imuState.active = true;
+        }
+
+        function startImuTracking() {
+            if (imuState.listening || !imuState.supported) return;
+            window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
+            imuState.listening = true;
+        }
+
+        async function requestImuPermission() {
+            if (!isMobileView || !imuState.supported || imuState.permission === 'granted' || imuState.permission === 'denied') {
+                return;
+            }
+
+            if (typeof window.DeviceOrientationEvent.requestPermission === 'function') {
+                imuState.permission = 'pending';
+                try {
+                    const result = await window.DeviceOrientationEvent.requestPermission();
+                    if (result === 'granted') {
+                        imuState.permission = 'granted';
+                        startImuTracking();
+                    } else {
+                        imuState.permission = 'denied';
+                    }
+                } catch (error) {
+                    imuState.permission = 'denied';
+                }
+                return;
+            }
+
+            imuState.permission = 'granted';
+            startImuTracking();
+        }
+
+        function resetImuBaseline() {
+            imuState.baseBeta = null;
+            imuState.baseGamma = null;
+            imuState.targetBeta = 0;
+            imuState.targetGamma = 0;
+            imuState.filteredBeta = 0;
+            imuState.filteredGamma = 0;
+            imuState.active = false;
+        }
+
+        function syncViewMode() {
+            const nextIsMobileView = detectMobileView();
+            if (nextIsMobileView === isMobileView) return;
+            isMobileView = nextIsMobileView;
+            resetImuBaseline();
+            applyViewMode();
+        }
+
+        window.addEventListener('resize', syncViewMode);
+        window.addEventListener('orientationchange', resetImuBaseline);
+        window.addEventListener('pointerdown', () => {
+            if (isMobileView) requestImuPermission();
+        }, { passive: true });
+
+        applyViewMode();
+        
         function saveState() {
             historyStack.push(JSON.parse(JSON.stringify(voxels)));
             if (historyStack.length > 30) historyStack.shift(); 
@@ -371,6 +487,7 @@
         paperCanvas.addEventListener('contextmenu', e => e.preventDefault());
 
         paperCanvas.addEventListener('pointerdown', (e) => {
+            if (isMobileView) return;
             const target = e.target;
             
             // 右键：进入批量删除模式
@@ -411,6 +528,7 @@
         });
 
         window.addEventListener('pointermove', (e) => {
+            if (isMobileView) return;
             // 获取实时的 3D 逆向映射坐标
             const coords = resolveGridCoords(e);
             
@@ -482,6 +600,7 @@
         });
 
         window.addEventListener('pointerup', () => {
+            if (isMobileView) return;
             if (mode === 'drawing') {
                 const preview = previewContainer.querySelector('.voxel');
                 if (preview) {
@@ -524,8 +643,8 @@
         let prevMouseX = mouseX; let prevMouseY = mouseY;
         
         window.addEventListener('mousemove', (e) => {
+            if (isMobileView) return;
             mouseX = e.clientX; mouseY = e.clientY;
-            cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
         });
 
         let lastTime = performance.now();
@@ -533,6 +652,20 @@
             const now = performance.now();
             const dt = Math.max(1, now - lastTime);
             lastTime = now;
+
+            if (isMobileView) {
+                imuState.filteredBeta += (imuState.targetBeta - imuState.filteredBeta) * 0.08;
+                imuState.filteredGamma += (imuState.targetGamma - imuState.filteredGamma) * 0.08;
+
+                const hasActiveImu = imuState.permission === 'granted' && imuState.active;
+                const fallbackTiltX = Math.sin(now * 0.00055) * 0.28;
+                const fallbackTiltY = Math.cos(now * 0.00043) * 0.22;
+                const tiltX = hasActiveImu ? clamp(imuState.filteredGamma / 30, -1, 1) : fallbackTiltX;
+                const tiltY = hasActiveImu ? clamp(imuState.filteredBeta / 30, -1, 1) : fallbackTiltY;
+
+                mouseX = window.innerWidth / 2 + tiltX * window.innerWidth * 0.18;
+                mouseY = window.innerHeight / 2 + tiltY * window.innerHeight * 0.14;
+            }
 
             lerpX += (mouseX - lerpX) * 0.15; lerpY += (mouseY - lerpY) * 0.15;
             const offsetX = lerpX - mouseX; const offsetY = lerpY - mouseY;
@@ -542,27 +675,40 @@
             const speed = Math.sqrt(vX * vX + vY * vY);
             const scaleCube = 1 + Math.min(speed * 0.05, 0.3); 
             
-            const normX = lerpX / window.innerWidth - 0.5;
-            const normY = lerpY / window.innerHeight - 0.5;
+            const normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
+            const normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
+
+            cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
 
             ambientGlow.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0) translate(-50%, -50%)`;
 
             // ✨ 核心再现：整个画板作为一个大平面在黑色背景前发生剧烈的物理倾斜 ✨
-            const sceneRotX = normY * -25; 
-            const sceneRotY = normX * 25;  
+            const sceneRotX = isMobileView ? normY * -40 : normY * -25; 
+            const sceneRotY = isMobileView ? normX * 40 : normX * 25;  
             paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
             
             // 随着画板的倾斜角度，投射在黑色背景上的巨型阴影产生动态偏移
-            paperCanvas.style.boxShadow = `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
+            paperCanvas.style.boxShadow = isMobileView
+                ? `${normX * -120}px ${normY * -120 + 48}px 120px rgba(0, 0, 0, 0.72)`
+                : `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
             const titleRect = plxTitle.getBoundingClientRect();
             const distToTitle = Math.hypot(mouseX - (titleRect.left + titleRect.width / 2), mouseY - (titleRect.top + titleRect.height / 2));
             let dynamicWeight = 900 - (distToTitle / (window.innerWidth * 0.4)) * 700;
             plxTitle.style.fontWeight = Math.max(200, Math.min(900, dynamicWeight));
 
-            // 多色立方体旋转
-            rotX -= 0.05 + vY * 8.0; rotY += 0.08 + vX * 8.0;
-            cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            if (isMobileView) {
+                const centerOffsetX = (lerpX - window.innerWidth / 2) * 0.4;
+                const centerOffsetY = (lerpY - window.innerHeight / 2) * 0.4;
+                const mobileRotX = normY * -70 + vY * 6;
+                const mobileRotY = normX * 70 + vX * 6;
+                cursorCube.style.transform = `translate3d(${centerOffsetX}px, ${centerOffsetY}px, 0) scale(${1.06 + Math.min(speed * 0.04, 0.14)}) rotateX(${mobileRotX}deg) rotateY(${mobileRotY}deg)`;
+            } else {
+                // 多色立方体旋转
+                rotX -= 0.05 + vY * 8.0;
+                rotY += 0.08 + vX * 8.0;
+                cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            }
 
             requestAnimationFrame(renderLoop);
         }
