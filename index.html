@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QiCore | Make Smart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;900&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/misans-vf@1.0.0/lib/MiSans.min.css">
+    <style>
+        /* ==========================================
+           基础与外层深灰画框
+           ========================================== */
+        :root {
+            --frame-bg: #1c1c1c;
+            --paper-bg: #F2F2F4; 
+            --text-black: #050505;
+            --text-warm-gray: #8B867D;
+            --grid-color: rgba(0, 0, 0, 0.05);
+            --axis-color: rgba(0, 0, 0, 0.15); 
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--frame-bg);
+            overflow: hidden;
+            font-family: 'Outfit', 'MiSans', sans-serif;
+            cursor: none;
+        }
+
+        /* ==========================================
+           全新外框联动：环境漫反射光晕
+           ========================================== */
+        .ambient-glow {
+            position: absolute;
+            /* 足够大以覆盖视口，形成柔和的过渡 */
+            width: 100vmax;
+            height: 100vmax;
+            /* 极致微弱的光斑，仅为 4% 的纯白 */
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0; /* 置于最底层 */
+            transform: translate(-50%, -50%);
+            will-change: transform;
+        }
+
+        /* ==========================================
+           内层米白色纸面与蓝图网格
+           ========================================== */
+        .paper-canvas {
+            position: absolute;
+            top: 2.5vw;
+            bottom: 2.5vw;
+            left: 2.5vw;
+            right: 2.5vw;
+            background-color: var(--paper-bg);
+            /* [修改] 加深了十字虚线和底层点阵的透明度（从 0.06 提升至 0.15），显著增强网格存在感 */
+            background-image: 
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40,0 L40,80 M0,40 L80,40' stroke='rgba(0,0,0,0.15)' stroke-width='1' stroke-dasharray='3 4' fill='none'/%3E%3C/svg%3E"),
+                radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
+            background-size: 80px 80px, 16px 16px;
+            background-position: center center;
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1; 
+        }
+
+        /* ==========================================
+           全新联动：CAD 十字游标与坐标
+           ========================================== */
+        .axis-h, .axis-v {
+            position: absolute;
+            background: var(--axis-color);
+            pointer-events: none;
+            z-index: 5;
+            will-change: transform;
+        }
+
+        .axis-h {
+            width: 100%;
+            height: 1px;
+            left: 0;
+            top: 0;
+        }
+
+        .axis-v {
+            height: 100%;
+            width: 1px;
+            top: 0;
+            left: 0;
+        }
+
+        .coord-tracker {
+            position: absolute;
+            top: 0; left: 0;
+            font-family: 'Geist Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.4);
+            letter-spacing: 0.05em;
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(16px, -20px);
+            will-change: transform;
+        }
+
+        /* ==========================================
+           视觉内容层
+           ========================================== */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            transform: translateY(-5%);
+        }
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(5rem, 14vw, 12rem);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 5vh;
+            user-select: none;
+        }
+
+        .brand-title .qi { color: var(--text-black); }
+        .brand-title .core { color: var(--text-warm-gray); }
+
+        .slogan-bar {
+            background: rgba(242, 242, 244, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 12px 36px;
+            border-radius: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+        }
+
+        .slogan-bar p {
+            font-family: 'MiSans', sans-serif;
+            color: #66635E;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            /* [新增] 使用 flex 布局以完美对齐文字与分隔符 */
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        /* [新增] 定制的几何分隔符 */
+        .slogan-separator {
+            display: inline-block;
+            width: 3px;
+            height: 3px;
+            background-color: rgba(0, 0, 0, 0.2);
+            /* 旋转 45 度形成一个小菱形/立方体暗示 */
+            transform: rotate(45deg);
+        }
+
+        /* ==========================================
+           底部联络信息 (终端滚轮排版)
+           ========================================== */
+        .footer-signature {
+            position: absolute;
+            bottom: 3vh;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-footer {
+            display: flex;
+            align-items: center;
+            background: rgba(242, 242, 244, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 4px 12px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            gap: 4px;
+        }
+
+        .terminal-footer .icon-indicator {
+            width: 6px;
+            height: 6px;
+            background-color: var(--text-warm-gray);
+            border-radius: 50%;
+            margin-right: 4px;
+            /* 呼吸灯效果 */
+            animation: pulseFade 2s infinite;
+        }
+
+        @keyframes pulseFade {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .terminal-footer .domain {
+            font-family: 'Geist Mono', monospace;
+            color: #716C64;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        /* 滚轮核心容器 */
+        .slot-machine {
+            height: 16px; 
+            overflow: hidden;
+            position: relative;
+            display: inline-block;
+            min-width: 42px; 
+            text-align: right;
+        }
+
+        /* 滚动轨道与动画 */
+        .slot-track {
+            display: flex;
+            flex-direction: column;
+            /* [修改] 仅在 hr 和 info 之间切换，缩短循环周期至 6s */
+            animation: slotSpin 6s infinite cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .slot-track span {
+            font-family: 'Geist Mono', monospace;
+            color: var(--text-black);
+            font-size: 0.7rem;
+            font-weight: 700;
+            line-height: 16px;
+            height: 16px;
+            letter-spacing: 0.05em;
+        }
+
+        /* [修改] 状态停留与快速滚动：0 (info), -16px (hr), -32px (循环的 info) */
+        @keyframes slotSpin {
+            0%, 40%   { transform: translateY(0); }
+            50%, 90%  { transform: translateY(-16px); }
+            100%      { transform: translateY(-32px); }
+        }
+
+        /* ==========================================
+           3D 游走立方体光标 (CSS 3D)
+           ========================================== */
+        #cursor-wrapper {
+            position: fixed;
+            top: 0; left: 0;
+            width: 1px; height: 1px;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference; 
+            perspective: 800px;
+        }
+
+        .cursor-dot {
+            position: absolute;
+            width: 6px; height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cube-container {
+            position: absolute;
+            width: 48px; height: 48px;
+            transform-style: preserve-3d;
+            transform: translate(-50%, -50%);
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 100%; height: 100%;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-sizing: border-box;
+        }
+
+        .cube-face.front  { background: rgba(0, 255, 255, 0.15); transform: rotateY(0deg) translateZ(24px); }
+        .cube-face.back   { background: rgba(255, 0, 255, 0.15); transform: rotateY(180deg) translateZ(24px); }
+        .cube-face.right  { background: rgba(255, 255, 0, 0.15); transform: rotateY(90deg) translateZ(24px); }
+        .cube-face.left   { background: rgba(0, 255, 0, 0.15); transform: rotateY(-90deg) translateZ(24px); }
+        .cube-face.top    { background: rgba(255, 100, 100, 0.15); transform: rotateX(90deg) translateZ(24px); }
+        .cube-face.bottom { background: rgba(100, 100, 255, 0.15); transform: rotateX(-90deg) translateZ(24px); }
+
+        @media (max-width: 768px) {
+            .paper-canvas { top: 4vw; bottom: 4vw; left: 4vw; right: 4vw; background-size: 80px 80px, 16px 16px; }
+            .slogan-bar { padding: 10px 24px; }
+            .slogan-bar p { font-size: 0.75rem; }
+            #cursor-wrapper, .axis-h, .axis-v, .coord-tracker, .ambient-glow { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 底层环境漫反射光 -->
+    <div class="ambient-glow" id="ambient-glow"></div>
+
+    <div class="paper-canvas" id="canvas-area">
+        <!-- CAD 十字游标与坐标 -->
+        <div class="axis-h" id="axis-h"></div>
+        <div class="axis-v" id="axis-v"></div>
+        <div class="coord-tracker" id="coord-tracker">X: 0.0 | Y: 0.0</div>
+
+        <div class="content-layer">
+            <h1 class="brand-title">
+                <span class="qi">Qi</span><span class="core">Core</span>
+            </h1>
+            <div class="slogan-bar">
+                <!-- [修改] 移除普通斜杠，替换为带有 gap 的 flex 布局与几何分隔符 -->
+                <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
+            </div>
+        </div>
+
+        <!-- 底部联系信息改为单行滚轮，仅保留 info 和 hr -->
+            <div class="terminal-footer">
+                <div class="icon-indicator"></div>
+                <div class="slot-machine">
+                    <div class="slot-track">
+                        <span>info</span>
+                        <span>hr</span>
+                        <span>info</span> <!-- 用于实现无缝首尾循环相接 -->
+                    </div>
+                </div>
+                <span class="domain">@qicore.tech</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D 立方体光标 DOM 结构 -->
+    <div id="cursor-wrapper">
+        <div class="cursor-dot"></div>
+        <div class="cube-container" id="cube">
+            <div class="cube-face front"></div>
+            <div class="cube-face back"></div>
+            <div class="cube-face right"></div>
+            <div class="cube-face left"></div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 交互逻辑：平滑跟随 + 动力学旋转 + CAD 游标
+        // ==========================================
+        const cursorWrapper = document.getElementById('cursor-wrapper');
+        const cube = document.getElementById('cube');
+        const paperCanvas = document.getElementById('canvas-area');
+        const ambientGlow = document.getElementById('ambient-glow');
+        
+        const axisH = document.getElementById('axis-h');
+        const axisV = document.getElementById('axis-v');
+        const coordTracker = document.getElementById('coord-tracker');
+        
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let lerpX = mouseX;
+        let lerpY = mouseY;
+        
+        let rotX = 45; 
+        let rotY = 45;
+        let vX = 0; 
+        let vY = 0; 
+        let prevMouseX = mouseX;
+        let prevMouseY = mouseY;
+        
+        let bgLerpX = mouseX;
+        let bgLerpY = mouseY;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        });
+
+        let lastTime = performance.now();
+        function renderLoop() {
+            const now = performance.now();
+            const dt = Math.max(1, now - lastTime);
+            lastTime = now;
+
+            // 1. 立方体缓动跟随
+            lerpX += (mouseX - lerpX) * 0.15;
+            lerpY += (mouseY - lerpY) * 0.15;
+            const offsetX = lerpX - mouseX;
+            const offsetY = lerpY - mouseY;
+
+            vX = (mouseX - prevMouseX) / dt;
+            vY = (mouseY - prevMouseY) / dt;
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
+
+            // 2. 背景与环境光联动
+            bgLerpX += (mouseX - bgLerpX) * 0.08;
+            bgLerpY += (mouseY - bgLerpY) * 0.08;
+            
+            // 外层环境漫反射光跟随
+            ambientGlow.style.transform = `translate3d(${bgLerpX}px, ${bgLerpY}px, 0) translate(-50%, -50%)`;
+
+            // 获取画框边界以计算相对位置
+            const rect = paperCanvas.getBoundingClientRect();
+            const localX = bgLerpX - rect.left;
+            const localY = bgLerpY - rect.top;
+
+            // 背景网格反向视差
+            const gridOffsetX = (bgLerpX / window.innerWidth - 0.5) * -120; 
+            const gridOffsetY = (bgLerpY / window.innerHeight - 0.5) * -120;
+            paperCanvas.style.backgroundPosition = `calc(50% + ${gridOffsetX}px) calc(50% + ${gridOffsetY}px)`;
+
+            // 十字游标定位 (防止溢出画框)
+            if (localX >= 0 && localX <= rect.width && localY >= 0 && localY <= rect.height) {
+                axisH.style.transform = `translate3d(0, ${localY}px, 0)`;
+                axisV.style.transform = `translate3d(${localX}px, 0, 0)`;
+                
+                coordTracker.style.transform = `translate3d(${localX + 16}px, ${localY - 24}px, 0)`;
+                coordTracker.textContent = `X: ${localX.toFixed(1)} | Y: ${localY.toFixed(1)}`;
+                
+                axisH.style.opacity = '1';
+                axisV.style.opacity = '1';
+                coordTracker.style.opacity = '1';
+            } else {
+                // 当鼠标离开内层画布时，隐藏十字游标
+                axisH.style.opacity = '0';
+                axisV.style.opacity = '0';
+                coordTracker.style.opacity = '0';
+            }
+
+            // 3. 立方体旋转动力学
+            rotX -= 0.05;
+            rotY += 0.08;
+            rotX -= vY * 8.0; 
+            rotY += vX * 8.0;
+            cube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+
+            requestAnimationFrame(renderLoop);
+        }
+        
+        requestAnimationFrame(renderLoop);
+    </script>
+</body>
+</html>
