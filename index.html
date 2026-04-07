@@ -6,340 +6,230 @@
     <title>QiCore | Make Smart</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;900&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/misans-vf@1.0.0/lib/MiSans.min.css">
     <style>
         /* ==========================================
-           基础与外层深灰画框
+           全局变量与基础设定
            ========================================== */
         :root {
             --frame-bg: #1c1c1c;
-            --paper-bg: #F2F2F4; 
+            --paper-bg: #EAE8EC; 
             --text-black: #050505;
             --text-warm-gray: #8B867D;
-            --grid-color: rgba(0, 0, 0, 0.05);
-            --axis-color: rgba(0, 0, 0, 0.15); 
+            --grid-color: rgba(0, 0, 0, 0.08);
+            --axis-color: rgba(0, 0, 0, 0.2); 
+            --voxel-depth: 40px; 
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
+        /* body 作为全局摄像机视口 */
         body, html {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background-color: var(--frame-bg);
             overflow: hidden;
             font-family: 'Outfit', 'MiSans', sans-serif;
             cursor: none;
+            /* 开启全局景深，让倾斜产生巨大的 3D 落差感 */
+            perspective: 2000px; 
+            display: flex; align-items: center; justify-content: center;
         }
 
-        /* ==========================================
-           全新外框联动：环境漫反射光晕
-           ========================================== */
         .ambient-glow {
-            position: absolute;
-            /* 足够大以覆盖视口，形成柔和的过渡 */
-            width: 100vmax;
-            height: 100vmax;
-            /* 极致微弱的光斑，仅为 4% 的纯白 */
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0; /* 置于最底层 */
-            transform: translate(-50%, -50%);
-            will-change: transform;
+            position: absolute; width: 100vmax; height: 100vmax;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            border-radius: 50%; pointer-events: none; z-index: 0; 
+            transform: translate(-50%, -50%); will-change: transform;
         }
 
         /* ==========================================
-           内层米白色纸面与蓝图网格
+           ✨ 核心画布：作为一个整体在黑色背景上悬浮倾斜 ✨
            ========================================== */
         .paper-canvas {
-            position: absolute;
-            top: 2.5vw;
-            bottom: 2.5vw;
-            left: 2.5vw;
-            right: 2.5vw;
+            position: relative;
+            /* 缩小画布面积，露出深邃的黑色背景边框 */
+            width: 90vw; height: 90vh;
             background-color: var(--paper-bg);
-            /* 加深了十字虚线和底层点阵的透明度，显著增强网格存在感 */
+            border-radius: 8px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            transform-style: preserve-3d;
+            transform-origin: center center;
+            will-change: transform, box-shadow;
+            z-index: 1; 
+            touch-action: none;
+        }
+
+        /* 物理图纸底板 */
+        #grid-plane {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40,0 L40,80 M0,40 L80,40' stroke='rgba(0,0,0,0.15)' stroke-width='1' stroke-dasharray='3 4' fill='none'/%3E%3C/svg%3E"),
-                radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40,0 L40,80 M0,40 L80,40' stroke='rgba(0,0,0,0.12)' stroke-width='1' stroke-dasharray='3 4' fill='none'/%3E%3C/svg%3E"),
+                radial-gradient(circle, rgba(0,0,0,0.12) 1px, transparent 1px);
             background-size: 80px 80px, 16px 16px;
             background-position: center center;
-            border-radius: 4px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1; 
+            transform: translateZ(0); 
+            pointer-events: auto; /* 接收点击生成指令 */
+            border-radius: inherit;
+        }
+
+        #voxels-container, #preview-container, #magnetic-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            transform-style: preserve-3d; pointer-events: none; 
         }
 
         /* ==========================================
-           全新联动：CAD 十字游标与坐标
+           🚀 严格折叠的 3D 几何模块 (Voxel)
+           ========================================== */
+        .voxel {
+            position: absolute; transform-style: preserve-3d;
+            pointer-events: auto; 
+        }
+
+        .voxel .face {
+            position: absolute; box-sizing: border-box;
+            border: 1px solid rgba(0, 0, 0, 0.4); transition: background 0.1s, opacity 0.2s;
+        }
+
+        /* 实体模块高级光照材质 */
+        .voxel .face.top { width: 100%; height: 100%; background: #E8E8EB; box-shadow: inset 0 0 8px rgba(255,255,255,0.8); }
+        .voxel .face.bottom { width: 100%; height: 100%; background: #222; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .voxel .face.front  { width: 100%; height: var(--voxel-depth); top: 0; transform-origin: top; background: #C4C4C8; }
+        .voxel .face.back   { width: 100%; height: var(--voxel-depth); bottom: 0; transform-origin: bottom; background: #A8A8AC; }
+        .voxel .face.left   { width: var(--voxel-depth); height: 100%; left: 0; transform-origin: left; background: #D0D0D4; }
+        .voxel .face.right  { width: var(--voxel-depth); height: 100%; right: 0; transform-origin: right; background: #B4B4B8; }
+
+        /* 模块抓取态 (移动中) - 调整透明度并透传事件 */
+        .voxel.moving { pointer-events: none !important; }
+        .voxel.moving .face { opacity: 0.5; }
+
+        /* ✨ 拖拽与磁吸预览框：改为契合主题的暖灰色 ✨ */
+        .voxel.preview { pointer-events: none; z-index: 999; }
+        .voxel.preview .face { 
+            background: rgba(180, 180, 185, 0.4) !important; 
+            border: 1.5px dashed rgba(100, 100, 100, 0.6); 
+        }
+        .voxel.preview .face.top { box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4); }
+        .voxel.preview .face.bottom { box-shadow: none; border: none; }
+
+        /* 悬停提示互动逻辑 */
+        .voxel:hover .face.top { background: #F5F5F5; }
+        .voxel:hover .face.front, .voxel:hover .face.back, .voxel:hover .face.left, .voxel:hover .face.right { 
+            background: #E8E8EB; cursor: move; /* 提示可抓取 */
+        }
+        body.is-deleting .voxel:hover .face { background: #FFBABA !important; border-color: #FF4444; }
+
+        /* ==========================================
+           UI 交互层 (悬浮在 3D 画布上方)
            ========================================== */
         .axis-h, .axis-v {
-            position: absolute;
-            background: var(--axis-color);
-            pointer-events: none;
-            z-index: 5;
-            will-change: transform;
+            position: absolute; background: var(--axis-color);
+            pointer-events: none; z-index: 5; will-change: transform;
+            transition: opacity 0.2s ease; transform: translateZ(1px);
         }
-
-        .axis-h {
-            width: 100%;
-            height: 1px;
-            left: 0;
-            top: 0;
-        }
-
-        .axis-v {
-            height: 100%;
-            width: 1px;
-            top: 0;
-            left: 0;
-        }
+        .axis-h { width: 100%; height: 1px; left: 0; top: 0; }
+        .axis-v { height: 100%; width: 1px; top: 0; left: 0; }
 
         .coord-tracker {
-            position: absolute;
-            top: 0; left: 0;
-            font-family: 'Geist Mono', monospace;
-            font-size: 10px;
-            font-weight: 600;
-            color: rgba(0, 0, 0, 0.4);
-            letter-spacing: 0.05em;
-            pointer-events: none;
-            z-index: 5;
-            transform: translate(16px, -20px);
-            will-change: transform;
+            position: absolute; top: 0; left: 0; font-family: 'Geist Mono', monospace;
+            font-size: 10px; font-weight: 600; color: rgba(0, 0, 0, 0.4); letter-spacing: 0.05em;
+            pointer-events: none; z-index: 5; transform: translate3d(16px, -20px, 1px); will-change: transform;
         }
 
-        /* ==========================================
-           视觉内容层
-           ========================================== */
         .content-layer {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            pointer-events: none;
-            /* 保留基础定位 */
-            transform: translateY(-5%);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            pointer-events: none; z-index: 10; transform-style: preserve-3d;
         }
 
         .brand-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: clamp(5rem, 14vw, 12rem);
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            line-height: 1;
-            margin-bottom: 5vh;
-            user-select: none;
-            /* 开启 GPU 加速，准备接收高频视差更新 */
-            will-change: transform;
+            font-family: 'Outfit', sans-serif; font-size: clamp(5rem, 14vw, 12rem); font-weight: 200; 
+            letter-spacing: -0.02em; line-height: 1; margin-bottom: 5vh; 
+            /* 利用 CSS 直接赋予高程，画布倾斜时浏览器会自动计算视差 */
+            transform: translateZ(80px) translateY(-10vh); will-change: font-weight;
         }
-
         .brand-title .qi { color: var(--text-black); }
         .brand-title .core { color: var(--text-warm-gray); }
 
         .slogan-bar {
-            background: rgba(242, 242, 244, 0.75);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 12px 36px;
-            border-radius: 100px;
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
-            /* 开启 GPU 加速 */
-            will-change: transform;
+            background: rgba(242, 242, 244, 0.75); backdrop-filter: blur(12px);
+            padding: 12px 36px; border-radius: 100px; border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05); display: flex; align-items: center; gap: 14px;
+            transform: translateZ(50px) translateY(-10vh);
         }
+        .slogan-bar p { color: #66635E; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; }
+        .slogan-separator { display: inline-block; width: 3px; height: 3px; background-color: rgba(0, 0, 0, 0.2); transform: rotate(45deg); }
 
-        .slogan-bar p {
-            font-family: 'MiSans', sans-serif;
-            color: #66635E;
-            font-size: 0.95rem;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .slogan-separator {
-            display: inline-block;
-            width: 3px;
-            height: 3px;
-            background-color: rgba(0, 0, 0, 0.2);
-            transform: rotate(45deg);
-        }
-
-        /* ==========================================
-           底部联络信息 (终端滚轮排版)
-           ========================================== */
+        /* 恢复底部终端邮箱 */
         .footer-signature {
-            position: absolute;
-            bottom: 3vh;
-            left: 50%;
-            /* 基础定位，后续在 JS 中叠加视差 */
-            transform: translateX(-50%);
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            /* 开启 GPU 加速 */
-            will-change: transform;
+            position: absolute; bottom: 3vh; left: 50%;
+            z-index: 10; pointer-events: none; display: flex; align-items: center;
+            transform: translateX(-50%) translateZ(30px);
         }
-
         .terminal-footer {
-            display: flex;
-            align-items: center;
-            background: rgba(242, 242, 244, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            padding: 4px 12px;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-            gap: 4px;
+            display: flex; align-items: center; background: rgba(242, 242, 244, 0.6);
+            backdrop-filter: blur(8px); border: 1px solid rgba(0, 0, 0, 0.05); padding: 4px 12px; border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02); gap: 4px;
         }
-
         .terminal-footer .icon-indicator {
-            width: 6px;
-            height: 6px;
-            background-color: var(--text-warm-gray);
-            border-radius: 50%;
-            margin-right: 4px;
-            /* 呼吸灯效果 */
-            animation: pulseFade 2s infinite;
+            width: 6px; height: 6px; background-color: var(--text-warm-gray);
+            border-radius: 50%; margin-right: 4px; animation: pulseFade 2s infinite;
         }
-
-        @keyframes pulseFade {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        .terminal-footer .domain {
-            font-family: 'Geist Mono', monospace;
-            color: #716C64;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-        }
-
-        /* 滚轮核心容器 */
-        .slot-machine {
-            height: 16px; 
-            overflow: hidden;
-            position: relative;
-            display: inline-block;
-            min-width: 42px; 
-            text-align: right;
-        }
-
-        /* 滚动轨道与动画 */
-        .slot-track {
-            display: flex;
-            flex-direction: column;
-            /* 仅在 hr 和 info 之间切换，缩短循环周期至 6s */
-            animation: slotSpin 6s infinite cubic-bezier(0.7, 0, 0.3, 1);
-        }
-
-        .slot-track span {
-            font-family: 'Geist Mono', monospace;
-            color: var(--text-black);
-            font-size: 0.7rem;
-            font-weight: 700;
-            line-height: 16px;
-            height: 16px;
-            letter-spacing: 0.05em;
-        }
-
-        /* 状态停留与快速滚动：0 (info), -16px (hr), -32px (循环的 info) */
-        @keyframes slotSpin {
-            0%, 40%   { transform: translateY(0); }
-            50%, 90%  { transform: translateY(-16px); }
-            100%      { transform: translateY(-32px); }
-        }
+        @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .terminal-footer .domain { font-family: 'Geist Mono', monospace; color: #716C64; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; }
+        .slot-machine { height: 16px; overflow: hidden; position: relative; display: inline-block; min-width: 42px; text-align: right; }
+        .slot-track { display: flex; flex-direction: column; animation: slotSpin 6s infinite cubic-bezier(0.7, 0, 0.3, 1); }
+        .slot-track span { font-family: 'Geist Mono', monospace; color: var(--text-black); font-size: 0.7rem; font-weight: 700; line-height: 16px; height: 16px; letter-spacing: 0.05em; }
+        @keyframes slotSpin { 0%, 40% { transform: translateY(0); } 50%, 90% { transform: translateY(-16px); } 100% { transform: translateY(-32px); } }
 
         /* ==========================================
-           3D 游走立方体光标 (CSS 3D)
+           ✨ 恢复：悬浮的多色 3D 准星立方体 ✨
            ========================================== */
         #cursor-wrapper {
-            position: fixed;
-            top: 0; left: 0;
-            width: 1px; height: 1px;
-            pointer-events: none;
-            z-index: 9999;
-            mix-blend-mode: difference; 
-            perspective: 800px;
+            position: fixed; top: 0; left: 0; width: 1px; height: 1px;
+            pointer-events: none; z-index: 9999; mix-blend-mode: difference; perspective: 800px;
+            will-change: transform;
         }
-
-        .cursor-dot {
-            position: absolute;
-            width: 6px; height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
+        .cursor-dot { position: absolute; width: 6px; height: 6px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%); }
+        .cursor-cube-container {
+            position: absolute; width: 48px; height: 48px; transform-style: preserve-3d;
+            transform: translate(-50%, -50%); transition: transform 0.1s linear;
         }
+        .cursor-cube-face { position: absolute; width: 100%; height: 100%; border: 1.5px solid rgba(255, 255, 255, 0.9); box-sizing: border-box; }
+        .cursor-cube-face.front  { background: rgba(0, 255, 255, 0.15); transform: rotateY(0deg) translateZ(24px); }
+        .cursor-cube-face.back   { background: rgba(255, 0, 255, 0.15); transform: rotateY(180deg) translateZ(24px); }
+        .cursor-cube-face.right  { background: rgba(255, 255, 0, 0.15); transform: rotateY(90deg) translateZ(24px); }
+        .cursor-cube-face.left   { background: rgba(0, 255, 0, 0.15); transform: rotateY(-90deg) translateZ(24px); }
+        .cursor-cube-face.top    { background: rgba(255, 100, 100, 0.15); transform: rotateX(90deg) translateZ(24px); }
+        .cursor-cube-face.bottom { background: rgba(100, 100, 255, 0.15); transform: rotateX(-90deg) translateZ(24px); }
 
-        .cube-container {
-            position: absolute;
-            width: 48px; height: 48px;
-            transform-style: preserve-3d;
-            transform: translate(-50%, -50%);
-        }
-
-        .cube-face {
-            position: absolute;
-            width: 100%; height: 100%;
-            border: 1.5px solid rgba(255, 255, 255, 0.9);
-            box-sizing: border-box;
-        }
-
-        .cube-face.front  { background: rgba(0, 255, 255, 0.15); transform: rotateY(0deg) translateZ(24px); }
-        .cube-face.back   { background: rgba(255, 0, 255, 0.15); transform: rotateY(180deg) translateZ(24px); }
-        .cube-face.right  { background: rgba(255, 255, 0, 0.15); transform: rotateY(90deg) translateZ(24px); }
-        .cube-face.left   { background: rgba(0, 255, 0, 0.15); transform: rotateY(-90deg) translateZ(24px); }
-        .cube-face.top    { background: rgba(255, 100, 100, 0.15); transform: rotateX(90deg) translateZ(24px); }
-        .cube-face.bottom { background: rgba(100, 100, 255, 0.15); transform: rotateX(-90deg) translateZ(24px); }
-
-        @media (max-width: 768px) {
-            .paper-canvas { top: 4vw; bottom: 4vw; left: 4vw; right: 4vw; background-size: 80px 80px, 16px 16px; }
-            .slogan-bar { padding: 10px 24px; }
-            .slogan-bar p { font-size: 0.75rem; }
-            
-            /* 移动端不再隐藏 cursor-wrapper，保留 3D 立方体显示。仅隐藏准星点、坐标轴和环境光 */
-            .cursor-dot, .axis-h, .axis-v, .coord-tracker, .ambient-glow { display: none; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- 底层环境漫反射光 -->
     <div class="ambient-glow" id="ambient-glow"></div>
 
+    <!-- ✨ 核心画板：它作为一个整体在黑色物理空间中发生倾斜视差 ✨ -->
     <div class="paper-canvas" id="canvas-area">
-        <!-- CAD 十字游标与坐标 -->
-        <div class="axis-h" id="axis-h"></div>
-        <div class="axis-v" id="axis-v"></div>
-        <div class="coord-tracker" id="coord-tracker">X: 0.0 | Y: 0.0</div>
+        
+        <div id="grid-plane">
+            <!-- CAD 坐标仪 -->
+            <div class="axis-h" id="axis-h"></div>
+            <div class="axis-v" id="axis-v"></div>
+            <div class="coord-tracker" id="coord-tracker">X: 0 | Y: 0 | Z: 0</div>
+        </div>
+        
+        <div id="voxels-container"></div>
+        <div id="magnetic-container"></div>
+        <div id="preview-container"></div>
 
         <div class="content-layer">
-            <h1 class="brand-title" id="plx-title">
-                <span class="qi">Qi</span><span class="core">Core</span>
-            </h1>
+            <h1 class="brand-title" id="plx-title"><span class="qi">Qi</span><span class="core">Core</span></h1>
             <div class="slogan-bar" id="plx-slogan">
                 <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
             </div>
         </div>
 
-        <!-- 底部联系信息改为单行滚轮，仅保留 info 和 hr -->
         <div class="footer-signature" id="plx-footer">
             <div class="terminal-footer">
                 <div class="icon-indicator"></div>
@@ -350,118 +240,291 @@
                         <span>info</span>
                     </div>
                 </div>
-                <span class="domain">@qicore.ai</span>
+                <span class="domain">@qicore.tech</span>
             </div>
         </div>
     </div>
 
-    <!-- 3D 立方体光标 DOM 结构 -->
+    <!-- ✨ 恢复的多色悬浮光标 ✨ -->
     <div id="cursor-wrapper">
         <div class="cursor-dot"></div>
-        <div class="cube-container" id="cube">
-            <div class="cube-face front"></div>
-            <div class="cube-face back"></div>
-            <div class="cube-face right"></div>
-            <div class="cube-face left"></div>
-            <div class="cube-face top"></div>
-            <div class="cube-face bottom"></div>
+        <div class="cursor-cube-container" id="cursor-cube">
+            <div class="cursor-cube-face front"></div>
+            <div class="cursor-cube-face back"></div>
+            <div class="cursor-cube-face right"></div>
+            <div class="cursor-cube-face left"></div>
+            <div class="cursor-cube-face top"></div>
+            <div class="cursor-cube-face bottom"></div>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // 交互逻辑：平滑跟随 + 动力学旋转 + CAD 游标 + 全局视差
+        // 1. ✨ 数据驱动的沙盒建造引擎 (原生逆向坐标映射) ✨
         // ==========================================
-        const cursorWrapper = document.getElementById('cursor-wrapper');
-        const cube = document.getElementById('cube');
+        const GRID_SIZE = 40; 
         const paperCanvas = document.getElementById('canvas-area');
-        const ambientGlow = document.getElementById('ambient-glow');
+        const gridPlane = document.getElementById('grid-plane');
+        const voxelsContainer = document.getElementById('voxels-container');
+        const previewContainer = document.getElementById('preview-container');
+        const magneticContainer = document.getElementById('magnetic-container');
         
         const axisH = document.getElementById('axis-h');
         const axisV = document.getElementById('axis-v');
         const coordTracker = document.getElementById('coord-tracker');
-        
-        // 获取视差元素
-        const plxTitle = document.getElementById('plx-title');
-        const plxSlogan = document.getElementById('plx-slogan');
-        const plxFooter = document.getElementById('plx-footer');
-        
-        // [修复] 必须先声明鼠标位置变量
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
-        let lerpX = mouseX;
-        let lerpY = mouseY;
-        
-        let rotX = 45; 
-        let rotY = 45;
-        let vX = 0; 
-        let vY = 0; 
-        let prevMouseX = mouseX;
-        let prevMouseY = mouseY;
-        
-        let bgLerpX = mouseX;
-        let bgLerpY = mouseY;
 
-        // 触控控制接管 (Fallback)
-        window.addEventListener('touchmove', (e) => {
-            if(e.touches.length > 0) {
-                mouseX = e.touches[0].clientX;
-                mouseY = e.touches[0].clientY;
-                cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        let voxels = []; 
+        let historyStack = []; 
+        
+        let mode = 'none'; 
+        let drawStartX = 0, drawStartY = 0, drawStartZ = 0;
+        let activeVoxelId = null; 
+        let magneticPos = null;
+
+        function saveState() {
+            historyStack.push(JSON.parse(JSON.stringify(voxels)));
+            if (historyStack.length > 30) historyStack.shift(); 
+        }
+        
+        function undo() {
+            if (historyStack.length > 0) {
+                voxels = historyStack.pop();
+                renderAllVoxels();
             }
-        }, { passive: true });
+        }
 
-        // 尝试在首次触摸屏幕时，向 iOS 请求陀螺仪权限
-        let imuPermissionGranted = false;
-        document.body.addEventListener('touchstart', () => {
-            if (!imuPermissionGranted && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission()
-                    .then(state => { if (state === 'granted') imuPermissionGranted = true; })
-                    .catch(console.error);
-            } else {
-                imuPermissionGranted = true; // Android 等非限制设备直接视为可用
-            }
-        }, { once: true });
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z') undo();
+        });
 
-        // IMU 重力感应逻辑
-        let initBeta = null;
-        let initGamma = null;
-
-        window.addEventListener('deviceorientation', (e) => {
-            // 剔除空数据
-            if (e.beta === null || e.gamma === null) return;
+        function getMaxZInArea(x1, y1, x2, y2, ignoreId = null) {
+            let maxZ = 0;
+            const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
+            const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
             
-            // 首次获取数据时，记录设备当前的物理拿持姿势作为屏幕中心 (0,0) 的基准
-            if (initBeta === null) {
-                initBeta = e.beta;
-                initGamma = e.gamma;
+            voxels.forEach(v => {
+                if (v.id === ignoreId) return;
+                if (minX < v.x + v.w && maxX >= v.x && minY < v.y + v.h && maxY >= v.y) {
+                    maxZ = Math.max(maxZ, v.z + 1);
+                }
+            });
+            return maxZ;
+        }
+
+        // 创建严格闭合的几何模块
+        function createVoxelDOM(v, isPreview = false) {
+            const el = document.createElement('div');
+            el.className = `voxel ${isPreview ? 'preview' : ''}`;
+            if (!isPreview) el.id = `voxel-${v.id}`;
+            
+            el.style.left = `${v.x * GRID_SIZE}px`; el.style.top = `${v.y * GRID_SIZE}px`;
+            el.style.width = `${v.w * GRID_SIZE}px`; el.style.height = `${v.h * GRID_SIZE}px`;
+            el.dataset.id = v.id;
+            el.dataset.x = String(v.x);
+            el.dataset.y = String(v.y);
+            el.dataset.w = String(v.w);
+            el.dataset.h = String(v.h);
+            el.dataset.z = String(v.z);
+
+            const faces = ['top', 'bottom', 'front', 'back', 'left', 'right'];
+            faces.forEach(f => {
+                const face = document.createElement('div');
+                face.className = `face ${f}`;
+                // Z 轴深度数据直接下放到每个面，防止父级扁平化
+                if (f === 'bottom') face.style.transform = `translateZ(${v.z * 40}px)`;
+                else if (f === 'top') face.style.transform = `translateZ(${(v.z + 1) * 40}px)`;
+                else if (f === 'front') face.style.transform = `translateZ(${v.z * 40}px) rotateX(90deg)`;
+                else if (f === 'back') face.style.transform = `translateZ(${v.z * 40}px) rotateX(-90deg)`;
+                else if (f === 'left') face.style.transform = `translateZ(${v.z * 40}px) rotateY(-90deg)`;
+                else if (f === 'right') face.style.transform = `translateZ(${v.z * 40}px) rotateY(90deg)`;
+                el.appendChild(face);
+            });
+            return el;
+        }
+
+        function renderAllVoxels() {
+            voxelsContainer.innerHTML = '';
+            voxels.forEach(v => voxelsContainer.appendChild(createVoxelDOM(v)));
+        }
+
+        // ✨ 核心机制：通过原生 offsetX 获取 3D 偏转平面的绝对二维坐标 ✨
+        function resolveGridCoords(e) {
+            const target = e.target;
+            // 命中底板
+            if (target.id === 'grid-plane') {
+                return { x: Math.floor(e.offsetX / GRID_SIZE), y: Math.floor(e.offsetY / GRID_SIZE), z: 0 };
+            }
+            // 命中模块顶面
+            if (target.classList.contains('top')) {
+                const voxelEl = target.closest('.voxel');
+                if (!voxelEl) return null;
+                const v = voxels.find(vx => vx.id == voxelEl.dataset.id);
+                if (v) return { 
+                    x: v.x + Math.floor(e.offsetX / GRID_SIZE), 
+                    y: v.y + Math.floor(e.offsetY / GRID_SIZE), 
+                    z: v.z + 1 
+                };
+            }
+            return null;
+        }
+
+        paperCanvas.addEventListener('contextmenu', e => e.preventDefault());
+
+        paperCanvas.addEventListener('pointerdown', (e) => {
+            const target = e.target;
+            
+            // 右键：进入批量删除模式
+            if (e.button === 2) {
+                saveState();
+                mode = 'deleting';
+                document.body.classList.add('is-deleting');
+                const voxelEl = target.closest('.voxel');
+                if (voxelEl && !voxelEl.classList.contains('preview')) {
+                    voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
+                    renderAllVoxels();
+                }
                 return;
             }
 
-            // 计算相对物理倾斜偏移
-            let diffX = e.gamma - initGamma;
-            let diffY = e.beta - initBeta;
+            // 左键：交互逻辑
+            if (e.button === 0) {
+                // 1. 如果抓的是侧面，进入抓取移动模式
+                if (target.classList.contains('face') && !target.classList.contains('top') && !target.classList.contains('bottom')) {
+                    saveState();
+                    mode = 'moving';
+                    const voxelEl = target.closest('.voxel');
+                    activeVoxelId = parseInt(voxelEl.dataset.id);
+                    voxelEl.classList.add('moving'); // 释放自身鼠标事件，让射线穿透
+                    return;
+                }
 
-            // 限制倾斜解析的极值（比如最大倾斜 25 度），避免立方体飞出视口边界
-            const maxTilt = 25; 
-            diffX = Math.max(-maxTilt, Math.min(maxTilt, diffX));
-            diffY = Math.max(-maxTilt, Math.min(maxTilt, diffY));
-
-            // 将角度映射为屏幕坐标。倾斜 25 度等同于移动屏幕宽度的 40%
-            const targetX = (window.innerWidth / 2) + (diffX / maxTilt) * (window.innerWidth * 0.4);
-            const targetY = (window.innerHeight / 2) + (diffY / maxTilt) * (window.innerHeight * 0.4);
-
-            // 应用低通滤波（小系数 Lerp），让重力感应变得极其柔和，消除手部自然抖动
-            mouseX += (targetX - mouseX) * 0.05;
-            mouseY += (targetY - mouseY) * 0.05;
-            
-            cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+                // 2. 点击底板或顶面，进入绘制模式
+                const coords = resolveGridCoords(e);
+                if (coords) {
+                    saveState();
+                    mode = 'drawing';
+                    drawStartX = coords.x; drawStartY = coords.y; drawStartZ = coords.z;
+                    previewContainer.innerHTML = '';
+                    previewContainer.appendChild(createVoxelDOM({x: drawStartX, y: drawStartY, w: 1, h: 1, z: drawStartZ}, true));
+                }
+            }
         });
 
-        // 原有的 PC 端鼠标监听
+        window.addEventListener('pointermove', (e) => {
+            // 获取实时的 3D 逆向映射坐标
+            const coords = resolveGridCoords(e);
+            
+            // 1. 更新 CAD 准星与磁力悬停
+            if (coords) {
+                magneticPos = coords;
+                const crossX = coords.x * GRID_SIZE + GRID_SIZE/2; 
+                const crossY = coords.y * GRID_SIZE + GRID_SIZE/2;
+                axisH.style.transform = `translate3d(0, ${crossY}px, 1px)`; 
+                axisV.style.transform = `translate3d(${crossX}px, 0, 1px)`;
+                coordTracker.style.transform = `translate3d(${crossX + 16}px, ${crossY - 24}px, 1px)`;
+                coordTracker.textContent = `X: ${coords.x} | Y: ${coords.y} | Z: ${coords.z}`;
+                axisH.style.opacity = '1'; axisV.style.opacity = '1'; coordTracker.style.opacity = '1';
+
+                if (mode === 'none') {
+                    magneticContainer.innerHTML = '';
+                    magneticContainer.appendChild(createVoxelDOM({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z}, true));
+                }
+            } else {
+                axisH.style.opacity = '0'; axisV.style.opacity = '0'; coordTracker.style.opacity = '0';
+                if (mode === 'none') magneticContainer.innerHTML = '';
+            }
+
+            // 2. 执行批量删除
+            if (mode === 'deleting') {
+                const voxelEl = e.target.closest('.voxel');
+                if (voxelEl && !voxelEl.classList.contains('preview')) {
+                    voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
+                    renderAllVoxels();
+                }
+                return;
+            }
+
+            // 3. 执行拖拽生成 (利用 magneticPos 防止透视畸变)
+            if (mode === 'drawing' && magneticPos) {
+                magneticContainer.innerHTML = ''; 
+                const minX = Math.min(drawStartX, magneticPos.x); 
+                const minY = Math.min(drawStartY, magneticPos.y);
+                const w = Math.abs(magneticPos.x - drawStartX) + 1; 
+                const h = Math.abs(magneticPos.y - drawStartY) + 1;
+                const dynamicZ = Math.max(drawStartZ, getMaxZInArea(minX, minY, minX + w - 1, minY + h - 1));
+
+                previewContainer.innerHTML = '';
+                previewContainer.appendChild(createVoxelDOM({x: minX, y: minY, w: w, h: h, z: dynamicZ}, true));
+                return;
+            }
+
+            // 4. 执行抓取移动
+            if (mode === 'moving' && activeVoxelId && magneticPos) {
+                magneticContainer.innerHTML = '';
+                const v = voxels.find(vx => vx.id === activeVoxelId);
+                const newZ = getMaxZInArea(magneticPos.x, magneticPos.y, magneticPos.x + v.w - 1, magneticPos.y + v.h - 1, v.id);
+                
+                const movingEl = document.getElementById(`voxel-${v.id}`);
+                if(movingEl) {
+                    movingEl.style.left = `${magneticPos.x * GRID_SIZE}px`;
+                    movingEl.style.top = `${magneticPos.y * GRID_SIZE}px`;
+                    const faces = movingEl.querySelectorAll('.face');
+                    faces.forEach(face => {
+                        if (face.classList.contains('bottom')) face.style.transform = `translateZ(${newZ * 40}px)`;
+                        else if (face.classList.contains('top')) face.style.transform = `translateZ(${(newZ + 1) * 40}px)`;
+                        else if(face.classList.contains('front')) face.style.transform = `translateZ(${newZ * 40}px) rotateX(90deg)`;
+                        else if(face.classList.contains('back')) face.style.transform = `translateZ(${newZ * 40}px) rotateX(-90deg)`;
+                        else if(face.classList.contains('left')) face.style.transform = `translateZ(${newZ * 40}px) rotateY(-90deg)`;
+                        else if(face.classList.contains('right')) face.style.transform = `translateZ(${newZ * 40}px) rotateY(90deg)`;
+                    });
+                }
+            }
+        });
+
+        window.addEventListener('pointerup', () => {
+            if (mode === 'drawing') {
+                const preview = previewContainer.querySelector('.voxel');
+                if (preview) {
+                    voxels.push({
+                        id: Date.now(),
+                        x: parseInt(preview.dataset.x), y: parseInt(preview.dataset.y),
+                        w: parseInt(preview.dataset.w), h: parseInt(preview.dataset.h),
+                        z: parseInt(preview.dataset.z)
+                    });
+                    renderAllVoxels();
+                    previewContainer.innerHTML = '';
+                }
+            } else if (mode === 'moving' && activeVoxelId && magneticPos) {
+                const vIndex = voxels.findIndex(vx => vx.id === activeVoxelId);
+                if (vIndex !== -1) {
+                    voxels[vIndex].x = magneticPos.x;
+                    voxels[vIndex].y = magneticPos.y;
+                    voxels[vIndex].z = getMaxZInArea(magneticPos.x, magneticPos.y, magneticPos.x + voxels[vIndex].w - 1, magneticPos.y + voxels[vIndex].h - 1, activeVoxelId);
+                }
+                renderAllVoxels();
+                activeVoxelId = null;
+            } else if (mode === 'deleting') {
+                document.body.classList.remove('is-deleting');
+            }
+            mode = 'none';
+        });
+
+        // ==========================================
+        // 2. ✨ 全局全境视差联动引擎 ✨
+        // ==========================================
+        const cursorWrapper = document.getElementById('cursor-wrapper');
+        const cursorCube = document.getElementById('cursor-cube');
+        const plxTitle = document.getElementById('plx-title');
+        const ambientGlow = document.getElementById('ambient-glow');
+        
+        let mouseX = window.innerWidth / 2; let mouseY = window.innerHeight / 2;
+        let lerpX = mouseX; let lerpY = mouseY;
+        let rotX = 45; let rotY = 45;
+        let vX = 0; let vY = 0; 
+        let prevMouseX = mouseX; let prevMouseY = mouseY;
+        
         window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            mouseX = e.clientX; mouseY = e.clientY;
             cursorWrapper.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
         });
 
@@ -471,73 +534,40 @@
             const dt = Math.max(1, now - lastTime);
             lastTime = now;
 
-            // 1. 立方体缓动跟随
-            lerpX += (mouseX - lerpX) * 0.15;
-            lerpY += (mouseY - lerpY) * 0.15;
-            const offsetX = lerpX - mouseX;
-            const offsetY = lerpY - mouseY;
+            lerpX += (mouseX - lerpX) * 0.15; lerpY += (mouseY - lerpY) * 0.15;
+            const offsetX = lerpX - mouseX; const offsetY = lerpY - mouseY;
+            vX = (mouseX - prevMouseX) / dt; vY = (mouseY - prevMouseY) / dt;
+            prevMouseX = mouseX; prevMouseY = mouseY;
 
-            vX = (mouseX - prevMouseX) / dt;
-            vY = (mouseY - prevMouseY) / dt;
-            prevMouseX = mouseX;
-            prevMouseY = mouseY;
-
-            // 2. 背景与环境光联动
-            bgLerpX += (mouseX - bgLerpX) * 0.08;
-            bgLerpY += (mouseY - bgLerpY) * 0.08;
+            const speed = Math.sqrt(vX * vX + vY * vY);
+            const scaleCube = 1 + Math.min(speed * 0.05, 0.3); 
             
-            ambientGlow.style.transform = `translate3d(${bgLerpX}px, ${bgLerpY}px, 0) translate(-50%, -50%)`;
+            const normX = lerpX / window.innerWidth - 0.5;
+            const normY = lerpY / window.innerHeight - 0.5;
 
-            // 计算相对于屏幕中心的归一化偏移量 (-0.5 到 0.5)
-            const normX = bgLerpX / window.innerWidth - 0.5;
-            const normY = bgLerpY / window.innerHeight - 0.5;
+            ambientGlow.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0) translate(-50%, -50%)`;
 
-            // 背景网格反向视差 (系数最强，且为负数)
-            const gridOffsetX = normX * -120; 
-            const gridOffsetY = normY * -120;
-            paperCanvas.style.backgroundPosition = `calc(50% + ${gridOffsetX}px) calc(50% + ${gridOffsetY}px)`;
-
-            // 3. 内部元素正向视差 (景深效果)
-            // 越“近”的元素系数越大。
-            // 大标题最活跃，Slogan次之，底部Footer最稳固
-            plxTitle.style.transform = `translate3d(${normX * 60}px, ${normY * 60}px, 0)`;
-            plxSlogan.style.transform = `translate3d(${normX * 30}px, ${normY * 30}px, 0)`;
+            // ✨ 核心再现：整个画板作为一个大平面在黑色背景前发生剧烈的物理倾斜 ✨
+            const sceneRotX = normY * -25; 
+            const sceneRotY = normX * 25;  
+            paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
             
-            // Footer 自身带有 translateX(-50%) 的基础居中定位，需通过 calc 保留
-            plxFooter.style.transform = `translate3d(calc(-50% + ${normX * 15}px), ${normY * 15}px, 0)`;
+            // 随着画板的倾斜角度，投射在黑色背景上的巨型阴影产生动态偏移
+            paperCanvas.style.boxShadow = `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
-            const rect = paperCanvas.getBoundingClientRect();
-            const localX = bgLerpX - rect.left;
-            const localY = bgLerpY - rect.top;
+            const titleRect = plxTitle.getBoundingClientRect();
+            const distToTitle = Math.hypot(mouseX - (titleRect.left + titleRect.width / 2), mouseY - (titleRect.top + titleRect.height / 2));
+            let dynamicWeight = 900 - (distToTitle / (window.innerWidth * 0.4)) * 700;
+            plxTitle.style.fontWeight = Math.max(200, Math.min(900, dynamicWeight));
 
-            // 4. 十字游标定位
-            if (localX >= 0 && localX <= rect.width && localY >= 0 && localY <= rect.height) {
-                axisH.style.transform = `translate3d(0, ${localY}px, 0)`;
-                axisV.style.transform = `translate3d(${localX}px, 0, 0)`;
-                
-                coordTracker.style.transform = `translate3d(${localX + 16}px, ${localY - 24}px, 0)`;
-                coordTracker.textContent = `X: ${localX.toFixed(1)} | Y: ${localY.toFixed(1)}`;
-                
-                axisH.style.opacity = '1';
-                axisV.style.opacity = '1';
-                coordTracker.style.opacity = '1';
-            } else {
-                axisH.style.opacity = '0';
-                axisV.style.opacity = '0';
-                coordTracker.style.opacity = '0';
-            }
-
-            // 5. 立方体旋转动力学
-            rotX -= 0.05;
-            rotY += 0.08;
-            rotX -= vY * 8.0; 
-            rotY += vX * 8.0;
-            cube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            // 多色立方体旋转
+            rotX -= 0.05 + vY * 8.0; rotY += 0.08 + vX * 8.0;
+            cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
 
             requestAnimationFrame(renderLoop);
         }
-        
         requestAnimationFrame(renderLoop);
+
     </script>
 </body>
 </html>
