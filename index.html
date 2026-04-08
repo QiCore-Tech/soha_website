@@ -136,6 +136,88 @@
             pointer-events: none; z-index: 10; transform-style: preserve-3d;
         }
 
+        .projection-layer {
+            position: absolute; inset: 0; z-index: 8;
+            pointer-events: none; transform-style: preserve-3d;
+        }
+
+        .projection-shadow {
+            position: absolute; top: 0; left: 0;
+            pointer-events: none; transform-style: preserve-3d;
+            transform-origin: center center;
+            will-change: transform, filter, opacity;
+            mix-blend-mode: multiply;
+            opacity: 0;
+        }
+
+        .projection-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(5rem, 14vw, 12rem);
+            font-weight: 430;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            color: rgba(14, 14, 18, 0.54);
+            text-shadow: none;
+            white-space: nowrap;
+        }
+        .projection-title .qi,
+        .projection-title .core {
+            color: inherit;
+        }
+
+        .projection-slogan,
+        .projection-footer {
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(16, 16, 18, 0.5);
+            background: rgba(22, 20, 24, 0.26);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+
+        .projection-slogan {
+            padding: 12px 36px;
+            border-radius: 100px;
+            gap: 14px;
+        }
+        .projection-slogan p {
+            font-family: 'Outfit', 'MiSans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: inherit;
+        }
+        .projection-slogan .slogan-separator {
+            background-color: rgba(0, 0, 0, 0.28);
+        }
+
+        .projection-footer {
+            padding: 4px 12px;
+            border-radius: 4px;
+            gap: 8px;
+        }
+        .projection-footer .icon-indicator {
+            width: 6px; height: 6px;
+            background-color: rgba(0, 0, 0, 0.28);
+            border-radius: 50%;
+            animation: none;
+        }
+        .projection-footer .slot-track,
+        .projection-footer .slot-machine {
+            animation: none;
+        }
+        .projection-footer .slot-track span,
+        .projection-footer .domain {
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: inherit;
+            line-height: 16px;
+            height: 16px;
+            letter-spacing: 0.04em;
+        }
+
         .brand-title {
             font-family: 'Outfit', sans-serif; font-size: clamp(5rem, 14vw, 12rem); font-weight: 200; 
             letter-spacing: -0.02em; line-height: 1; margin-bottom: 5vh; 
@@ -243,6 +325,17 @@
         <div id="voxels-container"></div>
         <div id="magnetic-container"></div>
         <div id="preview-container"></div>
+        <div class="projection-layer" id="projection-layer">
+            <div class="projection-shadow projection-title" id="title-shadow"><span class="qi">Qi</span><span class="core">Core</span></div>
+            <div class="projection-shadow projection-slogan" id="slogan-shadow">
+                <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
+            </div>
+            <div class="projection-shadow projection-footer" id="footer-shadow">
+                <div class="icon-indicator"></div>
+                <div class="slot-machine"><div class="slot-track"><span>info</span></div></div>
+                <span class="domain">@qicore.tech</span>
+            </div>
+        </div>
 
         <div class="content-layer">
             <h1 class="brand-title" id="plx-title"><span class="qi">Qi</span><span class="core">Core</span></h1>
@@ -329,15 +422,69 @@
         let drawStartX = 0, drawStartY = 0, drawStartZ = 0;
         let activeVoxelId = null; 
         let magneticPos = null;
+        let previewVoxelEl = null;
+        let magneticVoxelEl = null;
 
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+        function syncVoxelDOM(el, v) {
+            el.style.left = `${v.x * GRID_SIZE}px`;
+            el.style.top = `${v.y * GRID_SIZE}px`;
+            el.style.width = `${v.w * GRID_SIZE}px`;
+            el.style.height = `${v.h * GRID_SIZE}px`;
+            el.dataset.x = String(v.x);
+            el.dataset.y = String(v.y);
+            el.dataset.w = String(v.w);
+            el.dataset.h = String(v.h);
+            el.dataset.z = String(v.z);
+
+            const faces = el.querySelectorAll('.face');
+            faces.forEach(face => {
+                if (face.classList.contains('bottom')) face.style.transform = `translateZ(${v.z * 40}px)`;
+                else if (face.classList.contains('top')) face.style.transform = `translateZ(${(v.z + 1) * 40}px)`;
+                else if (face.classList.contains('front')) face.style.transform = `translateZ(${v.z * 40}px) rotateX(90deg)`;
+                else if (face.classList.contains('back')) face.style.transform = `translateZ(${v.z * 40}px) rotateX(-90deg)`;
+                else if (face.classList.contains('left')) face.style.transform = `translateZ(${v.z * 40}px) rotateY(-90deg)`;
+                else if (face.classList.contains('right')) face.style.transform = `translateZ(${v.z * 40}px) rotateY(90deg)`;
+            });
+        }
+
+        function ensurePreviewVoxel(v) {
+            if (!previewVoxelEl) {
+                previewVoxelEl = createVoxelDOM(v, true);
+                previewContainer.appendChild(previewVoxelEl);
+            } else if (!previewContainer.contains(previewVoxelEl)) {
+                previewContainer.appendChild(previewVoxelEl);
+            }
+            syncVoxelDOM(previewVoxelEl, v);
+            previewVoxelEl.style.display = '';
+        }
+
+        function hidePreviewVoxel() {
+            if (previewVoxelEl) previewVoxelEl.style.display = 'none';
+        }
+
+        function ensureMagneticVoxel(v) {
+            if (!magneticVoxelEl) {
+                magneticVoxelEl = createVoxelDOM(v, true);
+                magneticContainer.appendChild(magneticVoxelEl);
+            } else if (!magneticContainer.contains(magneticVoxelEl)) {
+                magneticContainer.appendChild(magneticVoxelEl);
+            }
+            syncVoxelDOM(magneticVoxelEl, v);
+            magneticVoxelEl.style.display = '';
+        }
+
+        function hideMagneticVoxel() {
+            if (magneticVoxelEl) magneticVoxelEl.style.display = 'none';
+        }
 
         function resetInteractionState() {
             mode = 'none';
             activeVoxelId = null;
             magneticPos = null;
-            previewContainer.innerHTML = '';
-            magneticContainer.innerHTML = '';
+            hidePreviewVoxel();
+            hideMagneticVoxel();
             document.body.classList.remove('is-deleting');
             document.querySelectorAll('.voxel.moving').forEach(el => el.classList.remove('moving'));
             axisH.style.opacity = '0';
@@ -411,6 +558,7 @@
             mobileRollX = 0; mobileRollY = 0;
             mobileTapTargetX = 0; mobileTapTargetY = 0;
             mobileTapActive = false;
+            markShadowGeometryDirty();
         }
 
         function syncViewMode() {
@@ -420,10 +568,17 @@
             resetImuBaseline();
             applyViewMode();
             ensureImuTracking();
+            markShadowGeometryDirty();
         }
 
-        window.addEventListener('resize', syncViewMode);
-        window.addEventListener('orientationchange', resetImuBaseline);
+        window.addEventListener('resize', () => {
+            syncViewMode();
+            markShadowGeometryDirty();
+        });
+        window.addEventListener('orientationchange', () => {
+            resetImuBaseline();
+            markShadowGeometryDirty();
+        });
         
         // 移动端首次触摸时仅申请陀螺仪权限，不改变重力立方体的位置基线
         window.addEventListener('touchstart', (e) => { 
@@ -554,8 +709,7 @@
                 if (coords) {
                     saveState(); mode = 'drawing';
                     drawStartX = coords.x; drawStartY = coords.y; drawStartZ = coords.z;
-                    previewContainer.innerHTML = '';
-                    previewContainer.appendChild(createVoxelDOM({x: drawStartX, y: drawStartY, w: 1, h: 1, z: drawStartZ}, true));
+                    ensurePreviewVoxel({x: drawStartX, y: drawStartY, w: 1, h: 1, z: drawStartZ});
                 }
             }
         });
@@ -576,12 +730,11 @@
                 axisH.style.opacity = '1'; axisV.style.opacity = '1'; coordTracker.style.opacity = '1';
 
                 if (mode === 'none') {
-                    magneticContainer.innerHTML = '';
-                    magneticContainer.appendChild(createVoxelDOM({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z}, true));
+                    ensureMagneticVoxel({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z});
                 }
             } else {
                 axisH.style.opacity = '0'; axisV.style.opacity = '0'; coordTracker.style.opacity = '0';
-                if (mode === 'none') magneticContainer.innerHTML = '';
+                if (mode === 'none') hideMagneticVoxel();
             }
 
             if (mode === 'deleting') {
@@ -594,20 +747,19 @@
             }
 
             if (mode === 'drawing' && magneticPos) {
-                magneticContainer.innerHTML = ''; 
+                hideMagneticVoxel(); 
                 const minX = Math.min(drawStartX, magneticPos.x); 
                 const minY = Math.min(drawStartY, magneticPos.y);
                 const w = Math.abs(magneticPos.x - drawStartX) + 1; 
                 const h = Math.abs(magneticPos.y - drawStartY) + 1;
                 const dynamicZ = Math.max(drawStartZ, getMaxZInArea(minX, minY, minX + w - 1, minY + h - 1));
 
-                previewContainer.innerHTML = '';
-                previewContainer.appendChild(createVoxelDOM({x: minX, y: minY, w: w, h: h, z: dynamicZ}, true));
+                ensurePreviewVoxel({x: minX, y: minY, w: w, h: h, z: dynamicZ});
                 return;
             }
 
             if (mode === 'moving' && activeVoxelId && magneticPos) {
-                magneticContainer.innerHTML = '';
+                hideMagneticVoxel();
                 const v = voxels.find(vx => vx.id === activeVoxelId);
                 const newZ = getMaxZInArea(magneticPos.x, magneticPos.y, magneticPos.x + v.w - 1, magneticPos.y + v.h - 1, v.id);
                 
@@ -631,7 +783,7 @@
         window.addEventListener('pointerup', () => {
             if (isMobileView) return; // 移动端拦截
             if (mode === 'drawing') {
-                const preview = previewContainer.querySelector('.voxel');
+                const preview = previewVoxelEl && previewVoxelEl.style.display !== 'none' ? previewVoxelEl : null;
                 if (preview) {
                     voxels.push({
                         id: Date.now(),
@@ -640,7 +792,7 @@
                         z: parseInt(preview.dataset.z)
                     });
                     renderAllVoxels();
-                    previewContainer.innerHTML = '';
+                    hidePreviewVoxel();
                 }
             } else if (mode === 'moving' && activeVoxelId && magneticPos) {
                 const vIndex = voxels.findIndex(vx => vx.id === activeVoxelId);
@@ -663,7 +815,12 @@
         const cursorWrapper = document.getElementById('cursor-wrapper');
         const cursorCube = document.getElementById('cursor-cube');
         const plxTitle = document.getElementById('plx-title');
+        const plxSlogan = document.getElementById('plx-slogan');
+        const plxFooter = document.getElementById('plx-footer');
         const ambientGlow = document.getElementById('ambient-glow');
+        const titleShadow = document.getElementById('title-shadow');
+        const sloganShadow = document.getElementById('slogan-shadow');
+        const footerShadow = document.getElementById('footer-shadow');
         
         let mouseX = window.innerWidth / 2; let mouseY = window.innerHeight / 2;
         let lerpX = mouseX; let lerpY = mouseY;
@@ -676,6 +833,89 @@
         let mobileTapTargetX = 0; let mobileTapTargetY = 0;
         let mobileTapActive = false;
         let titleWeightState = 430;
+        let appliedTitleWeight = 430;
+
+        const shadowState = {
+            dirty: true,
+            paperRect: null,
+            title: {
+                rect: null, centerX: 0, centerY: 0,
+                currentOffsetX: 0, currentOffsetY: 0, currentScaleX: 1, currentScaleY: 1,
+                currentSkewX: 0, currentSkewY: 0, currentBlur: 0, currentOpacity: 0
+            },
+            slogan: {
+                rect: null, centerX: 0, centerY: 0,
+                currentOffsetX: 0, currentOffsetY: 0, currentScaleX: 1, currentScaleY: 1,
+                currentSkewX: 0, currentSkewY: 0, currentBlur: 0, currentOpacity: 0
+            },
+            footer: {
+                rect: null, centerX: 0, centerY: 0,
+                currentOffsetX: 0, currentOffsetY: 0, currentScaleX: 1, currentScaleY: 1,
+                currentSkewX: 0, currentSkewY: 0, currentBlur: 0, currentOpacity: 0
+            }
+        };
+
+        function markShadowGeometryDirty() {
+            shadowState.dirty = true;
+        }
+
+        function refreshProjectionGeometry() {
+            const paperRect = paperCanvas.getBoundingClientRect();
+            shadowState.paperRect = paperRect;
+
+            const syncShadowGeometry = (sourceEl, shadowEl, stateEntry) => {
+                const sourceRect = sourceEl.getBoundingClientRect();
+                const rect = {
+                    left: sourceRect.left - paperRect.left,
+                    top: sourceRect.top - paperRect.top,
+                    width: sourceRect.width,
+                    height: sourceRect.height
+                };
+                stateEntry.rect = rect;
+                stateEntry.centerX = sourceRect.left + sourceRect.width / 2;
+                stateEntry.centerY = sourceRect.top + sourceRect.height / 2;
+                shadowEl.style.left = `${rect.left}px`;
+                shadowEl.style.top = `${rect.top}px`;
+                shadowEl.style.width = `${rect.width}px`;
+                shadowEl.style.height = `${rect.height}px`;
+            };
+
+            syncShadowGeometry(plxTitle, titleShadow, shadowState.title);
+            syncShadowGeometry(plxSlogan, sloganShadow, shadowState.slogan);
+            syncShadowGeometry(plxFooter, footerShadow, shadowState.footer);
+            shadowState.dirty = false;
+        }
+
+        function updateProjectionShadow(stateEntry, shadowEl, options, normX, normY) {
+            if (!stateEntry.rect) return;
+            const energy = Math.abs(normX) + Math.abs(normY);
+            const targetOffsetX = -normX * options.depth * 2.15;
+            const targetOffsetY = options.baseDrop + normY * -options.depth * 1.6 + Math.abs(normX) * options.depth * 0.22;
+            const targetScaleX = 1 + Math.abs(normX) * options.scaleXBoost;
+            const targetScaleY = clamp(options.baseScaleY - energy * options.scaleYDrop, 0.35, 0.92);
+            const targetSkewX = normX * -options.skewX;
+            const targetSkewY = normY * options.skewY;
+            const targetBlur = isMobileView
+                ? (options.mobileBlur ?? options.baseBlur)
+                : options.baseBlur + energy * options.blurBoost;
+            const targetOpacity = clamp(options.baseOpacity + energy * options.opacityBoost, options.baseOpacity, options.maxOpacity);
+            const lerpFactor = options.smoothing;
+
+            stateEntry.currentOffsetX += (targetOffsetX - stateEntry.currentOffsetX) * lerpFactor;
+            stateEntry.currentOffsetY += (targetOffsetY - stateEntry.currentOffsetY) * lerpFactor;
+            stateEntry.currentScaleX += (targetScaleX - stateEntry.currentScaleX) * lerpFactor;
+            stateEntry.currentScaleY += (targetScaleY - stateEntry.currentScaleY) * lerpFactor;
+            stateEntry.currentSkewX += (targetSkewX - stateEntry.currentSkewX) * lerpFactor;
+            stateEntry.currentSkewY += (targetSkewY - stateEntry.currentSkewY) * lerpFactor;
+            stateEntry.currentBlur += (targetBlur - stateEntry.currentBlur) * (lerpFactor * 0.85);
+            stateEntry.currentOpacity += (targetOpacity - stateEntry.currentOpacity) * (lerpFactor * 0.9);
+
+            shadowEl.style.transform = `translate3d(${stateEntry.currentOffsetX}px, ${stateEntry.currentOffsetY}px, 1px) scale(${stateEntry.currentScaleX}, ${stateEntry.currentScaleY}) skewX(${stateEntry.currentSkewX}deg) skewY(${stateEntry.currentSkewY}deg)`;
+            if (shadowEl.style.filter !== `blur(${stateEntry.currentBlur}px)`) {
+                shadowEl.style.filter = `blur(${stateEntry.currentBlur}px)`;
+            }
+            shadowEl.style.opacity = String(stateEntry.currentOpacity);
+        }
         
         window.addEventListener('mousemove', (e) => {
             if (isMobileView) return;
@@ -838,10 +1078,12 @@
                 : `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
             // 字体引力反馈
-            const titleRect = plxTitle.getBoundingClientRect();
+            if (shadowState.dirty || !shadowState.paperRect) {
+                refreshProjectionGeometry();
+            }
             const gravityX = isMobileView ? window.innerWidth / 2 + mobileCubeOffsetX : mouseX;
             const gravityY = isMobileView ? window.innerHeight / 2 + mobileCubeOffsetY : mouseY;
-            const distToTitle = Math.hypot(gravityX - (titleRect.left + titleRect.width / 2), gravityY - (titleRect.top + titleRect.height / 2));
+            const distToTitle = Math.hypot(gravityX - shadowState.title.centerX, gravityY - shadowState.title.centerY);
             const distRatio = distToTitle / (window.innerWidth * 0.4);
             const focusWeight = clamp(900 - distRatio * 700, 260, 900);
             const recoveryWeight = 430;
@@ -849,7 +1091,63 @@
             const targetTitleWeight = focusWeight * (1 - recoveryMix) + recoveryWeight * recoveryMix;
             const titleWeightLerp = recoveryMix > 0 ? 0.045 : 0.14;
             titleWeightState += (targetTitleWeight - titleWeightState) * titleWeightLerp;
-            plxTitle.style.fontWeight = clamp(titleWeightState, 380, 900);
+            const currentTitleWeight = Math.round(clamp(titleWeightState, 380, 900));
+            if (currentTitleWeight !== appliedTitleWeight) {
+                plxTitle.style.fontWeight = String(currentTitleWeight);
+                appliedTitleWeight = currentTitleWeight;
+            }
+            if (shadowState.dirty) {
+                refreshProjectionGeometry();
+            }
+
+            updateProjectionShadow(shadowState.title, titleShadow, {
+                depth: 86,
+                baseDrop: 14,
+                baseScaleY: 0.54,
+                scaleXBoost: 0.12,
+                scaleYDrop: 0.12,
+                skewX: 18,
+                skewY: 6,
+                baseBlur: 11,
+                blurBoost: 18,
+                mobileBlur: 10,
+                baseOpacity: 0.28,
+                opacityBoost: 0.24,
+                maxOpacity: 0.64,
+                smoothing: 0.14
+            }, normX, normY);
+            updateProjectionShadow(shadowState.slogan, sloganShadow, {
+                depth: 54,
+                baseDrop: 12,
+                baseScaleY: 0.62,
+                scaleXBoost: 0.09,
+                scaleYDrop: 0.08,
+                skewX: 15,
+                skewY: 5,
+                baseBlur: 9,
+                blurBoost: 13,
+                mobileBlur: 8,
+                baseOpacity: 0.22,
+                opacityBoost: 0.18,
+                maxOpacity: 0.48,
+                smoothing: 0.16
+            }, normX, normY);
+            updateProjectionShadow(shadowState.footer, footerShadow, {
+                depth: 34,
+                baseDrop: 8,
+                baseScaleY: 0.7,
+                scaleXBoost: 0.07,
+                scaleYDrop: 0.06,
+                skewX: 10,
+                skewY: 4,
+                baseBlur: 7,
+                blurBoost: 11,
+                mobileBlur: 6,
+                baseOpacity: 0.18,
+                opacityBoost: 0.14,
+                maxOpacity: 0.38,
+                smoothing: 0.18
+            }, normX, normY);
 
             requestAnimationFrame(renderLoop);
         }
