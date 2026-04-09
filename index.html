@@ -444,14 +444,6 @@
         .cursor-cube-face.top    { background: rgba(255, 100, 100, 0.15); transform: rotateX(90deg) translateZ(24px); }
         .cursor-cube-face.bottom { background: rgba(100, 100, 255, 0.15); transform: rotateX(-90deg) translateZ(24px); }
 
-        .debug-badge {
-            position: fixed; top: 16px; right: 16px; z-index: 10000;
-            padding: 6px 10px; border-radius: 999px;
-            background: rgba(5, 5, 5, 0.75); color: rgba(255, 255, 255, 0.88);
-            font: 600 11px/1 'Geist Mono', monospace; letter-spacing: 0.04em;
-            pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
-        }
-
         /* ✨ 核心修复：移动端专属尺寸调整 ✨ 
            显著缩小了画板比例，确保纯黑背景与八个圆角完美呈现，增强 3D 悬浮感 */
         @media (max-width: 768px) {
@@ -461,13 +453,19 @@
             }
             .axis-h, .axis-v, .coord-tracker { display: none; }
             .cursor-dot { display: none; } /* 仅隐藏中心白点，保留彩色方块 */
-            body.mobile-view .debug-badge { opacity: 1; }
             .slogan-shell {
-                width: min(92vw, 420px);
+                width: auto;
+                max-width: calc(100vw - 44px);
                 height: auto;
                 pointer-events: none;
             }
+            .slogan-card {
+                width: auto;
+                max-width: 100%;
+            }
             .slogan-bar {
+                width: auto;
+                max-width: 100%;
                 padding: 11px 20px;
             }
             .slogan-bar p,
@@ -561,8 +559,6 @@
         </div>
     </div>
     
-    <div class="debug-badge" id="debug-badge">MOBILE VIEW</div>
-
     <script>
         // ==========================================
         // 1. ✨ 设备检测与 IMU (重力感应) 初始化 ✨
@@ -577,7 +573,6 @@
         const axisH = document.getElementById('axis-h');
         const axisV = document.getElementById('axis-v');
         const coordTracker = document.getElementById('coord-tracker');
-        const debugBadge = document.getElementById('debug-badge');
         
         const coarsePointerMedia = window.matchMedia('(pointer: coarse)');
         const hoverNoneMedia = window.matchMedia('(hover: none)');
@@ -683,9 +678,7 @@
         }
 
         function applyViewMode() {
-            document.body.classList.toggle('mobile-view', isMobileView);
             gridPlane.style.pointerEvents = isMobileView ? 'none' : 'auto';
-            debugBadge.textContent = isMobileView ? 'MOBILE VIEW' : 'DESKTOP VIEW';
             if (isMobileView) resetInteractionState();
         }
 
