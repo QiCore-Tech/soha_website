@@ -110,12 +110,30 @@
             border: 1px solid rgba(0, 0, 0, 0.4); transition: background 0.1s, opacity 0.2s, filter 0.12s ease;
         }
 
-        .voxel .face.top { width: 100%; height: 100%; background: #E8E8EB; box-shadow: inset 0 0 8px rgba(255,255,255,0.8); }
-        .voxel .face.bottom { width: 100%; height: 100%; background: #222; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
-        .voxel .face.front  { width: 100%; height: var(--voxel-depth); top: 0; transform-origin: top; transform: rotateX(90deg); background: #C4C4C8; }
-        .voxel .face.back   { width: 100%; height: var(--voxel-depth); bottom: 0; transform-origin: bottom; transform: rotateX(-90deg); background: #A8A8AC; }
-        .voxel .face.left   { width: var(--voxel-depth); height: 100%; left: 0; transform-origin: left; transform: rotateY(-90deg); background: #D0D0D4; }
-        .voxel .face.right  { width: var(--voxel-depth); height: 100%; right: 0; transform-origin: right; transform: rotateY(90deg); background: #B4B4B8; }
+        .voxel .face.top {
+            width: 100%; height: 100%; background: #E8E8EB;
+            box-shadow: inset 0 0 8px rgba(255,255,255,0.8);
+        }
+        .voxel .face.bottom {
+            width: 100%; height: 100%; background: #222;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        .voxel .face.front  {
+            width: 100%; height: var(--voxel-depth); top: 0;
+            transform-origin: top; transform: rotateX(90deg); background: #C4C4C8;
+        }
+        .voxel .face.back   {
+            width: 100%; height: var(--voxel-depth); bottom: 0;
+            transform-origin: bottom; transform: rotateX(-90deg); background: #A8A8AC;
+        }
+        .voxel .face.left   {
+            width: var(--voxel-depth); height: 100%; left: 0;
+            transform-origin: left; transform: rotateY(-90deg); background: #D0D0D4;
+        }
+        .voxel .face.right  {
+            width: var(--voxel-depth); height: 100%; right: 0;
+            transform-origin: right; transform: rotateY(90deg); background: #B4B4B8;
+        }
 
         .voxel.preview { pointer-events: none; z-index: 999; }
         .voxel.preview .face {
@@ -463,7 +481,7 @@
             position: absolute;
             box-sizing: border-box;
             border: 1.5px solid rgba(20, 20, 25, 0.85);
-            border-radius: 8px;
+            border-radius: 0;
             box-shadow:
                 inset 0 1px 4px rgba(255, 255, 255, 0.14),
                 inset 0 -2px 6px rgba(0, 0, 0, 0.08);
