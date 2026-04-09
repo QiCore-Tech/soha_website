@@ -462,7 +462,23 @@
             .axis-h, .axis-v, .coord-tracker { display: none; }
             .cursor-dot { display: none; } /* 仅隐藏中心白点，保留彩色方块 */
             body.mobile-view .debug-badge { opacity: 1; }
-            .slogan-shell { pointer-events: none; }
+            .slogan-shell {
+                width: min(92vw, 420px);
+                height: auto;
+                pointer-events: none;
+            }
+            .slogan-bar {
+                padding: 11px 20px;
+            }
+            .slogan-bar p,
+            .projection-slogan p {
+                font-size: clamp(0.72rem, 3.5vw, 0.86rem);
+                letter-spacing: 0.1em;
+                white-space: nowrap;
+            }
+            .projection-slogan {
+                padding: 11px 20px;
+            }
             .slogan-detail { display: none; }
         }
 
