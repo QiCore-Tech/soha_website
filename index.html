@@ -107,7 +107,7 @@
 
         .voxel .face {
             position: absolute; box-sizing: border-box;
-            border: 1px solid rgba(0, 0, 0, 0.4); transition: background 0.1s, opacity 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.4); transition: background 0.1s, opacity 0.2s, filter 0.12s ease;
         }
 
         .voxel .face.top { width: 100%; height: 100%; background: #E8E8EB; box-shadow: inset 0 0 8px rgba(255,255,255,0.8); }
@@ -117,21 +117,15 @@
         .voxel .face.left   { width: var(--voxel-depth); height: 100%; left: 0; transform-origin: left; transform: rotateY(-90deg); background: #D0D0D4; }
         .voxel .face.right  { width: var(--voxel-depth); height: 100%; right: 0; transform-origin: right; transform: rotateY(90deg); background: #B4B4B8; }
 
-        .voxel.moving { pointer-events: none !important; }
-        .voxel.moving .face { opacity: 0.5; }
-
         .voxel.preview { pointer-events: none; z-index: 999; }
-        .voxel.preview .face { 
-            background: rgba(180, 180, 185, 0.4) !important; 
+        .voxel.preview .face {
+            background: var(--preview-face-bg, rgba(180, 180, 185, 0.4)) !important;
             border: 1.5px dashed rgba(100, 100, 100, 0.6); 
         }
         .voxel.preview .face.top { box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4); }
         .voxel.preview .face.bottom { box-shadow: none; border: none; }
 
-        .voxel:hover .face.top { background: #F5F5F5; }
-        .voxel:hover .face.front, .voxel:hover .face.back, .voxel:hover .face.left, .voxel:hover .face.right { 
-            background: #E8E8EB; cursor: move; 
-        }
+        .voxel:hover .face { filter: brightness(1.06); }
         body.is-deleting .voxel:hover .face { background: #FFBABA !important; border-color: #FF4444; }
 
         /* ==========================================
@@ -428,8 +422,11 @@
            ========================================== */
         #cursor-wrapper {
             position: fixed; top: 0; left: 0; width: 1px; height: 1px;
-            pointer-events: none; z-index: 9999; mix-blend-mode: difference; perspective: 800px;
+            pointer-events: none; z-index: 9999; mix-blend-mode: normal; perspective: 800px;
             will-change: transform;
+        }
+        #cursor-wrapper.is-contrast-text {
+            mix-blend-mode: difference;
         }
         .cursor-dot { position: absolute; width: 6px; height: 6px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%); }
         .cursor-cube-container {
@@ -437,12 +434,148 @@
             transform: translate(-50%, -50%); transition: transform 0.1s linear;
         }
         .cursor-cube-face { position: absolute; width: 100%; height: 100%; border: 1.5px solid rgba(255, 255, 255, 0.9); box-sizing: border-box; }
-        .cursor-cube-face.front  { background: rgba(0, 255, 255, 0.15); transform: rotateY(0deg) translateZ(24px); }
-        .cursor-cube-face.back   { background: rgba(255, 0, 255, 0.15); transform: rotateY(180deg) translateZ(24px); }
-        .cursor-cube-face.right  { background: rgba(255, 255, 0, 0.15); transform: rotateY(90deg) translateZ(24px); }
-        .cursor-cube-face.left   { background: rgba(0, 255, 0, 0.15); transform: rotateY(-90deg) translateZ(24px); }
-        .cursor-cube-face.top    { background: rgba(255, 100, 100, 0.15); transform: rotateX(90deg) translateZ(24px); }
-        .cursor-cube-face.bottom { background: rgba(100, 100, 255, 0.15); transform: rotateX(-90deg) translateZ(24px); }
+        .cursor-cube-face.front  { background: rgba(111, 167, 161, 0.16); transform: rotateY(0deg) translateZ(24px); }
+        .cursor-cube-face.back   { background: rgba(154, 146, 184, 0.16); transform: rotateY(180deg) translateZ(24px); }
+        .cursor-cube-face.right  { background: rgba(216, 194, 122, 0.16); transform: rotateY(90deg) translateZ(24px); }
+        .cursor-cube-face.left   { background: rgba(155, 184, 165, 0.16); transform: rotateY(-90deg) translateZ(24px); }
+        .cursor-cube-face.top    { background: rgba(201, 123, 114, 0.16); transform: rotateX(90deg) translateZ(24px); }
+        .cursor-cube-face.bottom { background: rgba(192, 142, 161, 0.16); transform: rotateX(-90deg) translateZ(24px); }
+
+        #cursor-wrapper.is-palette-mode {
+            pointer-events: auto;
+            mix-blend-mode: normal;
+            perspective: 1400px;
+        }
+        #cursor-wrapper.is-palette-mode .cursor-dot {
+            opacity: 0;
+        }
+        .cursor-cube-container.is-palette-mode {
+            width: 168px;
+            height: 168px;
+            transition: none;
+            --cube-size: 48px;
+            --half-size: 24px;
+            --span: 60px;
+            --selected-color: transparent;
+        }
+        .cursor-cube-container .face,
+        .cursor-cube-container .extra-face {
+            position: absolute;
+            box-sizing: border-box;
+            border: 1.5px solid rgba(20, 20, 25, 0.85);
+            border-radius: 8px;
+            box-shadow:
+                inset 0 1px 4px rgba(255, 255, 255, 0.14),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.08);
+            transition:
+                transform 0.72s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background-color 0.4s ease,
+                background 0.4s ease,
+                opacity 0.4s ease,
+                box-shadow 0.25s ease;
+            backface-visibility: hidden;
+        }
+        .cursor-cube-container .face {
+            inset: 0;
+        }
+        .cursor-cube-container .extra-face {
+            top: 50%;
+            left: 50%;
+            width: 48px;
+            height: 48px;
+            margin-top: -24px;
+            margin-left: -24px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translate3d(0, 0, 0) scale(0);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding: 7px;
+            color: rgba(22, 22, 26, 0.78);
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.52rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            appearance: none;
+            background: transparent;
+        }
+        .cursor-cube-container .extra-face span {
+            pointer-events: none;
+        }
+        .cursor-cube-container.is-palette-mode .face,
+        .cursor-cube-container.is-palette-mode .extra-face {
+            width: var(--cube-size);
+            height: var(--cube-size);
+            top: 60px;
+            left: 60px;
+            margin: 0;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            box-shadow:
+                0 10px 24px rgba(0, 0, 0, 0.16),
+                inset 0 1px 4px rgba(255, 255, 255, 0.16),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.08);
+        }
+        .cursor-cube-container.is-palette-mode .face:hover,
+        .cursor-cube-container.is-palette-mode .extra-face:hover {
+            box-shadow:
+                0 14px 28px rgba(0, 0, 0, 0.22),
+                inset 0 1px 4px rgba(255, 255, 255, 0.18),
+                inset 0 -2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .cursor-cube-container.is-palette-mode .face.front  { transform: rotateY(0deg) translateZ(var(--half-size)); }
+        .cursor-cube-container.is-palette-mode .face.back   { transform: rotateY(180deg) translateZ(var(--half-size)); }
+        .cursor-cube-container.is-palette-mode .face.left   { transform: rotateY(-90deg) translateZ(var(--half-size)); }
+        .cursor-cube-container.is-palette-mode .face.right  { transform: rotateY(90deg) translateZ(var(--half-size)); }
+        .cursor-cube-container.is-palette-mode .face.top    { transform: rotateX(90deg) translateZ(var(--half-size)); }
+        .cursor-cube-container.is-palette-mode .face.bottom { transform: rotateX(-90deg) translateZ(var(--half-size)); }
+        .cursor-cube-container.is-palette-mode .extra-face  { transform: translate3d(0, 0, 0) scale(0); opacity: 0; pointer-events: none; }
+        .cursor-cube-container.is-palette {
+            transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg) !important;
+        }
+        .cursor-cube-container.is-palette .extra-face {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .cursor-cube-container.is-palette .face.front { transform: translate3d(calc(-1 * var(--span)), calc(-1 * var(--span)), 0); }
+        .cursor-cube-container.is-palette .face.back  { transform: translate3d(0, calc(-1 * var(--span)), 0); }
+        .cursor-cube-container.is-palette .face.left  { transform: translate3d(var(--span), calc(-1 * var(--span)), 0); }
+        .cursor-cube-container.is-palette .face.right { transform: translate3d(calc(-1 * var(--span)), 0, 0); }
+        .cursor-cube-container.is-palette .extra-face.multi { transform: translate3d(0, 0, 0) scale(1); }
+        .cursor-cube-container.is-palette .face.top   { transform: translate3d(var(--span), 0, 0); }
+        .cursor-cube-container.is-palette .face.bottom{ transform: translate3d(calc(-1 * var(--span)), var(--span), 0); }
+        .cursor-cube-container.is-palette .extra-face.white { transform: translate3d(0, var(--span), 0) scale(1); }
+        .cursor-cube-container.is-palette .extra-face.black { transform: translate3d(var(--span), var(--span), 0) scale(1); }
+        .cursor-cube-container.is-colored .face {
+            background: var(--selected-color) !important;
+        }
+        .cursor-cube-container.is-colored .face::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        }
+
+        .palette-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 160ms ease;
+        }
+        .palette-overlay.is-active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .palette-backdrop {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.12));
+        }
 
         /* ✨ 核心修复：移动端专属尺寸调整 ✨ 
            显著缩小了画板比例，确保纯黑背景与八个圆角完美呈现，增强 3D 悬浮感 */
@@ -478,6 +611,7 @@
                 padding: 11px 20px;
             }
             .slogan-detail { display: none; }
+            .palette-overlay { display: none; }
         }
 
     </style>
@@ -547,15 +681,22 @@
         </div>
     </div>
 
+    <div class="palette-overlay" id="palette-overlay" aria-hidden="true">
+        <div class="palette-backdrop" id="palette-backdrop"></div>
+    </div>
+
     <div id="cursor-wrapper">
         <div class="cursor-dot"></div>
-        <div class="cursor-cube-container" id="cursor-cube">
-            <div class="cursor-cube-face front"></div>
-            <div class="cursor-cube-face back"></div>
-            <div class="cursor-cube-face right"></div>
-            <div class="cursor-cube-face left"></div>
-            <div class="cursor-cube-face top"></div>
-            <div class="cursor-cube-face bottom"></div>
+        <div class="cursor-cube-container" id="cursor-cube" role="menu" aria-label="Voxel color palette">
+            <div class="cursor-cube-face face front" data-color-key="front"></div>
+            <div class="cursor-cube-face face back" data-color-key="back"></div>
+            <div class="cursor-cube-face face right" data-color-key="right"></div>
+            <div class="cursor-cube-face face left" data-color-key="left"></div>
+            <div class="cursor-cube-face face top" data-color-key="top"></div>
+            <div class="cursor-cube-face face bottom" data-color-key="bottom"></div>
+            <button class="extra-face multi" type="button" data-color-key="multicolor" aria-label="Multicolor"></button>
+            <button class="extra-face white" type="button" data-color-key="white" aria-label="White"></button>
+            <button class="extra-face black" type="button" data-color-key="black" aria-label="Black"></button>
         </div>
     </div>
     
@@ -605,12 +746,107 @@
         
         let mode = 'none'; 
         let drawStartX = 0, drawStartY = 0, drawStartZ = 0;
-        let activeVoxelId = null; 
         let magneticPos = null;
         let previewVoxelEl = null;
         let magneticVoxelEl = null;
 
         const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+        const PALETTE_TILE_SIZE = 48;
+        const PALETTE_GAP = 12;
+        const PALETTE_GRID_SIZE = PALETTE_TILE_SIZE * 3 + PALETTE_GAP * 2;
+        const FACE_KEYS = ['top', 'front', 'right', 'left', 'back', 'bottom'];
+        const MULTICOLOR_POOL = ['top', 'front', 'right', 'left', 'back', 'bottom', 'white', 'black'];
+        const MULTICOLOR_GRADIENT = 'conic-gradient(from 180deg, #6FA7A1, #C08EA1, #9A92B8, #C97B72, #D8C27A, #9BB8A5, #F3F1EC, #3A3D40, #6FA7A1)';
+        const COLOR_OPTIONS = {
+            top: { hex: '#C97B72' },
+            front: { hex: '#6FA7A1' },
+            right: { hex: '#D8C27A' },
+            left: { hex: '#9BB8A5' },
+            back: { hex: '#9A92B8' },
+            bottom: { hex: '#C08EA1' },
+            white: { hex: '#F3F1EC' },
+            black: { hex: '#3A3D40' }
+        };
+        let activeColorMode = 'multicolor';
+        let pendingPlacementColor = null;
+        let paletteState = 'closed';
+        let interactionLocked = false;
+        let paletteAnchorX = window.innerWidth / 2;
+        let paletteAnchorY = window.innerHeight / 2;
+        let paletteTimers = [];
+
+        const hexToRgb = (hex) => {
+            const normalized = hex.replace('#', '');
+            const value = parseInt(normalized, 16);
+            return {
+                r: (value >> 16) & 255,
+                g: (value >> 8) & 255,
+                b: value & 255
+            };
+        };
+
+        const toRgba = (hex, alpha) => {
+            const { r, g, b } = hexToRgb(hex);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        };
+
+        const getFaceName = (el) => FACE_KEYS.find((key) => el.classList.contains(key)) || 'front';
+        const pickRandomColorKey = () => MULTICOLOR_POOL[Math.floor(Math.random() * MULTICOLOR_POOL.length)];
+        const isPaletteBusy = () => paletteState !== 'closed';
+
+        function ensurePendingPlacementColor() {
+            if (activeColorMode !== 'multicolor') return activeColorMode;
+            if (!pendingPlacementColor) {
+                pendingPlacementColor = pickRandomColorKey();
+                syncCursorBrushVisuals();
+            }
+            return pendingPlacementColor;
+        }
+
+        function getBrushFaceColorKey(faceName, mode = activeColorMode) {
+            return mode === 'multicolor' ? (pendingPlacementColor || faceName) : mode;
+        }
+
+        function resolveVoxelFaceColorKey(faceName, colorKey) {
+            if (!colorKey || colorKey === 'multicolor') return faceName;
+            return colorKey;
+        }
+
+        function getVoxelFaceBackground(faceName, colorKey) {
+            return COLOR_OPTIONS[resolveVoxelFaceColorKey(faceName, colorKey)].hex;
+        }
+
+        function getPreviewFaceBackground(colorKey) {
+            const resolvedKey = colorKey === 'multicolor' ? ensurePendingPlacementColor() : colorKey;
+            return toRgba(COLOR_OPTIONS[resolvedKey].hex, 0.32);
+        }
+
+        function getCursorFaceBackground(colorKey, solid = false) {
+            return toRgba(COLOR_OPTIONS[colorKey].hex, solid ? 0.7 : 0.16);
+        }
+
+        function clearPendingPlacementColor() {
+            if (!pendingPlacementColor) return;
+            pendingPlacementColor = null;
+            syncCursorBrushVisuals();
+        }
+
+        function applyVoxelColorsToElement(el, colorKey, isPreview = false) {
+            const resolvedColorKey = colorKey || 'multicolor';
+            el.dataset.colorKey = resolvedColorKey;
+            el.querySelectorAll('.face').forEach((face) => {
+                face.style.background = getVoxelFaceBackground(getFaceName(face), resolvedColorKey);
+            });
+            if (isPreview) {
+                el.style.setProperty('--preview-face-bg', getPreviewFaceBackground(resolvedColorKey));
+            } else {
+                el.style.removeProperty('--preview-face-bg');
+            }
+        }
+
+        function getPreviewColorKey() {
+            return activeColorMode === 'multicolor' ? ensurePendingPlacementColor() : activeColorMode;
+        }
 
         function syncVoxelDOM(el, v) {
             el.style.left = `${v.x * GRID_SIZE}px`;
@@ -632,6 +868,7 @@
                 else if (face.classList.contains('left')) face.style.transform = `translateZ(${v.z * 40}px) rotateY(-90deg)`;
                 else if (face.classList.contains('right')) face.style.transform = `translateZ(${v.z * 40}px) rotateY(90deg)`;
             });
+            applyVoxelColorsToElement(el, v.colorKey, el.classList.contains('preview'));
         }
 
         function ensurePreviewVoxel(v) {
@@ -666,12 +903,10 @@
 
         function resetInteractionState() {
             mode = 'none';
-            activeVoxelId = null;
             magneticPos = null;
             hidePreviewVoxel();
             hideMagneticVoxel();
             document.body.classList.remove('is-deleting');
-            document.querySelectorAll('.voxel.moving').forEach(el => el.classList.remove('moving'));
             axisH.style.opacity = '0';
             axisV.style.opacity = '0';
             coordTracker.style.opacity = '0';
@@ -756,6 +991,7 @@
 
         window.addEventListener('resize', () => {
             syncViewMode();
+            if (isPaletteBusy()) positionPaletteAt(paletteAnchorX, paletteAnchorY);
             markShadowGeometryDirty();
         });
         window.addEventListener('orientationchange', () => {
@@ -798,7 +1034,11 @@
         }
 
         window.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'z') undo();
+            if (e.key === 'Escape' && paletteState === 'open') {
+                closePalette();
+                return;
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !isPaletteBusy()) undo();
         });
 
         function getMaxZInArea(x1, y1, x2, y2, ignoreId = null) {
@@ -837,6 +1077,7 @@
                 else if (f === 'right') face.style.transform = `translateZ(${v.z * 40}px) rotateY(90deg)`;
                 el.appendChild(face);
             });
+            applyVoxelColorsToElement(el, v.colorKey, isPreview);
             return el;
         }
 
@@ -863,42 +1104,64 @@
             return null;
         }
 
-        paperCanvas.addEventListener('contextmenu', e => e.preventDefault());
+        paperCanvas.addEventListener('contextmenu', (e) => {
+            if (!isMobileView) e.preventDefault();
+        });
+
+        window.addEventListener('contextmenu', (e) => {
+            if (isMobileView) return;
+            const target = e.target;
+            const voxelEl = target.closest('.voxel');
+            const shouldBlockMenu =
+                isPaletteBusy() ||
+                (voxelEl && !voxelEl.classList.contains('preview')) ||
+                target.id === 'grid-plane' ||
+                !paperCanvas.contains(target);
+
+            if (shouldBlockMenu) e.preventDefault();
+        });
+
+        window.addEventListener('pointerdown', (e) => {
+            if (isMobileView || interactionLocked || isPaletteBusy()) return;
+            if (e.button !== 2) return;
+            const target = e.target;
+            const voxelEl = target.closest('.voxel');
+            if (voxelEl && !voxelEl.classList.contains('preview')) return;
+            if (paperCanvas.contains(target) || cursorWrapper.contains(target)) return;
+            openPaletteAt(e.clientX, e.clientY);
+        });
 
         paperCanvas.addEventListener('pointerdown', (e) => {
-            if (isMobileView) return; 
+            if (isMobileView || interactionLocked || isPaletteBusy()) return;
             const target = e.target;
             
             if (e.button === 2) {
-                saveState(); mode = 'deleting'; document.body.classList.add('is-deleting');
+                e.stopPropagation();
                 const voxelEl = target.closest('.voxel');
                 if (voxelEl && !voxelEl.classList.contains('preview')) {
+                    clearPendingPlacementColor();
+                    saveState(); mode = 'deleting'; document.body.classList.add('is-deleting');
                     voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
                     renderAllVoxels();
+                } else if (target.id === 'grid-plane') {
+                    openPaletteAt(e.clientX, e.clientY);
                 }
                 return;
             }
 
             if (e.button === 0) {
-                if (target.classList.contains('face') && !target.classList.contains('top') && !target.classList.contains('bottom')) {
-                    saveState(); mode = 'moving';
-                    const voxelEl = target.closest('.voxel');
-                    activeVoxelId = parseInt(voxelEl.dataset.id);
-                    voxelEl.classList.add('moving'); 
-                    return;
-                }
-
                 const coords = resolveGridCoords(e);
                 if (coords) {
+                    const previewColorKey = getPreviewColorKey();
                     saveState(); mode = 'drawing';
                     drawStartX = coords.x; drawStartY = coords.y; drawStartZ = coords.z;
-                    ensurePreviewVoxel({x: drawStartX, y: drawStartY, w: 1, h: 1, z: drawStartZ});
+                    ensurePreviewVoxel({x: drawStartX, y: drawStartY, w: 1, h: 1, z: drawStartZ, colorKey: previewColorKey});
                 }
             }
         });
 
         window.addEventListener('pointermove', (e) => {
-            if (isMobileView) return; 
+            if (isMobileView || isPaletteBusy()) return;
             
             const coords = resolveGridCoords(e);
             
@@ -913,11 +1176,14 @@
                 axisH.style.opacity = '1'; axisV.style.opacity = '1'; coordTracker.style.opacity = '1';
 
                 if (mode === 'none') {
-                    ensureMagneticVoxel({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z});
+                    ensureMagneticVoxel({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z, colorKey: getPreviewColorKey()});
                 }
             } else {
                 axisH.style.opacity = '0'; axisV.style.opacity = '0'; coordTracker.style.opacity = '0';
-                if (mode === 'none') hideMagneticVoxel();
+                if (mode === 'none') {
+                    hideMagneticVoxel();
+                    clearPendingPlacementColor();
+                }
             }
 
             if (mode === 'deleting') {
@@ -937,34 +1203,13 @@
                 const h = Math.abs(magneticPos.y - drawStartY) + 1;
                 const dynamicZ = Math.max(drawStartZ, getMaxZInArea(minX, minY, minX + w - 1, minY + h - 1));
 
-                ensurePreviewVoxel({x: minX, y: minY, w: w, h: h, z: dynamicZ});
+                ensurePreviewVoxel({x: minX, y: minY, w: w, h: h, z: dynamicZ, colorKey: getPreviewColorKey()});
                 return;
-            }
-
-            if (mode === 'moving' && activeVoxelId && magneticPos) {
-                hideMagneticVoxel();
-                const v = voxels.find(vx => vx.id === activeVoxelId);
-                const newZ = getMaxZInArea(magneticPos.x, magneticPos.y, magneticPos.x + v.w - 1, magneticPos.y + v.h - 1, v.id);
-                
-                const movingEl = document.getElementById(`voxel-${v.id}`);
-                if(movingEl) {
-                    movingEl.style.left = `${magneticPos.x * GRID_SIZE}px`;
-                    movingEl.style.top = `${magneticPos.y * GRID_SIZE}px`;
-                    const faces = movingEl.querySelectorAll('.face');
-                    faces.forEach(face => {
-                        if (face.classList.contains('bottom')) face.style.transform = `translateZ(${newZ * 40}px)`;
-                        else if (face.classList.contains('top')) face.style.transform = `translateZ(${(newZ + 1) * 40}px)`;
-                        else if(face.classList.contains('front')) face.style.transform = `translateZ(${newZ * 40}px) rotateX(90deg)`;
-                        else if(face.classList.contains('back')) face.style.transform = `translateZ(${newZ * 40}px) rotateX(-90deg)`;
-                        else if(face.classList.contains('left')) face.style.transform = `translateZ(${newZ * 40}px) rotateY(-90deg)`;
-                        else if(face.classList.contains('right')) face.style.transform = `translateZ(${newZ * 40}px) rotateY(90deg)`;
-                    });
-                }
             }
         });
 
         window.addEventListener('pointerup', () => {
-            if (isMobileView) return; // 移动端拦截
+            if (isMobileView || isPaletteBusy()) return;
             if (mode === 'drawing') {
                 const preview = previewVoxelEl && previewVoxelEl.style.display !== 'none' ? previewVoxelEl : null;
                 if (preview) {
@@ -972,22 +1217,16 @@
                         id: Date.now(),
                         x: parseInt(preview.dataset.x), y: parseInt(preview.dataset.y),
                         w: parseInt(preview.dataset.w), h: parseInt(preview.dataset.h),
-                        z: parseInt(preview.dataset.z)
+                        z: parseInt(preview.dataset.z),
+                        colorKey: preview.dataset.colorKey || getPreviewColorKey()
                     });
                     renderAllVoxels();
                     hidePreviewVoxel();
                 }
-            } else if (mode === 'moving' && activeVoxelId && magneticPos) {
-                const vIndex = voxels.findIndex(vx => vx.id === activeVoxelId);
-                if (vIndex !== -1) {
-                    voxels[vIndex].x = magneticPos.x;
-                    voxels[vIndex].y = magneticPos.y;
-                    voxels[vIndex].z = getMaxZInArea(magneticPos.x, magneticPos.y, magneticPos.x + voxels[vIndex].w - 1, magneticPos.y + voxels[vIndex].h - 1, activeVoxelId);
-                }
-                renderAllVoxels();
-                activeVoxelId = null;
+                clearPendingPlacementColor();
             } else if (mode === 'deleting') {
                 document.body.classList.remove('is-deleting');
+                clearPendingPlacementColor();
             }
             mode = 'none';
         });
@@ -1008,6 +1247,15 @@
         const titleShadow = document.getElementById('title-shadow');
         const sloganShadow = document.getElementById('slogan-shadow');
         const footerShadow = document.getElementById('footer-shadow');
+        const paletteOverlay = document.getElementById('palette-overlay');
+        const paletteBackdrop = document.getElementById('palette-backdrop');
+        const cursorFaces = Object.fromEntries(FACE_KEYS.map((faceKey) => [faceKey, cursorCube.querySelector(`.face.${faceKey}`)]));
+        const cursorExtras = {
+            multicolor: cursorCube.querySelector('.extra-face.multi'),
+            white: cursorCube.querySelector('.extra-face.white'),
+            black: cursorCube.querySelector('.extra-face.black')
+        };
+        const paletteBlocks = Array.from(cursorCube.querySelectorAll('.face, .extra-face'));
 
         let mouseX = window.innerWidth / 2; let mouseY = window.innerHeight / 2;
         let lerpX = mouseX; let lerpY = mouseY;
@@ -1029,6 +1277,184 @@
         const footerSlotAliases = ['info', 'hr'];
         const footerSlotLineHeight = 16;
         const footerSlotTracks = [footerSlotTrack, footerShadowTrack].filter(Boolean);
+
+        function clearPaletteTimers() {
+            paletteTimers.forEach((timerId) => window.clearTimeout(timerId));
+            paletteTimers = [];
+        }
+
+        function queuePaletteTimer(delay, callback) {
+            const timerId = window.setTimeout(callback, delay);
+            paletteTimers.push(timerId);
+            return timerId;
+        }
+
+        function getPaletteBlockBackground(colorKey, solid = false) {
+            if (colorKey === 'multicolor') return MULTICOLOR_GRADIENT;
+            return solid ? COLOR_OPTIONS[colorKey].hex : getCursorFaceBackground(colorKey, solid);
+        }
+
+        function applyCursorBrushColors(mode = activeColorMode, solid = false) {
+            FACE_KEYS.forEach((faceName) => {
+                const faceEl = cursorFaces[faceName];
+                const colorKey = getBrushFaceColorKey(faceName, mode);
+                faceEl.dataset.colorKey = colorKey;
+                faceEl.style.background = getCursorFaceBackground(colorKey, solid);
+            });
+        }
+
+        function applyCursorExtraColors() {
+            cursorExtras.multicolor.style.background = MULTICOLOR_GRADIENT;
+            cursorExtras.multicolor.style.color = 'rgba(255, 255, 255, 0.95)';
+            cursorExtras.multicolor.style.textShadow = '0 1px 2px rgba(0, 0, 0, 0.28)';
+            cursorExtras.white.style.background = COLOR_OPTIONS.white.hex;
+            cursorExtras.white.style.color = 'rgba(20, 20, 25, 0.78)';
+            cursorExtras.black.style.background = COLOR_OPTIONS.black.hex;
+            cursorExtras.black.style.color = 'rgba(255, 255, 255, 0.88)';
+        }
+
+        function getDisplayedBrushColorKey() {
+            if (activeColorMode === 'multicolor') return pendingPlacementColor;
+            return activeColorMode;
+        }
+
+        function syncCursorBrushVisuals() {
+            if (isPaletteBusy()) return;
+            applyCursorBrushColors('multicolor', false);
+            applyCursorExtraColors();
+
+            const displayColorKey = getDisplayedBrushColorKey();
+            if (displayColorKey) {
+                cursorCube.style.setProperty('--selected-color', COLOR_OPTIONS[displayColorKey].hex);
+                cursorCube.classList.add('is-colored');
+            } else {
+                cursorCube.classList.remove('is-colored');
+            }
+        }
+
+        function applyPaletteFaceColors() {
+            FACE_KEYS.forEach((faceName) => {
+                const faceEl = cursorFaces[faceName];
+                faceEl.dataset.colorKey = faceName;
+                faceEl.style.background = getPaletteBlockBackground(faceName, true);
+            });
+            applyCursorExtraColors();
+        }
+
+        function refreshTransientVoxelColors() {
+            if (magneticVoxelEl && magneticVoxelEl.style.display !== 'none') {
+                applyVoxelColorsToElement(magneticVoxelEl, getPreviewColorKey(), true);
+            }
+            if (previewVoxelEl && previewVoxelEl.style.display !== 'none') {
+                applyVoxelColorsToElement(previewVoxelEl, getPreviewColorKey(), true);
+            }
+        }
+
+        function positionPaletteAt(x, y) {
+            const inset = PALETTE_GRID_SIZE / 2 + 20;
+            paletteAnchorX = clamp(x, inset, window.innerWidth - inset);
+            paletteAnchorY = clamp(y, inset, window.innerHeight - inset);
+        }
+
+        function openPaletteAt(x, y) {
+            if (isMobileView || isPaletteBusy()) return;
+
+            clearPaletteTimers();
+            resetInteractionState();
+            clearPendingPlacementColor();
+            interactionLocked = true;
+            paletteState = 'opening';
+            positionPaletteAt(x, y);
+
+            mouseX = paletteAnchorX;
+            mouseY = paletteAnchorY;
+            lerpX = paletteAnchorX;
+            lerpY = paletteAnchorY;
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
+
+            paletteOverlay.classList.add('is-active');
+            paletteOverlay.setAttribute('aria-hidden', 'false');
+            cursorWrapper.classList.remove('is-contrast-text');
+            cursorWrapper.classList.add('is-palette-mode');
+            cursorCube.classList.add('is-palette-mode');
+            cursorCube.classList.remove('is-colored');
+            cursorCube.classList.remove('is-palette');
+            cursorCube.style.transform = 'translate(-50%, -50%)';
+            applyPaletteFaceColors();
+
+            requestAnimationFrame(() => {
+                cursorCube.classList.add('is-palette');
+                queuePaletteTimer(180, () => {
+                    paletteState = 'open';
+                    interactionLocked = false;
+                });
+            });
+        }
+
+        function closePalette(nextColorMode = null) {
+            if (paletteState !== 'open') return;
+
+            clearPaletteTimers();
+            interactionLocked = true;
+            paletteState = 'closing';
+
+            if (nextColorMode) activeColorMode = nextColorMode;
+            clearPendingPlacementColor();
+
+            const displayColorKey = getDisplayedBrushColorKey();
+            if (displayColorKey) {
+                cursorCube.style.setProperty('--selected-color', COLOR_OPTIONS[displayColorKey].hex);
+                cursorCube.classList.add('is-colored');
+            } else {
+                cursorCube.classList.remove('is-colored');
+            }
+
+            cursorCube.classList.remove('is-palette');
+            queuePaletteTimer(720, () => {
+                paletteOverlay.classList.remove('is-active');
+                paletteOverlay.setAttribute('aria-hidden', 'true');
+                cursorWrapper.classList.remove('is-palette-mode');
+                cursorCube.classList.remove('is-palette', 'is-palette-mode');
+                cursorCube.style.transform = '';
+                syncCursorBrushVisuals();
+                paletteState = 'closed';
+                interactionLocked = false;
+                refreshTransientVoxelColors();
+            });
+        }
+
+        function forceClosePalette() {
+            clearPaletteTimers();
+            paletteOverlay.classList.remove('is-active');
+            paletteOverlay.setAttribute('aria-hidden', 'true');
+            cursorWrapper.classList.remove('is-palette-mode');
+            cursorWrapper.classList.remove('is-contrast-text');
+            cursorCube.classList.remove('is-palette', 'is-palette-mode');
+            cursorCube.style.transform = '';
+            paletteState = 'closed';
+            interactionLocked = false;
+            clearPendingPlacementColor();
+            syncCursorBrushVisuals();
+        }
+
+        paletteBlocks.forEach((block) => {
+            block.setAttribute('role', 'button');
+            block.tabIndex = -1;
+            block.addEventListener('pointerdown', (e) => {
+                if (paletteState !== 'open') return;
+                e.stopPropagation();
+                closePalette(block.dataset.colorKey);
+            });
+        });
+
+        paletteBackdrop.addEventListener('pointerdown', (e) => {
+            if (paletteState !== 'open') return;
+            e.stopPropagation();
+            closePalette();
+        });
+
+        syncCursorBrushVisuals();
 
         function syncFooterLinkAlias() {
             const alias = footerSlotAliases[footerSlotIndex] || footerSlotAliases[0];
@@ -1178,7 +1604,7 @@
         }
         
         window.addEventListener('mousemove', (e) => {
-            if (isMobileView) return;
+            if (isMobileView || isPaletteBusy()) return;
             mouseX = e.clientX; mouseY = e.clientY;
         });
 
@@ -1335,8 +1761,30 @@
                 }
             }
 
+            if (isPaletteBusy() || isMobileView) {
+                cursorWrapper.classList.remove('is-contrast-text');
+            } else {
+                const titleRect = plxTitle.getBoundingClientRect();
+                const sloganRect = sloganCard ? sloganCard.getBoundingClientRect() : plxSlogan.getBoundingClientRect();
+                const footerRect = plxFooter.getBoundingClientRect();
+                const insideRect = (rect, padX = 0, padY = 0) =>
+                    mouseX >= rect.left - padX &&
+                    mouseX <= rect.right + padX &&
+                    mouseY >= rect.top - padY &&
+                    mouseY <= rect.bottom + padY;
+
+                const useContrastBlend =
+                    insideRect(titleRect, 10, 10) ||
+                    insideRect(sloganRect, 10, 10) ||
+                    insideRect(footerRect, 8, 8);
+
+                cursorWrapper.classList.toggle('is-contrast-text', useContrastBlend);
+            }
+
             // 更新多色光标的物理坐标与旋转
-            if (isMobileView) {
+            if (isPaletteBusy()) {
+                cursorWrapper.style.transform = `translate3d(${paletteAnchorX}px, ${paletteAnchorY}px, 0)`;
+            } else if (isMobileView) {
                 const mobileRotX = normY * -12 + mobileRollX;
                 const mobileRotY = normX * 12 + mobileRollY;
                 cursorWrapper.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
