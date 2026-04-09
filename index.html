@@ -251,46 +251,130 @@
         .brand-title .qi { color: var(--text-black); }
         .brand-title .core { color: var(--text-warm-gray); }
 
+        .slogan-shell {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            width: min(392px, 72vw);
+            height: 188px;
+            transform: translateZ(50px) translateY(-10vh);
+            pointer-events: none;
+        }
+        .slogan-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            pointer-events: auto;
+        }
         .slogan-bar {
-            background: rgba(242, 242, 244, 0.75); backdrop-filter: blur(12px);
-            padding: 12px 36px; border-radius: 100px; border: 1px solid rgba(0, 0, 0, 0.04);
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 14px;
+            cursor: default;
+            text-align: center;
+            padding: 12px 36px;
+            border-radius: 999px;
+            border: 1px solid rgba(0, 0, 0, 0.045);
+            background: rgba(242, 242, 244, 0.82);
+            backdrop-filter: blur(14px);
             box-shadow:
                 0 10px 18px rgba(0, 0, 0, 0.08),
                 0 24px 42px rgba(0, 0, 0, 0.08),
                 0 1px 0 rgba(255, 255, 255, 0.35) inset;
-            display: flex; align-items: center; gap: 14px;
-            transform: translateZ(50px) translateY(-10vh);
+            transition:
+                border-radius 520ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 420ms ease;
         }
-        .slogan-bar p { color: #66635E; font-size: 0.95rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; }
-        .slogan-separator { display: inline-block; width: 3px; height: 3px; background-color: rgba(0, 0, 0, 0.2); transform: rotate(45deg); }
+        .slogan-card.is-expanded {
+        }
+        .slogan-card.is-expanded .slogan-bar {
+            border-radius: 26px 26px 18px 18px;
+            box-shadow:
+                0 8px 16px rgba(0, 0, 0, 0.05),
+                0 16px 28px rgba(0, 0, 0, 0.045),
+                0 1px 0 rgba(255, 255, 255, 0.36) inset;
+            background: rgba(241, 240, 242, 0.86);
+        }
+        .slogan-drawer {
+            position: relative;
+            width: 100%;
+            margin-top: -14px;
+            padding: 0 22px;
+            border-radius: 0 0 26px 26px;
+            border: 1px solid rgba(0, 0, 0, 0.045);
+            border-top: none;
+            background: rgba(241, 240, 242, 0.82);
+            backdrop-filter: blur(14px);
+            box-shadow:
+                0 18px 30px rgba(0, 0, 0, 0.07),
+                0 32px 52px rgba(0, 0, 0, 0.06),
+                0 1px 0 rgba(255, 255, 255, 0.3) inset;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transform: translateY(-8px);
+            transform-origin: top center;
+            transition:
+                max-height 520ms cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 260ms ease 90ms,
+                transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+                padding-top 520ms cubic-bezier(0.22, 1, 0.36, 1),
+                padding-bottom 520ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .slogan-bar p {
+            color: rgba(97, 92, 84, 0.92);
+            font-size: 0.95rem;
+            font-weight: 560;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+        .slogan-separator { display: inline-block; width: 3px; height: 3px; background-color: rgba(101, 96, 88, 0.34); transform: rotate(45deg); }
+        .slogan-card.is-expanded .slogan-drawer {
+            max-height: 132px;
+            opacity: 1;
+            transform: translateY(0);
+            padding-top: 24px;
+            padding-bottom: 16px;
+        }
+        .slogan-detail {
+            width: 100%;
+        }
         .company-note {
-            max-width: min(640px, 72vw);
-            margin-top: 2.4vh;
-            color: rgba(91, 86, 78, 0.78);
-            font-size: 0.84rem;
-            font-weight: 500;
-            line-height: 1.7;
-            letter-spacing: 0.04em;
+            max-width: 100%;
+            color: rgba(102, 96, 88, 0.9);
+            font-size: 0.8rem;
+            font-weight: 450;
+            line-height: 1.78;
+            letter-spacing: 0.03em;
             text-align: center;
-            transform: translateZ(34px) translateY(-8.2vh);
             text-wrap: balance;
         }
         .company-note .brand {
-            color: rgba(44, 42, 39, 0.92);
-            font-weight: 650;
+            color: rgba(70, 66, 60, 0.96);
+            font-weight: 600;
         }
         .company-note .hiring {
             font-family: 'Geist Mono', monospace;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            color: rgba(76, 72, 65, 0.9);
+            display: inline-block;
+            margin-left: 0.2em;
+            padding: 0.14em 0.5em;
+            border-radius: 999px;
+            background: rgba(139, 134, 125, 0.12);
+            font-size: 0.72rem;
+            font-weight: 650;
+            letter-spacing: 0.06em;
+            color: rgba(88, 82, 74, 0.92);
             white-space: nowrap;
         }
 
         .footer-signature {
             position: absolute; bottom: 3vh; left: 50%;
-            z-index: 10; pointer-events: none; display: flex; align-items: center;
+            z-index: 10; pointer-events: auto; display: flex; align-items: center;
             transform: translateX(-50%) translateZ(30px);
         }
         .terminal-footer {
@@ -300,7 +384,24 @@
                 0 8px 14px rgba(0, 0, 0, 0.06),
                 0 18px 30px rgba(0, 0, 0, 0.07),
                 0 1px 0 rgba(255, 255, 255, 0.28) inset;
+        }
+        .terminal-footer-link {
+            display: flex;
+            align-items: center;
             gap: 4px;
+            color: inherit;
+            text-decoration: none;
+        }
+        .terminal-footer-link:hover .slot-track span,
+        .terminal-footer-link:hover .domain,
+        .terminal-footer-link:focus-visible .slot-track span,
+        .terminal-footer-link:focus-visible .domain {
+            color: #4f4a43;
+        }
+        .terminal-footer-link:focus-visible {
+            outline: 1px solid rgba(79, 74, 67, 0.28);
+            outline-offset: 4px;
+            border-radius: 4px;
         }
         .terminal-footer .icon-indicator {
             width: 6px; height: 6px; background-color: var(--text-warm-gray);
@@ -309,8 +410,17 @@
         @keyframes pulseFade { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
         .terminal-footer .domain { font-family: 'Geist Mono', monospace; color: #716C64; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em; }
         .slot-machine { height: 16px; overflow: hidden; position: relative; display: inline-block; min-width: 42px; text-align: right; }
-        .slot-track { display: flex; flex-direction: column; animation: slotSpin 6s infinite cubic-bezier(0.7, 0, 0.3, 1); }
+        .slot-track {
+            display: flex;
+            flex-direction: column;
+            transform: translateY(0);
+            transition: transform 640ms cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
         .slot-track span { font-family: 'Geist Mono', monospace; color: var(--text-black); font-size: 0.7rem; font-weight: 700; line-height: 16px; height: 16px; letter-spacing: 0.05em; }
+        .slot-track.is-resetting {
+            transition: none;
+        }
         @keyframes slotSpin { 0%, 40% { transform: translateY(0); } 50%, 90% { transform: translateY(-16px); } 100% { transform: translateY(-32px); } }
 
         /* ==========================================
@@ -352,6 +462,8 @@
             .axis-h, .axis-v, .coord-tracker { display: none; }
             .cursor-dot { display: none; } /* 仅隐藏中心白点，保留彩色方块 */
             body.mobile-view .debug-badge { opacity: 1; }
+            .slogan-shell { pointer-events: none; }
+            .slogan-detail { display: none; }
         }
 
     </style>
@@ -377,30 +489,46 @@
             </div>
             <div class="projection-shadow projection-footer" id="footer-shadow">
                 <div class="icon-indicator"></div>
-                <div class="slot-machine"><div class="slot-track"><span>info</span></div></div>
-                <span class="domain">@qicore.ai</span>
-            </div>
-        </div>
-
-        <div class="content-layer">
-            <h1 class="brand-title" id="plx-title"><span class="qi">Qi</span><span class="core">Core</span></h1>
-            <div class="slogan-bar" id="plx-slogan">
-                <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
-            </div>
-            <p class="company-note"> <span class="brand">气核科技（qicore）</span> 专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，<span class="hiring">WE ARE HIRING</span>。</p>
-        </div>
-
-        <div class="footer-signature" id="plx-footer">
-            <div class="terminal-footer">
-                <div class="icon-indicator"></div>
                 <div class="slot-machine">
-                    <div class="slot-track">
+                    <div class="slot-track" id="footer-shadow-track">
                         <span>info</span>
                         <span>hr</span>
                         <span>info</span>
                     </div>
                 </div>
                 <span class="domain">@qicore.ai</span>
+            </div>
+        </div>
+
+        <div class="content-layer">
+            <h1 class="brand-title" id="plx-title"><span class="qi">Qi</span><span class="core">Core</span></h1>
+            <div class="slogan-shell">
+                <div class="slogan-card">
+                    <div class="slogan-bar" id="plx-slogan">
+                        <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
+                    </div>
+                    <div class="slogan-drawer">
+                        <div class="slogan-detail">
+                            <p class="company-note"><span class="brand">气核科技（qicore）</span> 专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，<span class="hiring">WE ARE HIRING</span>。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-signature" id="plx-footer">
+            <div class="terminal-footer">
+                <a class="terminal-footer-link" href="mailto:info@qicore.ai" aria-label="Email info@qicore.ai">
+                    <div class="icon-indicator"></div>
+                    <div class="slot-machine">
+                        <div class="slot-track" id="footer-slot-track">
+                            <span>info</span>
+                            <span>hr</span>
+                            <span>info</span>
+                        </div>
+                    </div>
+                    <span class="domain">@qicore.ai</span>
+                </a>
             </div>
         </div>
     </div>
@@ -862,12 +990,16 @@
         const cursorCube = document.getElementById('cursor-cube');
         const plxTitle = document.getElementById('plx-title');
         const plxSlogan = document.getElementById('plx-slogan');
+        const sloganCard = plxSlogan.closest('.slogan-card');
         const plxFooter = document.getElementById('plx-footer');
+        const footerLink = plxFooter.querySelector('.terminal-footer-link');
+        const footerSlotTrack = document.getElementById('footer-slot-track');
+        const footerShadowTrack = document.getElementById('footer-shadow-track');
         const ambientGlow = document.getElementById('ambient-glow');
         const titleShadow = document.getElementById('title-shadow');
         const sloganShadow = document.getElementById('slogan-shadow');
         const footerShadow = document.getElementById('footer-shadow');
-        
+
         let mouseX = window.innerWidth / 2; let mouseY = window.innerHeight / 2;
         let lerpX = mouseX; let lerpY = mouseY;
         let rotX = 45; let rotY = 45;
@@ -880,6 +1012,79 @@
         let mobileTapActive = false;
         let titleWeightState = 430;
         let appliedTitleWeight = 430;
+        let sloganExpanded = false;
+        let footerSlotIndex = 0;
+        let footerSlotPaused = false;
+        let footerSlotAdvanceAt = performance.now() + 2200;
+
+        const footerSlotAliases = ['info', 'hr'];
+        const footerSlotLineHeight = 16;
+        const footerSlotTracks = [footerSlotTrack, footerShadowTrack].filter(Boolean);
+
+        function syncFooterLinkAlias() {
+            const alias = footerSlotAliases[footerSlotIndex] || footerSlotAliases[0];
+            const email = `${alias}@qicore.ai`;
+            footerLink.href = `mailto:${email}`;
+            footerLink.setAttribute('aria-label', `Email ${email}`);
+        }
+
+        function setFooterSlotTransform(index, isResetting = false) {
+            footerSlotTracks.forEach((track) => {
+                track.classList.toggle('is-resetting', isResetting);
+                track.style.transform = `translateY(${-footerSlotLineHeight * index}px)`;
+            });
+        }
+
+        function resetFooterSlotLoop() {
+            setFooterSlotTransform(0, true);
+            footerSlotIndex = 0;
+            syncFooterLinkAlias();
+            requestAnimationFrame(() => {
+                footerSlotTracks.forEach((track) => track.classList.remove('is-resetting'));
+            });
+        }
+
+        function advanceFooterSlot() {
+            if (footerSlotPaused) return;
+
+            if (footerSlotIndex === 0) {
+                footerSlotIndex = 1;
+                setFooterSlotTransform(1);
+                syncFooterLinkAlias();
+                footerSlotAdvanceAt = performance.now() + 2200;
+                return;
+            }
+
+            footerSlotIndex = 2;
+            setFooterSlotTransform(2);
+            syncFooterLinkAlias();
+
+            window.setTimeout(() => {
+                if (footerSlotIndex !== 2) return;
+                resetFooterSlotLoop();
+                footerSlotAdvanceAt = performance.now() + 2200;
+            }, 700);
+        }
+
+        syncFooterLinkAlias();
+
+        plxFooter.addEventListener('pointerenter', () => {
+            footerSlotPaused = true;
+        });
+
+        plxFooter.addEventListener('pointerleave', () => {
+            footerSlotPaused = false;
+            footerSlotAdvanceAt = performance.now() + 900;
+        });
+
+        footerLink.addEventListener('focus', () => {
+            footerSlotPaused = true;
+        });
+
+        footerLink.addEventListener('blur', () => {
+            footerSlotPaused = false;
+            footerSlotAdvanceAt = performance.now() + 900;
+        });
 
         const shadowState = {
             dirty: true,
@@ -973,6 +1178,10 @@
             const now = performance.now();
             const dt = Math.max(1, now - lastTime);
             lastTime = now;
+
+            if (!footerSlotPaused && now >= footerSlotAdvanceAt) {
+                advanceFooterSlot();
+            }
 
             let normX = 0, normY = 0;
             let scaleCube = 1;
@@ -1092,6 +1301,29 @@
             } else {
                 normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
                 normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
+            }
+
+            if (sloganCard) {
+                if (isMobileView) {
+                    if (sloganExpanded) {
+                        sloganExpanded = false;
+                        sloganCard.classList.remove('is-expanded');
+                    }
+                } else {
+                    const sloganRect = plxSlogan.getBoundingClientRect();
+                    const padX = sloganExpanded ? 28 : 10;
+                    const padY = sloganExpanded ? 24 : 10;
+                    const isInsideSloganZone =
+                        mouseX >= sloganRect.left - padX &&
+                        mouseX <= sloganRect.right + padX &&
+                        mouseY >= sloganRect.top - padY &&
+                        mouseY <= sloganRect.bottom + padY;
+
+                    if (isInsideSloganZone !== sloganExpanded) {
+                        sloganExpanded = isInsideSloganZone;
+                        sloganCard.classList.toggle('is-expanded', sloganExpanded);
+                    }
+                }
             }
 
             // 更新多色光标的物理坐标与旋转
