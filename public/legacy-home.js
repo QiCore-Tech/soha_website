@@ -60,20 +60,21 @@
         const PALETTE_GAP = 12;
         const PALETTE_GRID_SIZE = PALETTE_TILE_SIZE * 3 + PALETTE_GAP * 2;
         const FACE_KEYS = ['top', 'front', 'right', 'left', 'back', 'bottom'];
-        const MULTICOLOR_POOL = ['top', 'front', 'right', 'left', 'back', 'bottom', 'white', 'black'];
-        const MULTICOLOR_GRADIENT = 'conic-gradient(from 180deg, #6FA7A1, #C08EA1, #9A92B8, #C97B72, #D8C27A, #9BB8A5, #F3F1EC, #3A3D40, #6FA7A1)';
+        const MULTICOLOR_POOL = ['top', 'front', 'right', 'left', 'back', 'bottom'];
+        const MULTICOLOR_GRADIENT = 'conic-gradient(from 180deg, #C9857C, #D2A06E, #D8C27A, #8FA892, #7E98B7, #A08FB5, #C9857C)';
         const COLOR_OPTIONS = {
-            top: { hex: '#C97B72' },
-            front: { hex: '#6FA7A1' },
+            top: { hex: '#C9857C' },
+            front: { hex: '#D2A06E' },
             right: { hex: '#D8C27A' },
-            left: { hex: '#9BB8A5' },
-            back: { hex: '#9A92B8' },
-            bottom: { hex: '#C08EA1' },
+            left: { hex: '#8FA892' },
+            back: { hex: '#7E98B7' },
+            bottom: { hex: '#A08FB5' },
             white: { hex: '#F3F1EC' },
             black: { hex: '#3A3D40' }
         };
         let activeColorMode = 'multicolor';
         let pendingPlacementColor = null;
+        let multicolorSequenceIndex = 0;
         let paletteState = 'closed';
         let interactionLocked = false;
         let isClearChargeActive = false;
@@ -98,14 +99,28 @@
             return `rgba(${r}, ${g}, ${b}, ${alpha})`;
         };
 
+        function applyRainbowPresetCssVars() {
+            const rootStyle = document.documentElement.style;
+            FACE_KEYS.forEach((faceKey) => {
+                const { r, g, b } = hexToRgb(COLOR_OPTIONS[faceKey].hex);
+                rootStyle.setProperty(`--cursor-${faceKey}-rgb`, `${r}, ${g}, ${b}`);
+            });
+        }
+
+        applyRainbowPresetCssVars();
+
         const getFaceName = (el) => FACE_KEYS.find((key) => el.classList.contains(key)) || 'front';
-        const pickRandomColorKey = () => MULTICOLOR_POOL[Math.floor(Math.random() * MULTICOLOR_POOL.length)];
+        const pickNextMulticolorKey = () => {
+            const colorKey = MULTICOLOR_POOL[multicolorSequenceIndex % MULTICOLOR_POOL.length];
+            multicolorSequenceIndex = (multicolorSequenceIndex + 1) % MULTICOLOR_POOL.length;
+            return colorKey;
+        };
         const isPaletteBusy = () => paletteState !== 'closed';
 
         function ensurePendingPlacementColor() {
             if (activeColorMode !== 'multicolor') return activeColorMode;
             if (!pendingPlacementColor) {
-                pendingPlacementColor = pickRandomColorKey();
+                pendingPlacementColor = pickNextMulticolorKey();
                 syncCursorBrushVisuals();
             }
             return pendingPlacementColor;
