@@ -552,7 +552,18 @@
         }
         .cursor-cube-container {
             position: absolute; inset: 0; width: var(--cursor-cube-size); height: var(--cursor-cube-size); transform-style: preserve-3d;
-            transition: transform 0.1s linear;
+            transform: rotateX(-30deg) rotateY(45deg);
+            transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes cursorCubeSpin {
+            0% { transform: rotateX(-30deg) rotateY(45deg); }
+            100% { transform: rotateX(-30deg) rotateY(405deg); }
+        }
+        .cursor-cube-container.is-spinning {
+            animation: cursorCubeSpin 8s linear infinite;
+        }
+        .cursor-cube-container.is-opening {
+            transition-duration: 0.7s;
         }
         .cursor-cube-face {
             position: absolute;
@@ -583,7 +594,6 @@
             top: calc(-1 * var(--cursor-span));
             width: var(--cursor-palette-size);
             height: var(--cursor-palette-size);
-            transition: none;
             --cube-size: var(--cursor-cube-size);
             --half-size: var(--cursor-half-size);
             --span: var(--cursor-span);
@@ -599,12 +609,16 @@
                 inset 0 1px 4px rgba(255, 255, 255, 0.14),
                 inset 0 -2px 6px rgba(0, 0, 0, 0.08);
             transition:
-                transform 0.72s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
                 background-color 0.4s ease,
                 background 0.4s ease,
-                opacity 0.4s ease,
+                opacity 0.6s ease,
                 box-shadow 0.25s ease;
             backface-visibility: hidden;
+        }
+        .cursor-cube-container.is-opening .face,
+        .cursor-cube-container.is-opening .extra-face {
+            transition-duration: 0.7s, 0.4s, 0.4s, 0.6s, 0.25s;
         }
         .cursor-cube-container .face {
             inset: 0;

@@ -886,6 +886,8 @@
         let rightPressOrigin = null;
         let isLongPressTriggered = false;
         const LONG_PRESS_THRESHOLD = 1200;
+        const PALETTE_OPEN_DURATION = 700;
+        const PALETTE_CLOSE_DURATION = 700;
 
         const footerSlotAliases = ['info', 'hr'];
         const footerSlotLineHeight = 16;
@@ -1081,15 +1083,17 @@
             cursorWrapper.classList.add('is-palette-mode');
             cubeWrapper.classList.remove('is-imploding');
             cursorCube.classList.add('is-palette-mode');
+            cursorCube.classList.add('is-opening');
             cursorCube.classList.remove('is-spinning');
             cursorCube.classList.remove('is-colored');
             cursorCube.classList.remove('is-palette');
-            cursorCube.style.transform = 'rotateX(0deg) rotateY(0deg)';
+            cursorCube.style.transform = '';
             applyPaletteFaceColors();
 
             requestAnimationFrame(() => {
                 cursorCube.classList.add('is-palette');
-                queuePaletteTimer(180, () => {
+                queuePaletteTimer(PALETTE_OPEN_DURATION, () => {
+                    cursorCube.classList.remove('is-opening');
                     paletteState = 'open';
                     interactionLocked = false;
                 });
@@ -1106,6 +1110,7 @@
 
             if (nextColorMode) activeColorMode = nextColorMode;
             clearPendingPlacementColor();
+            cursorCube.classList.remove('is-opening');
 
             const displayColorKey = getDisplayedBrushColorKey();
             if (displayColorKey) {
@@ -1116,11 +1121,11 @@
             }
 
             cursorCube.classList.remove('is-palette');
-            queuePaletteTimer(720, () => {
+            queuePaletteTimer(PALETTE_CLOSE_DURATION, () => {
                 paletteOverlay.classList.remove('is-active');
                 paletteOverlay.setAttribute('aria-hidden', 'true');
                 cursorWrapper.classList.remove('is-palette-mode');
-                cursorCube.classList.remove('is-palette', 'is-palette-mode');
+                cursorCube.classList.remove('is-palette', 'is-palette-mode', 'is-opening');
                 cursorCube.style.transform = '';
                 cursorCube.classList.add('is-spinning');
                 syncCursorBrushVisuals();
@@ -1137,7 +1142,7 @@
             paletteOverlay.setAttribute('aria-hidden', 'true');
             cursorWrapper.classList.remove('is-palette-mode');
             cursorWrapper.classList.remove('is-contrast-text');
-            cursorCube.classList.remove('is-palette', 'is-palette-mode');
+            cursorCube.classList.remove('is-palette', 'is-palette-mode', 'is-opening');
             cursorCube.style.transform = '';
             cursorCube.classList.add('is-spinning');
             paletteState = 'closed';
@@ -1506,17 +1511,12 @@
             // 更新多色光标的物理坐标与旋转
             if (isClearChargeActive && rightPressOrigin) {
                 cursorWrapper.style.transform = `translate3d(${rightPressOrigin.x}px, ${rightPressOrigin.y}px, 0)`;
-                cursorCube.style.transform = `rotateX(-30deg) rotateY(${45 + now * 0.05}deg)`;
             } else if (isPaletteBusy()) {
                 cursorWrapper.style.transform = `translate3d(${paletteAnchorX}px, ${paletteAnchorY}px, 0)`;
             } else if (isMobileView) {
-                const mobileRotX = normY * -12 + mobileRollX;
-                const mobileRotY = normX * 12 + mobileRollY;
-                cursorWrapper.style.transform = `translate3d(${window.innerWidth / 2}px, ${window.innerHeight / 2}px, 0)`;
-                cursorCube.style.transform = `translate3d(${mobileCubeOffsetX}px, ${mobileCubeOffsetY}px, 0) scale(${1.02 + Math.min(speed * 0.015, 0.08)}) rotateX(${mobileRotX}deg) rotateY(${mobileRotY}deg)`;
+                cursorWrapper.style.transform = `translate3d(${window.innerWidth / 2 + mobileCubeOffsetX}px, ${window.innerHeight / 2 + mobileCubeOffsetY}px, 0)`;
             } else {
                 cursorWrapper.style.transform = `translate3d(${lerpX}px, ${lerpY}px, 0)`;
-                cursorCube.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scaleCube}) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
             }
 
             if (isPaletteBusy() || isMobileView) {
