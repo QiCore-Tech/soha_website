@@ -3,6 +3,7 @@ import Script from "next/script";
 export function LegacyHome() {
   return (
     <>
+      <div className="emp-flash" id="emp-flash" />
       <div className="ambient-glow" id="ambient-glow" />
 
       <div className="paper-canvas" id="canvas-area">
@@ -87,16 +88,25 @@ export function LegacyHome() {
 
       <div id="cursor-wrapper">
         <div className="cursor-dot" />
-        <div className="cursor-cube-container" id="cursor-cube" role="menu" aria-label="Voxel color palette">
-          <div className="cursor-cube-face face front" data-color-key="front" />
-          <div className="cursor-cube-face face back" data-color-key="back" />
-          <div className="cursor-cube-face face right" data-color-key="right" />
-          <div className="cursor-cube-face face left" data-color-key="left" />
-          <div className="cursor-cube-face face top" data-color-key="top" />
-          <div className="cursor-cube-face face bottom" data-color-key="bottom" />
-          <button className="extra-face multi" type="button" data-color-key="multicolor" aria-label="Multicolor" />
-          <button className="extra-face white" type="button" data-color-key="white" aria-label="White" />
-          <button className="extra-face black" type="button" data-color-key="black" aria-label="Black" />
+        <div className="shockwave" id="shockwave" />
+        <div className="cube-wrapper" id="cube-wrapper">
+          <div className="cursor-cube-container is-spinning" id="cursor-cube" role="menu" aria-label="Voxel color palette">
+            <div className="cursor-cube-face face front" data-color-key="front" />
+            <div className="cursor-cube-face face back" data-color-key="back" />
+            <div className="cursor-cube-face face right" data-color-key="right" />
+            <div className="cursor-cube-face face left" data-color-key="left" />
+            <div className="cursor-cube-face face top" data-color-key="top" />
+            <div className="cursor-cube-face face bottom" data-color-key="bottom" />
+            <button className="extra-face multi" type="button" data-color-key="multicolor" aria-label="Multicolor" />
+            <button className="extra-face white" type="button" data-color-key="white" aria-label="White" />
+            <button className="extra-face black" type="button" data-color-key="black" aria-label="Black" />
+          </div>
+          <div className="charge-hint" id="charge-hint">
+            <div className="charge-text">HOLD TO CLEAR</div>
+            <div className="charge-bar-container">
+              <div className="charge-bar" />
+            </div>
+          </div>
         </div>
       </div>
 

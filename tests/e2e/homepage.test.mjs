@@ -8,6 +8,7 @@ import {
   getStoredVoxels,
   getVoxelCount,
   gotoFreshHomepage,
+  holdRightClickOnGrid,
   openPaletteOnFrame,
   openPaletteOnGrid,
   placeVoxelAtGrid,
@@ -133,6 +134,21 @@ test("voxel layout persists after reload", async () => {
         { x: 4, y: 4, z: 1 },
       ],
     );
+  });
+});
+
+test("right long press clears the canvas", async () => {
+  await withPage(async (page) => {
+    await placeVoxelAtGrid(page, 4, 4);
+    await placeVoxelAtGrid(page, 5, 4);
+    assert.equal(await getVoxelCount(page), 2);
+
+    await holdRightClickOnGrid(page, 2, 2, 1300);
+    await page.waitForTimeout(750);
+
+    assert.equal(await getVoxelCount(page), 0);
+    const stored = await getStoredVoxels(page);
+    assert.equal(stored.length, 0);
   });
 });
 

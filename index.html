@@ -442,22 +442,128 @@
             position: fixed; top: 0; left: 0; width: 1px; height: 1px;
             pointer-events: none; z-index: 9999; mix-blend-mode: normal; perspective: 800px;
             will-change: transform;
+            --cursor-cube-size: 46px;
+            --cursor-half-size: 23px;
+            --cursor-gap: 16px;
+            --cursor-span: calc(var(--cursor-cube-size) + var(--cursor-gap));
+            --cursor-palette-size: calc(var(--cursor-cube-size) * 3 + var(--cursor-gap) * 2);
+            --cursor-follow-offset-x: 32px;
+            --cursor-follow-offset-y: 32px;
         }
         #cursor-wrapper.is-contrast-text {
             mix-blend-mode: difference;
         }
         .cursor-dot { position: absolute; width: 6px; height: 6px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%); }
-        .cursor-cube-container {
-            position: absolute; width: 48px; height: 48px; transform-style: preserve-3d;
-            transform: translate(-50%, -50%); transition: transform 0.1s linear;
+        .emp-flash {
+            position: fixed;
+            inset: 0;
+            background-color: #ffffff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9997;
+            transition: opacity 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-        .cursor-cube-face { position: absolute; width: 100%; height: 100%; border: 1.5px solid rgba(255, 255, 255, 0.9); box-sizing: border-box; }
-        .cursor-cube-face.front  { background: rgba(111, 167, 161, 0.16); transform: rotateY(0deg) translateZ(24px); }
-        .cursor-cube-face.back   { background: rgba(154, 146, 184, 0.16); transform: rotateY(180deg) translateZ(24px); }
-        .cursor-cube-face.right  { background: rgba(216, 194, 122, 0.16); transform: rotateY(90deg) translateZ(24px); }
-        .cursor-cube-face.left   { background: rgba(155, 184, 165, 0.16); transform: rotateY(-90deg) translateZ(24px); }
-        .cursor-cube-face.top    { background: rgba(201, 123, 114, 0.16); transform: rotateX(90deg) translateZ(24px); }
-        .cursor-cube-face.bottom { background: rgba(192, 142, 161, 0.16); transform: rotateX(-90deg) translateZ(24px); }
+        .emp-flash.fire { opacity: 0.6; transition: opacity 0s; }
+        .shockwave {
+            position: absolute; top: 0; left: 0;
+            width: 20px; height: 20px; border-radius: 50%;
+            border: 1px solid rgba(192, 142, 161, 0.9); box-shadow: none;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0; pointer-events: none; z-index: 100;
+        }
+        .shockwave.fire { animation: pulse-ring 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; }
+        @keyframes pulse-ring {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(80); opacity: 0; }
+        }
+        .cube-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: var(--cursor-cube-size);
+            height: var(--cursor-cube-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            transform: translate(calc(-50% + var(--cursor-follow-offset-x)), calc(-50% + var(--cursor-follow-offset-y)));
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .cube-wrapper.is-charging {
+            transform: translate(calc(-50% + var(--cursor-follow-offset-x)), calc(-50% + var(--cursor-follow-offset-y))) scale(0.65);
+            filter: grayscale(0.85) contrast(1.2);
+            transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1), filter 1.2s ease;
+        }
+        .cube-wrapper.is-charging .face.front  { transform: rotateY(0deg) translateZ(48px); }
+        .cube-wrapper.is-charging .face.back   { transform: rotateY(180deg) translateZ(48px); }
+        .cube-wrapper.is-charging .face.left   { transform: rotateY(-90deg) translateZ(48px); }
+        .cube-wrapper.is-charging .face.right  { transform: rotateY(90deg) translateZ(48px); }
+        .cube-wrapper.is-charging .face.top    { transform: rotateX(90deg) translateZ(48px); }
+        .cube-wrapper.is-charging .face.bottom { transform: rotateX(-90deg) translateZ(48px); }
+        .cube-wrapper.is-charging .face {
+            backface-visibility: visible;
+        }
+        .cube-wrapper.is-imploding {
+            transform: translate(calc(-50% + var(--cursor-follow-offset-x)), calc(-50% + var(--cursor-follow-offset-y))) scale(0);
+            transition: transform 0.15s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+        }
+        #cursor-wrapper.is-palette-mode .cube-wrapper {
+            transform: translate(-50%, -50%);
+        }
+        #cursor-wrapper.is-palette-mode .cube-wrapper.is-charging {
+            transform: translate(-50%, -50%) scale(0.65);
+        }
+        #cursor-wrapper.is-palette-mode .cube-wrapper.is-imploding {
+            transform: translate(-50%, -50%) scale(0);
+        }
+        .charge-hint {
+            position: absolute;
+            left: 50%;
+            bottom: -100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-50%) translateY(15px);
+            pointer-events: none;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 14px 28px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            white-space: nowrap;
+        }
+        .charge-hint.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .charge-text {
+            color: #222; font-size: 14px; letter-spacing: 4px; font-weight: 700;
+            margin-bottom: 12px; text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+        .charge-bar-container {
+            width: 160px; height: 3px; background: rgba(0, 0, 0, 0.1); border-radius: 4px; overflow: hidden;
+        }
+        .charge-bar { width: 0%; height: 100%; background: #222; transition: width 0s; }
+        .cube-wrapper.is-charging .charge-bar { width: 100%; transition: width 1.2s linear; }
+        .cursor-cube-container {
+            position: absolute; inset: 0; width: var(--cursor-cube-size); height: var(--cursor-cube-size); transform-style: preserve-3d;
+            transition: transform 0.1s linear;
+        }
+        .cursor-cube-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(20, 20, 25, 0.7);
+            border-radius: 4px;
+            box-sizing: border-box;
+            box-shadow: inset 0 2px 6px rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.05);
+        }
+        .cursor-cube-face.front  { background: rgba(111, 167, 161, 0.18); transform: rotateY(0deg) translateZ(var(--cursor-half-size)); }
+        .cursor-cube-face.back   { background: rgba(154, 146, 184, 0.18); transform: rotateY(180deg) translateZ(var(--cursor-half-size)); }
+        .cursor-cube-face.right  { background: rgba(216, 194, 122, 0.18); transform: rotateY(90deg) translateZ(var(--cursor-half-size)); }
+        .cursor-cube-face.left   { background: rgba(155, 184, 165, 0.18); transform: rotateY(-90deg) translateZ(var(--cursor-half-size)); }
+        .cursor-cube-face.top    { background: rgba(201, 123, 114, 0.18); transform: rotateX(90deg) translateZ(var(--cursor-half-size)); }
+        .cursor-cube-face.bottom { background: rgba(192, 142, 161, 0.18); transform: rotateX(-90deg) translateZ(var(--cursor-half-size)); }
 
         #cursor-wrapper.is-palette-mode {
             pointer-events: auto;
@@ -468,12 +574,14 @@
             opacity: 0;
         }
         .cursor-cube-container.is-palette-mode {
-            width: 168px;
-            height: 168px;
+            left: calc(-1 * var(--cursor-span));
+            top: calc(-1 * var(--cursor-span));
+            width: var(--cursor-palette-size);
+            height: var(--cursor-palette-size);
             transition: none;
-            --cube-size: 48px;
-            --half-size: 24px;
-            --span: 60px;
+            --cube-size: var(--cursor-cube-size);
+            --half-size: var(--cursor-half-size);
+            --span: var(--cursor-span);
             --selected-color: transparent;
         }
         .cursor-cube-container .face,
@@ -499,10 +607,10 @@
         .cursor-cube-container .extra-face {
             top: 50%;
             left: 50%;
-            width: 48px;
-            height: 48px;
-            margin-top: -24px;
-            margin-left: -24px;
+            width: var(--cursor-cube-size);
+            height: var(--cursor-cube-size);
+            margin-top: calc(-1 * var(--cursor-half-size));
+            margin-left: calc(-1 * var(--cursor-half-size));
             opacity: 0;
             pointer-events: none;
             transform: translate3d(0, 0, 0) scale(0);
@@ -526,22 +634,20 @@
         .cursor-cube-container.is-palette-mode .extra-face {
             width: var(--cube-size);
             height: var(--cube-size);
-            top: 60px;
-            left: 60px;
+            top: var(--span);
+            left: var(--span);
             margin: 0;
             cursor: pointer;
-            backdrop-filter: blur(12px);
             box-shadow:
-                0 10px 24px rgba(0, 0, 0, 0.16),
-                inset 0 1px 4px rgba(255, 255, 255, 0.16),
-                inset 0 -2px 6px rgba(0, 0, 0, 0.08);
+                inset 0 2px 6px rgba(255,255,255,0.1),
+                inset 0 -2px 6px rgba(0,0,0,0.05);
         }
         .cursor-cube-container.is-palette-mode .face:hover,
         .cursor-cube-container.is-palette-mode .extra-face:hover {
             box-shadow:
-                0 14px 28px rgba(0, 0, 0, 0.22),
-                inset 0 1px 4px rgba(255, 255, 255, 0.18),
-                inset 0 -2px 6px rgba(0, 0, 0, 0.1);
+                inset 0 2px 6px rgba(255,255,255,0.3),
+                inset 0 -2px 6px rgba(0,0,0,0.1),
+                0 4px 12px rgba(0,0,0,0.15);
         }
         .cursor-cube-container.is-palette-mode .face.front  { transform: rotateY(0deg) translateZ(var(--half-size)); }
         .cursor-cube-container.is-palette-mode .face.back   { transform: rotateY(180deg) translateZ(var(--half-size)); }
@@ -551,7 +657,7 @@
         .cursor-cube-container.is-palette-mode .face.bottom { transform: rotateX(-90deg) translateZ(var(--half-size)); }
         .cursor-cube-container.is-palette-mode .extra-face  { transform: translate3d(0, 0, 0) scale(0); opacity: 0; pointer-events: none; }
         .cursor-cube-container.is-palette {
-            transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg) !important;
+            transform: rotateX(0deg) rotateY(0deg) !important;
         }
         .cursor-cube-container.is-palette .extra-face {
             opacity: 1;
@@ -636,6 +742,7 @@
 </head>
 <body>
 
+    <div class="emp-flash" id="emp-flash"></div>
     <div class="ambient-glow" id="ambient-glow"></div>
 
     <div class="paper-canvas" id="canvas-area">
@@ -705,16 +812,23 @@
 
     <div id="cursor-wrapper">
         <div class="cursor-dot"></div>
-        <div class="cursor-cube-container" id="cursor-cube" role="menu" aria-label="Voxel color palette">
-            <div class="cursor-cube-face face front" data-color-key="front"></div>
-            <div class="cursor-cube-face face back" data-color-key="back"></div>
-            <div class="cursor-cube-face face right" data-color-key="right"></div>
-            <div class="cursor-cube-face face left" data-color-key="left"></div>
-            <div class="cursor-cube-face face top" data-color-key="top"></div>
-            <div class="cursor-cube-face face bottom" data-color-key="bottom"></div>
-            <button class="extra-face multi" type="button" data-color-key="multicolor" aria-label="Multicolor"></button>
-            <button class="extra-face white" type="button" data-color-key="white" aria-label="White"></button>
-            <button class="extra-face black" type="button" data-color-key="black" aria-label="Black"></button>
+        <div class="shockwave" id="shockwave"></div>
+        <div class="cube-wrapper" id="cube-wrapper">
+            <div class="cursor-cube-container is-spinning" id="cursor-cube" role="menu" aria-label="Voxel color palette">
+                <div class="cursor-cube-face face front" data-color-key="front"></div>
+                <div class="cursor-cube-face face back" data-color-key="back"></div>
+                <div class="cursor-cube-face face right" data-color-key="right"></div>
+                <div class="cursor-cube-face face left" data-color-key="left"></div>
+                <div class="cursor-cube-face face top" data-color-key="top"></div>
+                <div class="cursor-cube-face face bottom" data-color-key="bottom"></div>
+                <button class="extra-face multi" type="button" data-color-key="multicolor" aria-label="Multicolor"></button>
+                <button class="extra-face white" type="button" data-color-key="white" aria-label="White"></button>
+                <button class="extra-face black" type="button" data-color-key="black" aria-label="Black"></button>
+            </div>
+            <div class="charge-hint" id="charge-hint">
+                <div class="charge-text">HOLD TO CLEAR</div>
+                <div class="charge-bar-container"><div class="charge-bar"></div></div>
+            </div>
         </div>
     </div>
     
@@ -793,6 +907,7 @@
         let pendingPlacementColor = null;
         let paletteState = 'closed';
         let interactionLocked = false;
+        let isClearChargeActive = false;
         let paletteAnchorX = window.innerWidth / 2;
         let paletteAnchorY = window.innerHeight / 2;
         let paletteTimers = [];
@@ -975,6 +1090,13 @@
             axisH.style.opacity = '0';
             axisV.style.opacity = '0';
             coordTracker.style.opacity = '0';
+        }
+
+        function clearAllVoxels() {
+            resetInteractionState();
+            if (voxels.length > 0) saveState();
+            voxels = [];
+            renderAllVoxels();
         }
 
         function applyViewMode() {
@@ -1414,31 +1536,8 @@
             return null;
         }
 
-        paperCanvas.addEventListener('contextmenu', (e) => {
+        document.addEventListener('contextmenu', (e) => {
             if (!isMobileView) e.preventDefault();
-        });
-
-        window.addEventListener('contextmenu', (e) => {
-            if (isMobileView) return;
-            const target = e.target;
-            const voxelEl = target.closest('.voxel');
-            const shouldBlockMenu =
-                isPaletteBusy() ||
-                (voxelEl && !voxelEl.classList.contains('preview')) ||
-                target.id === 'grid-plane' ||
-                !paperCanvas.contains(target);
-
-            if (shouldBlockMenu) e.preventDefault();
-        });
-
-        window.addEventListener('pointerdown', (e) => {
-            if (isMobileView || interactionLocked || isPaletteBusy()) return;
-            if (e.button !== 2) return;
-            const target = e.target;
-            const voxelEl = target.closest('.voxel');
-            if (voxelEl && !voxelEl.classList.contains('preview')) return;
-            if (paperCanvas.contains(target) || cursorWrapper.contains(target)) return;
-            openPaletteAt(e.clientX, e.clientY);
         });
 
         paperCanvas.addEventListener('pointerdown', (e) => {
@@ -1453,8 +1552,6 @@
                     saveState(); mode = 'deleting'; document.body.classList.add('is-deleting');
                     voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
                     renderAllVoxels();
-                } else if (target.id === 'grid-plane') {
-                    openPaletteAt(e.clientX, e.clientY);
                 }
                 return;
             }
@@ -1484,7 +1581,7 @@
         });
 
         window.addEventListener('pointermove', (e) => {
-            if (isMobileView || isPaletteBusy()) return;
+            if (isMobileView || isPaletteBusy() || isClearChargeActive) return;
             
             const hoverCoords = resolveGridCoords(e);
             const coords = mode === 'drawing'
@@ -1573,7 +1670,11 @@
         // 3. ✨ 全局全境视差与重力引擎 ✨
         // ==========================================
         const cursorWrapper = document.getElementById('cursor-wrapper');
+        const cubeWrapper = document.getElementById('cube-wrapper');
         const cursorCube = document.getElementById('cursor-cube');
+        const shockwave = document.getElementById('shockwave');
+        const chargeHint = document.getElementById('charge-hint');
+        const empFlash = document.getElementById('emp-flash');
         const plxTitle = document.getElementById('plx-title');
         const plxSlogan = document.getElementById('plx-slogan');
         const sloganCard = plxSlogan.closest('.slogan-card');
@@ -1611,6 +1712,10 @@
         let footerSlotIndex = 0;
         let footerSlotPaused = false;
         let footerSlotAdvanceAt = performance.now() + 2200;
+        let pressTimer = 0;
+        let rightPressOrigin = null;
+        let isLongPressTriggered = false;
+        const LONG_PRESS_THRESHOLD = 1200;
 
         const footerSlotAliases = ['info', 'hr'];
         const footerSlotLineHeight = 16;
@@ -1694,10 +1799,99 @@
             paletteAnchorY = clamp(y, inset, window.innerHeight - inset);
         }
 
+        function clearChargeTimer() {
+            if (!pressTimer) return;
+            window.clearTimeout(pressTimer);
+            pressTimer = 0;
+        }
+
+        function resetChargeVisualState() {
+            clearChargeTimer();
+            isClearChargeActive = false;
+            cubeWrapper.classList.remove('is-charging');
+            chargeHint.classList.remove('show');
+        }
+
+        function cancelRightPressState() {
+            rightPressOrigin = null;
+            isLongPressTriggered = false;
+            resetChargeVisualState();
+        }
+
+        function shouldHandleRightPress(target) {
+            if (cursorWrapper.contains(target)) return false;
+
+            const voxelEl = target.closest('.voxel');
+            if (voxelEl && !voxelEl.classList.contains('preview')) return false;
+
+            if (target === paletteBackdrop || paletteBackdrop.contains(target)) return true;
+
+            return target.id === 'grid-plane' || !paperCanvas.contains(target);
+        }
+
+        function beginRightPress(e) {
+            if (isMobileView || interactionLocked) return;
+            if (e.button !== 2) return;
+            if (!shouldHandleRightPress(e.target)) return;
+            if (paletteState === 'opening' || paletteState === 'closing') return;
+
+            resetInteractionState();
+            clearChargeTimer();
+            isLongPressTriggered = false;
+            isClearChargeActive = true;
+            rightPressOrigin = { x: e.clientX, y: e.clientY };
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            lerpX = e.clientX;
+            lerpY = e.clientY;
+            prevMouseX = e.clientX;
+            prevMouseY = e.clientY;
+
+            cubeWrapper.classList.remove('is-imploding', 'is-charging');
+            void cubeWrapper.offsetWidth;
+            cubeWrapper.classList.add('is-charging');
+            chargeHint.classList.add('show');
+
+            pressTimer = window.setTimeout(() => {
+                isLongPressTriggered = true;
+                executeClearAnimation();
+            }, LONG_PRESS_THRESHOLD);
+        }
+
+        function togglePaletteAt(x, y) {
+            if (paletteState === 'open') {
+                closePalette();
+                return;
+            }
+            if (paletteState !== 'closed') return;
+            openPaletteAt(x, y);
+        }
+
+        function releaseRightPress(e) {
+            if (e.button !== 2) return;
+            if (!rightPressOrigin) return;
+
+            const origin = rightPressOrigin;
+            rightPressOrigin = null;
+            clearChargeTimer();
+
+            const longTriggered = isLongPressTriggered;
+            isLongPressTriggered = false;
+            isClearChargeActive = false;
+            cubeWrapper.classList.remove('is-charging');
+            chargeHint.classList.remove('show');
+
+            if (longTriggered) return;
+            if (paletteState === 'opening' || paletteState === 'closing') return;
+
+            togglePaletteAt(origin.x, origin.y);
+        }
+
         function openPaletteAt(x, y) {
             if (isMobileView || isPaletteBusy()) return;
 
             clearPaletteTimers();
+            resetChargeVisualState();
             resetInteractionState();
             clearPendingPlacementColor();
             interactionLocked = true;
@@ -1715,10 +1909,12 @@
             paletteOverlay.setAttribute('aria-hidden', 'false');
             cursorWrapper.classList.remove('is-contrast-text');
             cursorWrapper.classList.add('is-palette-mode');
+            cubeWrapper.classList.remove('is-imploding');
             cursorCube.classList.add('is-palette-mode');
+            cursorCube.classList.remove('is-spinning');
             cursorCube.classList.remove('is-colored');
             cursorCube.classList.remove('is-palette');
-            cursorCube.style.transform = 'translate(-50%, -50%)';
+            cursorCube.style.transform = 'rotateX(0deg) rotateY(0deg)';
             applyPaletteFaceColors();
 
             requestAnimationFrame(() => {
@@ -1734,6 +1930,7 @@
             if (paletteState !== 'open') return;
 
             clearPaletteTimers();
+            resetChargeVisualState();
             interactionLocked = true;
             paletteState = 'closing';
 
@@ -1755,6 +1952,7 @@
                 cursorWrapper.classList.remove('is-palette-mode');
                 cursorCube.classList.remove('is-palette', 'is-palette-mode');
                 cursorCube.style.transform = '';
+                cursorCube.classList.add('is-spinning');
                 syncCursorBrushVisuals();
                 paletteState = 'closed';
                 interactionLocked = false;
@@ -1764,16 +1962,47 @@
 
         function forceClosePalette() {
             clearPaletteTimers();
+            resetChargeVisualState();
             paletteOverlay.classList.remove('is-active');
             paletteOverlay.setAttribute('aria-hidden', 'true');
             cursorWrapper.classList.remove('is-palette-mode');
             cursorWrapper.classList.remove('is-contrast-text');
             cursorCube.classList.remove('is-palette', 'is-palette-mode');
             cursorCube.style.transform = '';
+            cursorCube.classList.add('is-spinning');
             paletteState = 'closed';
             interactionLocked = false;
             clearPendingPlacementColor();
             syncCursorBrushVisuals();
+        }
+
+        function executeClearAnimation() {
+            clearChargeTimer();
+            isClearChargeActive = false;
+            if (paletteState !== 'closed') {
+                forceClosePalette();
+            }
+
+            cubeWrapper.classList.remove('is-charging');
+            cubeWrapper.classList.add('is-imploding');
+            chargeHint.classList.remove('show');
+
+            shockwave.classList.remove('fire');
+            void shockwave.offsetWidth;
+            shockwave.classList.add('fire');
+
+            empFlash.classList.add('fire');
+            window.setTimeout(() => {
+                empFlash.classList.remove('fire');
+            }, 50);
+
+            clearAllVoxels();
+
+            window.setTimeout(() => {
+                cubeWrapper.classList.remove('is-imploding');
+                cursorCube.classList.add('is-spinning');
+                syncCursorBrushVisuals();
+            }, 600);
         }
 
         paletteBlocks.forEach((block) => {
@@ -1791,6 +2020,11 @@
             e.stopPropagation();
             closePalette();
         });
+
+        window.addEventListener('mousedown', beginRightPress);
+        window.addEventListener('mouseup', releaseRightPress);
+        window.addEventListener('pointercancel', cancelRightPressState);
+        window.addEventListener('blur', cancelRightPressState);
 
         syncCursorBrushVisuals();
 
@@ -2100,7 +2334,10 @@
             }
 
             // 更新多色光标的物理坐标与旋转
-            if (isPaletteBusy()) {
+            if (isClearChargeActive && rightPressOrigin) {
+                cursorWrapper.style.transform = `translate3d(${rightPressOrigin.x}px, ${rightPressOrigin.y}px, 0)`;
+                cursorCube.style.transform = `rotateX(-30deg) rotateY(${45 + now * 0.05}deg)`;
+            } else if (isPaletteBusy()) {
                 cursorWrapper.style.transform = `translate3d(${paletteAnchorX}px, ${paletteAnchorY}px, 0)`;
             } else if (isMobileView) {
                 const mobileRotX = normY * -12 + mobileRollX;

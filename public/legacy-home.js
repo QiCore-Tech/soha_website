@@ -76,6 +76,7 @@
         let pendingPlacementColor = null;
         let paletteState = 'closed';
         let interactionLocked = false;
+        let isClearChargeActive = false;
         let paletteAnchorX = window.innerWidth / 2;
         let paletteAnchorY = window.innerHeight / 2;
         let paletteTimers = [];
@@ -260,6 +261,13 @@
             coordTracker.style.opacity = '0';
         }
 
+        function clearAllVoxels() {
+            resetInteractionState();
+            if (voxels.length > 0) saveState();
+            voxels = [];
+            renderAllVoxels();
+        }
+
         function applyViewMode() {
             gridPlane.style.pointerEvents = isMobileView ? 'none' : 'auto';
             if (isMobileView) resetInteractionState();
@@ -352,7 +360,7 @@
             if (isMobileView) {
                 requestImuPermission();
                 if (e.touches.length > 0) {
-                    const cubeHalf = 24;
+                    const cubeHalf = 23;
                     const boundaryX = Math.max(0, window.innerWidth / 2 - cubeHalf - 6);
                     const boundaryY = Math.max(0, window.innerHeight / 2 - cubeHalf - 6);
                     const touch = e.touches[0];
@@ -698,31 +706,8 @@
             return null;
         }
 
-        paperCanvas.addEventListener('contextmenu', (e) => {
+        document.addEventListener('contextmenu', (e) => {
             if (!isMobileView) e.preventDefault();
-        });
-
-        window.addEventListener('contextmenu', (e) => {
-            if (isMobileView) return;
-            const target = e.target;
-            const voxelEl = target.closest('.voxel');
-            const shouldBlockMenu =
-                isPaletteBusy() ||
-                (voxelEl && !voxelEl.classList.contains('preview')) ||
-                target.id === 'grid-plane' ||
-                !paperCanvas.contains(target);
-
-            if (shouldBlockMenu) e.preventDefault();
-        });
-
-        window.addEventListener('pointerdown', (e) => {
-            if (isMobileView || interactionLocked || isPaletteBusy()) return;
-            if (e.button !== 2) return;
-            const target = e.target;
-            const voxelEl = target.closest('.voxel');
-            if (voxelEl && !voxelEl.classList.contains('preview')) return;
-            if (paperCanvas.contains(target) || cursorWrapper.contains(target)) return;
-            openPaletteAt(e.clientX, e.clientY);
         });
 
         paperCanvas.addEventListener('pointerdown', (e) => {
@@ -737,8 +722,6 @@
                     saveState(); mode = 'deleting'; document.body.classList.add('is-deleting');
                     voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
                     renderAllVoxels();
-                } else if (target.id === 'grid-plane') {
-                    openPaletteAt(e.clientX, e.clientY);
                 }
                 return;
             }
@@ -768,7 +751,7 @@
         });
 
         window.addEventListener('pointermove', (e) => {
-            if (isMobileView || isPaletteBusy()) return;
+            if (isMobileView || isPaletteBusy() || isClearChargeActive) return;
             
             const hoverCoords = resolveGridCoords(e);
             const coords = mode === 'drawing'
@@ -857,7 +840,11 @@
         // 3. ✨ 全局全境视差与重力引擎 ✨
         // ==========================================
         const cursorWrapper = document.getElementById('cursor-wrapper');
+        const cubeWrapper = document.getElementById('cube-wrapper');
         const cursorCube = document.getElementById('cursor-cube');
+        const shockwave = document.getElementById('shockwave');
+        const chargeHint = document.getElementById('charge-hint');
+        const empFlash = document.getElementById('emp-flash');
         const plxTitle = document.getElementById('plx-title');
         const plxSlogan = document.getElementById('plx-slogan');
         const sloganCard = plxSlogan.closest('.slogan-card');
@@ -895,6 +882,10 @@
         let footerSlotIndex = 0;
         let footerSlotPaused = false;
         let footerSlotAdvanceAt = performance.now() + 2200;
+        let pressTimer = 0;
+        let rightPressOrigin = null;
+        let isLongPressTriggered = false;
+        const LONG_PRESS_THRESHOLD = 1200;
 
         const footerSlotAliases = ['info', 'hr'];
         const footerSlotLineHeight = 16;
@@ -978,10 +969,99 @@
             paletteAnchorY = clamp(y, inset, window.innerHeight - inset);
         }
 
+        function clearChargeTimer() {
+            if (!pressTimer) return;
+            window.clearTimeout(pressTimer);
+            pressTimer = 0;
+        }
+
+        function resetChargeVisualState() {
+            clearChargeTimer();
+            isClearChargeActive = false;
+            cubeWrapper.classList.remove('is-charging');
+            chargeHint.classList.remove('show');
+        }
+
+        function cancelRightPressState() {
+            rightPressOrigin = null;
+            isLongPressTriggered = false;
+            resetChargeVisualState();
+        }
+
+        function shouldHandleRightPress(target) {
+            if (cursorWrapper.contains(target)) return false;
+
+            const voxelEl = target.closest('.voxel');
+            if (voxelEl && !voxelEl.classList.contains('preview')) return false;
+
+            if (target === paletteBackdrop || paletteBackdrop.contains(target)) return true;
+
+            return target.id === 'grid-plane' || !paperCanvas.contains(target);
+        }
+
+        function beginRightPress(e) {
+            if (isMobileView || interactionLocked) return;
+            if (e.button !== 2) return;
+            if (!shouldHandleRightPress(e.target)) return;
+            if (paletteState === 'opening' || paletteState === 'closing') return;
+
+            resetInteractionState();
+            clearChargeTimer();
+            isLongPressTriggered = false;
+            isClearChargeActive = true;
+            rightPressOrigin = { x: e.clientX, y: e.clientY };
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            lerpX = e.clientX;
+            lerpY = e.clientY;
+            prevMouseX = e.clientX;
+            prevMouseY = e.clientY;
+
+            cubeWrapper.classList.remove('is-imploding', 'is-charging');
+            void cubeWrapper.offsetWidth;
+            cubeWrapper.classList.add('is-charging');
+            chargeHint.classList.add('show');
+
+            pressTimer = window.setTimeout(() => {
+                isLongPressTriggered = true;
+                executeClearAnimation();
+            }, LONG_PRESS_THRESHOLD);
+        }
+
+        function togglePaletteAt(x, y) {
+            if (paletteState === 'open') {
+                closePalette();
+                return;
+            }
+            if (paletteState !== 'closed') return;
+            openPaletteAt(x, y);
+        }
+
+        function releaseRightPress(e) {
+            if (e.button !== 2) return;
+            if (!rightPressOrigin) return;
+
+            const origin = rightPressOrigin;
+            rightPressOrigin = null;
+            clearChargeTimer();
+
+            const longTriggered = isLongPressTriggered;
+            isLongPressTriggered = false;
+            isClearChargeActive = false;
+            cubeWrapper.classList.remove('is-charging');
+            chargeHint.classList.remove('show');
+
+            if (longTriggered) return;
+            if (paletteState === 'opening' || paletteState === 'closing') return;
+
+            togglePaletteAt(origin.x, origin.y);
+        }
+
         function openPaletteAt(x, y) {
             if (isMobileView || isPaletteBusy()) return;
 
             clearPaletteTimers();
+            resetChargeVisualState();
             resetInteractionState();
             clearPendingPlacementColor();
             interactionLocked = true;
@@ -999,10 +1079,12 @@
             paletteOverlay.setAttribute('aria-hidden', 'false');
             cursorWrapper.classList.remove('is-contrast-text');
             cursorWrapper.classList.add('is-palette-mode');
+            cubeWrapper.classList.remove('is-imploding');
             cursorCube.classList.add('is-palette-mode');
+            cursorCube.classList.remove('is-spinning');
             cursorCube.classList.remove('is-colored');
             cursorCube.classList.remove('is-palette');
-            cursorCube.style.transform = 'translate(-50%, -50%)';
+            cursorCube.style.transform = 'rotateX(0deg) rotateY(0deg)';
             applyPaletteFaceColors();
 
             requestAnimationFrame(() => {
@@ -1018,6 +1100,7 @@
             if (paletteState !== 'open') return;
 
             clearPaletteTimers();
+            resetChargeVisualState();
             interactionLocked = true;
             paletteState = 'closing';
 
@@ -1039,6 +1122,7 @@
                 cursorWrapper.classList.remove('is-palette-mode');
                 cursorCube.classList.remove('is-palette', 'is-palette-mode');
                 cursorCube.style.transform = '';
+                cursorCube.classList.add('is-spinning');
                 syncCursorBrushVisuals();
                 paletteState = 'closed';
                 interactionLocked = false;
@@ -1048,16 +1132,47 @@
 
         function forceClosePalette() {
             clearPaletteTimers();
+            resetChargeVisualState();
             paletteOverlay.classList.remove('is-active');
             paletteOverlay.setAttribute('aria-hidden', 'true');
             cursorWrapper.classList.remove('is-palette-mode');
             cursorWrapper.classList.remove('is-contrast-text');
             cursorCube.classList.remove('is-palette', 'is-palette-mode');
             cursorCube.style.transform = '';
+            cursorCube.classList.add('is-spinning');
             paletteState = 'closed';
             interactionLocked = false;
             clearPendingPlacementColor();
             syncCursorBrushVisuals();
+        }
+
+        function executeClearAnimation() {
+            clearChargeTimer();
+            isClearChargeActive = false;
+            if (paletteState !== 'closed') {
+                forceClosePalette();
+            }
+
+            cubeWrapper.classList.remove('is-charging');
+            cubeWrapper.classList.add('is-imploding');
+            chargeHint.classList.remove('show');
+
+            shockwave.classList.remove('fire');
+            void shockwave.offsetWidth;
+            shockwave.classList.add('fire');
+
+            empFlash.classList.add('fire');
+            window.setTimeout(() => {
+                empFlash.classList.remove('fire');
+            }, 50);
+
+            clearAllVoxels();
+
+            window.setTimeout(() => {
+                cubeWrapper.classList.remove('is-imploding');
+                cursorCube.classList.add('is-spinning');
+                syncCursorBrushVisuals();
+            }, 600);
         }
 
         paletteBlocks.forEach((block) => {
@@ -1075,6 +1190,11 @@
             e.stopPropagation();
             closePalette();
         });
+
+        window.addEventListener('mousedown', beginRightPress);
+        window.addEventListener('mouseup', releaseRightPress);
+        window.addEventListener('pointercancel', cancelRightPressState);
+        window.addEventListener('blur', cancelRightPressState);
 
         syncCursorBrushVisuals();
 
@@ -1274,7 +1394,7 @@
                 mouseY = clamp(targetMobileY, cubeInset, window.innerHeight - cubeInset);
 
                 const frameScale = dt / 16.67;
-                const cubeHalf = 24;
+                const cubeHalf = 23;
                 const cubeBoundaryX = Math.max(0, window.innerWidth / 2 - cubeHalf - 6);
                 const cubeBoundaryY = Math.max(0, window.innerHeight / 2 - cubeHalf - 6);
                 const edgeSoftZoneX = Math.min(120, cubeBoundaryX || 120);
@@ -1384,7 +1504,10 @@
             }
 
             // 更新多色光标的物理坐标与旋转
-            if (isPaletteBusy()) {
+            if (isClearChargeActive && rightPressOrigin) {
+                cursorWrapper.style.transform = `translate3d(${rightPressOrigin.x}px, ${rightPressOrigin.y}px, 0)`;
+                cursorCube.style.transform = `rotateX(-30deg) rotateY(${45 + now * 0.05}deg)`;
+            } else if (isPaletteBusy()) {
                 cursorWrapper.style.transform = `translate3d(${paletteAnchorX}px, ${paletteAnchorY}px, 0)`;
             } else if (isMobileView) {
                 const mobileRotX = normY * -12 + mobileRollX;

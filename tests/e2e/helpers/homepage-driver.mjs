@@ -4,13 +4,15 @@ const GRID_SIZE = 40;
 const VOXEL_STORAGE_KEY = "qicore-voxel-layout-v1";
 
 export async function gotoFreshHomepage(page, baseURL) {
-  await page.goto(baseURL, { waitUntil: "networkidle" });
+  await page.goto(baseURL, { waitUntil: "domcontentloaded" });
   await page.locator("#grid-plane").waitFor();
+  await page.waitForFunction(() => Boolean(window.__QICORE_LEGACY_INITED__));
   await page.evaluate((storageKey) => {
     window.localStorage.removeItem(storageKey);
   }, VOXEL_STORAGE_KEY);
-  await page.reload({ waitUntil: "networkidle" });
+  await page.reload({ waitUntil: "domcontentloaded" });
   await page.locator("#grid-plane").waitFor();
+  await page.waitForFunction(() => Boolean(window.__QICORE_LEGACY_INITED__));
 }
 
 export async function getGridPoint(page, x, y) {
@@ -59,6 +61,14 @@ export async function openPaletteOnGrid(page, x, y) {
 export async function openPaletteOnFrame(page) {
   await page.mouse.click(24, 24, { button: "right" });
   await waitForPaletteOpen(page);
+}
+
+export async function holdRightClickOnGrid(page, x, y, durationMs = 1300) {
+  const point = await getGridPoint(page, x, y);
+  await page.mouse.move(point.x, point.y);
+  await page.mouse.down({ button: "right" });
+  await page.waitForTimeout(durationMs);
+  await page.mouse.up({ button: "right" });
 }
 
 export async function selectPaletteColor(page, colorKey) {
