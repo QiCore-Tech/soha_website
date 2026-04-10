@@ -1109,6 +1109,16 @@
             if (target.id === 'grid-plane') {
                 return { x: Math.floor(e.offsetX / GRID_SIZE), y: Math.floor(e.offsetY / GRID_SIZE), z: 0 };
             }
+            if (target.classList.contains('top')) {
+                const voxelEl = target.closest('.voxel');
+                if (!voxelEl) return null;
+                const v = voxels.find(vx => vx.id == voxelEl.dataset.id);
+                if (v) return {
+                    x: v.x + Math.floor(e.offsetX / GRID_SIZE),
+                    y: v.y + Math.floor(e.offsetY / GRID_SIZE),
+                    z: v.z + 1
+                };
+            }
             return null;
         }
 
