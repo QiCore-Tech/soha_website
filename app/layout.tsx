@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import type { Metadata } from "next";
-import "./globals.css";
+
+const globalStyles = readFileSync(path.join(process.cwd(), "app/globals.css"), "utf8");
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://qicore.ai"),
@@ -43,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/npm/misans-vf@1.0.0/lib/MiSans.min.css"
         />
+        <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
       </head>
       <body>
         {children}

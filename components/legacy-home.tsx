@@ -1,7 +1,4 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
-
-const legacyScript = readFileSync(path.join(process.cwd(), "public/legacy-home.js"), "utf8");
+import Script from "next/script";
 
 export function LegacyHome() {
   return (
@@ -103,7 +100,7 @@ export function LegacyHome() {
         </div>
       </div>
 
-      <script dangerouslySetInnerHTML={{ __html: legacyScript }} />
+      <Script id="legacy-home-script" src="/legacy-home.js" strategy="afterInteractive" />
     </>
   );
 }
