@@ -763,7 +763,11 @@
         let historyStack = []; 
         
         let mode = 'none'; 
-        let drawStartX = 0, drawStartY = 0, drawStartZ = 0;
+        let drawStartPoint = null;
+        let drawPlane = null;
+        let drawFaceName = null;
+        let drawStartClientX = 0;
+        let drawStartClientY = 0;
         let magneticPos = null;
         let previewVoxelEl = null;
         let magneticVoxelEl = null;
@@ -868,27 +872,63 @@
             return activeColorMode === 'multicolor' ? ensurePendingPlacementColor() : activeColorMode;
         }
 
-        function syncVoxelDOM(el, v) {
+        function syncVoxelDOM(el, v, isPreview = el.classList.contains('preview')) {
+            const heightPx = v.sz * GRID_SIZE;
+
             el.style.left = `${v.x * GRID_SIZE}px`;
             el.style.top = `${v.y * GRID_SIZE}px`;
-            el.style.width = `${v.w * GRID_SIZE}px`;
-            el.style.height = `${v.h * GRID_SIZE}px`;
+            el.style.width = `${v.sx * GRID_SIZE}px`;
+            el.style.height = `${v.sy * GRID_SIZE}px`;
+            el.dataset.id = String(v.id);
             el.dataset.x = String(v.x);
             el.dataset.y = String(v.y);
-            el.dataset.w = String(v.w);
-            el.dataset.h = String(v.h);
             el.dataset.z = String(v.z);
+            el.dataset.sx = String(v.sx);
+            el.dataset.sy = String(v.sy);
+            el.dataset.sz = String(v.sz);
+            el.dataset.w = String(v.sx);
+            el.dataset.h = String(v.sy);
 
             const faces = el.querySelectorAll('.face');
-            faces.forEach(face => {
-                if (face.classList.contains('bottom')) face.style.transform = `translateZ(${v.z * 40}px)`;
-                else if (face.classList.contains('top')) face.style.transform = `translateZ(${(v.z + 1) * 40}px)`;
-                else if (face.classList.contains('front')) face.style.transform = `translateZ(${v.z * 40}px) rotateX(90deg)`;
-                else if (face.classList.contains('back')) face.style.transform = `translateZ(${v.z * 40}px) rotateX(-90deg)`;
-                else if (face.classList.contains('left')) face.style.transform = `translateZ(${v.z * 40}px) rotateY(-90deg)`;
-                else if (face.classList.contains('right')) face.style.transform = `translateZ(${v.z * 40}px) rotateY(90deg)`;
+            faces.forEach((face) => {
+                face.style.top = '';
+                face.style.right = '';
+                face.style.bottom = '';
+                face.style.left = '';
+                face.style.width = '';
+                face.style.height = '';
+
+                if (face.classList.contains('bottom')) {
+                    face.style.width = '100%';
+                    face.style.height = '100%';
+                    face.style.transform = `translateZ(${v.z * GRID_SIZE}px)`;
+                } else if (face.classList.contains('top')) {
+                    face.style.width = '100%';
+                    face.style.height = '100%';
+                    face.style.transform = `translateZ(${(v.z + v.sz) * GRID_SIZE}px)`;
+                } else if (face.classList.contains('front')) {
+                    face.style.top = '0';
+                    face.style.width = '100%';
+                    face.style.height = `${heightPx}px`;
+                    face.style.transform = `translateZ(${v.z * GRID_SIZE}px) rotateX(90deg)`;
+                } else if (face.classList.contains('back')) {
+                    face.style.bottom = '0';
+                    face.style.width = '100%';
+                    face.style.height = `${heightPx}px`;
+                    face.style.transform = `translateZ(${v.z * GRID_SIZE}px) rotateX(-90deg)`;
+                } else if (face.classList.contains('left')) {
+                    face.style.left = '0';
+                    face.style.width = `${heightPx}px`;
+                    face.style.height = '100%';
+                    face.style.transform = `translateZ(${v.z * GRID_SIZE}px) rotateY(-90deg)`;
+                } else if (face.classList.contains('right')) {
+                    face.style.right = '0';
+                    face.style.width = `${heightPx}px`;
+                    face.style.height = '100%';
+                    face.style.transform = `translateZ(${v.z * GRID_SIZE}px) rotateY(90deg)`;
+                }
             });
-            applyVoxelColorsToElement(el, v.colorKey, el.classList.contains('preview'));
+            applyVoxelColorsToElement(el, v.colorKey, isPreview);
         }
 
         function ensurePreviewVoxel(v) {
@@ -923,6 +963,11 @@
 
         function resetInteractionState() {
             mode = 'none';
+            drawStartPoint = null;
+            drawPlane = null;
+            drawFaceName = null;
+            drawStartClientX = 0;
+            drawStartClientY = 0;
             magneticPos = null;
             hidePreviewVoxel();
             hideMagneticVoxel();
@@ -1068,11 +1113,192 @@
             
             voxels.forEach(v => {
                 if (v.id === ignoreId) return;
-                if (minX < v.x + v.w && maxX >= v.x && minY < v.y + v.h && maxY >= v.y) {
-                    maxZ = Math.max(maxZ, v.z + 1);
+                if (minX < v.x + v.sx && maxX >= v.x && minY < v.y + v.sy && maxY >= v.y) {
+                    maxZ = Math.max(maxZ, v.z + v.sz);
                 }
             });
             return maxZ;
+        }
+
+        function normalizeVoxel(voxel, index = 0) {
+            return {
+                id: Number.isFinite(Number(voxel.id)) ? Number(voxel.id) : Date.now() + index,
+                x: Math.max(0, Math.floor(Number(voxel.x) || 0)),
+                y: Math.max(0, Math.floor(Number(voxel.y) || 0)),
+                z: Math.max(0, Math.floor(Number(voxel.z) || 0)),
+                sx: Math.max(1, Math.floor(Number(voxel.sx ?? voxel.w) || 1)),
+                sy: Math.max(1, Math.floor(Number(voxel.sy ?? voxel.h) || 1)),
+                sz: Math.max(1, Math.floor(Number(voxel.sz) || 1)),
+                colorKey: VALID_COLOR_KEYS.has(voxel.colorKey) ? voxel.colorKey : 'white'
+            };
+        }
+
+        function getGridBounds() {
+            return {
+                cols: Math.floor(gridPlane.clientWidth / GRID_SIZE),
+                rows: Math.floor(gridPlane.clientHeight / GRID_SIZE)
+            };
+        }
+
+        function isVoxelWithinCanvas(v) {
+            const { cols, rows } = getGridBounds();
+            return (
+                v.x >= 0 &&
+                v.y >= 0 &&
+                v.z >= 0 &&
+                v.x + v.sx <= cols &&
+                v.y + v.sy <= rows
+            );
+        }
+
+        function voxelsIntersect(a, b) {
+            return (
+                a.x < b.x + b.sx &&
+                a.x + a.sx > b.x &&
+                a.y < b.y + b.sy &&
+                a.y + a.sy > b.y &&
+                a.z < b.z + b.sz &&
+                a.z + a.sz > b.z
+            );
+        }
+
+        function doesVoxelIntersectAny(candidate, ignoreId = null) {
+            return voxels.some((voxel) => voxel.id !== ignoreId && voxelsIntersect(candidate, voxel));
+        }
+
+        function getEventAxisOffset(e, target, axis) {
+            const fallbackRect = target.getBoundingClientRect();
+            const fallbackOffset = axis === 'x'
+                ? e.clientX - fallbackRect.left
+                : e.clientY - fallbackRect.top;
+            const rawOffset = axis === 'x' ? e.offsetX : e.offsetY;
+            const size = axis === 'x' ? target.offsetWidth : target.offsetHeight;
+
+            if (!Number.isFinite(rawOffset) || size <= 0) {
+                return clamp(fallbackOffset, 0, Math.max(0, fallbackRect[axis === 'x' ? 'width' : 'height'] - 0.001));
+            }
+
+            return clamp(rawOffset, 0, Math.max(0, size - 0.001));
+        }
+
+        function getGridIndexFromOffset(offset, count) {
+            return clamp(Math.floor(offset / GRID_SIZE), 0, Math.max(0, count - 1));
+        }
+
+        function createUnitVoxel(point, colorKey) {
+            return normalizeVoxel({
+                id: Date.now(),
+                x: point.x,
+                y: point.y,
+                z: point.z,
+                sx: 1,
+                sy: 1,
+                sz: 1,
+                colorKey
+            });
+        }
+
+        function buildVoxelFromDrag(startPoint, endPoint, plane, colorKey) {
+            if (!startPoint || !endPoint || startPoint.plane !== plane || endPoint.plane !== plane) return null;
+
+            if (plane === 'xy') {
+                const x = Math.min(startPoint.x, endPoint.x);
+                const y = Math.min(startPoint.y, endPoint.y);
+                const sx = Math.abs(endPoint.x - startPoint.x) + 1;
+                const sy = Math.abs(endPoint.y - startPoint.y) + 1;
+                const z = Math.max(startPoint.z, getMaxZInArea(x, y, x + sx - 1, y + sy - 1));
+                return normalizeVoxel({ id: Date.now(), x, y, z, sx, sy, sz: 1, colorKey });
+            }
+
+            if (plane === 'xz') {
+                return normalizeVoxel({
+                    id: Date.now(),
+                    x: Math.min(startPoint.x, endPoint.x),
+                    y: startPoint.y,
+                    z: Math.min(startPoint.z, endPoint.z),
+                    sx: Math.abs(endPoint.x - startPoint.x) + 1,
+                    sy: 1,
+                    sz: Math.abs(endPoint.z - startPoint.z) + 1,
+                    colorKey
+                });
+            }
+
+            if (plane === 'yz') {
+                return normalizeVoxel({
+                    id: Date.now(),
+                    x: startPoint.x,
+                    y: Math.min(startPoint.y, endPoint.y),
+                    z: Math.min(startPoint.z, endPoint.z),
+                    sx: 1,
+                    sy: Math.abs(endPoint.y - startPoint.y) + 1,
+                    sz: Math.abs(endPoint.z - startPoint.z) + 1,
+                    colorKey
+                });
+            }
+
+            if (plane === 'xy-side') {
+                return normalizeVoxel({
+                    id: Date.now(),
+                    x: Math.min(startPoint.x, endPoint.x),
+                    y: Math.min(startPoint.y, endPoint.y),
+                    z: startPoint.z,
+                    sx: Math.abs(endPoint.x - startPoint.x) + 1,
+                    sy: Math.abs(endPoint.y - startPoint.y) + 1,
+                    sz: 1,
+                    colorKey
+                });
+            }
+
+            return null;
+        }
+
+        function getPlacementVoxel(point, colorKey) {
+            const voxel = createUnitVoxel(point, colorKey);
+            if (!isVoxelWithinCanvas(voxel) || doesVoxelIntersectAny(voxel)) return null;
+            return voxel;
+        }
+
+        function resolveDragCoords(e, hoverCoords) {
+            if (!drawStartPoint || !drawPlane) return hoverCoords;
+            if (drawPlane === 'xy') {
+                return hoverCoords && hoverCoords.plane === 'xy' ? hoverCoords : magneticPos;
+            }
+
+            const deltaX = Math.round((e.clientX - drawStartClientX) / GRID_SIZE);
+            const deltaY = Math.round((e.clientY - drawStartClientY) / GRID_SIZE);
+
+            if (drawPlane === 'xy-side') {
+                return {
+                    plane: 'xy-side',
+                    x: Math.max(0, drawStartPoint.x + deltaX),
+                    y: Math.max(0, drawStartPoint.y + deltaY),
+                    z: drawStartPoint.z
+                };
+            }
+
+            if (drawPlane === 'xz') {
+                return {
+                    plane: 'xz',
+                    x: drawStartPoint.x + deltaX,
+                    y: drawStartPoint.y,
+                    z: Math.max(
+                        0,
+                        drawStartPoint.z +
+                            (drawFaceName === 'back' ? -deltaY : deltaY)
+                    )
+                };
+            }
+
+            if (drawPlane === 'yz') {
+                return {
+                    plane: 'yz',
+                    x: drawStartPoint.x,
+                    y: Math.max(0, drawStartPoint.y + deltaY),
+                    z: drawStartPoint.z
+                };
+            }
+
+            return hoverCoords;
         }
 
         function createVoxelDOM(v, isPreview = false) {
@@ -1080,24 +1306,13 @@
             el.className = `voxel ${isPreview ? 'preview' : ''}`;
             if (!isPreview) el.id = `voxel-${v.id}`;
             
-            el.style.left = `${v.x * GRID_SIZE}px`; el.style.top = `${v.y * GRID_SIZE}px`;
-            el.style.width = `${v.w * GRID_SIZE}px`; el.style.height = `${v.h * GRID_SIZE}px`;
-            el.dataset.id = v.id; el.dataset.x = String(v.x); el.dataset.y = String(v.y);
-            el.dataset.w = String(v.w); el.dataset.h = String(v.h); el.dataset.z = String(v.z);
-
             const faces = ['top', 'bottom', 'front', 'back', 'left', 'right'];
             faces.forEach(f => {
                 const face = document.createElement('div');
                 face.className = `face ${f}`;
-                if (f === 'bottom') face.style.transform = `translateZ(${v.z * 40}px)`;
-                else if (f === 'top') face.style.transform = `translateZ(${(v.z + 1) * 40}px)`;
-                else if (f === 'front') face.style.transform = `translateZ(${v.z * 40}px) rotateX(90deg)`;
-                else if (f === 'back') face.style.transform = `translateZ(${v.z * 40}px) rotateX(-90deg)`;
-                else if (f === 'left') face.style.transform = `translateZ(${v.z * 40}px) rotateY(-90deg)`;
-                else if (f === 'right') face.style.transform = `translateZ(${v.z * 40}px) rotateY(90deg)`;
                 el.appendChild(face);
             });
-            applyVoxelColorsToElement(el, v.colorKey, isPreview);
+            syncVoxelDOM(el, normalizeVoxel(v), isPreview);
             return el;
         }
 
@@ -1120,16 +1335,8 @@
                 const parsed = JSON.parse(raw);
                 if (!Array.isArray(parsed)) return;
                 voxels = parsed
-                    .map((voxel, index) => ({
-                        id: Number.isFinite(Number(voxel.id)) ? Number(voxel.id) : Date.now() + index,
-                        x: Math.max(0, Math.floor(Number(voxel.x) || 0)),
-                        y: Math.max(0, Math.floor(Number(voxel.y) || 0)),
-                        w: Math.max(1, Math.floor(Number(voxel.w) || 1)),
-                        h: Math.max(1, Math.floor(Number(voxel.h) || 1)),
-                        z: Math.max(0, Math.floor(Number(voxel.z) || 0)),
-                        colorKey: VALID_COLOR_KEYS.has(voxel.colorKey) ? voxel.colorKey : 'white'
-                    }))
-                    .filter(voxel => Number.isFinite(voxel.id));
+                    .map((voxel, index) => normalizeVoxel(voxel, index))
+                    .filter((voxel) => Number.isFinite(voxel.id));
             } catch (error) {
                 voxels = [];
             }
@@ -1141,16 +1348,67 @@
         function resolveGridCoords(e) {
             const target = e.target;
             if (target.id === 'grid-plane') {
-                return { x: Math.floor(e.offsetX / GRID_SIZE), y: Math.floor(e.offsetY / GRID_SIZE), z: 0 };
+                return {
+                    plane: 'xy',
+                    x: Math.floor(e.offsetX / GRID_SIZE),
+                    y: Math.floor(e.offsetY / GRID_SIZE),
+                    z: 0
+                };
             }
-            if (target.classList.contains('top')) {
-                const voxelEl = target.closest('.voxel');
-                if (!voxelEl) return null;
-                const v = voxels.find(vx => vx.id == voxelEl.dataset.id);
-                if (v) return {
-                    x: v.x + Math.floor(e.offsetX / GRID_SIZE),
-                    y: v.y + Math.floor(e.offsetY / GRID_SIZE),
-                    z: v.z + 1
+            if (!target.classList.contains('face')) return null;
+
+            const voxelEl = target.closest('.voxel');
+            if (!voxelEl) return null;
+
+            const v = voxels.find(vx => vx.id == voxelEl.dataset.id);
+            if (!v) return null;
+
+            const faceName = getFaceName(target);
+            const offsetX = getEventAxisOffset(e, target, 'x');
+            const offsetY = getEventAxisOffset(e, target, 'y');
+
+            if (faceName === 'top') {
+                return {
+                    plane: 'xy',
+                    x: v.x + getGridIndexFromOffset(offsetX, v.sx),
+                    y: v.y + getGridIndexFromOffset(offsetY, v.sy),
+                    z: v.z + v.sz
+                };
+            }
+
+            if (faceName === 'front') {
+                return {
+                    plane: 'xz',
+                    x: v.x + getGridIndexFromOffset(offsetX, v.sx),
+                    y: v.y - 1,
+                    z: v.z + getGridIndexFromOffset(offsetY, v.sz)
+                };
+            }
+
+            if (faceName === 'back') {
+                return {
+                    plane: 'xz',
+                    x: v.x + getGridIndexFromOffset(offsetX, v.sx),
+                    y: v.y + v.sy,
+                    z: v.z + (v.sz - 1 - getGridIndexFromOffset(offsetY, v.sz))
+                };
+            }
+
+            if (faceName === 'left') {
+                return {
+                    plane: 'xy-side',
+                    x: v.x - 1,
+                    y: v.y + getGridIndexFromOffset(offsetY, v.sy),
+                    z: v.z + getGridIndexFromOffset(offsetX, v.sz)
+                };
+            }
+
+            if (faceName === 'right') {
+                return {
+                    plane: 'xy-side',
+                    x: v.x + v.sx,
+                    y: v.y + getGridIndexFromOffset(offsetY, v.sy),
+                    z: v.z + (v.sz - 1 - getGridIndexFromOffset(offsetX, v.sz))
                 };
             }
             return null;
@@ -1202,12 +1460,25 @@
             }
 
             if (e.button === 0) {
-                const coords = resolveGridCoords(e);
-                if (coords) {
+                const point = resolveGridCoords(e);
+                if (point) {
                     const previewColorKey = getPreviewColorKey();
-                    saveState(); mode = 'drawing';
-                    drawStartX = coords.x; drawStartY = coords.y; drawStartZ = coords.z;
-                    ensurePreviewVoxel({x: drawStartX, y: drawStartY, w: 1, h: 1, z: drawStartZ, colorKey: previewColorKey});
+                    const previewVoxel = buildVoxelFromDrag(point, point, point.plane, previewColorKey);
+                    if (!previewVoxel || !isVoxelWithinCanvas(previewVoxel) || doesVoxelIntersectAny(previewVoxel)) return;
+
+                    saveState();
+                    mode = 'drawing';
+                    drawStartPoint = point;
+                    drawPlane = point.plane;
+                    drawFaceName = target.classList.contains('face')
+                        ? getFaceName(target)
+                        : point.plane === 'xy'
+                            ? 'top'
+                            : null;
+                    drawStartClientX = e.clientX;
+                    drawStartClientY = e.clientY;
+                    magneticPos = point;
+                    ensurePreviewVoxel(previewVoxel);
                 }
             }
         });
@@ -1215,7 +1486,10 @@
         window.addEventListener('pointermove', (e) => {
             if (isMobileView || isPaletteBusy()) return;
             
-            const coords = resolveGridCoords(e);
+            const hoverCoords = resolveGridCoords(e);
+            const coords = mode === 'drawing'
+                ? resolveDragCoords(e, hoverCoords)
+                : hoverCoords;
             
             if (coords) {
                 magneticPos = coords;
@@ -1228,7 +1502,9 @@
                 axisH.style.opacity = '1'; axisV.style.opacity = '1'; coordTracker.style.opacity = '1';
 
                 if (mode === 'none') {
-                    ensureMagneticVoxel({x: coords.x, y: coords.y, w: 1, h: 1, z: coords.z, colorKey: getPreviewColorKey()});
+                    const magneticVoxel = getPlacementVoxel(coords, getPreviewColorKey());
+                    if (magneticVoxel) ensureMagneticVoxel(magneticVoxel);
+                    else hideMagneticVoxel();
                 }
             } else {
                 axisH.style.opacity = '0'; axisV.style.opacity = '0'; coordTracker.style.opacity = '0';
@@ -1247,15 +1523,18 @@
                 return;
             }
 
+            if (mode === 'drawing' && coords && coords.plane === drawPlane) {
+                magneticPos = coords;
+            }
+
             if (mode === 'drawing' && magneticPos) {
                 hideMagneticVoxel(); 
-                const minX = Math.min(drawStartX, magneticPos.x); 
-                const minY = Math.min(drawStartY, magneticPos.y);
-                const w = Math.abs(magneticPos.x - drawStartX) + 1; 
-                const h = Math.abs(magneticPos.y - drawStartY) + 1;
-                const dynamicZ = Math.max(drawStartZ, getMaxZInArea(minX, minY, minX + w - 1, minY + h - 1));
-
-                ensurePreviewVoxel({x: minX, y: minY, w: w, h: h, z: dynamicZ, colorKey: getPreviewColorKey()});
+                const previewVoxel = buildVoxelFromDrag(drawStartPoint, magneticPos, drawPlane, getPreviewColorKey());
+                if (previewVoxel && isVoxelWithinCanvas(previewVoxel) && !doesVoxelIntersectAny(previewVoxel)) {
+                    ensurePreviewVoxel(previewVoxel);
+                } else {
+                    hidePreviewVoxel();
+                }
                 return;
             }
         });
@@ -1268,8 +1547,10 @@
                     voxels.push({
                         id: Date.now(),
                         x: parseInt(preview.dataset.x), y: parseInt(preview.dataset.y),
-                        w: parseInt(preview.dataset.w), h: parseInt(preview.dataset.h),
                         z: parseInt(preview.dataset.z),
+                        sx: parseInt(preview.dataset.sx),
+                        sy: parseInt(preview.dataset.sy),
+                        sz: parseInt(preview.dataset.sz),
                         colorKey: preview.dataset.colorKey || getPreviewColorKey()
                     });
                     renderAllVoxels();
@@ -1281,6 +1562,11 @@
                 clearPendingPlacementColor();
             }
             mode = 'none';
+            drawStartPoint = null;
+            drawPlane = null;
+            drawFaceName = null;
+            drawStartClientX = 0;
+            drawStartClientY = 0;
         });
 
         // ==========================================
