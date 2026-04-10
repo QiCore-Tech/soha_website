@@ -75,6 +75,8 @@
         let paletteAnchorX = window.innerWidth / 2;
         let paletteAnchorY = window.innerHeight / 2;
         let paletteTimers = [];
+        const VOXEL_STORAGE_KEY = 'qicore-voxel-layout-v1';
+        const VALID_COLOR_KEYS = new Set([...FACE_KEYS, 'white', 'black']);
 
         const hexToRgb = (hex) => {
             const normalized = hex.replace('#', '');
@@ -385,7 +387,39 @@
         function renderAllVoxels() {
             voxelsContainer.innerHTML = '';
             voxels.forEach(v => voxelsContainer.appendChild(createVoxelDOM(v)));
+            persistVoxels();
         }
+
+        function persistVoxels() {
+            try {
+                window.localStorage.setItem(VOXEL_STORAGE_KEY, JSON.stringify(voxels));
+            } catch (error) {}
+        }
+
+        function restoreVoxels() {
+            try {
+                const raw = window.localStorage.getItem(VOXEL_STORAGE_KEY);
+                if (!raw) return;
+                const parsed = JSON.parse(raw);
+                if (!Array.isArray(parsed)) return;
+                voxels = parsed
+                    .map((voxel, index) => ({
+                        id: Number.isFinite(Number(voxel.id)) ? Number(voxel.id) : Date.now() + index,
+                        x: Math.max(0, Math.floor(Number(voxel.x) || 0)),
+                        y: Math.max(0, Math.floor(Number(voxel.y) || 0)),
+                        w: Math.max(1, Math.floor(Number(voxel.w) || 1)),
+                        h: Math.max(1, Math.floor(Number(voxel.h) || 1)),
+                        z: Math.max(0, Math.floor(Number(voxel.z) || 0)),
+                        colorKey: VALID_COLOR_KEYS.has(voxel.colorKey) ? voxel.colorKey : 'white'
+                    }))
+                    .filter(voxel => Number.isFinite(voxel.id));
+            } catch (error) {
+                voxels = [];
+            }
+        }
+
+        restoreVoxels();
+        renderAllVoxels();
 
         function resolveGridCoords(e) {
             const target = e.target;
