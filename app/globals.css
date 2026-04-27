@@ -94,6 +94,16 @@
             opacity: 0;
         }
 
+        body.is-luon-active,
+        body.is-luon-active .scene-luon,
+        body.is-luon-active .scene-luon * {
+            cursor: auto;
+        }
+
+        body.is-luon-active .return-cmd {
+            cursor: pointer;
+        }
+
         body.is-luon-active #cursor-wrapper,
         body.is-transitioning #cursor-wrapper,
         body.is-returning #cursor-wrapper {
