@@ -3,6 +3,7 @@ import Script from "next/script";
 export function LegacyHome() {
   return (
     <>
+      <div className="transition-overlay" id="transition-overlay" />
       <div className="emp-flash" id="emp-flash" />
       <div className="ambient-glow" id="ambient-glow" />
 
@@ -80,7 +81,59 @@ export function LegacyHome() {
             </a>
           </div>
         </div>
+
+        <button className="luon-gateway" id="btn-trigger" type="button" aria-label="Initialize Luon preview">
+          <span className="mini-cube-icon" aria-hidden="true">
+            <span className="mini-face front" />
+            <span className="mini-face back" />
+            <span className="mini-face right" />
+            <span className="mini-face left" />
+            <span className="mini-face top" />
+            <span className="mini-face bottom" />
+          </span>
+          <span className="gateway-text">Initialize: Luon</span>
+        </button>
       </div>
+
+      <section className="scene-luon" id="scene-luon" aria-hidden="true">
+        <button className="return-cmd" id="btn-return" type="button">
+          TERMINATE_PROCESS
+        </button>
+
+        <div className="macro-environment" id="macro-environment" aria-hidden="true">
+          <div className="macro-light macro-1" />
+          <div className="macro-light macro-2" />
+          <div className="macro-light macro-3" />
+          <div className="scan-line" />
+        </div>
+
+        <div className="tesseract-wrapper" id="tesseract-wrapper" aria-hidden="true">
+          <div className="luon-tesseract" id="luon-tesseract">
+            <div className="luon-cube outer">
+              <div className="cube-face front" />
+              <div className="cube-face back" />
+              <div className="cube-face right" />
+              <div className="cube-face left" />
+              <div className="cube-face top" />
+              <div className="cube-face bottom" />
+            </div>
+            <div className="luon-cube inner">
+              <div className="cube-face front" />
+              <div className="cube-face back" />
+              <div className="cube-face right" />
+              <div className="cube-face left" />
+              <div className="cube-face top" />
+              <div className="cube-face bottom" />
+            </div>
+          </div>
+        </div>
+
+        <div className="luon-text-group" id="luon-text-group">
+          <h1 className="luon-title">Luon</h1>
+          <p className="luon-subtitle" id="luon-typewriter" />
+          <p className="luon-slogan">MODULAR. UNIFIED. INTELLIGENT.</p>
+        </div>
+      </section>
 
       <div className="palette-overlay" id="palette-overlay" aria-hidden="true">
         <div className="palette-backdrop" id="palette-backdrop" />

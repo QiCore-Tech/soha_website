@@ -152,4 +152,25 @@ test("right long press clears the canvas", async () => {
   });
 });
 
+test("Luon gateway enters and returns from the product preview", async () => {
+  await withPage(async (page) => {
+    const gatewayBox = await page.locator("#btn-trigger").boundingBox();
+    assert.ok(gatewayBox, "Luon gateway should be visible");
+    await page.mouse.click(gatewayBox.x + gatewayBox.width / 2, gatewayBox.y + gatewayBox.height / 2);
+
+    await page.waitForFunction(() => document.body.classList.contains("is-luon-active"));
+    await page.waitForFunction(() => document.getElementById("scene-luon")?.classList.contains("active"));
+    await page.waitForTimeout(1800);
+    assert.match(await page.locator("#luon-typewriter").textContent(), /^system/);
+
+    const returnBox = await page.locator("#btn-return").boundingBox();
+    assert.ok(returnBox, "Luon return command should be visible");
+    await page.mouse.click(returnBox.x + returnBox.width / 2, returnBox.y + returnBox.height / 2);
+
+    await page.waitForFunction(() => !document.body.classList.contains("is-luon-active"));
+    await page.waitForFunction(() => !document.body.classList.contains("is-returning"));
+    assert.equal(await page.locator("#scene-luon.active").count(), 0);
+  });
+});
+
 test.todo("side-plane drag should create wall patches on voxel faces");

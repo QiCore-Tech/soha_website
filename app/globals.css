@@ -15,6 +15,9 @@
             --cursor-left-rgb: 143, 168, 146;
             --cursor-back-rgb: 126, 152, 183;
             --cursor-bottom-rgb: 160, 143, 181;
+            --luon-bg: #020304;
+            --luon-text: #F3F1EC;
+            --luon-wire: rgba(255, 255, 255, 0.15);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
@@ -28,6 +31,11 @@
             cursor: none;
             perspective: 2000px; 
             display: flex; align-items: center; justify-content: center;
+            transition: background-color 0s 0.6s;
+        }
+
+        body.luon-theme {
+            background-color: var(--luon-bg);
         }
 
         .ambient-glow {
@@ -51,6 +59,498 @@
             will-change: transform, box-shadow;
             z-index: 1; 
             touch-action: none;
+        }
+
+        .transition-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #fff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9996;
+            mix-blend-mode: difference;
+        }
+
+        body.is-transitioning .paper-canvas {
+            animation: qicore-collapse 1.5s cubic-bezier(0.75, 0, 0.25, 1) forwards;
+            pointer-events: none;
+        }
+
+        body.is-returning .paper-canvas {
+            animation: qicore-expand 1.5s cubic-bezier(0.75, 0, 0.25, 1) forwards;
+            pointer-events: none;
+        }
+
+        body.is-transitioning .transition-overlay,
+        body.is-returning .transition-overlay {
+            animation: luon-flash 1.5s ease-in-out forwards;
+        }
+
+        body.is-luon-active .paper-canvas {
+            pointer-events: none;
+        }
+
+        body.is-luon-active .ambient-glow {
+            opacity: 0;
+        }
+
+        body.is-luon-active #cursor-wrapper,
+        body.is-transitioning #cursor-wrapper,
+        body.is-returning #cursor-wrapper {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 220ms ease;
+        }
+
+        @keyframes qicore-collapse {
+            0% { transform: scale(1) rotateX(0) rotateY(0); filter: blur(0) contrast(1); opacity: 1; }
+            40% { transform: scale(1.1) rotateX(10deg); filter: blur(4px) contrast(2) invert(1); opacity: 1; }
+            100% { transform: scale(0) rotateZ(45deg) translateZ(-800px); filter: blur(20px); opacity: 0; }
+        }
+
+        @keyframes qicore-expand {
+            0% { transform: scale(0) rotateZ(-45deg) translateZ(-800px); filter: blur(20px) contrast(2) invert(1); opacity: 0; }
+            60% { transform: scale(1.05) rotateX(-5deg); filter: blur(2px) contrast(1.5); opacity: 1; }
+            100% { transform: scale(1) rotateX(0) rotateY(0); filter: blur(0) contrast(1); opacity: 1; }
+        }
+
+        @keyframes luon-flash {
+            0%, 30% { opacity: 0; }
+            40% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .luon-gateway {
+            position: absolute;
+            right: 40px;
+            bottom: 40px;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 24px 12px 18px;
+            appearance: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            background: #0a0a0c;
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            cursor: pointer;
+            overflow: hidden;
+            transform: translateZ(80px);
+            transform-style: preserve-3d;
+            transition:
+                background-color 400ms cubic-bezier(0.25, 1, 0.5, 1),
+                border-color 400ms cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 400ms cubic-bezier(0.25, 1, 0.5, 1),
+                transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .luon-gateway::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transform: skewX(-20deg);
+            animation: gateway-scan 4s infinite;
+        }
+
+        @keyframes gateway-scan {
+            0%, 50% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .luon-gateway:hover,
+        .luon-gateway:focus-visible {
+            background: #000;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow:
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                0 0 20px rgba(255, 255, 255, 0.1);
+            transform: translateZ(100px) scale(1.05);
+            outline: none;
+        }
+
+        .gateway-text {
+            position: relative;
+            z-index: 1;
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: currentColor;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+            transition: text-shadow 300ms ease;
+        }
+
+        .luon-gateway:hover .gateway-text,
+        .luon-gateway:focus-visible .gateway-text {
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        }
+
+        .mini-cube-icon {
+            position: relative;
+            z-index: 1;
+            width: 16px;
+            height: 16px;
+            transform-style: preserve-3d;
+            animation: mini-spin 6s linear infinite;
+            flex: 0 0 auto;
+        }
+
+        .luon-gateway:hover .mini-cube-icon,
+        .luon-gateway:focus-visible .mini-cube-icon {
+            animation-duration: 2s;
+        }
+
+        .mini-face {
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            transition: border-color 300ms ease, background-color 300ms ease, box-shadow 300ms ease;
+        }
+
+        .luon-gateway:hover .mini-face,
+        .luon-gateway:focus-visible .mini-face {
+            border-color: rgba(255, 255, 255, 1);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .mini-face.front  { transform: translateZ(8px); }
+        .mini-face.back   { transform: rotateY(180deg) translateZ(8px); }
+        .mini-face.right  { transform: rotateY(90deg) translateZ(8px); }
+        .mini-face.left   { transform: rotateY(-90deg) translateZ(8px); }
+        .mini-face.top    { transform: rotateX(90deg) translateZ(8px); }
+        .mini-face.bottom { transform: rotateX(-90deg) translateZ(8px); }
+
+        @keyframes mini-spin {
+            0% { transform: rotateX(-20deg) rotateY(0deg); }
+            100% { transform: rotateX(-20deg) rotateY(360deg); }
+        }
+
+        .scene-luon {
+            position: fixed;
+            inset: 0;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .scene-luon.active {
+            opacity: 1;
+            pointer-events: auto;
+            transition: opacity 500ms ease 500ms;
+        }
+
+        .return-cmd {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 12px;
+            appearance: none;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            transition: background-color 300ms ease, color 300ms ease;
+        }
+
+        .return-cmd::before {
+            content: "";
+            display: block;
+            width: 6px;
+            height: 6px;
+            border-radius: 1px;
+            background: rgba(255, 255, 255, 0.4);
+            transition: background-color 300ms ease, box-shadow 300ms ease, transform 300ms ease;
+        }
+
+        .return-cmd:hover,
+        .return-cmd:focus-visible {
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.05);
+            outline: none;
+        }
+
+        .return-cmd:hover::before,
+        .return-cmd:focus-visible::before {
+            background: #fff;
+            box-shadow: 0 0 10px #fff;
+            transform: scale(1.2);
+        }
+
+        .macro-environment {
+            position: absolute;
+            inset: -20%;
+            z-index: -1;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .macro-light {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+            opacity: 0;
+            filter: blur(8px);
+        }
+
+        .macro-1 {
+            width: 15vw;
+            height: 100%;
+            top: 0;
+            left: 10%;
+            animation: slow-breathe 8s infinite 1s;
+        }
+
+        .macro-2 {
+            width: 25vw;
+            height: 100%;
+            top: 0;
+            right: 15%;
+            animation: slow-breathe 12s infinite 5s;
+        }
+
+        .macro-3 {
+            width: 8vw;
+            height: 100%;
+            top: 0;
+            left: 35%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+            animation: slow-breathe 6s infinite 3s;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: -10%;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+            animation: radar-scan 10s linear infinite;
+        }
+
+        @keyframes slow-breathe {
+            0%, 40%, 60%, 100% { opacity: 0; transform: translateZ(-200px); }
+            50% { opacity: 1; transform: translateZ(-150px); }
+        }
+
+        @keyframes radar-scan {
+            0% { transform: translateY(0); opacity: 0; }
+            10%, 90% { opacity: 1; }
+            100% { transform: translateY(120vh); opacity: 0; }
+        }
+
+        .tesseract-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .luon-tesseract {
+            position: absolute;
+            width: 0;
+            height: 0;
+            transform-style: preserve-3d;
+            animation: tesseract-float 16s ease-in-out infinite;
+        }
+
+        .scene-luon.assemble .luon-tesseract {
+            animation:
+                assemble-space 1.5s cubic-bezier(0.1, 1, 0.2, 1) forwards,
+                tesseract-float 16s ease-in-out infinite 1.5s;
+        }
+
+        .scene-luon.disassemble .luon-tesseract {
+            animation: disassemble-space 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes assemble-space {
+            0% { transform: scale(0) rotateX(90deg) rotateY(90deg); filter: blur(10px); opacity: 0; }
+            100% { transform: scale(1) rotateX(0deg) rotateY(0deg); filter: blur(0); opacity: 1; }
+        }
+
+        @keyframes disassemble-space {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0) rotateX(-90deg) rotateY(-90deg); opacity: 0; filter: blur(10px); }
+        }
+
+        .luon-cube {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-style: preserve-3d;
+        }
+
+        .cube-face {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            border-radius: 12px;
+            backface-visibility: visible;
+        }
+
+        .luon-cube.outer {
+            --size: clamp(260px, 34vw, 400px);
+            width: var(--size);
+            height: var(--size);
+            margin-top: calc(var(--size) / -2);
+            margin-left: calc(var(--size) / -2);
+            animation: spin-outer 32s linear infinite;
+        }
+
+        .luon-cube.outer .cube-face {
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.01);
+            animation: edge-breathe 6s ease-in-out infinite alternate;
+        }
+
+        .luon-cube.inner {
+            --size: clamp(90px, 12vw, 140px);
+            width: var(--size);
+            height: var(--size);
+            margin-top: calc(var(--size) / -2);
+            margin-left: calc(var(--size) / -2);
+            animation: spin-inner 20s linear infinite;
+        }
+
+        .luon-cube.inner .cube-face {
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(6px);
+            animation: core-breathe 4s ease-in-out infinite alternate;
+        }
+
+        .cube-face.front  { transform: translateZ(calc(var(--size) / 2)); }
+        .cube-face.back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
+        .cube-face.right  { transform: rotateY(90deg) translateZ(calc(var(--size) / 2)); }
+        .cube-face.left   { transform: rotateY(-90deg) translateZ(calc(var(--size) / 2)); }
+        .cube-face.top    { transform: rotateX(90deg) translateZ(calc(var(--size) / 2)); }
+        .cube-face.bottom { transform: rotateX(-90deg) translateZ(calc(var(--size) / 2)); }
+
+        @keyframes edge-breathe {
+            0% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 transparent; }
+            100% { border-color: rgba(255, 255, 255, 0.35); box-shadow: 0 0 40px rgba(255, 255, 255, 0.06), inset 0 0 20px rgba(255, 255, 255, 0.04); }
+        }
+
+        @keyframes core-breathe {
+            0% { box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1), 0 0 15px rgba(255, 255, 255, 0.05); }
+            100% { box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.15); }
+        }
+
+        @keyframes spin-outer {
+            0% { transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(20deg) rotateY(360deg) rotateZ(360deg); }
+        }
+
+        @keyframes spin-inner {
+            0% { transform: rotateX(-35deg) rotateY(0deg) rotateZ(0deg); }
+            100% { transform: rotateX(-35deg) rotateY(-360deg) rotateZ(-360deg); }
+        }
+
+        @keyframes tesseract-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .luon-text-group {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateZ(150px);
+            transition: opacity 1s ease 800ms;
+            will-change: transform, opacity;
+        }
+
+        .scene-luon.active .luon-text-group {
+            opacity: 1;
+        }
+
+        .luon-title {
+            margin-right: -0.15em;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            font-size: clamp(4.4rem, 12vw, 8rem);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            line-height: 0.95;
+            text-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+        }
+
+        .luon-subtitle {
+            min-height: 1.5em;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+        }
+
+        .luon-subtitle::after {
+            content: "_";
+            animation: luon-blink 1s step-end infinite;
+        }
+
+        @keyframes luon-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .luon-slogan {
+            margin-top: 2rem;
+            margin-right: -0.5em;
+            color: rgba(255, 255, 255, 0.35);
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 1.5s ease 2.5s, transform 1.5s ease 2.5s;
+        }
+
+        .scene-luon.active .luon-slogan {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* 物理图纸底板 */
@@ -732,6 +1232,47 @@
             .paper-canvas { 
                 width: 82vw; 
                 height: 75vh; 
+            }
+            .luon-gateway {
+                right: 18px;
+                bottom: 18px;
+                max-width: calc(100% - 36px);
+                padding: 9px 12px 9px 10px;
+                gap: 10px;
+            }
+            .gateway-text {
+                font-size: 0.66rem;
+                letter-spacing: 0.1em;
+            }
+            .return-cmd {
+                top: 22px;
+                left: 18px;
+                font-size: 0.64rem;
+                letter-spacing: 0.1em;
+            }
+            .luon-cube.outer {
+                --size: min(70vw, 270px);
+            }
+            .luon-cube.inner {
+                --size: min(24vw, 96px);
+            }
+            .luon-title {
+                font-size: clamp(3.2rem, 18vw, 4.6rem);
+                letter-spacing: 0.12em;
+                margin-right: -0.12em;
+            }
+            .luon-subtitle {
+                width: min(86vw, 390px);
+                font-size: clamp(0.54rem, 2.4vw, 0.7rem);
+                letter-spacing: 0.18em;
+                overflow-wrap: anywhere;
+            }
+            .luon-slogan {
+                width: min(84vw, 360px);
+                font-size: clamp(0.48rem, 2.2vw, 0.62rem);
+                letter-spacing: 0.24em;
+                line-height: 1.8;
+                margin-right: -0.24em;
             }
             .axis-h, .axis-v, .coord-tracker { display: none; }
             .cursor-dot { display: none; } /* 仅隐藏中心白点，保留彩色方块 */

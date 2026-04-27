@@ -766,7 +766,7 @@
         });
 
         window.addEventListener('pointermove', (e) => {
-            if (isMobileView || isPaletteBusy() || isClearChargeActive) return;
+            if (isMobileView || isPaletteBusy() || isClearChargeActive || isLuonTransitioned || isLuonAnimating) return;
             
             const hoverCoords = resolveGridCoords(e);
             const coords = mode === 'drawing'
@@ -822,7 +822,7 @@
         });
 
         window.addEventListener('pointerup', () => {
-            if (isMobileView || isPaletteBusy()) return;
+            if (isMobileView || isPaletteBusy() || isLuonTransitioned || isLuonAnimating) return;
             if (mode === 'drawing') {
                 const preview = previewVoxelEl && previewVoxelEl.style.display !== 'none' ? previewVoxelEl : null;
                 if (preview) {
@@ -873,6 +873,14 @@
         const footerShadow = document.getElementById('footer-shadow');
         const paletteOverlay = document.getElementById('palette-overlay');
         const paletteBackdrop = document.getElementById('palette-backdrop');
+        const btnTrigger = document.getElementById('btn-trigger');
+        const btnReturn = document.getElementById('btn-return');
+        const sceneLuon = document.getElementById('scene-luon');
+        const gatewayText = btnTrigger.querySelector('.gateway-text');
+        const typewriterEl = document.getElementById('luon-typewriter');
+        const tesseractWrapper = document.getElementById('tesseract-wrapper');
+        const luonTextGroup = document.getElementById('luon-text-group');
+        const macroEnvironment = document.getElementById('macro-environment');
         const cursorFaces = Object.fromEntries(FACE_KEYS.map((faceKey) => [faceKey, cursorCube.querySelector(`.face.${faceKey}`)]));
         const cursorExtras = {
             multicolor: cursorCube.querySelector('.extra-face.multi'),
@@ -900,13 +908,100 @@
         let pressTimer = 0;
         let rightPressOrigin = null;
         let isLongPressTriggered = false;
+        let isLuonTransitioned = false;
+        let isLuonAnimating = false;
+        let luonTypeIndex = 0;
+        let luonTypeTimeout = 0;
         const LONG_PRESS_THRESHOLD = 1200;
         const PALETTE_OPEN_DURATION = 700;
         const PALETTE_CLOSE_DURATION = 700;
+        const LUON_TYPE_TEXT = 'system.architecture.expanding()';
 
         const footerSlotAliases = ['info', 'hr'];
         const footerSlotLineHeight = 16;
         const footerSlotTracks = [footerSlotTrack, footerShadowTrack].filter(Boolean);
+
+        function clearLuonTypewriter() {
+            if (luonTypeTimeout) {
+                window.clearTimeout(luonTypeTimeout);
+                luonTypeTimeout = 0;
+            }
+            luonTypeIndex = 0;
+            typewriterEl.textContent = '';
+        }
+
+        function runLuonTypewriter() {
+            if (!isLuonTransitioned || luonTypeIndex >= LUON_TYPE_TEXT.length) return;
+            typewriterEl.textContent += LUON_TYPE_TEXT.charAt(luonTypeIndex);
+            luonTypeIndex += 1;
+            luonTypeTimeout = window.setTimeout(runLuonTypewriter, Math.random() * 40 + 30);
+        }
+
+        function updateLuonParallax(normX, normY) {
+            if (!isLuonTransitioned || isLuonAnimating) return;
+            tesseractWrapper.style.transform = `rotateX(${normY * 12}deg) rotateY(${normX * -12}deg)`;
+            luonTextGroup.style.transform = `translateZ(150px) rotateX(${normY * -6}deg) rotateY(${normX * 6}deg)`;
+            macroEnvironment.style.transform = `rotateX(${normY * 5}deg) rotateY(${normX * -5}deg)`;
+        }
+
+        function enterLuonScene() {
+            if (isLuonTransitioned || isLuonAnimating) return;
+
+            isLuonAnimating = true;
+            interactionLocked = true;
+            btnTrigger.disabled = true;
+            gatewayText.textContent = 'EXECUTING...';
+            resetInteractionState();
+            resetChargeVisualState();
+            if (paletteState !== 'closed') forceClosePalette();
+
+            document.body.classList.remove('is-returning');
+            document.body.classList.add('is-transitioning', 'luon-theme');
+
+            window.setTimeout(() => {
+                sceneLuon.setAttribute('aria-hidden', 'false');
+                sceneLuon.classList.remove('disassemble');
+                sceneLuon.classList.add('active', 'assemble');
+                document.body.classList.add('is-luon-active');
+                isLuonTransitioned = true;
+
+                clearLuonTypewriter();
+                luonTypeTimeout = window.setTimeout(runLuonTypewriter, 800);
+
+                window.setTimeout(() => {
+                    isLuonAnimating = false;
+                }, 800);
+            }, 1400);
+        }
+
+        function returnFromLuonScene() {
+            if (!isLuonTransitioned || isLuonAnimating) return;
+
+            isLuonAnimating = true;
+            sceneLuon.classList.remove('assemble');
+            sceneLuon.classList.add('disassemble');
+            clearLuonTypewriter();
+
+            window.setTimeout(() => {
+                document.body.classList.remove('is-transitioning', 'is-luon-active');
+                document.body.classList.add('is-returning');
+                sceneLuon.classList.remove('active', 'disassemble');
+                sceneLuon.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('luon-theme');
+                void paperCanvas.offsetWidth;
+
+                isLuonTransitioned = false;
+                gatewayText.textContent = 'INITIALIZE: LUON';
+
+                window.setTimeout(() => {
+                    document.body.classList.remove('is-returning');
+                    isLuonAnimating = false;
+                    interactionLocked = false;
+                    btnTrigger.disabled = false;
+                    markShadowGeometryDirty();
+                }, 1500);
+            }, 800);
+        }
 
         function clearPaletteTimers() {
             paletteTimers.forEach((timerId) => window.clearTimeout(timerId));
@@ -1211,6 +1306,21 @@
             closePalette();
         });
 
+        btnTrigger.addEventListener('pointerdown', (e) => {
+            e.stopPropagation();
+        });
+
+        btnTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            enterLuonScene();
+        });
+
+        btnReturn.addEventListener('click', (e) => {
+            e.preventDefault();
+            returnFromLuonScene();
+        });
+
         window.addEventListener('mousedown', beginRightPress);
         window.addEventListener('mouseup', releaseRightPress);
         window.addEventListener('pointercancel', cancelRightPressState);
@@ -1498,6 +1608,13 @@
             } else {
                 normX = clamp(lerpX / window.innerWidth - 0.5, -0.5, 0.5);
                 normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
+            }
+
+            if (isLuonTransitioned || isLuonAnimating) {
+                cursorWrapper.classList.remove('is-contrast-text');
+                updateLuonParallax(normX, normY);
+                requestAnimationFrame(renderLoop);
+                return;
             }
 
             if (sloganCard) {
