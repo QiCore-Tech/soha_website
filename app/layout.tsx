@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "气核科技",
-              alternateName: "qicore",
+              alternateName: ["qicore", "杭州炁核科技有限公司", "深圳气核科技有限公司"],
               url: "https://qicore.ai"
             })
           }}
