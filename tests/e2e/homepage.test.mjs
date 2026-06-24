@@ -7,6 +7,7 @@ import {
   getLastVoxelFaceBackground,
   getStoredVoxels,
   getVoxelCount,
+  isSystemCursorVisible,
   gotoFreshHomepage,
   holdRightClickOnGrid,
   openPaletteOnFrame,
@@ -55,6 +56,7 @@ after(async () => {
 test("right click opens palette on blank canvas", async () => {
   await withPage(async (page) => {
     await openPaletteOnGrid(page, 3, 3);
+    assert.equal(await isSystemCursorVisible(page), true);
   });
 });
 

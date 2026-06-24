@@ -1189,6 +1189,7 @@
 
             paletteOverlay.classList.add('is-active');
             paletteOverlay.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('is-system-cursor');
             cursorWrapper.classList.remove('is-contrast-text');
             cursorWrapper.classList.add('is-palette-mode');
             cubeWrapper.classList.remove('is-imploding');
@@ -1234,6 +1235,7 @@
             queuePaletteTimer(PALETTE_CLOSE_DURATION, () => {
                 paletteOverlay.classList.remove('is-active');
                 paletteOverlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('is-system-cursor');
                 cursorWrapper.classList.remove('is-palette-mode');
                 cursorCube.classList.remove('is-palette', 'is-palette-mode', 'is-opening');
                 cursorCube.style.transform = '';
@@ -1250,6 +1252,7 @@
             resetChargeVisualState();
             paletteOverlay.classList.remove('is-active');
             paletteOverlay.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('is-system-cursor');
             cursorWrapper.classList.remove('is-palette-mode');
             cursorWrapper.classList.remove('is-contrast-text');
             cursorCube.classList.remove('is-palette', 'is-palette-mode', 'is-opening');

@@ -102,6 +102,10 @@ export async function getCursorSelectedColor(page) {
   return page.evaluate(() => document.getElementById("cursor-cube")?.style.getPropertyValue("--selected-color") || "");
 }
 
+export async function isSystemCursorVisible(page) {
+  return page.evaluate(() => getComputedStyle(document.body).cursor === "auto");
+}
+
 export async function getLastVoxelFaceBackground(page, faceName) {
   return page.locator("#voxels-container .voxel").last().locator(`.face.${faceName}`).evaluate((el) => getComputedStyle(el).backgroundColor);
 }
