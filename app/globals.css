@@ -3497,3 +3497,82 @@ body.is-qicore-navigating .paper-canvas {
     .company-product-identity { min-height: 300px; }
     .company-product-emblem { width: 122px; }
 }
+
+/* Always render the OysCat brand from its official product wordmark on QiCore surfaces. */
+.qicore-oyscat-product-wordmark {
+    display: inline-block;
+    width: auto;
+    max-width: none;
+    height: 1em;
+    margin: 0;
+    object-fit: contain;
+    vertical-align: -.08em;
+}
+
+.marketing-nav-links .is-oyscat-product-link,
+.marketing-footer-product {
+    display: inline-flex;
+    align-items: center;
+}
+
+.marketing-nav.is-qicore-site .marketing-nav-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 33px;
+    line-height: 1;
+}
+.qicore-nav-oyscat-wordmark {
+    display: block;
+    height: 12px;
+    transform: translateY(1px);
+    vertical-align: initial;
+}
+
+.marketing-footer-product { gap: 6px; }
+.qicore-footer-oyscat-wordmark { height: 14px; }
+
+.company-cta-brand-label {
+    display: inline-flex;
+    align-items: center;
+    gap: .48em;
+    line-height: 1;
+}
+.company-cta .qicore-inline-oyscat-wordmark {
+    display: block;
+    height: .96em;
+    vertical-align: initial;
+}
+
+.company-product-heading {
+    display: inline;
+}
+.company-product-heading-brand {
+    display: inline-block;
+    height: .8em;
+    margin-right: .08em;
+    vertical-align: -.14em;
+}
+.hardware-copy h2 .qicore-heading-oyscat-wordmark {
+    display: block;
+    width: auto;
+    height: 100%;
+    vertical-align: initial;
+}
+
+.company-product-code {
+    display: inline-flex;
+    align-items: center;
+    gap: .7em;
+}
+.company-product-code .qicore-code-oyscat-wordmark { height: 1.25em; }
+
+.company-product-identity .company-product-word {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.company-product-identity .qicore-display-oyscat-wordmark {
+    width: clamp(170px, 18vw, 260px);
+    height: auto;
+}

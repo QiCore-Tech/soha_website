@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { MouseEvent } from "react";
+import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
 
 type Locale = "zh" | "en";
 
@@ -64,10 +65,21 @@ export function MarketingNav() {
       >
         <nav className={`marketing-nav-links${isMenuOpen ? " is-open" : ""}`} aria-label="Main navigation">
           {navItems.map((item) => {
-            const label = <><span data-lang="zh">{item.zh}</span><span data-lang="en">{item.en}</span></>;
+            const label = item.href === "/oyscat" ? (
+              <OysCatProductWordmark className="qicore-nav-oyscat-wordmark" />
+            ) : (
+              <><span data-lang="zh">{item.zh}</span><span data-lang="en">{item.en}</span></>
+            );
             const active = pathname === item.href;
             return item.href === "/oyscat" ? (
-              <a href={item.href} key={item.href} aria-current={active ? "page" : undefined}>{label}</a>
+              <a
+                className={`is-oyscat-product-link${active ? " is-active" : ""}`}
+                href={item.href}
+                key={item.href}
+                aria-current={active ? "page" : undefined}
+              >
+                {label}
+              </a>
             ) : (
               <a
                 className={active ? "is-active" : undefined}
