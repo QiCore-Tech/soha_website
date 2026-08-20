@@ -901,6 +901,7 @@
         let mobileTapActive = false;
         let titleWeightState = 430;
         let appliedTitleWeight = 430;
+        let sceneStrengthState = 25;
         let sloganExpanded = false;
         let footerSlotIndex = 0;
         let footerSlotPaused = false;
@@ -915,7 +916,7 @@
         const LONG_PRESS_THRESHOLD = 1200;
         const PALETTE_OPEN_DURATION = 700;
         const PALETTE_CLOSE_DURATION = 700;
-        const LUON_TYPE_TEXT = 'system.architecture.expanding()';
+        const LUON_TYPE_TEXT = 'idea  →  design  →  reality';
 
         const footerSlotAliases = ['info', 'hr'];
         const footerSlotLineHeight = 16;
@@ -950,7 +951,7 @@
             isLuonAnimating = true;
             interactionLocked = true;
             btnTrigger.disabled = true;
-            gatewayText.textContent = 'EXECUTING...';
+            btnTrigger.classList.add('is-opening');
             resetInteractionState();
             resetChargeVisualState();
             if (paletteState !== 'closed') forceClosePalette();
@@ -959,19 +960,8 @@
             document.body.classList.add('is-transitioning', 'luon-theme');
 
             window.setTimeout(() => {
-                sceneLuon.setAttribute('aria-hidden', 'false');
-                sceneLuon.classList.remove('disassemble');
-                sceneLuon.classList.add('active', 'assemble');
-                document.body.classList.add('is-luon-active');
-                isLuonTransitioned = true;
-
-                clearLuonTypewriter();
-                luonTypeTimeout = window.setTimeout(runLuonTypewriter, 800);
-
-                window.setTimeout(() => {
-                    isLuonAnimating = false;
-                }, 800);
-            }, 1400);
+                window.location.assign('/oyscat');
+            }, 900);
         }
 
         function returnFromLuonScene() {
@@ -991,7 +981,7 @@
                 void paperCanvas.offsetWidth;
 
                 isLuonTransitioned = false;
-                gatewayText.textContent = 'INITIALIZE: LUON';
+                btnTrigger.classList.remove('is-opening');
 
                 window.setTimeout(() => {
                     document.body.classList.remove('is-returning');
@@ -1102,6 +1092,7 @@
 
         function shouldHandleRightPress(target) {
             if (cursorWrapper.contains(target)) return false;
+            if (target.closest('[data-home-interactive-control]')) return false;
 
             const voxelEl = target.closest('.voxel');
             if (voxelEl && !voxelEl.classList.contains('preview')) return false;
@@ -1685,13 +1676,23 @@
             }
 
             // 全境 3D 倾斜
-            const sceneRotX = isMobileView ? normY * -38 : normY * -25; 
-            const sceneRotY = isMobileView ? normX * 38 : normX * 25;  
+            const isQiCoreContentRoute = document.body.classList.contains('is-qicore-content-route');
+            const targetSceneStrength = isQiCoreContentRoute ? (isMobileView ? 16.5 : 14.5) : (isMobileView ? 38 : 25);
+            sceneStrengthState += (targetSceneStrength - sceneStrengthState) * 0.075;
+            const sceneRotX = normY * -sceneStrengthState;
+            const sceneRotY = normX * sceneStrengthState;
             paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
+            const homeNav = document.querySelector('.marketing-nav.is-qicore-home');
+            if (homeNav && !document.body.classList.contains('is-qicore-navigating')) {
+                homeNav.style.setProperty('--home-nav-rx', `${sceneRotX}deg`);
+                homeNav.style.setProperty('--home-nav-ry', `${sceneRotY}deg`);
+            }
             
-            paperCanvas.style.boxShadow = isMobileView
-                ? `${normX * -120}px ${normY * -120 + 44}px 120px rgba(0, 0, 0, 0.72)`
-                : `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
+            paperCanvas.style.boxShadow = isQiCoreContentRoute
+                ? `${normX * -18}px ${normY * -18 + 34}px 88px rgba(0, 0, 0, 0.56)`
+                : isMobileView
+                    ? `${normX * -120}px ${normY * -120 + 44}px 120px rgba(0, 0, 0, 0.72)`
+                    : `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
             // 字体引力反馈
             if (shadowState.dirty || !shadowState.paperRect) {

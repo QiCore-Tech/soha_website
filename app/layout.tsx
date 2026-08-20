@@ -6,25 +6,28 @@ const globalStyles = readFileSync(path.join(process.cwd(), "app/globals.css"), "
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://qicore.ai"),
-  title: "气核科技（qicore）| 智能硬件创造平台",
+  title: {
+    default: "气核科技 QiCore | 智能硬件创造平台",
+    template: "%s | QiCore"
+  },
   description:
-    "气核科技（qicore）官方网站。我们专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，也欢迎优秀人才加入我们。",
+    "气核科技 QiCore 官方网站。了解智能硬件创造平台 OysCat、研发动态与团队。",
   alternates: {
     canonical: "/"
   },
   openGraph: {
-    title: "气核科技（qicore）| 智能硬件创造平台",
+    title: "气核科技 QiCore | OysCat 智能硬件创造平台",
     description:
-      "气核科技（qicore）官方网站。我们专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，也欢迎优秀人才加入我们。",
+      "从灵感到现实，了解 QiCore 与面向智能硬件创造者的全链路工作空间 OysCat。",
     url: "https://qicore.ai/",
     siteName: "气核科技 qicore",
     type: "website"
   },
   twitter: {
     card: "summary",
-    title: "气核科技（qicore）| 智能硬件创造平台",
+    title: "气核科技 QiCore | OysCat 智能硬件创造平台",
     description:
-      "气核科技（qicore）官方网站。我们专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，也欢迎优秀人才加入我们。"
+      "从灵感到现实，了解 QiCore 与面向智能硬件创造者的全链路工作空间 OysCat。"
   },
   icons: {
     icon: "/favicon.svg"
