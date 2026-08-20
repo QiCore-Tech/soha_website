@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
 
@@ -17,7 +17,7 @@ const navItems = [
 
 export function MarketingNav() {
   const pathname = usePathname();
-  const router = useRouter();
+  const navigationTimerRef = useRef<number | null>(null);
   const [locale, setLocale] = useState<Locale>("zh");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -36,11 +36,9 @@ export function MarketingNav() {
     );
   }, [pathname]);
 
-  useEffect(() => {
-    navItems.forEach((item) => {
-      if (item.href !== "/oyscat") router.prefetch(item.href);
-    });
-  }, [router]);
+  useEffect(() => () => {
+    if (navigationTimerRef.current) window.clearTimeout(navigationTimerRef.current);
+  }, []);
 
   function toggleLocale() {
     const nextLocale: Locale = locale === "zh" ? "en" : "zh";
@@ -49,12 +47,30 @@ export function MarketingNav() {
     document.documentElement.dataset.locale = nextLocale;
   }
 
-  function navigateToQiCore(event: MouseEvent<HTMLAnchorElement>, href: string) {
+  function navigateToDocument(event: MouseEvent<HTMLAnchorElement>, href: string) {
     setIsMenuOpen(false);
-    if (href === "/oyscat" || href === pathname) return;
+    if (href === pathname) {
+      event.preventDefault();
+      return;
+    }
+
+    if (
+      event.button !== 0
+      || event.metaKey
+      || event.ctrlKey
+      || event.shiftKey
+      || event.altKey
+      || event.currentTarget.target === "_blank"
+    ) return;
 
     event.preventDefault();
-    router.push(href, { scroll: false });
+    document.body.classList.add("is-qicore-navigating");
+    document.body.classList.add(pathname === "/" ? "is-qicore-leaving-home" : "is-qicore-switching-content");
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    navigationTimerRef.current = window.setTimeout(() => {
+      window.location.assign(href);
+    }, reducedMotion ? 40 : pathname === "/" ? 320 : 260);
   }
 
   return (
@@ -71,22 +87,13 @@ export function MarketingNav() {
               <><span data-lang="zh">{item.zh}</span><span data-lang="en">{item.en}</span></>
             );
             const active = pathname === item.href;
-            return item.href === "/oyscat" ? (
+            return (
               <a
-                className={`is-oyscat-product-link${active ? " is-active" : ""}`}
+                className={`${item.href === "/oyscat" ? "is-oyscat-product-link" : ""}${active ? " is-active" : ""}`.trim() || undefined}
                 href={item.href}
                 key={item.href}
                 aria-current={active ? "page" : undefined}
-              >
-                {label}
-              </a>
-            ) : (
-              <a
-                className={active ? "is-active" : undefined}
-                href={item.href}
-                key={item.href}
-                aria-current={active ? "page" : undefined}
-                onClick={(event) => navigateToQiCore(event, item.href)}
+                onClick={(event) => navigateToDocument(event, item.href)}
               >
                 {label}
               </a>
