@@ -2979,6 +2979,7 @@ body.is-qicore-switching-content .marketing-board {
 }
 body.is-qicore-navigating .marketing-nav.is-qicore-home {
     transition-duration: 280ms;
+    transform: translate3d(-50%,0,0);
 }
 
 @media (max-width: 820px) {

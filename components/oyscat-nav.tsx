@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Locale = "zh" | "en";
@@ -24,9 +23,9 @@ export function OysCatNav() {
 
   return (
     <header className="oyscat-nav">
-      <Link className="oyscat-nav-brand" href="/oyscat" aria-label="OysCat products">
+      <a className="oyscat-nav-brand" href="/oyscat" aria-label="OysCat products">
         <img src="/brand/oyscat-wordmark.png" alt="OysCat" />
-      </Link>
+      </a>
       <span className="oyscat-nav-index">QICORE / PRODUCT 01</span>
       <div className="oyscat-nav-actions">
         <a href="/" className="back-to-qicore">

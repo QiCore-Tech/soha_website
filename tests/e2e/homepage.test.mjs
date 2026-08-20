@@ -187,6 +187,36 @@ test("mobile navigation reaches OysCat content pages", async () => {
   });
 });
 
+test("company navigation requests a fresh HTML document", async () => {
+  await withPage(async (page) => {
+    await page.evaluate(() => {
+      document.documentElement.dataset.navigationDocumentProbe = "stale-page";
+    });
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+
+    assert.equal(
+      await page.evaluate(() => document.documentElement.dataset.navigationDocumentProbe ?? null),
+      null,
+      "the previous document must not survive navigation"
+    );
+    assert.equal(await page.evaluate(() => document.contentType), "text/html");
+
+    await page.evaluate(() => {
+      document.documentElement.dataset.navigationDocumentProbe = "stale-company-page";
+    });
+    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
+    await page.waitForURL("**/oyscat");
+
+    assert.equal(
+      await page.evaluate(() => document.documentElement.dataset.navigationDocumentProbe ?? null),
+      null,
+      "the QiCore document must not survive the product-site navigation"
+    );
+    assert.equal(await page.evaluate(() => document.contentType), "text/html");
+  });
+});
+
 test("returning from a company page reloads an interactive voxel homepage", async () => {
   await withPage(async (page) => {
     await page.goto(`${server.baseURL}/about`);
