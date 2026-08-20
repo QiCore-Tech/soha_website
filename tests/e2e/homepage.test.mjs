@@ -66,6 +66,16 @@ test("right click opens palette on the outer black frame", async () => {
   });
 });
 
+test("floating navigation is isolated from the voxel palette", async () => {
+  await withPage(async (page) => {
+    const navBox = await page.locator(".marketing-nav").boundingBox();
+    assert.ok(navBox, "floating navigation should be visible");
+    await page.mouse.click(navBox.x + navBox.width / 2, navBox.y + navBox.height / 2, { button: "right" });
+    await page.waitForTimeout(200);
+    assert.equal(await page.locator("#palette-overlay.is-active").count(), 0);
+  });
+});
+
 test("right clicking a placed voxel deletes it instead of opening the palette", async () => {
   await withPage(async (page) => {
     await placeVoxelAtGrid(page, 5, 5);
@@ -154,24 +164,36 @@ test("right long press clears the canvas", async () => {
   });
 });
 
-test("Luon gateway enters and returns from the product preview", async () => {
+test("OysCat gateway transitions to the independent product site", async () => {
   await withPage(async (page) => {
     const gatewayBox = await page.locator("#btn-trigger").boundingBox();
-    assert.ok(gatewayBox, "Luon gateway should be visible");
+    assert.ok(gatewayBox, "OysCat gateway should be visible");
     await page.mouse.click(gatewayBox.x + gatewayBox.width / 2, gatewayBox.y + gatewayBox.height / 2);
+    await page.waitForURL("**/oyscat");
+    assert.equal(await page.locator(".oyscat-product-page").count(), 1);
+  });
+});
 
-    await page.waitForFunction(() => document.body.classList.contains("is-luon-active"));
-    await page.waitForFunction(() => document.getElementById("scene-luon")?.classList.contains("active"));
-    await page.waitForTimeout(1800);
-    assert.match(await page.locator("#luon-typewriter").textContent(), /^system/);
+test("mobile navigation reaches OysCat content pages", async () => {
+  await withPage(async (page) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.reload();
+    await page.locator(".marketing-menu-toggle").click();
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.locator(".locale-toggle").click();
+    await page.waitForFunction(() => document.documentElement.dataset.locale === "en");
+    assert.equal(await page.getByRole("heading", { name: "Make intelligent hardware easier to create." }).isVisible(), true);
+  });
+});
 
-    const returnBox = await page.locator("#btn-return").boundingBox();
-    assert.ok(returnBox, "Luon return command should be visible");
-    await page.mouse.click(returnBox.x + returnBox.width / 2, returnBox.y + returnBox.height / 2);
-
-    await page.waitForFunction(() => !document.body.classList.contains("is-luon-active"));
-    await page.waitForFunction(() => !document.body.classList.contains("is-returning"));
-    assert.equal(await page.locator("#scene-luon.active").count(), 0);
+test("returning from a company page reloads an interactive voxel homepage", async () => {
+  await withPage(async (page) => {
+    await page.goto(`${server.baseURL}/about`);
+    await page.locator('.marketing-nav-links a[href="/"]').click();
+    await page.waitForURL(`${server.baseURL}/`);
+    await placeVoxelAtGrid(page, 4, 4);
+    assert.equal(await getVoxelCount(page), 1);
   });
 });
 

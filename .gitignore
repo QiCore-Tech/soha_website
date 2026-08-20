@@ -1,6 +1,8 @@
 docs/
 node_modules/
 .next/
+.next.*/
+*.tsbuildinfo
 out/
 .artifacts/
 .vercel/

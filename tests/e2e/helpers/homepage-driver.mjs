@@ -73,12 +73,19 @@ export async function holdRightClickOnGrid(page, x, y, durationMs = 1300) {
 
 export async function selectPaletteColor(page, colorKey) {
   const target = page.locator(`#cursor-cube [data-color-key="${colorKey}"]`);
-  await target.click();
+  // The palette intentionally follows the pointer, so its visual box never
+  // becomes stable enough for Playwright's coordinate-based click heuristic.
+  await target.evaluate((element) => {
+    element.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, pointerType: "mouse" }));
+  });
   await waitForPaletteClosed(page);
 }
 
 export async function waitForPaletteOpen(page) {
-  await page.waitForFunction(() => document.getElementById("cursor-cube")?.classList.contains("is-palette-mode"));
+  await page.waitForFunction(() => {
+    const palette = document.getElementById("cursor-cube");
+    return palette?.classList.contains("is-palette-mode") && !palette.classList.contains("is-opening");
+  });
 }
 
 export async function waitForPaletteClosed(page) {

@@ -1,8 +1,10 @@
 import Script from "next/script";
+import { MarketingNav } from "@/components/marketing-nav";
 
 export function LegacyHome() {
   return (
     <>
+      <MarketingNav />
       <div className="transition-overlay" id="transition-overlay" />
       <div className="emp-flash" id="emp-flash" />
       <div className="ambient-glow" id="ambient-glow" />
@@ -57,8 +59,14 @@ export function LegacyHome() {
               <div className="slogan-drawer">
                 <div className="slogan-detail">
                   <p className="company-note">
-                    <span className="brand">气核科技（qicore）</span> 专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，
-                    <span className="hiring">WE ARE HIRING</span>。
+                    <span data-lang="zh">
+                      <span className="brand">气核科技（QiCore）</span> 专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，
+                      <span className="hiring">WE ARE HIRING</span>。
+                    </span>
+                    <span data-lang="en">
+                      <span className="brand">QiCore Technology</span> creates next-generation platforms for intelligent hardware. Discover our work and grow with us —{" "}
+                      <span className="hiring">WE ARE HIRING</span>.
+                    </span>
                   </p>
                 </div>
               </div>
@@ -82,56 +90,59 @@ export function LegacyHome() {
           </div>
         </div>
 
-        <button className="luon-gateway" id="btn-trigger" type="button" aria-label="Initialize Luon preview">
-          <span className="mini-cube-icon" aria-hidden="true">
-            <span className="mini-face front" />
-            <span className="mini-face back" />
-            <span className="mini-face right" />
-            <span className="mini-face left" />
-            <span className="mini-face top" />
-            <span className="mini-face bottom" />
-          </span>
-          <span className="gateway-text">Initialize: Luon</span>
-        </button>
       </div>
+
+      <button className="luon-gateway oyscat-gateway" id="btn-trigger" type="button" aria-label="Meet OysCat">
+        <img className="oyscat-gateway-art" src="/brand/oyscat-default-cover.png" alt="" />
+        <span className="gateway-copy">
+          <small>QiCore Workspace</small>
+          <span className="gateway-text">
+            <img src="/brand/oyscat-wordmark.png" alt="OysCat" />
+          </span>
+        </span>
+        <span className="gateway-arrow" aria-hidden="true">↗</span>
+      </button>
 
       <section className="scene-luon" id="scene-luon" aria-hidden="true">
         <button className="return-cmd" id="btn-return" type="button">
-          TERMINATE_PROCESS
+          <span data-lang="zh">返回创造场</span>
+          <span data-lang="en">Back to canvas</span>
         </button>
 
         <div className="macro-environment" id="macro-environment" aria-hidden="true">
-          <div className="macro-light macro-1" />
-          <div className="macro-light macro-2" />
-          <div className="macro-light macro-3" />
-          <div className="scan-line" />
+          <div className="oyscat-orbit orbit-a" />
+          <div className="oyscat-orbit orbit-b" />
+          <div className="oyscat-dot-field" />
         </div>
 
         <div className="tesseract-wrapper" id="tesseract-wrapper" aria-hidden="true">
-          <div className="luon-tesseract" id="luon-tesseract">
-            <div className="luon-cube outer">
-              <div className="cube-face front" />
-              <div className="cube-face back" />
-              <div className="cube-face right" />
-              <div className="cube-face left" />
-              <div className="cube-face top" />
-              <div className="cube-face bottom" />
-            </div>
-            <div className="luon-cube inner">
-              <div className="cube-face front" />
-              <div className="cube-face back" />
-              <div className="cube-face right" />
-              <div className="cube-face left" />
-              <div className="cube-face top" />
-              <div className="cube-face bottom" />
-            </div>
+          <div className="luon-tesseract oyscat-figure" id="luon-tesseract">
+            <img src="/brand/oyscat-workspace-loading-320-12fps.webp" alt="" />
           </div>
         </div>
 
         <div className="luon-text-group" id="luon-text-group">
-          <h1 className="luon-title">Luon</h1>
+          <img className="oyscat-wordmark" src="/brand/oyscat-wordmark.png" alt="OysCat" />
           <p className="luon-subtitle" id="luon-typewriter" />
-          <p className="luon-slogan">MODULAR. UNIFIED. INTELLIGENT.</p>
+          <h1 className="luon-title">
+            <span data-lang="zh">让创造，自然发生。</span>
+            <span data-lang="en">Where creation begins.</span>
+          </h1>
+          <p className="luon-slogan">
+            <span data-lang="zh">面向智能硬件创造者的全链路工作空间</span>
+            <span data-lang="en">The end-to-end workspace for intelligent hardware creators</span>
+          </p>
+          <div className="oyscat-scene-actions" data-home-interactive-control>
+            <a className="oyscat-primary-action" href="/oyscat">
+              <span data-lang="zh">了解 OysCat</span>
+              <span data-lang="en">Discover OysCat</span>
+            </a>
+            <a className="oyscat-secondary-action" href="https://oyscat.com">
+              <span data-lang="zh">进入 Workspace</span>
+              <span data-lang="en">Open Workspace</span>
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
         </div>
       </section>
 
