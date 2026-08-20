@@ -1,4 +1,5 @@
 import { BilingualText, MarketingPage } from "@/components/marketing-page";
+import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
 
 const capabilities = [
   {
@@ -46,7 +47,20 @@ export default function AboutPage() {
               />
             </p>
             <a className="company-cta" href="/oyscat">
-              <BilingualText zh="了解首个产品 OysCat" en="Discover OysCat" />
+              <BilingualText
+                zh={
+                  <span className="company-cta-brand-label">
+                    <span>了解首个产品</span>
+                    <OysCatProductWordmark className="qicore-inline-oyscat-wordmark" />
+                  </span>
+                }
+                en={
+                  <span className="company-cta-brand-label">
+                    <span>Discover</span>
+                    <OysCatProductWordmark className="qicore-inline-oyscat-wordmark" />
+                  </span>
+                }
+              />
               <span aria-hidden="true">→</span>
             </a>
           </div>
@@ -66,18 +80,42 @@ export default function AboutPage() {
       <section className="hardware-strip company-product-strip marketing-section">
         <div className="hardware-copy">
           <p className="section-kicker">Our first product</p>
-          <h2><BilingualText zh="OysCat，是我们迈出的第一步。" en="OysCat is our first step." /></h2>
+          <h2>
+            <BilingualText
+              zh={
+                <span className="company-product-heading">
+                  <span className="company-product-heading-brand">
+                    <OysCatProductWordmark className="qicore-heading-oyscat-wordmark" />
+                  </span>
+                  <span>，是我们迈出的第一步。</span>
+                </span>
+              }
+              en={
+                <span className="company-product-heading">
+                  <span className="company-product-heading-brand">
+                    <OysCatProductWordmark className="qicore-heading-oyscat-wordmark" />
+                  </span>
+                  <span>is our first step.</span>
+                </span>
+              }
+            />
+          </h2>
           <a className="company-cta dark" href="/oyscat">
             <BilingualText zh="进入产品站" en="Enter product site" />
             <span aria-hidden="true">→</span>
           </a>
         </div>
         <div className="company-product-identity">
-          <span className="company-product-code">PRODUCT 01 / OYSCAT</span>
+          <span className="company-product-code">
+            PRODUCT 01 /
+            <OysCatProductWordmark className="qicore-code-oyscat-wordmark" decorative />
+          </span>
           <div className="company-product-emblem">
             <img src="/brand/oyscat-cat-head-whiskers.svg" alt="" aria-hidden="true" />
           </div>
-          <div className="company-product-word" aria-hidden="true">OysCat</div>
+          <div className="company-product-word">
+            <OysCatProductWordmark className="qicore-display-oyscat-wordmark" />
+          </div>
         </div>
       </section>
     </MarketingPage>

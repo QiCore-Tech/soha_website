@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
 
 type MarketingPageProps = {
   eyebrow: { zh: string; en: string };
@@ -52,7 +53,11 @@ export function MarketingPage({ eyebrow, title, intro, children }: MarketingPage
           <div className="marketing-footer-links">
             <a href="mailto:info@qicore.ai">info@qicore.ai</a>
             <a href="mailto:hr@qicore.ai">hr@qicore.ai</a>
-            <a href="/oyscat">OysCat Products</a>
+            <a className="marketing-footer-product" href="/oyscat">
+              <OysCatProductWordmark className="qicore-footer-oyscat-wordmark" />
+              <span data-lang="zh">产品</span>
+              <span data-lang="en">Products</span>
+            </a>
           </div>
           <small>© {new Date().getFullYear()} QiCore Technology. All rights reserved.</small>
         </footer>
