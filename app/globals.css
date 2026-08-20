@@ -3525,6 +3525,7 @@ body.is-qicore-navigating .paper-canvas {
 .qicore-nav-oyscat-wordmark {
     display: block;
     height: 12px;
+    transform: translateY(1px);
     vertical-align: initial;
 }
 
@@ -3544,19 +3545,18 @@ body.is-qicore-navigating .paper-canvas {
 }
 
 .company-product-heading {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
-    column-gap: .14em;
+    display: inline;
 }
 .company-product-heading-brand {
-    display: flex;
-    align-items: center;
-    height: 1.05em;
+    display: inline-block;
+    height: .8em;
+    margin-right: .08em;
+    vertical-align: -.14em;
 }
 .hardware-copy h2 .qicore-heading-oyscat-wordmark {
     display: block;
-    height: .72em;
+    width: auto;
+    height: 100%;
     vertical-align: initial;
 }
 
