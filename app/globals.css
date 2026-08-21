@@ -581,43 +581,9 @@
             border-radius: inherit;
         }
 
-        #voxel-presentation-canvas,
         #voxels-container, #preview-container, #magnetic-container {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-        }
-
-        #voxel-presentation-canvas {
-            z-index: 1;
-            opacity: 1;
-            transition: opacity 180ms cubic-bezier(.22, 1, .36, 1);
-        }
-
-        #voxels-container, #preview-container, #magnetic-container {
-            z-index: 2;
-            transform-style: preserve-3d;
-        }
-
-        html[data-qicore-voxel-mode="interactive"] #voxel-presentation-canvas {
-            opacity: 0;
-        }
-
-        html[data-qicore-voxel-mode="presentation"] #voxels-container,
-        html[data-qicore-voxel-mode="presentation"] #preview-container,
-        html[data-qicore-voxel-mode="presentation"] #magnetic-container {
-            display: none;
-        }
-
-        html[data-qicore-voxel-mode="home-loading"] #voxels-container {
-            opacity: 0;
-        }
-
-        html[data-qicore-voxel-mode="home-loading"] #voxels-container.is-hydrated {
-            opacity: 1;
-        }
-
-        html[data-qicore-voxel-mode="home-loading"] #voxel-presentation-canvas.is-retiring {
-            opacity: 0;
+            transform-style: preserve-3d; pointer-events: none;
         }
 
         /* ==========================================

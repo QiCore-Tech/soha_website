@@ -83,9 +83,6 @@
         let paletteTimers = [];
         const VOXEL_STORAGE_KEY = 'qicore-voxel-layout-v1';
         const VALID_COLOR_KEYS = new Set([...FACE_KEYS, 'white', 'black']);
-        const presentationCanvas = document.getElementById('voxel-presentation-canvas');
-        let voxelBuildVersion = 0;
-        window.__QICORE_VOXEL_BUILD_READY__ = false;
 
         const hexToRgb = (hex) => {
             const normalized = hex.replace('#', '');
@@ -628,78 +625,7 @@
             return el;
         }
 
-        function finishInteractiveVoxelBuild(buildVersion) {
-            if (buildVersion !== voxelBuildVersion) return;
-            voxelsContainer.classList.add('is-hydrated');
-            window.requestAnimationFrame(() => {
-                if (buildVersion !== voxelBuildVersion) return;
-                presentationCanvas?.classList.add('is-retiring');
-                window.setTimeout(() => {
-                    if (buildVersion !== voxelBuildVersion) return;
-                    document.documentElement.dataset.qicoreVoxelMode = 'interactive';
-                    voxelsContainer.classList.remove('is-hydrated');
-                    presentationCanvas?.classList.remove('is-retiring');
-                    interactionLocked = false;
-                    window.__QICORE_VOXEL_BUILD_READY__ = true;
-                }, 180);
-            });
-        }
-
-        function renderVoxelsInFrameBatches() {
-            const buildVersion = ++voxelBuildVersion;
-            interactionLocked = true;
-            voxelsContainer.replaceChildren();
-            let index = 0;
-
-            const appendBatch = () => {
-                if (buildVersion !== voxelBuildVersion) return;
-                const startedAt = performance.now();
-                const fragment = document.createDocumentFragment();
-                let appended = 0;
-
-                while (index < voxels.length && (appended < 8 || (appended < 28 && performance.now() - startedAt < 5))) {
-                    fragment.appendChild(createVoxelDOM(voxels[index]));
-                    index += 1;
-                    appended += 1;
-                }
-                voxelsContainer.appendChild(fragment);
-
-                if (index < voxels.length) {
-                    window.requestAnimationFrame(appendBatch);
-                    return;
-                }
-
-                persistVoxels();
-                finishInteractiveVoxelBuild(buildVersion);
-            };
-
-            window.requestAnimationFrame(appendBatch);
-        }
-
         function renderAllVoxels() {
-            const isContentPresentation = window.location.pathname !== '/';
-            if (isContentPresentation) {
-                voxelBuildVersion += 1;
-                voxelsContainer.replaceChildren();
-                document.documentElement.dataset.qicoreVoxelMode = 'presentation';
-                window.__QICORE_VOXEL_PRESENTATION__?.draw?.();
-                interactionLocked = true;
-                window.__QICORE_VOXEL_BUILD_READY__ = true;
-                return;
-            }
-
-            const isReturningHome =
-                document.documentElement.dataset.qicoreRouteEntry === 'to-home' ||
-                document.querySelector('.qicore-route-shell.is-returning-home');
-            const shouldStageInteractiveVoxels = isReturningHome || voxels.length > 300;
-            if (shouldStageInteractiveVoxels) {
-                document.documentElement.dataset.qicoreVoxelMode = 'home-loading';
-                window.__QICORE_VOXEL_PRESENTATION__?.draw?.();
-                renderVoxelsInFrameBatches();
-                return;
-            }
-
-            voxelBuildVersion += 1;
             const existingVoxels = Array.from(voxelsContainer.children);
             const canReuseFirstPaintVoxels =
                 document.documentElement.dataset.qicoreVoxelsReady === 'true' &&
@@ -713,10 +639,7 @@
                 voxels.forEach(v => voxelsContainer.appendChild(createVoxelDOM(v)));
             }
             delete document.documentElement.dataset.qicoreVoxelsReady;
-            document.documentElement.dataset.qicoreVoxelMode = 'interactive';
             persistVoxels();
-            interactionLocked = false;
-            window.__QICORE_VOXEL_BUILD_READY__ = true;
         }
 
         function appendVoxel(v) {
@@ -753,12 +676,6 @@
 
         restoreVoxels();
         renderAllVoxels();
-        window.addEventListener('resize', () => {
-            const voxelMode = document.documentElement.dataset.qicoreVoxelMode;
-            if (voxelMode === 'presentation' || voxelMode === 'home-loading') {
-                window.__QICORE_VOXEL_PRESENTATION__?.draw?.();
-            }
-        }, { passive: true });
 
         function resolveGridCoords(e) {
             const target = e.target;
