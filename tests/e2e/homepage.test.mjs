@@ -250,6 +250,21 @@ test("document navigation restores the waterfall entry animation", async () => {
   });
 });
 
+test("saved voxels are present before the interactive restoration script", async () => {
+  await withPage(async (page) => {
+    await placeVoxelAtGrid(page, 4, 4);
+    assert.equal(await getVoxelCount(page), 1);
+
+    await page.route("**/*.js", (route) => route.abort());
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.waitForLoadState("domcontentloaded");
+
+    assert.equal(await page.locator("#voxels-container .voxel").count(), 1);
+    assert.equal(await page.locator("html").getAttribute("data-qicore-voxels-ready"), "true");
+  });
+});
+
 test("returning home hides the title before hydration", async () => {
   const context = await browser.newContext({
     viewport: { width: 1440, height: 960 },

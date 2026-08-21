@@ -626,8 +626,19 @@
         }
 
         function renderAllVoxels() {
-            voxelsContainer.innerHTML = '';
-            voxels.forEach(v => voxelsContainer.appendChild(createVoxelDOM(v)));
+            const existingVoxels = Array.from(voxelsContainer.children);
+            const canReuseFirstPaintVoxels =
+                document.documentElement.dataset.qicoreVoxelsReady === 'true' &&
+                existingVoxels.length === voxels.length &&
+                existingVoxels.every((element, index) => Number(element.dataset.id) === Number(voxels[index].id));
+
+            if (canReuseFirstPaintVoxels) {
+                existingVoxels.forEach((element, index) => syncVoxelDOM(element, voxels[index]));
+            } else {
+                voxelsContainer.innerHTML = '';
+                voxels.forEach(v => voxelsContainer.appendChild(createVoxelDOM(v)));
+            }
+            delete document.documentElement.dataset.qicoreVoxelsReady;
             persistVoxels();
         }
 

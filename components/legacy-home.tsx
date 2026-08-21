@@ -1,6 +1,8 @@
 import Script from "next/script";
 import { MarketingNav } from "@/components/marketing-nav";
 
+const voxelFirstPaintBootstrap = `(function(){try{var container=document.getElementById("voxels-container");var raw=window.localStorage.getItem("qicore-voxel-layout-v1");if(!container||!raw)return;var parsed=JSON.parse(raw);if(!Array.isArray(parsed))return;var size=40;var faces=["top","bottom","front","back","left","right"];var colors={top:"#C9857C",front:"#D2A06E",right:"#D8C27A",left:"#8FA892",back:"#7E98B7",bottom:"#A08FB5",white:"#F3F1EC",black:"#3A3D40"};var valid=new Set(Object.keys(colors));var fragment=document.createDocumentFragment();parsed.forEach(function(source,index){var number=function(value,fallback){var result=Number(value);return Number.isFinite(result)?result:fallback;};var voxel={id:number(source.id,Date.now()+index),x:Math.max(0,Math.floor(number(source.x,0))),y:Math.max(0,Math.floor(number(source.y,0))),z:Math.max(0,Math.floor(number(source.z,0))),sx:Math.max(1,Math.floor(number(source.sx==null?source.w:source.sx,1))),sy:Math.max(1,Math.floor(number(source.sy==null?source.h:source.sy,1))),sz:Math.max(1,Math.floor(number(source.sz,1))),colorKey:valid.has(source.colorKey)?source.colorKey:"white"};var element=document.createElement("div");element.className="voxel";element.id="voxel-"+voxel.id;element.style.left=voxel.x*size+"px";element.style.top=voxel.y*size+"px";element.style.width=voxel.sx*size+"px";element.style.height=voxel.sy*size+"px";Object.keys(voxel).forEach(function(key){element.dataset[key]=String(voxel[key]);});element.dataset.w=String(voxel.sx);element.dataset.h=String(voxel.sy);faces.forEach(function(faceName){var face=document.createElement("div");face.className="face "+faceName;var height=voxel.sz*size;if(faceName==="bottom"||faceName==="top"){face.style.width="100%";face.style.height="100%";face.style.transform="translateZ("+(voxel.z+(faceName==="top"?voxel.sz:0))*size+"px)";}else if(faceName==="front"||faceName==="back"){face.style[faceName==="front"?"top":"bottom"]="0";face.style.width="100%";face.style.height=height+"px";face.style.transform="translateZ("+voxel.z*size+"px) rotateX("+(faceName==="front"?90:-90)+"deg)";}else{face.style[faceName]="0";face.style.width=height+"px";face.style.height="100%";face.style.transform="translateZ("+voxel.z*size+"px) rotateY("+(faceName==="left"?-90:90)+"deg)";}var faceColor=voxel.colorKey==="multicolor"?faceName:voxel.colorKey;face.style.background=colors[faceColor]||colors.white;element.appendChild(face);});element.dataset.colorKey=voxel.colorKey;fragment.appendChild(element);});container.replaceChildren(fragment);document.documentElement.dataset.qicoreVoxelsReady="true";}catch(error){}})();`;
+
 export function LegacyHome() {
   return (
     <>
@@ -18,7 +20,8 @@ export function LegacyHome() {
           </div>
         </div>
 
-        <div id="voxels-container" />
+        <div id="voxels-container" suppressHydrationWarning />
+        <script dangerouslySetInnerHTML={{ __html: voxelFirstPaintBootstrap }} />
         <div id="magnetic-container" />
         <div id="preview-container" />
         <div className="projection-layer" id="projection-layer">
