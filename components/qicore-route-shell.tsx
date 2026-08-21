@@ -12,7 +12,12 @@ type QiCoreRouteShellProps = {
 type RouteFrame = {
   pathname: string;
   content: ReactNode;
-  scrollY?: number;
+};
+
+type RouteSnapshot = {
+  pathname: string;
+  html: string;
+  scrollY: number;
 };
 
 type TransitionKind =
@@ -28,8 +33,9 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const transitionTimerRef = useRef<number | null>(null);
   const transitionFrameRef = useRef<number | null>(null);
+  const activeSnapshotRef = useRef<RouteSnapshot | null>(null);
   const [activeFrame, setActiveFrame] = useState<RouteFrame>({ pathname, content: children });
-  const [outgoingFrame, setOutgoingFrame] = useState<RouteFrame | null>(null);
+  const [outgoingFrame, setOutgoingFrame] = useState<RouteSnapshot | null>(null);
   const [transitionKind, setTransitionKind] = useState<TransitionKind>("idle");
   const isContentRoute = pathname !== "/";
   const hasVisibleContent = isContentRoute
@@ -41,7 +47,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     if (entryKind !== "from-home" && entryKind !== "between-content" && entryKind !== "to-home") return;
 
     if (entryKind === "from-home" || entryKind === "between-content") {
-      const duration = entryKind === "from-home" ? 1820 : 1320;
+      const duration = entryKind === "from-home" ? 2050 : 1800;
       transitionTimerRef.current = window.setTimeout(() => {
         delete document.documentElement.dataset.qicoreRouteEntry;
       }, duration);
@@ -58,6 +64,18 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     });
   }, []);
 
+  useLayoutEffect(() => {
+    if (pathname === "/" || activeFrame.pathname !== pathname) return;
+    const activePanel = contentRef.current?.querySelector<HTMLElement>(".qicore-route-panel.is-active");
+    if (!activePanel) return;
+
+    activeSnapshotRef.current = {
+      pathname,
+      html: activePanel.innerHTML,
+      scrollY: window.scrollY,
+    };
+  }, [activeFrame.pathname, pathname, children]);
+
   useEffect(() => {
     if (activeFrame.pathname === pathname) return;
 
@@ -70,14 +88,17 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
     if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
     if (transitionFrameRef.current) window.cancelAnimationFrame(transitionFrameRef.current);
-    setOutgoingFrame(previousFrame.pathname === "/"
-      ? null
-      : { ...previousFrame, scrollY: window.scrollY });
+    const previousSnapshot = activeSnapshotRef.current;
+    setOutgoingFrame(
+      previousFrame.pathname !== "/" && previousSnapshot?.pathname === previousFrame.pathname
+        ? { ...previousSnapshot, scrollY: window.scrollY }
+        : null
+    );
     setActiveFrame({ pathname, content: children });
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-    const duration = nextTransition === "from-home" ? 1820 : nextTransition === "between-content" ? 1320 : 850;
+    const duration = nextTransition === "from-home" ? 2050 : nextTransition === "between-content" ? 1800 : 850;
     const beginTransition = () => {
       setTransitionKind(nextTransition);
       transitionTimerRef.current = window.setTimeout(() => {
@@ -88,9 +109,10 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
     if (nextTransition === "from-home" || nextTransition === "between-content") {
       setTransitionKind(nextTransition === "from-home" ? "staging-from-home" : "staging-between-content");
-      transitionFrameRef.current = window.requestAnimationFrame(() => {
-        transitionFrameRef.current = window.requestAnimationFrame(beginTransition);
-      });
+      // A timer keeps the staged frame reliable when Chromium throttles
+      // requestAnimationFrame in a background tab. The brief hold is still
+      // long enough for the hidden waterfall state to paint first.
+      transitionTimerRef.current = window.setTimeout(beginTransition, 40);
     } else {
       beginTransition();
     }
@@ -136,10 +158,9 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
           <div
             className="qicore-route-panel is-outgoing"
             key={`outgoing-${outgoingFrame.pathname}`}
-            style={{ "--outgoing-scroll-offset": `${-(outgoingFrame.scrollY ?? 0)}px` } as CSSProperties}
-          >
-            {outgoingFrame.content}
-          </div>
+            style={{ "--outgoing-scroll-offset": `${-outgoingFrame.scrollY}px` } as CSSProperties}
+            dangerouslySetInnerHTML={{ __html: outgoingFrame.html }}
+          />
         )}
         {activeFrame.pathname !== "/" && (
           <div className="qicore-route-panel is-active" key={`active-${activeFrame.pathname}`}>

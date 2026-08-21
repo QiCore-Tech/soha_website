@@ -43,7 +43,34 @@ async function waitForServer(baseURL, child) {
   throw new Error(`Timed out waiting for test server at ${baseURL}`);
 }
 
+async function findExistingServer() {
+  const configuredBaseURL = process.env.QICORE_E2E_BASE_URL;
+  const candidates = configuredBaseURL
+    ? [configuredBaseURL]
+    : process.env.CI
+      ? []
+      : [`http://${HOST}:3012`];
+
+  for (const baseURL of candidates) {
+    try {
+      const response = await fetch(baseURL);
+      const contentType = response.headers.get("content-type") || "";
+      if (response.ok && contentType.includes("text/html")) return baseURL;
+    } catch (error) {}
+  }
+
+  return null;
+}
+
 export async function startTestServer() {
+  const existingBaseURL = await findExistingServer();
+  if (existingBaseURL) {
+    return {
+      baseURL: existingBaseURL,
+      async stop() {},
+    };
+  }
+
   const port = await getAvailablePort();
   const nextBin = path.join(process.cwd(), "node_modules", "next", "dist", "bin", "next");
   const child = spawn(process.execPath, [nextBin, "dev", "--hostname", HOST, "--port", String(port)], {

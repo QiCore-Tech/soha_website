@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
@@ -15,8 +15,11 @@ const navItems = [
   { href: "/oyscat", zh: "OysCat 产品", en: "OysCat Products" }
 ];
 
+const qicoreRoutes = new Set(["/", "/about", "/news", "/team"]);
+
 export function MarketingNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const navigationTimerRef = useRef<number | null>(null);
   const [locale, setLocale] = useState<Locale>("zh");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,6 +37,7 @@ export function MarketingNav() {
       "is-qicore-navigating",
       "is-qicore-leaving-home",
       "is-qicore-switching-content",
+      "is-qicore-client-navigation",
       "is-qicore-preparing-home-route",
       "is-qicore-nav-lifting"
     );
@@ -42,6 +46,12 @@ export function MarketingNav() {
   useEffect(() => () => {
     if (navigationTimerRef.current) window.clearTimeout(navigationTimerRef.current);
   }, []);
+
+  useEffect(() => {
+    qicoreRoutes.forEach((href) => {
+      if (href !== pathname) router.prefetch(href);
+    });
+  }, [pathname, router]);
 
   function toggleLocale() {
     const nextLocale: Locale = locale === "zh" ? "en" : "zh";
@@ -67,20 +77,25 @@ export function MarketingNav() {
       || event.currentTarget.target === "_blank"
     ) return;
 
+    const isQiCoreRoute = qicoreRoutes.has(href);
     event.preventDefault();
-    document.body.classList.add("is-qicore-navigating");
+    document.body.classList.add(isQiCoreRoute ? "is-qicore-client-navigation" : "is-qicore-navigating");
+
+    const commitNavigation = () => {
+      if (isQiCoreRoute) {
+        window.sessionStorage.removeItem("qicore-route-entry");
+        router.push(href, { scroll: false });
+        return;
+      }
+
+      window.sessionStorage.removeItem("qicore-route-entry");
+      window.location.assign(href);
+    };
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reducedMotion) {
-      navigationTimerRef.current = window.setTimeout(() => window.location.assign(href), 40);
+      navigationTimerRef.current = window.setTimeout(commitNavigation, 40);
       return;
-    }
-
-    if (["/", "/about", "/news", "/team"].includes(href)) {
-      const kind = pathname === "/" ? "from-home" : href === "/" ? "to-home" : "between-content";
-      window.sessionStorage.setItem("qicore-route-entry", JSON.stringify({ kind, target: href, at: Date.now() }));
-    } else {
-      window.sessionStorage.removeItem("qicore-route-entry");
     }
 
     if (pathname === "/") {
@@ -88,15 +103,20 @@ export function MarketingNav() {
       navigationTimerRef.current = window.setTimeout(() => {
         document.body.classList.add("is-qicore-nav-lifting");
         navigationTimerRef.current = window.setTimeout(() => {
-          window.location.assign(href);
+          commitNavigation();
         }, 220);
       }, 280);
       return;
     }
 
+    if (isQiCoreRoute) {
+      navigationTimerRef.current = window.setTimeout(commitNavigation, 32);
+      return;
+    }
+
     document.body.classList.add("is-qicore-switching-content");
     navigationTimerRef.current = window.setTimeout(() => {
-      window.location.assign(href);
+      commitNavigation();
     }, 180);
   }
 
