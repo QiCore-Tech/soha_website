@@ -1,8 +1,5 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
 import type { Metadata } from "next";
-
-const globalStyles = readFileSync(path.join(process.cwd(), "app/globals.css"), "utf8");
+import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://qicore.ai"),
@@ -36,8 +33,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var root=document.documentElement;try{var locale=window.localStorage.getItem("qicore-locale")==="en"?"en":"zh";root.dataset.locale=locale;root.lang=locale==="en"?"en":"zh-CN";}catch(error){root.dataset.locale="zh";}try{var rawEntry=window.sessionStorage.getItem("qicore-route-entry");window.sessionStorage.removeItem("qicore-route-entry");if(rawEntry){var entry=JSON.parse(rawEntry);var isValidKind=entry.kind==="from-home"||entry.kind==="between-content"||entry.kind==="to-home";if(isValidKind&&entry.target===window.location.pathname&&Date.now()-entry.at<10000){root.dataset.qicoreRouteEntry=entry.kind;}}}catch(error){}})();`
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -49,7 +51,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/npm/misans-vf@1.0.0/lib/MiSans.min.css"
         />
-        <style dangerouslySetInnerHTML={{ __html: globalStyles }} />
       </head>
       <body>
         {children}

@@ -187,6 +187,95 @@ test("mobile navigation reaches OysCat content pages", async () => {
   });
 });
 
+test("saved English locale is applied before hydration", async () => {
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 960 },
+  });
+  const page = await context.newPage();
+
+  try {
+    await page.addInitScript(() => {
+      window.localStorage.setItem("qicore-locale", "en");
+      window.sessionStorage.setItem("qicore-route-entry", JSON.stringify({
+        kind: "from-home",
+        target: "/about",
+        at: Date.now(),
+      }));
+    });
+    await page.route("**/*.js", (route) => route.abort());
+    await page.goto(`${server.baseURL}/about`, { waitUntil: "domcontentloaded" });
+
+    assert.equal(await page.locator("html").getAttribute("data-locale"), "en");
+    assert.equal(await page.locator("html").getAttribute("lang"), "en");
+    assert.equal(await page.getByRole("heading", { name: "Make intelligent hardware easier to create." }).isVisible(), true);
+    assert.equal(await page.getByRole("heading", { name: "让智能硬件更容易被创造。" }).isVisible(), false);
+    assert.equal(
+      await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
+      "qicore-waterfall-arrive"
+    );
+    await page.waitForFunction(() => {
+      const item = document.querySelector('[data-qicore-waterfall="0"]');
+      return item && Number.parseFloat(getComputedStyle(item).opacity) > 0.1;
+    });
+  } finally {
+    await context.close();
+  }
+});
+
+test("document navigation restores the waterfall entry animation", async () => {
+  await withPage(async (page) => {
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.waitForFunction(() => {
+      const item = document.querySelector('[data-qicore-waterfall="0"]');
+      return item && getComputedStyle(item).animationName === "qicore-waterfall-arrive";
+    });
+
+    assert.equal(
+      await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
+      "qicore-waterfall-arrive"
+    );
+
+    await page.locator('.marketing-nav-links a[href="/news"]').click();
+    await page.waitForURL("**/news");
+    await page.waitForFunction(() => {
+      const item = document.querySelector('[data-qicore-waterfall="0"]');
+      return item && getComputedStyle(item).animationName === "qicore-waterfall-arrive";
+    });
+
+    assert.equal(
+      await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
+      "qicore-waterfall-arrive"
+    );
+  });
+});
+
+test("returning home hides the title before hydration", async () => {
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 960 },
+  });
+  const page = await context.newPage();
+
+  try {
+    await page.addInitScript(() => {
+      window.sessionStorage.setItem("qicore-route-entry", JSON.stringify({
+        kind: "to-home",
+        target: "/",
+        at: Date.now(),
+      }));
+    });
+    await page.route("**/*.js", (route) => route.abort());
+    await page.goto(`${server.baseURL}/`, { waitUntil: "domcontentloaded" });
+
+    assert.equal(await page.locator("html").getAttribute("data-qicore-route-entry"), "to-home");
+    assert.equal(await page.locator(".content-layer").evaluate((element) => getComputedStyle(element).opacity), "0");
+    const returningNavBox = await page.locator(".marketing-nav").boundingBox();
+    assert.ok(returningNavBox && returningNavBox.y < 30, "returning navigation should start at the top");
+  } finally {
+    await context.close();
+  }
+});
+
 test("company navigation requests a fresh HTML document", async () => {
   await withPage(async (page) => {
     await page.evaluate(() => {
@@ -222,6 +311,11 @@ test("returning from a company page reloads an interactive voxel homepage", asyn
     await page.goto(`${server.baseURL}/about`);
     await page.locator('.marketing-nav-links a[href="/"]').click();
     await page.waitForURL(`${server.baseURL}/`);
+    await page.waitForFunction(() => document.querySelector(".qicore-route-shell")?.classList.contains("is-returning-home"));
+    assert.equal(
+      await page.locator(".content-layer").evaluate((element) => getComputedStyle(element).animationName),
+      "qicore-home-content-return"
+    );
     await placeVoxelAtGrid(page, 4, 4);
     assert.equal(await getVoxelCount(page), 1);
   });

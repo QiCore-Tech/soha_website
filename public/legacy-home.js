@@ -364,10 +364,12 @@
             syncViewMode();
             if (isPaletteBusy()) positionPaletteAt(paletteAnchorX, paletteAnchorY);
             markShadowGeometryDirty();
+            scheduleRender(true);
         });
         window.addEventListener('orientationchange', () => {
             resetImuBaseline();
             markShadowGeometryDirty();
+            scheduleRender(true);
         });
         
         // 移动端首次触摸时仅申请陀螺仪权限，不改变重力立方体的位置基线
@@ -382,6 +384,7 @@
                     mobileTapTargetX = clamp(touch.clientX - window.innerWidth / 2, -boundaryX, boundaryX);
                     mobileTapTargetY = clamp(touch.clientY - window.innerHeight / 2, -boundaryY, boundaryY);
                     mobileTapActive = true;
+                    scheduleRender(true);
                 }
             }
         }, { passive: true });
@@ -628,6 +631,18 @@
             persistVoxels();
         }
 
+        function appendVoxel(v) {
+            voxels.push(v);
+            voxelsContainer.appendChild(createVoxelDOM(v));
+            persistVoxels();
+        }
+
+        function removeVoxel(id) {
+            voxels = voxels.filter((voxel) => voxel.id != id);
+            document.getElementById(`voxel-${id}`)?.remove();
+            persistVoxels();
+        }
+
         function persistVoxels() {
             try {
                 window.localStorage.setItem(VOXEL_STORAGE_KEY, JSON.stringify(voxels));
@@ -735,8 +750,7 @@
                 if (voxelEl && !voxelEl.classList.contains('preview')) {
                     clearPendingPlacementColor();
                     saveState(); mode = 'deleting'; document.body.classList.add('is-deleting');
-                    voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
-                    renderAllVoxels();
+                    removeVoxel(voxelEl.dataset.id);
                 }
                 return;
             }
@@ -799,8 +813,7 @@
             if (mode === 'deleting') {
                 const voxelEl = e.target.closest('.voxel');
                 if (voxelEl && !voxelEl.classList.contains('preview')) {
-                    voxels = voxels.filter(v => v.id != voxelEl.dataset.id);
-                    renderAllVoxels();
+                    removeVoxel(voxelEl.dataset.id);
                 }
                 return;
             }
@@ -826,7 +839,7 @@
             if (mode === 'drawing') {
                 const preview = previewVoxelEl && previewVoxelEl.style.display !== 'none' ? previewVoxelEl : null;
                 if (preview) {
-                    voxels.push({
+                    appendVoxel({
                         id: Date.now(),
                         x: parseInt(preview.dataset.x), y: parseInt(preview.dataset.y),
                         z: parseInt(preview.dataset.z),
@@ -835,7 +848,6 @@
                         sz: parseInt(preview.dataset.sz),
                         colorKey: preview.dataset.colorKey || getPreviewColorKey()
                     });
-                    renderAllVoxels();
                     hidePreviewVoxel();
                 }
                 clearPendingPlacementColor();
@@ -875,6 +887,7 @@
         const paletteBackdrop = document.getElementById('palette-backdrop');
         const btnTrigger = document.getElementById('btn-trigger');
         const btnReturn = document.getElementById('btn-return');
+        const homeNav = document.querySelector('.marketing-nav.is-qicore-home');
         const sceneLuon = document.getElementById('scene-luon');
         const gatewayText = btnTrigger.querySelector('.gateway-text');
         const typewriterEl = document.getElementById('luon-typewriter');
@@ -891,9 +904,6 @@
 
         let mouseX = window.innerWidth / 2; let mouseY = window.innerHeight / 2;
         let lerpX = mouseX; let lerpY = mouseY;
-        let rotX = 45; let rotY = 45;
-        let vX = 0; let vY = 0; 
-        let prevMouseX = mouseX; let prevMouseY = mouseY;
         let mobileCubeOffsetX = 0; let mobileCubeOffsetY = 0;
         let mobileCubeVelX = 0; let mobileCubeVelY = 0;
         let mobileRollX = 0; let mobileRollY = 0;
@@ -913,9 +923,24 @@
         let isLuonAnimating = false;
         let luonTypeIndex = 0;
         let luonTypeTimeout = 0;
+        let renderFrameId = 0;
+        let renderSettleFrames = 0;
+        let footerWakeTimer = 0;
+        let lastRenderedAt = 0;
         const LONG_PRESS_THRESHOLD = 1200;
         const PALETTE_OPEN_DURATION = 700;
         const PALETTE_CLOSE_DURATION = 700;
+        const reducedMotionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const lowPowerMode = reducedMotionMedia.matches
+            || navigator.connection?.saveData === true
+            || (Number.isFinite(navigator.deviceMemory) && navigator.deviceMemory <= 4)
+            || (Number.isFinite(navigator.hardwareConcurrency) && navigator.hardwareConcurrency <= 4);
+
+        document.documentElement.dataset.motionQuality = lowPowerMode ? 'reduced' : 'full';
+        window.__QICORE_PERF__ = { renderFrames: 0, lowPowerMode };
+        if (window.location.pathname !== '/') {
+            sceneStrengthState = (isMobileView ? 16.5 : 14.5) * (lowPowerMode ? 0.62 : 1);
+        }
         const LUON_TYPE_TEXT = 'idea  →  design  →  reality';
 
         const footerSlotAliases = ['info', 'hr'];
@@ -1117,8 +1142,7 @@
             mouseY = e.clientY;
             lerpX = e.clientX;
             lerpY = e.clientY;
-            prevMouseX = e.clientX;
-            prevMouseY = e.clientY;
+            scheduleRender(true);
 
             cubeWrapper.classList.remove('is-imploding', 'is-charging');
             void cubeWrapper.offsetWidth;
@@ -1175,8 +1199,7 @@
             mouseY = paletteAnchorY;
             lerpX = paletteAnchorX;
             lerpY = paletteAnchorY;
-            prevMouseX = mouseX;
-            prevMouseY = mouseY;
+            scheduleRender(true);
 
             paletteOverlay.classList.add('is-active');
             paletteOverlay.setAttribute('aria-hidden', 'false');
@@ -1371,39 +1394,45 @@
 
         plxFooter.addEventListener('pointerenter', () => {
             footerSlotPaused = true;
+            if (footerWakeTimer) window.clearTimeout(footerWakeTimer);
+            footerWakeTimer = 0;
         });
 
         plxFooter.addEventListener('pointerleave', () => {
             footerSlotPaused = false;
             footerSlotAdvanceAt = performance.now() + 900;
+            scheduleFooterWake();
         });
 
         footerLink.addEventListener('focus', () => {
             footerSlotPaused = true;
+            if (footerWakeTimer) window.clearTimeout(footerWakeTimer);
+            footerWakeTimer = 0;
         });
 
         footerLink.addEventListener('blur', () => {
             footerSlotPaused = false;
             footerSlotAdvanceAt = performance.now() + 900;
+            scheduleFooterWake();
         });
 
         const shadowState = {
             dirty: true,
             paperRect: null,
             title: {
-                rect: null, centerX: 0, centerY: 0,
+                rect: null, viewportRect: null, centerX: 0, centerY: 0,
                 currentOffsetX: 0, currentOffsetY: 0, currentScaleX: 1, currentScaleY: 1,
-                currentSkewX: 0, currentSkewY: 0, currentBlur: 0, currentOpacity: 0
+                currentSkewX: 0, currentSkewY: 0, currentOpacity: 0
             },
             slogan: {
-                rect: null, centerX: 0, centerY: 0,
+                rect: null, viewportRect: null, centerX: 0, centerY: 0,
                 currentOffsetX: 0, currentOffsetY: 0, currentScaleX: 1, currentScaleY: 1,
-                currentSkewX: 0, currentSkewY: 0, currentBlur: 0, currentOpacity: 0
+                currentSkewX: 0, currentSkewY: 0, currentOpacity: 0
             },
             footer: {
-                rect: null, centerX: 0, centerY: 0,
+                rect: null, viewportRect: null, centerX: 0, centerY: 0,
                 currentOffsetX: 0, currentOffsetY: 0, currentScaleX: 1, currentScaleY: 1,
-                currentSkewX: 0, currentSkewY: 0, currentBlur: 0, currentOpacity: 0
+                currentSkewX: 0, currentSkewY: 0, currentOpacity: 0
             }
         };
 
@@ -1424,6 +1453,7 @@
                     height: sourceRect.height
                 };
                 stateEntry.rect = rect;
+                stateEntry.viewportRect = sourceRect;
                 stateEntry.centerX = sourceRect.left + sourceRect.width / 2;
                 stateEntry.centerY = sourceRect.top + sourceRect.height / 2;
                 shadowEl.style.left = `${rect.left}px`;
@@ -1447,9 +1477,6 @@
             const targetScaleY = clamp(options.baseScaleY - energy * options.scaleYDrop, 0.35, 0.92);
             const targetSkewX = normX * -options.skewX;
             const targetSkewY = normY * options.skewY;
-            const targetBlur = isMobileView
-                ? (options.mobileBlur ?? options.baseBlur)
-                : options.baseBlur + energy * options.blurBoost;
             const targetOpacity = clamp(options.baseOpacity + energy * options.opacityBoost, options.baseOpacity, options.maxOpacity);
             const lerpFactor = options.smoothing;
 
@@ -1459,24 +1486,62 @@
             stateEntry.currentScaleY += (targetScaleY - stateEntry.currentScaleY) * lerpFactor;
             stateEntry.currentSkewX += (targetSkewX - stateEntry.currentSkewX) * lerpFactor;
             stateEntry.currentSkewY += (targetSkewY - stateEntry.currentSkewY) * lerpFactor;
-            stateEntry.currentBlur += (targetBlur - stateEntry.currentBlur) * (lerpFactor * 0.85);
             stateEntry.currentOpacity += (targetOpacity - stateEntry.currentOpacity) * (lerpFactor * 0.9);
 
             shadowEl.style.transform = `translate3d(${stateEntry.currentOffsetX}px, ${stateEntry.currentOffsetY}px, 1px) scale(${stateEntry.currentScaleX}, ${stateEntry.currentScaleY}) skewX(${stateEntry.currentSkewX}deg) skewY(${stateEntry.currentSkewY}deg)`;
-            if (shadowEl.style.filter !== `blur(${stateEntry.currentBlur}px)`) {
-                shadowEl.style.filter = `blur(${stateEntry.currentBlur}px)`;
-            }
             shadowEl.style.opacity = String(stateEntry.currentOpacity);
         }
+
+        function scheduleRender(settle = true) {
+            if (settle) {
+                renderSettleFrames = Math.max(renderSettleFrames, lowPowerMode ? 12 : 28);
+            }
+            if (renderFrameId || document.hidden) return;
+            renderFrameId = window.requestAnimationFrame(renderLoop);
+        }
+
+        function scheduleFooterWake(now = performance.now()) {
+            if (footerWakeTimer) window.clearTimeout(footerWakeTimer);
+            footerWakeTimer = 0;
+            if (document.hidden || footerSlotPaused || document.body.classList.contains('is-qicore-content-route')) return;
+
+            const delay = Math.max(80, footerSlotAdvanceAt - now);
+            footerWakeTimer = window.setTimeout(() => {
+                footerWakeTimer = 0;
+                scheduleRender(false);
+            }, delay);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (renderFrameId) window.cancelAnimationFrame(renderFrameId);
+                renderFrameId = 0;
+                if (footerWakeTimer) window.clearTimeout(footerWakeTimer);
+                footerWakeTimer = 0;
+                return;
+            }
+            lastTime = performance.now();
+            scheduleRender(true);
+        });
         
         window.addEventListener('mousemove', (e) => {
             if (isMobileView || isPaletteBusy()) return;
             mouseX = e.clientX; mouseY = e.clientY;
+            scheduleRender(true);
         });
 
         let lastTime = performance.now();
         function renderLoop() {
+            renderFrameId = 0;
             const now = performance.now();
+            const isQiCoreContentRoute = document.body.classList.contains('is-qicore-content-route');
+            const minimumFrameInterval = lowPowerMode || isMobileView || isQiCoreContentRoute ? 1000 / 30 : 0;
+            if (minimumFrameInterval && now - lastRenderedAt < minimumFrameInterval) {
+                scheduleRender(false);
+                return;
+            }
+            lastRenderedAt = now;
+            window.__QICORE_PERF__.renderFrames += 1;
             const dt = Math.max(1, now - lastTime);
             lastTime = now;
 
@@ -1485,7 +1550,6 @@
             }
 
             let normX = 0, normY = 0;
-            let scaleCube = 1;
             let mobileTiltX = 0;
             let mobileTiltY = 0;
 
@@ -1580,22 +1644,6 @@
             // 下方这段物理缓动与自转逻辑，现在移动端与 PC 端完美共用！
             lerpX += (mouseX - lerpX) * 0.15; 
             lerpY += (mouseY - lerpY) * 0.15;
-            
-            const offsetX = lerpX - mouseX; 
-            const offsetY = lerpY - mouseY;
-            
-            vX = (mouseX - prevMouseX) / dt; 
-            vY = (mouseY - prevMouseY) / dt;
-            prevMouseX = mouseX; 
-            prevMouseY = mouseY;
-
-            // 无论 PC 还是移动端，都保留基于速度的旋转翻滚和最基础的自转！
-            const speed = Math.sqrt(vX * vX + vY * vY);
-            scaleCube = 1 + Math.min(speed * 0.05, 0.3); 
-            
-            rotX -= 0.05 + vY * 8.0; 
-            rotY += 0.08 + vX * 8.0;
-
             if (isMobileView) {
                 normX = clamp(mobileTiltX * 0.42 + mobileCubeOffsetX / Math.max(1, window.innerWidth), -0.5, 0.5);
                 normY = clamp(mobileTiltY * 0.42 + mobileCubeOffsetY / Math.max(1, window.innerHeight), -0.5, 0.5);
@@ -1604,11 +1652,38 @@
                 normY = clamp(lerpY / window.innerHeight - 0.5, -0.5, 0.5);
             }
 
+            const isQiCoreNavigationSettling = document.body.classList.contains('is-qicore-navigating');
+            const normalSceneStrength = isQiCoreContentRoute
+                ? (isMobileView ? 16.5 : 14.5)
+                : (isMobileView ? 38 : 25);
+            const targetSceneStrength = isQiCoreNavigationSettling
+                ? 0
+                : lowPowerMode
+                    ? normalSceneStrength * 0.62
+                    : normalSceneStrength;
+            sceneStrengthState += (targetSceneStrength - sceneStrengthState) * 0.075;
+            const sceneRotX = normY * -sceneStrengthState;
+            const sceneRotY = normX * sceneStrengthState;
+
             if (isLuonTransitioned || isLuonAnimating) {
                 cursorWrapper.classList.remove('is-contrast-text');
                 updateLuonParallax(normX, normY);
-                requestAnimationFrame(renderLoop);
+                renderSettleFrames = Math.max(0, renderSettleFrames - 1);
+                if (isMobileView || renderSettleFrames > 0) scheduleRender(false);
                 return;
+            }
+
+            if (isQiCoreContentRoute) {
+                paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
+                renderSettleFrames = Math.max(0, renderSettleFrames - 1);
+                if (isMobileView || renderSettleFrames > 0 || Math.abs(targetSceneStrength - sceneStrengthState) > 0.05) {
+                    scheduleRender(false);
+                }
+                return;
+            }
+
+            if (shadowState.dirty || !shadowState.paperRect) {
+                refreshProjectionGeometry();
             }
 
             if (sloganCard) {
@@ -1618,10 +1693,10 @@
                         sloganCard.classList.remove('is-expanded');
                     }
                 } else {
-                    const sloganRect = plxSlogan.getBoundingClientRect();
+                    const sloganRect = shadowState.slogan.viewportRect;
                     const padX = sloganExpanded ? 28 : 10;
                     const padY = sloganExpanded ? 24 : 10;
-                    const isInsideSloganZone =
+                    const isInsideSloganZone = sloganRect &&
                         mouseX >= sloganRect.left - padX &&
                         mouseX <= sloganRect.right + padX &&
                         mouseY >= sloganRect.top - padY &&
@@ -1630,6 +1705,7 @@
                     if (isInsideSloganZone !== sloganExpanded) {
                         sloganExpanded = isInsideSloganZone;
                         sloganCard.classList.toggle('is-expanded', sloganExpanded);
+                        markShadowGeometryDirty();
                     }
                 }
             }
@@ -1648,11 +1724,18 @@
             if (isPaletteBusy() || isMobileView) {
                 cursorWrapper.classList.remove('is-contrast-text');
             } else {
-                const cubeRect = cursorCube.getBoundingClientRect();
-                const titleRect = plxTitle.getBoundingClientRect();
-                const sloganRect = sloganCard ? sloganCard.getBoundingClientRect() : plxSlogan.getBoundingClientRect();
-                const footerRect = plxFooter.getBoundingClientRect();
+                const cubeHalf = 24;
+                const cubeRect = {
+                    left: lerpX - cubeHalf,
+                    right: lerpX + cubeHalf,
+                    top: lerpY - cubeHalf,
+                    bottom: lerpY + cubeHalf
+                };
+                const titleRect = shadowState.title.viewportRect;
+                const sloganRect = shadowState.slogan.viewportRect;
+                const footerRect = shadowState.footer.viewportRect;
                 const intersectsRect = (rect, padX = 0, padY = 0) =>
+                    rect &&
                     cubeRect.left <= rect.right + padX &&
                     cubeRect.right >= rect.left - padX &&
                     cubeRect.top <= rect.bottom + padY &&
@@ -1676,28 +1759,11 @@
             }
 
             // 全境 3D 倾斜
-            const isQiCoreContentRoute = document.body.classList.contains('is-qicore-content-route');
-            const isQiCoreNavigationSettling = document.body.classList.contains('is-qicore-navigating');
-            const targetSceneStrength = isQiCoreNavigationSettling
-                ? 0
-                : isQiCoreContentRoute
-                    ? (isMobileView ? 16.5 : 14.5)
-                    : (isMobileView ? 38 : 25);
-            sceneStrengthState += (targetSceneStrength - sceneStrengthState) * 0.075;
-            const sceneRotX = normY * -sceneStrengthState;
-            const sceneRotY = normX * sceneStrengthState;
             paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
-            const homeNav = document.querySelector('.marketing-nav.is-qicore-home');
             if (homeNav && !document.body.classList.contains('is-qicore-navigating')) {
                 homeNav.style.setProperty('--home-nav-rx', `${sceneRotX}deg`);
                 homeNav.style.setProperty('--home-nav-ry', `${sceneRotY}deg`);
             }
-            
-            paperCanvas.style.boxShadow = isQiCoreContentRoute
-                ? `${normX * -18}px ${normY * -18 + 34}px 88px rgba(0, 0, 0, 0.56)`
-                : isMobileView
-                    ? `${normX * -120}px ${normY * -120 + 44}px 120px rgba(0, 0, 0, 0.72)`
-                    : `${normX * -80}px ${normY * -80 + 40}px 100px rgba(0, 0, 0, 0.7)`;
 
             // 字体引力反馈
             if (shadowState.dirty || !shadowState.paperRect) {
@@ -1713,7 +1779,9 @@
             const targetTitleWeight = focusWeight * (1 - recoveryMix) + recoveryWeight * recoveryMix;
             const titleWeightLerp = recoveryMix > 0 ? 0.045 : 0.14;
             titleWeightState += (targetTitleWeight - titleWeightState) * titleWeightLerp;
-            const currentTitleWeight = Math.round(clamp(titleWeightState, 380, 900));
+            const currentTitleWeight = lowPowerMode
+                ? 430
+                : Math.round(clamp(titleWeightState, 380, 900) / 25) * 25;
             if (currentTitleWeight !== appliedTitleWeight) {
                 plxTitle.style.fontWeight = String(currentTitleWeight);
                 appliedTitleWeight = currentTitleWeight;
@@ -1730,9 +1798,6 @@
                 scaleYDrop: 0.12,
                 skewX: 18,
                 skewY: 6,
-                baseBlur: 11,
-                blurBoost: 18,
-                mobileBlur: 10,
                 baseOpacity: 0.28,
                 opacityBoost: 0.24,
                 maxOpacity: 0.64,
@@ -1746,9 +1811,6 @@
                 scaleYDrop: 0.08,
                 skewX: 15,
                 skewY: 5,
-                baseBlur: 9,
-                blurBoost: 13,
-                mobileBlur: 8,
                 baseOpacity: 0.22,
                 opacityBoost: 0.18,
                 maxOpacity: 0.48,
@@ -1762,18 +1824,20 @@
                 scaleYDrop: 0.06,
                 skewX: 10,
                 skewY: 4,
-                baseBlur: 7,
-                blurBoost: 11,
-                mobileBlur: 6,
                 baseOpacity: 0.18,
                 opacityBoost: 0.14,
                 maxOpacity: 0.38,
                 smoothing: 0.18
             }, normX, normY);
 
-            requestAnimationFrame(renderLoop);
+            renderSettleFrames = Math.max(0, renderSettleFrames - 1);
+            scheduleFooterWake(now);
+            if (isMobileView || renderSettleFrames > 0 || Math.abs(targetSceneStrength - sceneStrengthState) > 0.05) {
+                scheduleRender(false);
+            }
         }
-        requestAnimationFrame(renderLoop);
+        scheduleRender(true);
+        scheduleFooterWake();
 
 
 })();

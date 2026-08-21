@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 
 type QiCoreRouteShellProps = {
@@ -36,6 +36,28 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     || activeFrame.pathname !== "/"
     || Boolean(outgoingFrame && outgoingFrame.pathname !== "/");
 
+  useLayoutEffect(() => {
+    const entryKind = document.documentElement.dataset.qicoreRouteEntry as TransitionKind | undefined;
+    if (entryKind !== "from-home" && entryKind !== "between-content" && entryKind !== "to-home") return;
+
+    if (entryKind === "from-home" || entryKind === "between-content") {
+      const duration = entryKind === "from-home" ? 1820 : 1320;
+      transitionTimerRef.current = window.setTimeout(() => {
+        delete document.documentElement.dataset.qicoreRouteEntry;
+      }, duration);
+      return;
+    }
+
+    setTransitionKind("to-home");
+    transitionFrameRef.current = window.requestAnimationFrame(() => {
+      transitionFrameRef.current = window.requestAnimationFrame(() => {
+        delete document.documentElement.dataset.qicoreRouteEntry;
+        const duration = 850;
+        transitionTimerRef.current = window.setTimeout(() => setTransitionKind("idle"), duration);
+      });
+    });
+  }, []);
+
   useEffect(() => {
     if (activeFrame.pathname === pathname) return;
 
@@ -55,7 +77,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-    const duration = nextTransition === "from-home" ? 1850 : nextTransition === "between-content" ? 1200 : 850;
+    const duration = nextTransition === "from-home" ? 1820 : nextTransition === "between-content" ? 1320 : 850;
     const beginTransition = () => {
       setTransitionKind(nextTransition);
       transitionTimerRef.current = window.setTimeout(() => {
