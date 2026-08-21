@@ -19,7 +19,7 @@ export default function NewsPage() {
     >
       <section className="marketing-section news-grid">
         {newsCategories.map((category, index) => (
-          <article className="news-card" key={category.code}>
+          <article className="news-card" data-qicore-waterfall={index + 2} key={category.code}>
             <div>
               <span className="news-index">0{index + 1}</span>
               <span className="news-code">{category.code}</span>

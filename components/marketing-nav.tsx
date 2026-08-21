@@ -32,7 +32,9 @@ export function MarketingNav() {
     document.body.classList.remove(
       "is-qicore-navigating",
       "is-qicore-leaving-home",
-      "is-qicore-switching-content"
+      "is-qicore-switching-content",
+      "is-qicore-preparing-home-route",
+      "is-qicore-nav-lifting"
     );
   }, [pathname]);
 
@@ -65,12 +67,28 @@ export function MarketingNav() {
 
     event.preventDefault();
     document.body.classList.add("is-qicore-navigating");
-    document.body.classList.add(pathname === "/" ? "is-qicore-leaving-home" : "is-qicore-switching-content");
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      navigationTimerRef.current = window.setTimeout(() => window.location.assign(href), 40);
+      return;
+    }
+
+    if (pathname === "/") {
+      document.body.classList.add("is-qicore-preparing-home-route");
+      navigationTimerRef.current = window.setTimeout(() => {
+        document.body.classList.add("is-qicore-nav-lifting");
+        navigationTimerRef.current = window.setTimeout(() => {
+          window.location.assign(href);
+        }, 320);
+      }, 420);
+      return;
+    }
+
+    document.body.classList.add("is-qicore-switching-content");
     navigationTimerRef.current = window.setTimeout(() => {
       window.location.assign(href);
-    }, reducedMotion ? 40 : pathname === "/" ? 320 : 260);
+    }, 260);
   }
 
   return (

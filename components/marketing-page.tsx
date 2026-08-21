@@ -13,7 +13,7 @@ export function MarketingPage({ eyebrow, title, intro, children }: MarketingPage
     <main className="marketing-page">
       <div className="marketing-board">
         <section className="marketing-hero">
-          <div className="marketing-hero-copy">
+          <div className="marketing-hero-copy" data-qicore-waterfall="0">
             <p className="marketing-eyebrow">
               <span data-lang="zh">{eyebrow.zh}</span>
               <span data-lang="en">{eyebrow.en}</span>
@@ -27,7 +27,7 @@ export function MarketingPage({ eyebrow, title, intro, children }: MarketingPage
               <span data-lang="en">{intro.en}</span>
             </p>
           </div>
-          <div className="company-hero-art" aria-hidden="true">
+          <div className="company-hero-art" data-qicore-waterfall="1" aria-hidden="true">
             <div className="company-blueprint-card">
               <span className="company-art-index">QICORE / 001</span>
               <strong><i>Qi</i>Core</strong>
@@ -43,14 +43,14 @@ export function MarketingPage({ eyebrow, title, intro, children }: MarketingPage
         {children}
 
         <footer className="marketing-footer">
-          <div>
+          <div data-qicore-waterfall="7">
             <strong>QiCore Technology</strong>
             <p>
               <span data-lang="zh">让智能硬件更容易被创造。</span>
               <span data-lang="en">Make intelligent hardware easier to create.</span>
             </p>
           </div>
-          <div className="marketing-footer-links">
+          <div className="marketing-footer-links" data-qicore-waterfall="8">
             <a href="mailto:info@qicore.ai">info@qicore.ai</a>
             <a href="mailto:hr@qicore.ai">hr@qicore.ai</a>
             <a className="marketing-footer-product" href="/oyscat">
@@ -59,7 +59,7 @@ export function MarketingPage({ eyebrow, title, intro, children }: MarketingPage
               <span data-lang="en">Products</span>
             </a>
           </div>
-          <small>© {new Date().getFullYear()} QiCore Technology. All rights reserved.</small>
+          <small data-qicore-waterfall="8">© {new Date().getFullYear()} QiCore Technology. All rights reserved.</small>
         </footer>
       </div>
     </main>

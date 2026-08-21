@@ -1677,7 +1677,12 @@
 
             // 全境 3D 倾斜
             const isQiCoreContentRoute = document.body.classList.contains('is-qicore-content-route');
-            const targetSceneStrength = isQiCoreContentRoute ? (isMobileView ? 16.5 : 14.5) : (isMobileView ? 38 : 25);
+            const isQiCoreNavigationSettling = document.body.classList.contains('is-qicore-navigating');
+            const targetSceneStrength = isQiCoreNavigationSettling
+                ? 0
+                : isQiCoreContentRoute
+                    ? (isMobileView ? 16.5 : 14.5)
+                    : (isMobileView ? 38 : 25);
             sceneStrengthState += (targetSceneStrength - sceneStrengthState) * 0.075;
             const sceneRotX = normY * -sceneStrengthState;
             const sceneRotY = normX * sceneStrengthState;
