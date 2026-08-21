@@ -12,6 +12,7 @@ export function OysCatNav() {
     const initialLocale: Locale = savedLocale === "en" ? "en" : "zh";
     setLocale(initialLocale);
     document.documentElement.dataset.locale = initialLocale;
+    document.documentElement.lang = initialLocale === "en" ? "en" : "zh-CN";
   }, []);
 
   function toggleLocale() {
@@ -19,6 +20,7 @@ export function OysCatNav() {
     setLocale(nextLocale);
     window.localStorage.setItem("qicore-locale", nextLocale);
     document.documentElement.dataset.locale = nextLocale;
+    document.documentElement.lang = nextLocale === "en" ? "en" : "zh-CN";
   }
 
   return (

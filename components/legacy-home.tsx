@@ -117,7 +117,12 @@ export function LegacyHome() {
 
         <div className="tesseract-wrapper" id="tesseract-wrapper" aria-hidden="true">
           <div className="luon-tesseract oyscat-figure" id="luon-tesseract">
-            <img src="/brand/oyscat-workspace-loading-320-12fps.webp" alt="" />
+            <img
+              data-src="/brand/oyscat-workspace-loading-320-12fps.webp"
+              alt=""
+              decoding="async"
+              fetchPriority="low"
+            />
           </div>
         </div>
 

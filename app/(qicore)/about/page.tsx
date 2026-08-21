@@ -36,10 +36,10 @@ export default function AboutPage() {
       }}
     >
       <section className="marketing-section about-manifesto company-manifesto">
-        <p className="section-kicker">Our direction</p>
+        <p className="section-kicker" data-qicore-waterfall="2">Our direction</p>
         <div className="manifesto-grid">
-          <h2><BilingualText zh="从一个想法，到一个真实工作的产品。" en="From an idea to a product that truly works." /></h2>
-          <div>
+          <h2 data-qicore-waterfall="2"><BilingualText zh="从一个想法，到一个真实工作的产品。" en="From an idea to a product that truly works." /></h2>
+          <div data-qicore-waterfall="3">
             <p>
               <BilingualText
                 zh="智能硬件的创造不应被学科和工具割裂。QiCore 关注完整产品，而不是孤立的技术环节；我们用长期研发和具体交付推动每一次进步。"
@@ -68,8 +68,8 @@ export default function AboutPage() {
       </section>
 
       <section className="capability-grid marketing-section" aria-label="QiCore capabilities">
-        {capabilities.map((capability) => (
-          <article className="capability-card" key={capability.number}>
+        {capabilities.map((capability, index) => (
+          <article className="capability-card" data-qicore-waterfall={index + 4} key={capability.number}>
             <span>{capability.number}</span>
             <h3><BilingualText zh={capability.zh} en={capability.en} /></h3>
             <p><BilingualText zh={capability.detailZh} en={capability.detailEn} /></p>
@@ -78,7 +78,7 @@ export default function AboutPage() {
       </section>
 
       <section className="hardware-strip company-product-strip marketing-section">
-        <div className="hardware-copy">
+        <div className="hardware-copy" data-qicore-waterfall="7">
           <p className="section-kicker">Our first product</p>
           <h2>
             <BilingualText
@@ -105,7 +105,7 @@ export default function AboutPage() {
             <span aria-hidden="true">→</span>
           </a>
         </div>
-        <div className="company-product-identity">
+        <div className="company-product-identity" data-qicore-waterfall="8">
           <span className="company-product-code">
             PRODUCT 01 /
             <OysCatProductWordmark className="qicore-code-oyscat-wordmark" decorative />

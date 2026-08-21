@@ -8,7 +8,8 @@
     "start": "next start",
     "test": "npm run test:e2e",
     "test:e2e": "node --test --test-concurrency=1 tests/e2e/homepage.test.mjs",
-    "test:e2e:ci": "npm run build && npm run test:e2e"
+    "test:e2e:ci": "npm run build && npm run test:e2e",
+    "test:perf": "node tests/perf/runtime-benchmark.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.0.0",

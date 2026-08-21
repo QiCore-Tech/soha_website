@@ -26,13 +26,16 @@ export function MarketingNav() {
     const initialLocale: Locale = savedLocale === "en" ? "en" : "zh";
     setLocale(initialLocale);
     document.documentElement.dataset.locale = initialLocale;
+    document.documentElement.lang = initialLocale === "en" ? "en" : "zh-CN";
   }, []);
 
   useEffect(() => {
     document.body.classList.remove(
       "is-qicore-navigating",
       "is-qicore-leaving-home",
-      "is-qicore-switching-content"
+      "is-qicore-switching-content",
+      "is-qicore-preparing-home-route",
+      "is-qicore-nav-lifting"
     );
   }, [pathname]);
 
@@ -45,6 +48,7 @@ export function MarketingNav() {
     setLocale(nextLocale);
     window.localStorage.setItem("qicore-locale", nextLocale);
     document.documentElement.dataset.locale = nextLocale;
+    document.documentElement.lang = nextLocale === "en" ? "en" : "zh-CN";
   }
 
   function navigateToDocument(event: MouseEvent<HTMLAnchorElement>, href: string) {
@@ -65,12 +69,35 @@ export function MarketingNav() {
 
     event.preventDefault();
     document.body.classList.add("is-qicore-navigating");
-    document.body.classList.add(pathname === "/" ? "is-qicore-leaving-home" : "is-qicore-switching-content");
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      navigationTimerRef.current = window.setTimeout(() => window.location.assign(href), 40);
+      return;
+    }
+
+    if (["/", "/about", "/news", "/team"].includes(href)) {
+      const kind = pathname === "/" ? "from-home" : href === "/" ? "to-home" : "between-content";
+      window.sessionStorage.setItem("qicore-route-entry", JSON.stringify({ kind, target: href, at: Date.now() }));
+    } else {
+      window.sessionStorage.removeItem("qicore-route-entry");
+    }
+
+    if (pathname === "/") {
+      document.body.classList.add("is-qicore-preparing-home-route");
+      navigationTimerRef.current = window.setTimeout(() => {
+        document.body.classList.add("is-qicore-nav-lifting");
+        navigationTimerRef.current = window.setTimeout(() => {
+          window.location.assign(href);
+        }, 220);
+      }, 280);
+      return;
+    }
+
+    document.body.classList.add("is-qicore-switching-content");
     navigationTimerRef.current = window.setTimeout(() => {
       window.location.assign(href);
-    }, reducedMotion ? 40 : pathname === "/" ? 320 : 260);
+    }, 180);
   }
 
   return (
