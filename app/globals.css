@@ -3023,6 +3023,21 @@ body.is-qicore-navigating .marketing-nav.is-qicore-home {
     min-height: 100vh;
 }
 
+html:has(.qicore-route-shell.is-content),
+body:has(.qicore-route-shell.is-content) {
+    cursor: auto;
+}
+
+.qicore-route-shell.is-content :is(a, button) {
+    cursor: pointer;
+}
+
+/* Internal QiCore routes keep the canvas alive; only lock interaction while
+   the shared route shell takes ownership of the transition. */
+body.is-qicore-client-navigation :is(.paper-canvas,.marketing-nav,.qicore-route-content) {
+    pointer-events: none;
+}
+
 .qicore-route-shell.is-content .paper-canvas {
     position: fixed;
     top: 5vh;
@@ -3434,9 +3449,23 @@ html[data-qicore-route-entry="to-home"] .marketing-nav.is-qicore-home {
     }
 }
 
-.qicore-route-content.is-from-home .qicore-route-panel.is-active,
-.qicore-route-content.is-between-content .qicore-route-panel.is-active {
+.qicore-route-content:is(.is-staging-from-home,.is-staging-between-content) .qicore-route-panel.is-active {
+    opacity: 0;
     animation: none !important;
+}
+
+.qicore-route-content.is-from-home .qicore-route-panel.is-active {
+    animation: qicore-panel-handoff 820ms cubic-bezier(.4,0,.2,1) 80ms both !important;
+}
+
+.qicore-route-content.is-between-content .qicore-route-panel.is-active {
+    animation: qicore-panel-handoff 860ms cubic-bezier(.4,0,.2,1) 140ms both !important;
+}
+
+@keyframes qicore-panel-handoff {
+    0% { opacity: 0; transform: translate3d(0,-20px,0) scale(.998); }
+    34% { opacity: .18; }
+    100% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
 }
 
 [data-qicore-waterfall="0"] { --waterfall-in-delay: 0ms; --waterfall-swap-delay: 0ms; --waterfall-out-delay: 0ms; }
@@ -3483,22 +3512,22 @@ html[data-qicore-route-entry="between-content"] .qicore-route-panel.is-active [d
 
 .qicore-route-content.is-from-home .qicore-route-panel.is-active [data-qicore-waterfall] {
     opacity: 0;
-    transform: translate3d(0,-86px,0) scale(.992);
-    filter: blur(7px);
-    animation: qicore-waterfall-arrive 880ms cubic-bezier(.16,1,.3,1) var(--waterfall-in-delay,0ms) both !important;
+    transform: translate3d(0,-64px,0) scale(.994);
+    filter: blur(6px);
+    animation: qicore-waterfall-arrive 1040ms cubic-bezier(.4,0,.2,1) var(--waterfall-in-delay,0ms) both !important;
     will-change: transform, opacity, filter;
 }
 
 .qicore-route-content.is-between-content .qicore-route-panel.is-active [data-qicore-waterfall] {
     opacity: 0;
-    transform: translate3d(0,-86px,0) scale(.992);
-    filter: blur(7px);
-    animation: qicore-waterfall-arrive 740ms cubic-bezier(.16,1,.3,1) var(--waterfall-swap-delay,0ms) both !important;
+    transform: translate3d(0,-64px,0) scale(.994);
+    filter: blur(6px);
+    animation: qicore-waterfall-arrive 940ms cubic-bezier(.4,0,.2,1) calc(140ms + var(--waterfall-swap-delay,0ms)) both !important;
     will-change: transform, opacity, filter;
 }
 
 .qicore-route-content.is-between-content .qicore-route-panel.is-outgoing {
-    animation: qicore-page-yield 520ms cubic-bezier(.32,.72,0,1) both !important;
+    animation: qicore-page-yield 700ms cubic-bezier(.4,0,.2,1) both !important;
 }
 
 .qicore-route-content.is-between-content .qicore-route-panel.is-outgoing .marketing-board > * {
@@ -3506,25 +3535,30 @@ html[data-qicore-route-entry="between-content"] .qicore-route-panel.is-active [d
 }
 
 .qicore-route-content.is-between-content .qicore-route-panel.is-outgoing [data-qicore-waterfall] {
-    animation: qicore-waterfall-dismiss 480ms cubic-bezier(.32,.72,0,1) var(--waterfall-out-delay,0ms) both !important;
+    animation: qicore-waterfall-dismiss 620ms cubic-bezier(.4,0,.2,1) var(--waterfall-out-delay,0ms) both !important;
     will-change: transform, opacity, filter;
 }
 
 @keyframes qicore-waterfall-arrive {
-    0% { opacity: 0; transform: translate3d(0,-86px,0) scale(.992); filter: blur(7px); }
-    42% { opacity: .72; filter: blur(1.5px); }
+    0% { opacity: 0; transform: translate3d(0,-64px,0) scale(.994); filter: blur(6px); }
+    24% { opacity: .1; transform: translate3d(0,-50px,0) scale(.995); filter: blur(4px); }
+    65% { opacity: .78; transform: translate3d(0,-12px,0) scale(.999); filter: blur(1px); }
     100% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0); }
 }
 
 @keyframes qicore-waterfall-dismiss {
     0% { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); }
-    100% { opacity: 0; transform: translate3d(0,30px,0); filter: blur(5px); }
+    100% { opacity: 1; transform: translate3d(0,26px,0); filter: blur(4px); }
 }
 
 @keyframes qicore-page-yield {
     0% {
         opacity: 1;
         transform: translate3d(0,var(--outgoing-scroll-offset,0px),0) scale(1);
+    }
+    45% {
+        opacity: .92;
+        transform: translate3d(0,calc(var(--outgoing-scroll-offset,0px) + 6px),0) scale(.999);
     }
     100% {
         opacity: 0;

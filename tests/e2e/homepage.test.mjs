@@ -222,55 +222,82 @@ test("saved English locale is applied before hydration", async () => {
   }
 });
 
-test("document navigation restores the waterfall entry animation", async () => {
+test("in-place company navigation preserves the waterfall entry animation", async () => {
   await withPage(async (page) => {
     await page.locator('.marketing-nav-links a[href="/about"]').click();
     await page.waitForURL("**/about");
     await page.waitForFunction(() => {
-      const item = document.querySelector('[data-qicore-waterfall="0"]');
+      const item = document.querySelector('.qicore-route-panel.is-active [data-qicore-waterfall="0"]');
       return item && getComputedStyle(item).animationName === "qicore-waterfall-arrive";
     });
 
+    assert.equal(await page.locator("body").evaluate((element) => getComputedStyle(element).cursor), "auto");
     assert.equal(
-      await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
+      await page.locator(".qicore-route-content").evaluate((element) => getComputedStyle(element).pointerEvents),
+      "auto"
+    );
+
+    assert.equal(
+      await page.locator('.qicore-route-panel.is-active [data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
       "qicore-waterfall-arrive"
     );
 
     await page.locator('.marketing-nav-links a[href="/news"]').click();
     await page.waitForURL("**/news");
+    await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-outgoing h1"));
+    assert.match(
+      await page.locator(".qicore-route-panel.is-outgoing h1").textContent(),
+      /Make intelligent hardware easier to create/,
+      "the outgoing layer must retain the previous page"
+    );
+    assert.match(
+      await page.locator(".qicore-route-panel.is-active h1").textContent(),
+      /Creation in motion/,
+      "the active layer must contain only the destination page"
+    );
+    assert.notEqual(
+      await page.locator(".qicore-route-panel.is-outgoing .marketing-board").evaluate((element) => getComputedStyle(element).animationName),
+      "qicore-drawer-close",
+      "internal navigation must not reuse the legacy document-exit animation"
+    );
     await page.waitForFunction(() => {
-      const item = document.querySelector('[data-qicore-waterfall="0"]');
+      const item = document.querySelector('.qicore-route-panel.is-active [data-qicore-waterfall="0"]');
       return item && getComputedStyle(item).animationName === "qicore-waterfall-arrive";
     });
 
     assert.equal(
-      await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
+      await page.locator('.qicore-route-panel.is-active [data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationDuration),
+      "0.94s"
+    );
+    assert.equal(
+      await page.locator(".qicore-route-panel.is-outgoing").evaluate((element) => getComputedStyle(element).animationDuration),
+      "0.7s"
+    );
+
+    assert.equal(
+      await page.locator('.qicore-route-panel.is-active [data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
       "qicore-waterfall-arrive"
     );
   });
 });
 
-test("saved voxels restore after hydration without hydration errors", async () => {
+test("saved voxels stay mounted across company navigation", async () => {
   await withPage(async (page) => {
     await placeVoxelAtGrid(page, 4, 4);
     assert.equal(await getVoxelCount(page), 1);
-
-    const hydrationErrors = [];
-    page.on("console", (message) => {
-      if (message.type() === "error" && /hydration|server rendered html/i.test(message.text())) {
-        hydrationErrors.push(message.text());
-      }
-    });
-    page.on("pageerror", (error) => {
-      if (/hydration|server rendered html/i.test(error.message)) hydrationErrors.push(error.message);
+    await page.evaluate(() => {
+      window.__QICORE_VOXEL_NODE_PROBE__ = document.querySelector("#voxels-container .voxel");
     });
 
     await page.locator('.marketing-nav-links a[href="/about"]').click();
     await page.waitForURL("**/about");
-    await page.waitForFunction(() => window.__QICORE_LEGACY_INITED__ === true);
 
     assert.equal(await page.locator("#voxels-container .voxel").count(), 1);
-    assert.deepEqual(hydrationErrors, []);
+    assert.equal(
+      await page.evaluate(() => window.__QICORE_VOXEL_NODE_PROBE__ === document.querySelector("#voxels-container .voxel")),
+      true,
+      "the rendered voxel node must survive company navigation"
+    );
   });
 });
 
@@ -300,18 +327,18 @@ test("returning home hides the title before hydration", async () => {
   }
 });
 
-test("company navigation requests a fresh HTML document", async () => {
+test("company navigation preserves the shared canvas while product navigation requests HTML", async () => {
   await withPage(async (page) => {
     await page.evaluate(() => {
-      document.documentElement.dataset.navigationDocumentProbe = "stale-page";
+      window.__QICORE_CANVAS_NODE_PROBE__ = document.getElementById("canvas-area");
     });
     await page.locator('.marketing-nav-links a[href="/about"]').click();
     await page.waitForURL("**/about");
 
     assert.equal(
-      await page.evaluate(() => document.documentElement.dataset.navigationDocumentProbe ?? null),
-      null,
-      "the previous document must not survive navigation"
+      await page.evaluate(() => window.__QICORE_CANVAS_NODE_PROBE__ === document.getElementById("canvas-area")),
+      true,
+      "the shared QiCore canvas must survive company navigation"
     );
     assert.equal(await page.evaluate(() => document.contentType), "text/html");
 
@@ -330,7 +357,7 @@ test("company navigation requests a fresh HTML document", async () => {
   });
 });
 
-test("returning from a company page reloads an interactive voxel homepage", async () => {
+test("returning from a company page keeps an interactive voxel homepage", async () => {
   await withPage(async (page) => {
     await page.goto(`${server.baseURL}/about`);
     await page.locator('.marketing-nav-links a[href="/"]').click();
