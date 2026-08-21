@@ -250,7 +250,39 @@ test("document navigation restores the waterfall entry animation", async () => {
   });
 });
 
-test("saved voxels are present before the interactive restoration script", async () => {
+test("saved voxels use the canvas presentation without hydration errors", async () => {
+  await withPage(async (page) => {
+    await placeVoxelAtGrid(page, 4, 4);
+    assert.equal(await getVoxelCount(page), 1);
+
+    const hydrationErrors = [];
+    page.on("console", (message) => {
+      if (message.type() === "error" && /hydration|server rendered html/i.test(message.text())) {
+        hydrationErrors.push(message.text());
+      }
+    });
+    page.on("pageerror", (error) => {
+      if (/hydration|server rendered html/i.test(error.message)) hydrationErrors.push(error.message);
+    });
+
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.waitForFunction(() => window.__QICORE_VOXEL_BUILD_READY__ === true);
+
+    assert.equal(await page.locator("#voxels-container .voxel").count(), 0);
+    assert.equal(await page.locator("html").getAttribute("data-qicore-voxel-mode"), "presentation");
+    assert.equal(
+      await page.locator("#voxel-presentation-canvas").evaluate((canvas) => {
+        const context = canvas.getContext("2d");
+        return context.getImageData(0, 0, canvas.width, canvas.height).data.some((value, index) => index % 4 === 3 && value > 0);
+      }),
+      true
+    );
+    assert.deepEqual(hydrationErrors, []);
+  });
+});
+
+test("the saved voxel canvas is available before external scripts", async () => {
   await withPage(async (page) => {
     await placeVoxelAtGrid(page, 4, 4);
     assert.equal(await getVoxelCount(page), 1);
@@ -260,8 +292,14 @@ test("saved voxels are present before the interactive restoration script", async
     await page.waitForURL("**/about");
     await page.waitForLoadState("domcontentloaded");
 
-    assert.equal(await page.locator("#voxels-container .voxel").count(), 1);
-    assert.equal(await page.locator("html").getAttribute("data-qicore-voxels-ready"), "true");
+    assert.equal(await page.locator("#voxels-container .voxel").count(), 0);
+    assert.equal(
+      await page.locator("#voxel-presentation-canvas").evaluate((canvas) => {
+        const context = canvas.getContext("2d");
+        return context.getImageData(0, 0, canvas.width, canvas.height).data.some((value, index) => index % 4 === 3 && value > 0);
+      }),
+      true
+    );
   });
 });
 
@@ -331,6 +369,7 @@ test("returning from a company page reloads an interactive voxel homepage", asyn
       await page.locator(".content-layer").evaluate((element) => getComputedStyle(element).animationName),
       "qicore-home-content-return"
     );
+    await page.waitForFunction(() => window.__QICORE_VOXEL_BUILD_READY__ === true);
     await placeVoxelAtGrid(page, 4, 4);
     assert.equal(await getVoxelCount(page), 1);
   });

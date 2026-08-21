@@ -77,6 +77,7 @@ async function sampleNavigation(browser, baseURL, voxelCount) {
   await cdp.send("Emulation.setCPUThrottlingRate", { rate: CPU_THROTTLE_RATE });
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForFunction(() => window.__QICORE_LEGACY_INITED__ === true, undefined, { timeout: 60000 });
+  await page.waitForFunction(() => window.__QICORE_VOXEL_BUILD_READY__ === true, undefined, { timeout: 60000 });
 
   const renderedBeforeNavigation = await page.locator("#voxels-container .voxel").count();
   if (renderedBeforeNavigation !== voxelCount) {
@@ -97,8 +98,11 @@ async function sampleNavigation(browser, baseURL, voxelCount) {
     const state = window.__QICORE_VOXEL_NAV_BENCH__;
     const gaps = state?.frameGaps || [];
     const longTasks = state?.longTasks || [];
+    const canvasLayout = window.__QICORE_VOXEL_PRESENTATION__?.layout || [];
     return {
-      voxelCount: document.querySelectorAll("#voxels-container .voxel").length,
+      voxelCount: document.documentElement.dataset.qicoreVoxelMode === "presentation"
+        ? canvasLayout.length
+        : document.querySelectorAll("#voxels-container .voxel").length,
       domNodeCount: document.querySelectorAll("*").length,
       worstFrameMs: gaps.length ? Math.max(...gaps) : 0,
       framesOver32Ms: gaps.filter((gap) => gap > 32).length,
