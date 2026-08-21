@@ -329,6 +329,10 @@ test("returning home hides the title before hydration", async () => {
 
 test("company navigation preserves the shared canvas while product navigation requests HTML", async () => {
   await withPage(async (page) => {
+    const routeDataRequests = [];
+    page.on("request", (request) => {
+      if (new URL(request.url()).pathname.endsWith(".txt")) routeDataRequests.push(request.url());
+    });
     await page.evaluate(() => {
       window.__QICORE_CANVAS_NODE_PROBE__ = document.getElementById("canvas-area");
     });
@@ -341,6 +345,22 @@ test("company navigation preserves the shared canvas while product navigation re
       "the shared QiCore canvas must survive company navigation"
     );
     assert.equal(await page.evaluate(() => document.contentType), "text/html");
+    assert.deepEqual(routeDataRequests, [], "QiCore navigation must not request static RSC .txt files");
+
+    await page.goBack();
+    await page.waitForURL(`${server.baseURL}/`);
+    assert.equal(
+      await page.evaluate(() => window.__QICORE_CANVAS_NODE_PROBE__ === document.getElementById("canvas-area")),
+      true,
+      "browser history must preserve the shared canvas"
+    );
+    await page.goForward();
+    await page.waitForURL(`${server.baseURL}/about`);
+    await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-active h1"));
+    assert.match(
+      await page.locator(".qicore-route-panel.is-active h1").textContent(),
+      /Make intelligent hardware easier to create/
+    );
 
     await page.evaluate(() => {
       document.documentElement.dataset.navigationDocumentProbe = "stale-company-page";

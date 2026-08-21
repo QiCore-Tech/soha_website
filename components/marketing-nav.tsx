@@ -1,9 +1,10 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
+import { isQiCoreRoute, loadQiCoreRouteHtml, preloadQiCoreRouteHtml } from "@/lib/qicore-client-navigation";
 
 type Locale = "zh" | "en";
 
@@ -15,11 +16,8 @@ const navItems = [
   { href: "/oyscat", zh: "OysCat 产品", en: "OysCat Products" }
 ];
 
-const qicoreRoutes = new Set(["/", "/about", "/news", "/team"]);
-
 export function MarketingNav() {
   const pathname = usePathname();
-  const router = useRouter();
   const navigationTimerRef = useRef<number | null>(null);
   const [locale, setLocale] = useState<Locale>("zh");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,10 +46,8 @@ export function MarketingNav() {
   }, []);
 
   useEffect(() => {
-    qicoreRoutes.forEach((href) => {
-      if (href !== pathname) router.prefetch(href);
-    });
-  }, [pathname, router]);
+    void preloadQiCoreRouteHtml();
+  }, []);
 
   function toggleLocale() {
     const nextLocale: Locale = locale === "zh" ? "en" : "zh";
@@ -77,14 +73,22 @@ export function MarketingNav() {
       || event.currentTarget.target === "_blank"
     ) return;
 
-    const isQiCoreRoute = qicoreRoutes.has(href);
+    const isInternalQiCoreRoute = isQiCoreRoute(href);
+    const routeHtmlPromise = isInternalQiCoreRoute && href !== "/"
+      ? loadQiCoreRouteHtml(href)
+      : Promise.resolve(null);
     event.preventDefault();
-    document.body.classList.add(isQiCoreRoute ? "is-qicore-client-navigation" : "is-qicore-navigating");
+    document.body.classList.add(isInternalQiCoreRoute ? "is-qicore-client-navigation" : "is-qicore-navigating");
 
-    const commitNavigation = () => {
-      if (isQiCoreRoute) {
-        window.sessionStorage.removeItem("qicore-route-entry");
-        router.push(href, { scroll: false });
+    const commitNavigation = async () => {
+      if (isInternalQiCoreRoute) {
+        try {
+          await routeHtmlPromise;
+          window.sessionStorage.removeItem("qicore-route-entry");
+          window.history.pushState(null, "", href);
+        } catch (error) {
+          window.location.assign(href);
+        }
         return;
       }
 
@@ -109,7 +113,7 @@ export function MarketingNav() {
       return;
     }
 
-    if (isQiCoreRoute) {
+    if (isInternalQiCoreRoute) {
       navigationTimerRef.current = window.setTimeout(commitNavigation, 32);
       return;
     }

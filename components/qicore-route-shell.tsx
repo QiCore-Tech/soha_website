@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
+import { getCachedQiCoreRouteHtml, setCachedQiCoreRouteHtml } from "@/lib/qicore-client-navigation";
 
 type QiCoreRouteShellProps = {
   canvas: ReactNode;
@@ -11,7 +12,8 @@ type QiCoreRouteShellProps = {
 
 type RouteFrame = {
   pathname: string;
-  content: ReactNode;
+  content?: ReactNode;
+  html?: string;
 };
 
 type RouteSnapshot = {
@@ -74,6 +76,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
       html: activePanel.innerHTML,
       scrollY: window.scrollY,
     };
+    setCachedQiCoreRouteHtml(pathname, activePanel.innerHTML);
   }, [activeFrame.pathname, pathname, children]);
 
   useEffect(() => {
@@ -94,7 +97,8 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
         ? { ...previousSnapshot, scrollY: window.scrollY }
         : null
     );
-    setActiveFrame({ pathname, content: children });
+    const cachedHtml = getCachedQiCoreRouteHtml(pathname);
+    setActiveFrame(cachedHtml ? { pathname, html: cachedHtml } : { pathname, content: children });
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
@@ -162,11 +166,17 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
             dangerouslySetInnerHTML={{ __html: outgoingFrame.html }}
           />
         )}
-        {activeFrame.pathname !== "/" && (
+        {activeFrame.pathname !== "/" && (activeFrame.html ? (
+          <div
+            className="qicore-route-panel is-active"
+            key={`active-${activeFrame.pathname}`}
+            dangerouslySetInnerHTML={{ __html: activeFrame.html }}
+          />
+        ) : (
           <div className="qicore-route-panel is-active" key={`active-${activeFrame.pathname}`}>
             {activeFrame.content}
           </div>
-        )}
+        ))}
       </div>
     </div>
   );
