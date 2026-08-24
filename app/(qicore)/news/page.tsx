@@ -21,11 +21,13 @@ export default function NewsPage() {
         <details className="news-entry" data-qicore-waterfall="3">
           <summary>
             <div className="news-entry-cover" aria-hidden="true">
+              <img
+                src="/media/oyscat-generated-v2/oyscat-beta-qicore-lineart-wide-v2.png"
+                alt=""
+                loading="eager"
+                decoding="async"
+              />
               <span>29</span>
-              <svg viewBox="0 0 600 260" role="presentation">
-                <path d="M20 164 C78 164 80 116 137 116 S197 198 256 198 S314 68 374 68 S432 144 491 144 S548 94 580 94" />
-                <path d="M20 144 C78 144 80 132 137 132 S197 169 256 169 S314 94 374 94 S432 126 491 126 S548 80 580 80" />
-              </svg>
               <small>BETA USERS / SIGNAL 01</small>
             </div>
 

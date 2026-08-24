@@ -123,6 +123,38 @@ export default function OysCatPage() {
         </p>
       </section>
 
+      <section className="oyscat-workshop-section" aria-label="OysCat workshop notes">
+        <header className="oyscat-workshop-heading">
+          <p>Field notes / Closed beta</p>
+          <div>
+            <h2><BilingualText zh="在真实的工作台上生长。" en="Made at the workbench." /></h2>
+            <p>
+              <BilingualText
+                zh="每一个模块都在反复搭建、连接与测试中被打磨。这里记录 OysCat 从原型走向真实创造工具的过程。"
+                en="Every module is shaped through repeated building, connecting, and testing. This is where OysCat moves from prototype to a tool for real creation."
+              />
+            </p>
+          </div>
+        </header>
+
+        <figure className="oyscat-workshop-figure">
+          <div className="oyscat-workshop-image">
+            <img
+              src="/media/oyscat-generated-v2/oyscat-product-pixel-workshop-wide-v2.png"
+              alt="Pixel-art OysCat workshop with a family of modular hardware blocks"
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="oyscat-workshop-corner corner-top">OYS / WORKBENCH 01</span>
+            <span className="oyscat-workshop-corner corner-bottom">BUILD · CONNECT · TEST</span>
+          </div>
+          <figcaption>
+            <span><BilingualText zh="正在开发" en="In development" /></span>
+            <span><BilingualText zh="硬件模块 · Workspace · 创作者内测" en="Hardware modules · Workspace · Creator beta" /></span>
+          </figcaption>
+        </figure>
+      </section>
+
       <section className="oyscat-product-catalog" id="products">
         <div className="product-section-heading">
           <p>Product entrance</p>

@@ -12,8 +12,25 @@ export default function TeamPage() {
       }}
     >
       <section className="marketing-section team-mission-section" data-lang="en" data-qicore-waterfall="2">
-        <p className="section-kicker">Our mission</p>
-        <p>Our mission is to extend AI&apos;s scope from the digital world into the physical world. We believe the ability to create real objects should not belong only to large companies or specialized engineering teams. It should be accessible to anyone with an idea.</p>
+        <div className="team-mission-visual" aria-hidden="true">
+          <span className="team-mission-record">QICORE / MISSION 01</span>
+          <span className="team-mission-number">01</span>
+          <div className="team-mission-diagram">
+            <span className="mission-digital">AI</span>
+            <i className="mission-bridge" />
+            <span className="mission-voxel"><i /><i /><i /></span>
+          </div>
+          <div className="team-mission-axis">
+            <span>Digital intent</span>
+            <span>Physical object</span>
+          </div>
+        </div>
+
+        <div className="team-mission-copy">
+          <p className="section-kicker">Our mission</p>
+          <p className="team-mission-lead">Our mission is to extend AI&apos;s scope from the digital world into the physical world.</p>
+          <p>We believe the ability to create real objects should not belong only to large companies or specialized engineering teams. It should be accessible to anyone with an idea.</p>
+        </div>
       </section>
 
       <section className="marketing-section values-grid">
