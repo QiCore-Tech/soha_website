@@ -30,7 +30,7 @@ export function OysCatNav() {
       </a>
       <span className="oyscat-nav-index">QICORE / PRODUCT 01</span>
       <div className="oyscat-nav-actions">
-        <a href="/" className="back-to-qicore">
+        <a href="/" className="back-to-qicore" data-qicore-return>
           <span data-lang="zh">返回 QiCore</span><span data-lang="en">QiCore site</span>
         </a>
         <button type="button" onClick={toggleLocale} aria-label="Switch language">

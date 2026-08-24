@@ -92,8 +92,8 @@ export function LegacyHome() {
 
       </div>
 
-      <button className="luon-gateway oyscat-gateway" id="btn-trigger" type="button" aria-label="Meet OysCat">
-        <img className="oyscat-gateway-art" src="/brand/oyscat-default-cover.png" alt="" />
+      <button className="luon-gateway oyscat-gateway" id="btn-trigger" type="button" aria-label="Meet OysCat" data-oyscat-entry>
+        <img className="oyscat-gateway-art" src="/brand/oyscat-symbol.svg" alt="" />
         <span className="gateway-copy">
           <small>QiCore Workspace</small>
           <span className="gateway-text">

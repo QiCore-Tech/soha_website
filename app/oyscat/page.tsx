@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BilingualText } from "@/components/marketing-page";
+import { OysCatHeroAnimation } from "@/components/oyscat-hero-animation";
 import { OysCatNav } from "@/components/oyscat-nav";
 
 export const metadata: Metadata = {
@@ -37,7 +38,7 @@ export default function OysCatPage() {
           <span className="product-visual-disc" />
           <span className="product-visual-orbit orbit-one" />
           <span className="product-visual-orbit orbit-two" />
-          <img src="/brand/oyscat-workspace-loading-320-12fps.webp" alt="" />
+          <OysCatHeroAnimation />
         </div>
       </section>
 
@@ -96,7 +97,7 @@ export default function OysCatPage() {
       <footer className="oyscat-product-footer">
         <img src="/brand/oyscat-wordmark.png" alt="OysCat" />
         <p><BilingualText zh="QiCore 的首个产品体系。" en="The first product family by QiCore." /></p>
-        <a href="/">qicore.ai ↗</a>
+        <a href="/" data-qicore-return>qicore.ai ↗</a>
       </footer>
     </main>
   );
