@@ -43,19 +43,32 @@ export default function AboutPage() {
       <section className="marketing-section about-narrative">
         <p className="section-kicker" data-qicore-waterfall="2">Why QiCore</p>
         <div className="about-narrative-layout" data-lang="zh">
-          <h2 data-qicore-waterfall="2">从一个想法，到一个真实工作的产品。</h2>
-          <div className="about-narrative-copy" data-qicore-waterfall="3">
-            <p>智能硬件的创造不应被学科和工具割裂。QiCore 关注完整产品，而不是孤立的技术环节。</p>
-            <p>我们把设计、工程和制造放在同一条创造路径上，用长期研发和具体交付推动每一次进步。</p>
+          <div className="about-narrative-statement" data-qicore-waterfall="2">
+            <div className="about-narrative-transition" aria-hidden="true">
+              <span>DIGITAL</span><i /><span>PHYSICAL</span>
+            </div>
+            <h2>用<span>更简单</span>的方式，创造物理世界。</h2>
+            <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
           </div>
+          <ol className="about-narrative-copy" data-qicore-waterfall="3">
+            <li><span>01 / DIGITAL</span><strong>数字创造已经很简单</strong><p>一句提示词，就能生成代码、设计与数字内容。</p></li>
+            <li><span>02 / PHYSICAL</span><strong>物理创造仍然割裂</strong><p>结构、电子、编程与制造之间，仍有很高的协作门槛。</p></li>
+            <li className="is-qicore"><span>03 / QICORE</span><strong>从意图，直接走向现实</strong><p>描述你想要什么，让完整产品沿同一条路径被创造。</p></li>
+          </ol>
         </div>
         <div className="about-narrative-layout" data-lang="en">
-          <h2 data-qicore-waterfall="2">Physical manufacturing, however, is a different story.</h2>
-          <div className="about-narrative-copy" data-qicore-waterfall="3">
-            <p>Generative AI has put digital creation within everyone&apos;s reach. A single prompt can now generate code, designs, and any form of digital content.</p>
-            <p>Building something in the real world requires knowledge of mechanics, electronics, programming, and often manufacturing know-how. For non-experts, the barrier to physical creation remains high.</p>
-            <p><strong>QiCore is changing this.</strong> We are bringing a new way to build in the physical world: simply describe what you want.</p>
+          <div className="about-narrative-statement" data-qicore-waterfall="2">
+            <div className="about-narrative-transition" aria-hidden="true">
+              <span>DIGITAL</span><i /><span>PHYSICAL</span>
+            </div>
+            <h2>Create the physical world. <span>Simply.</span></h2>
+            <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
           </div>
+          <ol className="about-narrative-copy" data-qicore-waterfall="3">
+            <li><span>01 / DIGITAL</span><strong>Digital creation is already simple</strong><p>One prompt can generate code, designs, and digital content.</p></li>
+            <li><span>02 / PHYSICAL</span><strong>Physical creation is still fragmented</strong><p>Mechanics, electronics, software, and manufacturing remain difficult to unify.</p></li>
+            <li className="is-qicore"><span>03 / QICORE</span><strong>From intent to reality</strong><p>Describe what you want. Create the whole product along one connected path.</p></li>
+          </ol>
         </div>
       </section>
 
