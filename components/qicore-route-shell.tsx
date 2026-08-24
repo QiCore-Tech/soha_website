@@ -144,6 +144,18 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     };
   }, [hasVisibleContent]);
 
+  useEffect(() => {
+    const handleFilmEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      contentRef.current
+        ?.querySelectorAll<HTMLElement>("[data-qicore-film].is-playing")
+        .forEach(closeFilm);
+    };
+
+    document.addEventListener("keydown", handleFilmEscape);
+    return () => document.removeEventListener("keydown", handleFilmEscape);
+  }, []);
+
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
     if (!hasVisibleContent || !contentRef.current) return;
 
@@ -206,6 +218,49 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     card.style.setProperty("--hero-accent-rotate", "0deg");
   }
 
+  function closeFilm(section: HTMLElement) {
+    const screen = section.querySelector<HTMLElement>("[data-qicore-film-screen]");
+    const poster = section.querySelector<HTMLButtonElement>("[data-qicore-film-play]");
+    const closeButton = section.querySelector<HTMLButtonElement>("[data-qicore-film-close]");
+
+    screen?.querySelector("iframe")?.remove();
+    screen?.classList.remove("is-playing");
+    section.classList.remove("is-playing");
+    if (poster) poster.hidden = false;
+    if (closeButton) closeButton.hidden = true;
+  }
+
+  function handleFilmInteraction(target: EventTarget | null) {
+    if (!(target instanceof Element)) return;
+    const playButton = target.closest<HTMLElement>("[data-qicore-film-play]");
+    const closeButton = target.closest<HTMLElement>("[data-qicore-film-close]");
+    const trigger = playButton ?? closeButton;
+    const section = trigger?.closest<HTMLElement>("[data-qicore-film]");
+    if (!trigger || !section || !section.closest(".qicore-route-panel.is-active")) return;
+
+    if (closeButton) {
+      closeFilm(section);
+      return;
+    }
+
+    const screen = section.querySelector<HTMLElement>("[data-qicore-film-screen]");
+    const poster = section.querySelector<HTMLButtonElement>("[data-qicore-film-play]");
+    const sectionCloseButton = section.querySelector<HTMLButtonElement>("[data-qicore-film-close]");
+    const videoId = screen?.dataset.videoId;
+    if (!screen || !poster || !sectionCloseButton || !videoId || screen.querySelector("iframe")) return;
+
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+    iframe.title = "QiCore Technology: MAKE SMART";
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.allowFullscreen = true;
+    screen.append(iframe);
+    screen.classList.add("is-playing");
+    section.classList.add("is-playing");
+    poster.hidden = true;
+    sectionCloseButton.hidden = false;
+  }
+
   function toggleHeroInteraction(target: EventTarget | null) {
     if (!(target instanceof Element)) return;
     const art = target.closest<HTMLElement>(".qicore-route-panel.is-active .themed-hero-art");
@@ -215,6 +270,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   }
 
   function handleContentClick(event: ReactMouseEvent<HTMLDivElement>) {
+    handleFilmInteraction(event.target);
     toggleHeroInteraction(event.target);
   }
 

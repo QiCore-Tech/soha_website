@@ -60,6 +60,69 @@ export default function OysCatPage() {
         </article>
       </section>
 
+      <section className="oyscat-system-section" aria-label="OysCat creation system">
+        <div className="oyscat-system-heading">
+          <p>Two core layers</p>
+          <h2>
+            <BilingualText
+              zh="从一句意图，到一个真实工作的物体。"
+              en="From intent to a real, working object."
+            />
+          </h2>
+        </div>
+
+        <div className="oyscat-system-grid">
+          <article className="oyscat-system-card is-hardware">
+            <span className="oyscat-system-index">01 / PHYSICAL</span>
+            <div className="oyscat-system-card-copy">
+              <p className="oyscat-system-role">
+                <BilingualText zh="物理体素框架的一部分" en="Part of the Physical Voxel Framework" />
+              </p>
+              <h3>Electronic Modules</h3>
+              <p>
+                <BilingualText
+                  zh="将运动、灯光、传感、声音与控制等物理能力封装为可复用的标准化硬件积木。无需焊接、从零布线或手工搭建电路，即可组合真实功能。"
+                  en="Standardized hardware blocks that make physical functions reusable. Each module packages motion, lighting, sensing, sound, or control into a plug-and-play form—without soldering, wiring from scratch, or building circuits manually."
+                />
+              </p>
+            </div>
+            <div className="oyscat-module-diagram" aria-hidden="true">
+              <span /><span /><span /><span />
+              <i>MOVE</i><i>LIGHT</i><i>SENSE</i><i>CTRL</i>
+            </div>
+          </article>
+
+          <article className="oyscat-system-card is-workspace">
+            <span className="oyscat-system-index">02 / INTELLIGENCE</span>
+            <div className="oyscat-system-card-copy">
+              <p className="oyscat-system-role">
+                <BilingualText zh="AI 创造引擎的首个版本" en="The first version of the AI Creation Engine" />
+              </p>
+              <h3>Workspace</h3>
+              <p>
+                <BilingualText
+                  zh="一个面向物理造物设计与控制的 AI 工作空间，将三维建模、编程、仿真和硬件控制整合进同一个环境。"
+                  en="An AI-powered workspace for designing and controlling physical objects. It brings 3D modeling, programming, simulation, and hardware control into one environment."
+                />
+              </p>
+              <a href="https://oyscat.com" className="oyscat-system-link">
+                <BilingualText zh="进入 Workspace" en="Open Workspace" /><span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <div className="oyscat-workspace-diagram" aria-hidden="true">
+              <span className="workspace-node node-intent">INTENT</span>
+              <span className="workspace-node node-model">3D</span>
+              <span className="workspace-node node-code">CODE</span>
+              <span className="workspace-node node-real">REAL</span>
+              <i /><i /><i />
+            </div>
+          </article>
+        </div>
+        <p className="oyscat-system-conclusion">
+          <BilingualText zh="你只需要描述你想要什么。" en="You only need to describe what you want." />
+        </p>
+      </section>
+
       <section className="oyscat-product-catalog" id="products">
         <div className="product-section-heading">
           <p>Product entrance</p>

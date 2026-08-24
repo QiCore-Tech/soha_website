@@ -10,12 +10,13 @@ type MarketingPageProps = {
   title: { zh: string; en: string };
   intro: { zh: string; en: string };
   heroArt: MarketingHeroArtVariant;
+  pageClassName?: string;
   children: ReactNode;
 };
 
-export function MarketingPage({ eyebrow, title, intro, heroArt, children }: MarketingPageProps) {
+export function MarketingPage({ eyebrow, title, intro, heroArt, pageClassName, children }: MarketingPageProps) {
   return (
-    <main className="marketing-page">
+    <main className={`marketing-page${pageClassName ? ` ${pageClassName}` : ""}`}>
       <div className="marketing-board">
         <section className="marketing-hero">
           <div className="marketing-hero-copy" data-qicore-waterfall="0">
@@ -41,8 +42,8 @@ export function MarketingPage({ eyebrow, title, intro, heroArt, children }: Mark
           <div data-qicore-waterfall="7">
             <strong>QiCore Technology</strong>
             <p>
-              <span data-lang="zh">让智能硬件更容易被创造。</span>
-              <span data-lang="en">Make intelligent hardware easier to create.</span>
+              <span data-lang="zh">气造万物</span>
+              <span data-lang="en">MAKE SMART</span>
             </p>
           </div>
           <div className="marketing-footer-links" data-qicore-waterfall="8">

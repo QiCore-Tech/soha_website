@@ -60,11 +60,11 @@ export function LegacyHome() {
                 <div className="slogan-detail">
                   <p className="company-note">
                     <span data-lang="zh">
-                      <span className="brand">气核科技（QiCore）</span> 专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，
+                      <span className="brand">气核科技（QiCore）</span> 首创生成式物理造物，致力于让每个人实现「所想即所造」。欢迎了解公司业务，
                       <span className="hiring">WE ARE HIRING</span>。
                     </span>
                     <span data-lang="en">
-                      <span className="brand">QiCore Technology</span> creates next-generation platforms for intelligent hardware. Discover our work and grow with us —{" "}
+                      <span className="brand">QiCore Technology</span> pioneers a new paradigm for intent-driven physical creation. Discover our work and grow with us —{" "}
                       <span className="hiring">WE ARE HIRING</span>.
                     </span>
                   </p>

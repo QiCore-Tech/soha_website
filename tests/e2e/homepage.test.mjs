@@ -183,7 +183,7 @@ test("mobile navigation reaches OysCat content pages", async () => {
     await page.waitForURL("**/about");
     await page.locator(".locale-toggle").click();
     await page.waitForFunction(() => document.documentElement.dataset.locale === "en");
-    assert.equal(await page.getByRole("heading", { name: "Make intelligent hardware easier to create." }).isVisible(), true);
+    assert.equal(await page.getByRole("heading", { name: "Make Physical Products by Simply Describing What You Want" }).isVisible(), true);
   });
 });
 
@@ -207,7 +207,7 @@ test("saved English locale is applied before hydration", async () => {
 
     assert.equal(await page.locator("html").getAttribute("data-locale"), "en");
     assert.equal(await page.locator("html").getAttribute("lang"), "en");
-    assert.equal(await page.getByRole("heading", { name: "Make intelligent hardware easier to create." }).isVisible(), true);
+    assert.equal(await page.getByRole("heading", { name: "Make Physical Products by Simply Describing What You Want" }).isVisible(), true);
     assert.equal(await page.getByRole("heading", { name: "让智能硬件更容易被创造。" }).isVisible(), false);
     assert.equal(
       await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
@@ -247,7 +247,7 @@ test("in-place company navigation preserves the waterfall entry animation", asyn
     await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-outgoing h1"));
     assert.match(
       await page.locator(".qicore-route-panel.is-outgoing h1").textContent(),
-      /Make intelligent hardware easier to create/,
+      /Make Physical Products by Simply Describing What You Want/,
       "the outgoing layer must retain the previous page"
     );
     assert.match(
@@ -290,6 +290,7 @@ test("cached company-page illustrations keep pointer and click interactions", as
 
     const newsArt = page.locator(".qicore-route-panel.is-active .themed-hero-art");
     const newsCard = newsArt.locator(".hero-blueprint-card");
+    await newsCard.waitFor({ state: "visible" });
     const newsBox = await newsCard.boundingBox();
     assert.ok(newsBox, "the cached news illustration should be visible");
     await page.mouse.move(newsBox.x + newsBox.width * .78, newsBox.y + newsBox.height * .24);
@@ -306,6 +307,43 @@ test("cached company-page illustrations keep pointer and click interactions", as
     await teamArt.click();
     assert.equal(await teamArt.getAttribute("aria-pressed"), "true");
     assert.equal(await teamArt.evaluate((element) => element.classList.contains("is-hero-activated")), true);
+  });
+});
+
+test("cached news content keeps its native story disclosure interactive", async () => {
+  await withPage(async (page) => {
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.locator('.marketing-nav-links a[href="/news"]').click();
+    await page.waitForURL("**/news");
+
+    const story = page.locator(".qicore-route-panel.is-active .news-entry");
+    assert.equal(await story.getAttribute("open"), null);
+    await story.locator("summary").click();
+    assert.equal(await story.getAttribute("open"), "");
+    assert.match(await story.locator(".news-entry-toggle").innerText(), /Close story|收起正文/);
+  });
+});
+
+test("QiCore film plays inline without leaving the About page", async () => {
+  await withPage(async (page) => {
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
+
+    await page.locator(".qicore-film-poster").click();
+    const player = page.locator(".qicore-film-screen iframe");
+    assert.equal(await player.count(), 1);
+    assert.match(await player.getAttribute("src"), /youtube-nocookie\.com\/embed\/lqwWjw_-WnY/);
+    assert.match(page.url(), /\/about$/);
+
+    await page.locator(".qicore-film-close").click();
+    assert.equal(await player.count(), 0);
+    assert.equal(await page.locator(".qicore-film-poster").count(), 1);
+
+    await page.locator(".qicore-film-poster").click();
+    await page.keyboard.press("Escape");
+    assert.equal(await player.count(), 0);
   });
 });
 
@@ -387,7 +425,7 @@ test("company navigation preserves the shared canvas while product navigation re
     await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-active h1"));
     assert.match(
       await page.locator(".qicore-route-panel.is-active h1").textContent(),
-      /Make intelligent hardware easier to create/
+      /Make Physical Products by Simply Describing What You Want/
     );
 
     await page.evaluate(() => {

@@ -9,14 +9,14 @@ export const metadata: Metadata = {
     template: "%s | QiCore"
   },
   description:
-    "气核科技 QiCore 官方网站。了解智能硬件创造平台 OysCat、研发动态与团队。",
+    "气核科技 QiCore 首创生成式物理造物，致力于让每个人实现所想即所造。了解 QiCore、OysCat、最新动态与团队。",
   alternates: {
     canonical: "/"
   },
   openGraph: {
     title: "气核科技 QiCore | OysCat 智能硬件创造平台",
     description:
-      "从灵感到现实，了解 QiCore 与面向智能硬件创造者的全链路工作空间 OysCat。",
+      "QiCore pioneers a new paradigm for intent-driven physical creation. Discover our work, OysCat, and the team behind it.",
     url: "https://qicore.ai/",
     siteName: "气核科技 qicore",
     type: "website"
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "气核科技 QiCore | OysCat 智能硬件创造平台",
     description:
-      "从灵感到现实，了解 QiCore 与面向智能硬件创造者的全链路工作空间 OysCat。"
+      "QiCore pioneers a new paradigm for intent-driven physical creation. Discover our work, OysCat, and the team behind it."
   },
   icons: {
     icon: "/favicon.svg"

@@ -1,5 +1,6 @@
 import { BilingualText, MarketingPage } from "@/components/marketing-page";
 import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
+import { QiCoreFilm } from "@/components/qicore-film";
 
 const capabilities = [
   {
@@ -29,46 +30,36 @@ export default function AboutPage() {
   return (
     <MarketingPage
       heroArt="system"
+      pageClassName="about-page"
       eyebrow={{ zh: "关于 QiCore", en: "About QiCore" }}
-      title={{ zh: "让智能硬件，更容易被创造。", en: "Make intelligent hardware easier to create." }}
+      title={{ zh: "让智能硬件，更容易被创造。", en: "Make Physical Products by Simply Describing What You Want" }}
       intro={{
         zh: "QiCore 气核科技是一家面向下一代智能硬件的产品与技术公司。我们把设计、工程和制造放在同一条创造路径上。",
-        en: "QiCore is a product and technology company for the next generation of intelligent hardware, bringing design, engineering, and manufacturing into one creative path."
+        en: "QiCore is bringing a new way to build in the physical world: simply describe what you want."
       }}
     >
-      <section className="marketing-section about-manifesto company-manifesto">
-        <p className="section-kicker" data-qicore-waterfall="2">Our direction</p>
-        <div className="manifesto-grid">
-          <h2 data-qicore-waterfall="2"><BilingualText zh="从一个想法，到一个真实工作的产品。" en="From an idea to a product that truly works." /></h2>
-          <div data-qicore-waterfall="3">
-            <p>
-              <BilingualText
-                zh="智能硬件的创造不应被学科和工具割裂。QiCore 关注完整产品，而不是孤立的技术环节；我们用长期研发和具体交付推动每一次进步。"
-                en="Creating intelligent hardware should not be fragmented by disciplines and tools. QiCore focuses on complete products, combining long-term research with concrete delivery."
-              />
-            </p>
-            <a className="company-cta" href="/oyscat">
-              <BilingualText
-                zh={
-                  <span className="company-cta-brand-label">
-                    <span>了解首个产品</span>
-                    <OysCatProductWordmark className="qicore-inline-oyscat-wordmark" />
-                  </span>
-                }
-                en={
-                  <span className="company-cta-brand-label">
-                    <span>Discover</span>
-                    <OysCatProductWordmark className="qicore-inline-oyscat-wordmark" />
-                  </span>
-                }
-              />
-              <span aria-hidden="true">→</span>
-            </a>
+      <QiCoreFilm />
+
+      <section className="marketing-section about-narrative">
+        <p className="section-kicker" data-qicore-waterfall="2">Why QiCore</p>
+        <div className="about-narrative-layout" data-lang="zh">
+          <h2 data-qicore-waterfall="2">从一个想法，到一个真实工作的产品。</h2>
+          <div className="about-narrative-copy" data-qicore-waterfall="3">
+            <p>智能硬件的创造不应被学科和工具割裂。QiCore 关注完整产品，而不是孤立的技术环节。</p>
+            <p>我们把设计、工程和制造放在同一条创造路径上，用长期研发和具体交付推动每一次进步。</p>
+          </div>
+        </div>
+        <div className="about-narrative-layout" data-lang="en">
+          <h2 data-qicore-waterfall="2">Physical manufacturing, however, is a different story.</h2>
+          <div className="about-narrative-copy" data-qicore-waterfall="3">
+            <p>Generative AI has put digital creation within everyone&apos;s reach. A single prompt can now generate code, designs, and any form of digital content.</p>
+            <p>Building something in the real world requires knowledge of mechanics, electronics, programming, and often manufacturing know-how. For non-experts, the barrier to physical creation remains high.</p>
+            <p><strong>QiCore is changing this.</strong> We are bringing a new way to build in the physical world: simply describe what you want.</p>
           </div>
         </div>
       </section>
 
-      <section className="capability-grid marketing-section" aria-label="QiCore capabilities">
+      <section className="capability-grid marketing-section" data-lang="zh" aria-label="QiCore capabilities">
         {capabilities.map((capability, index) => (
           <article className="capability-card" data-qicore-waterfall={index + 4} key={capability.number}>
             <span>{capability.number}</span>
@@ -79,7 +70,7 @@ export default function AboutPage() {
       </section>
 
       <section className="hardware-strip company-product-strip marketing-section">
-        <div className="hardware-copy" data-qicore-waterfall="7">
+        <div className="hardware-copy" data-qicore-waterfall="4">
           <p className="section-kicker">Our first product</p>
           <h2>
             <BilingualText
@@ -101,12 +92,18 @@ export default function AboutPage() {
               }
             />
           </h2>
+          <p className="company-product-summary">
+            <BilingualText
+              zh="由模块化电子硬件与 AI 创造工作空间组成，让真实造物更容易开始。"
+              en="A modular electronics system and AI creation workspace that make building in the physical world easier to begin."
+            />
+          </p>
           <a className="company-cta dark" href="/oyscat">
             <BilingualText zh="进入产品站" en="Enter product site" />
             <span aria-hidden="true">→</span>
           </a>
         </div>
-        <div className="company-product-identity" data-qicore-waterfall="8">
+        <div className="company-product-identity" data-qicore-waterfall="5">
           <span className="company-product-code">
             PRODUCT 01 /
             <OysCatProductWordmark className="qicore-code-oyscat-wordmark" decorative />
@@ -119,6 +116,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
     </MarketingPage>
   );
 }
