@@ -142,7 +142,7 @@ export function LegacyHome() {
               <span data-lang="zh">了解 OysCat</span>
               <span data-lang="en">Discover OysCat</span>
             </a>
-            <a className="oyscat-secondary-action" href="https://oyscat.com">
+            <a className="oyscat-secondary-action" href="https://beta-hk.oyscat.com/">
               <span data-lang="zh">进入 Workspace</span>
               <span data-lang="en">Open Workspace</span>
               <span aria-hidden="true">↗</span>

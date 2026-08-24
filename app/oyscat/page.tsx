@@ -26,7 +26,7 @@ export default function OysCatPage() {
           </p>
           <div className="oyscat-product-actions">
             <a href="#products" className="oyscat-solid-cta"><BilingualText zh="查看产品" en="Explore products" /></a>
-            <a href="https://oyscat.com" className="oyscat-line-cta">
+            <a href="https://beta-hk.oyscat.com/" className="oyscat-line-cta">
               <BilingualText zh="进入 Workspace" en="Open Workspace" /><span aria-hidden="true">↗</span>
             </a>
           </div>
@@ -72,40 +72,26 @@ export default function OysCatPage() {
         </div>
 
         <div className="oyscat-system-grid">
-          <article className="oyscat-system-card is-hardware">
-            <span className="oyscat-system-index">01 / PHYSICAL</span>
-            <div className="oyscat-system-card-copy">
-              <p className="oyscat-system-role">
-                <BilingualText zh="物理体素框架的一部分" en="Part of the Physical Voxel Framework" />
-              </p>
-              <h3>Electronic Modules</h3>
-              <p>
-                <BilingualText
-                  zh="将运动、灯光、传感、声音与控制等物理能力封装为可复用的标准化硬件积木。无需焊接、从零布线或手工搭建电路，即可组合真实功能。"
-                  en="Standardized hardware blocks that make physical functions reusable. Each module packages motion, lighting, sensing, sound, or control into a plug-and-play form—without soldering, wiring from scratch, or building circuits manually."
-                />
-              </p>
-            </div>
-            <div className="oyscat-module-diagram" aria-hidden="true">
-              <span /><span /><span /><span />
-              <i>MOVE</i><i>LIGHT</i><i>SENSE</i><i>CTRL</i>
-            </div>
-          </article>
-
           <article className="oyscat-system-card is-workspace">
-            <span className="oyscat-system-index">02 / INTELLIGENCE</span>
+            <span className="oyscat-system-index">01 / INTELLIGENCE</span>
             <div className="oyscat-system-card-copy">
               <p className="oyscat-system-role">
                 <BilingualText zh="AI 创造引擎的首个版本" en="The first version of the AI Creation Engine" />
               </p>
               <h3>Workspace</h3>
+              <div className="oyscat-system-keywords" aria-label="Workspace capabilities">
+                <span><BilingualText zh="建模" en="MODEL" /></span>
+                <span><BilingualText zh="编程" en="CODE" /></span>
+                <span><BilingualText zh="仿真" en="SIMULATE" /></span>
+                <span><BilingualText zh="控制" en="CONTROL" /></span>
+              </div>
               <p>
                 <BilingualText
-                  zh="一个面向物理造物设计与控制的 AI 工作空间，将三维建模、编程、仿真和硬件控制整合进同一个环境。"
-                  en="An AI-powered workspace for designing and controlling physical objects. It brings 3D modeling, programming, simulation, and hardware control into one environment."
+                  zh="一个面向物理造物设计与控制的 AI 工作空间，将从构想到真实物体所需的工具整合进同一个环境。"
+                  en="An AI-powered workspace that brings the tools for moving from an idea to a working physical object into one environment."
                 />
               </p>
-              <a href="https://oyscat.com" className="oyscat-system-link">
+              <a href="https://beta-hk.oyscat.com/" className="oyscat-system-link">
                 <BilingualText zh="进入 Workspace" en="Open Workspace" /><span aria-hidden="true">↗</span>
               </a>
             </div>
@@ -115,6 +101,32 @@ export default function OysCatPage() {
               <span className="workspace-node node-code">CODE</span>
               <span className="workspace-node node-real">REAL</span>
               <i /><i /><i />
+            </div>
+          </article>
+
+          <article className="oyscat-system-card is-hardware">
+            <span className="oyscat-system-index">02 / PHYSICAL</span>
+            <div className="oyscat-system-card-copy">
+              <p className="oyscat-system-role">
+                <BilingualText zh="物理体素框架的一部分" en="Part of the Physical Voxel Framework" />
+              </p>
+              <h3>Electronic Modules</h3>
+              <div className="oyscat-system-keywords" aria-label="Electronic module capabilities">
+                <span><BilingualText zh="运动" en="MOVE" /></span>
+                <span><BilingualText zh="灯光" en="LIGHT" /></span>
+                <span><BilingualText zh="传感" en="SENSE" /></span>
+                <span><BilingualText zh="控制" en="CONTROL" /></span>
+              </div>
+              <p>
+                <BilingualText
+                  zh="将物理能力封装为可复用的标准化硬件积木，无需焊接或从零布线，即可组合出真实功能。"
+                  en="Reusable, standardized hardware blocks that combine into real functions—without soldering or wiring circuits from scratch."
+                />
+              </p>
+            </div>
+            <div className="oyscat-module-diagram" aria-hidden="true">
+              <span /><span /><span /><span />
+              <i>MOVE</i><i>LIGHT</i><i>SENSE</i><i>CTRL</i>
             </div>
           </article>
         </div>
