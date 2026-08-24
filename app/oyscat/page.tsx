@@ -123,7 +123,7 @@ export default function OysCatPage() {
         </p>
       </section>
 
-      <section className="oyscat-workshop-section" aria-label="OysCat workshop notes">
+      <section className="oyscat-workshop-section is-withdrawn" aria-label="OysCat workshop notes">
         <header className="oyscat-workshop-heading">
           <p>Field notes / Closed beta</p>
           <div>

@@ -1,7 +1,14 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "outputDirectory": "out",
-  "cleanUrls": true,
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/news", "destination": "/news.html" },
+    { "source": "/team", "destination": "/team.html" },
+    { "source": "/oyscat", "destination": "/oyscat.html" },
+    { "source": "/style-lab", "destination": "/style-lab.html" }
+  ],
   "redirects": [
     {
       "source": "/:path*",

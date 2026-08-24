@@ -27,7 +27,7 @@ export default function NewsPage() {
                 loading="eager"
                 decoding="async"
               />
-              <span>29</span>
+              <span className="news-entry-count">29</span>
               <small>BETA USERS / SIGNAL 01</small>
             </div>
 

@@ -4308,7 +4308,14 @@ body.is-product-transition-arriving.is-product-to-qicore .oyscat-gateway-art {
 }
 
 .hero-art-index { top: 18px; left: 20px; }
-.hero-art-note { right: 20px; bottom: 17px; text-align: right; }
+.hero-art-note {
+    right: 20px;
+    bottom: 38px;
+    max-width: calc(100% - 40px);
+    line-height: 1.2;
+    text-align: right;
+    white-space: nowrap;
+}
 
 .hero-art-crop {
     position: absolute;
@@ -4379,7 +4386,7 @@ body.is-product-transition-arriving.is-product-to-qicore .oyscat-gateway-art {
     box-shadow: inset 0 0 0 2px #e8e5df;
 }
 
-.system-node.node-idea { left: 10%; bottom: 22%; }
+.system-node.node-idea { left: 10%; bottom: 28%; }
 .system-node.node-prototype { left: 38%; top: 42%; }
 .system-node.node-reality { right: 8%; top: 21%; }
 .system-node.node-idea i { background: #d8c27a; }
@@ -4547,7 +4554,7 @@ body.is-product-transition-arriving.is-product-to-qicore .oyscat-gateway-art {
     position: absolute;
     z-index: 4;
     right: 8%;
-    bottom: 15%;
+    bottom: 23%;
     display: grid;
     grid-template-columns: repeat(2, auto);
     gap: 6px 16px;
@@ -4720,7 +4727,7 @@ body.is-product-transition-arriving.is-product-to-qicore .oyscat-gateway-art {
     position: absolute;
     z-index: 3;
     right: 8%;
-    bottom: 12%;
+    bottom: 21%;
     color: rgba(40, 36, 32, .48);
     font-size: 8px;
     line-height: 1.35;
@@ -4763,7 +4770,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
 .hero-art-action {
     position: absolute;
     z-index: 7;
-    left: 34px;
+    left: 20px;
     bottom: 17px;
     color: rgba(42, 38, 34, .42);
     font: 8px/1 var(--font-geist-mono), "SFMono-Regular", Consolas, monospace;
@@ -4883,7 +4890,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
 
 .about-narrative {
     margin-top: 24px;
-    padding: clamp(42px, 6vw, 84px);
+    padding: clamp(38px, 4.2vw, 60px);
     border: 1px solid rgba(45, 41, 36, .1);
     border-radius: 5px;
     background: rgba(234, 232, 236, .91);
@@ -4901,7 +4908,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
     grid-template-columns: minmax(0, 1.02fr) minmax(300px, .98fr);
     gap: clamp(52px, 8vw, 128px);
     align-items: start;
-    margin-top: clamp(58px, 8vw, 108px);
+    margin-top: clamp(34px, 3.5vw, 50px);
 }
 
 .about-narrative-layout h2,
@@ -5312,7 +5319,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
     gap: clamp(34px, 6vw, 88px);
     align-items: start;
     margin-top: 24px;
-    padding: clamp(38px, 5vw, 72px);
+    padding: clamp(38px, 4.2vw, 60px);
     border: 1px solid rgba(45, 41, 36, .1);
     border-radius: 5px;
     background:
@@ -5323,7 +5330,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
 }
 
 .qicore-film-record { display: flex; flex-direction: column; align-self: stretch; min-height: 100%; }
-.qicore-film-record h2 { margin-top: clamp(46px, 8vw, 106px); font-size: clamp(2.5rem, 4.6vw, 4.8rem); }
+.qicore-film-record h2 { margin-top: clamp(30px, 3vw, 42px); font-size: clamp(2.5rem, 4.6vw, 4.8rem); }
 
 .qicore-film-description {
     max-width: 350px;
@@ -5337,7 +5344,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
     display: grid;
     gap: 9px;
     margin: auto 0 0;
-    padding-top: 56px;
+    padding-top: 36px;
     font-family: var(--font-geist-mono), "SFMono-Regular", Consolas, monospace;
     font-size: .58rem;
     letter-spacing: .08em;
@@ -5363,7 +5370,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
 
 .qicore-film-stage {
     min-width: 0;
-    margin-top: calc(clamp(46px, 8vw, 106px) + 42px);
+    margin-top: calc(clamp(30px, 3vw, 42px) + 48px);
 }
 .qicore-film-screen {
     position: relative;
@@ -5495,7 +5502,7 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
     .news-entry summary { grid-template-columns: 1fr; }
 
     .qicore-film-section { grid-template-columns: 1fr; }
-    .qicore-film-record h2 { margin-top: 52px; }
+    .qicore-film-record h2 { margin-top: 30px; }
     .qicore-film-meta { margin-top: 22px; padding-top: 24px; }
     .qicore-film-stage { margin-top: 34px; }
     .news-entry-cover { min-height: 310px; border-right: 0; border-bottom: 1px solid rgba(45, 41, 36, .1); }
@@ -5544,6 +5551,140 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
 
 .news-entry-cover > span,
 .news-entry-cover small { z-index: 2; }
+
+.news-entry-count {
+    color: #e5a092;
+    font-size: clamp(5rem, 9.5vw, 9.6rem) !important;
+    font-weight: 390 !important;
+    letter-spacing: -.065em !important;
+    line-height: .82;
+    white-space: nowrap;
+    translate: -12px -4px;
+    -webkit-text-stroke: 1.25px rgba(42, 38, 34, .78);
+    text-shadow: 3px 3px 0 rgba(247, 243, 235, .9);
+}
+
+.news-entry-cover > .news-entry-count::after {
+    left: .12em;
+    top: -1.65rem;
+    bottom: auto;
+    min-width: max-content;
+    margin-left: 0;
+    padding: 0 0 5px;
+    border: 0;
+    border-bottom: 1px solid rgba(42, 38, 34, .52);
+    background: transparent;
+    color: #2f2b27;
+    font-size: .58rem;
+    font-weight: 560;
+    letter-spacing: .16em;
+    line-height: 1;
+    -webkit-text-stroke: 0;
+    text-shadow: none;
+}
+
+.team-mission-section {
+    margin-bottom: 16px;
+    isolation: isolate;
+}
+
+.team-mission-flow {
+    position: absolute;
+    left: 8%;
+    top: 46px;
+    width: 84%;
+    height: calc(100% - 68px);
+    overflow: visible;
+}
+
+.team-mission-flow text {
+    fill: rgba(42, 38, 34, .48);
+    font-family: var(--font-geist-mono), "SFMono-Regular", Consolas, monospace;
+    font-size: 9px;
+    letter-spacing: 1.25px;
+}
+
+.mission-intent-block rect {
+    fill: rgba(228, 225, 230, .86);
+    stroke: rgba(45, 41, 36, .38);
+    stroke-width: 1.25;
+}
+
+.mission-intent-block circle {
+    fill: #e5a092;
+    stroke: rgba(45, 41, 36, .48);
+    stroke-width: 1;
+}
+
+.mission-intent-block path {
+    fill: none;
+    stroke: rgba(45, 41, 36, .36);
+    stroke-width: 1.25;
+}
+
+.mission-flow-line {
+    fill: none;
+    stroke: rgba(45, 41, 36, .46);
+    stroke-width: 1.4;
+    stroke-dasharray: 5 6;
+}
+
+.mission-flow-nodes circle {
+    fill: #b1f33e;
+    stroke: rgba(45, 41, 36, .52);
+    stroke-width: 1;
+}
+
+.mission-object-front {
+    fill: #9aaf9e;
+    stroke: rgba(45, 41, 36, .58);
+    stroke-width: 1.25;
+}
+
+.mission-object-top {
+    fill: #d8c47d;
+    stroke: rgba(45, 41, 36, .58);
+    stroke-width: 1.25;
+}
+
+.mission-object-side {
+    fill: #7f9986;
+    stroke: rgba(45, 41, 36, .58);
+    stroke-width: 1.25;
+}
+
+.mission-object-block circle { fill: rgba(42, 38, 34, .52); }
+.mission-object-block circle:last-of-type { fill: #b1f33e; }
+
+.mission-ground-line {
+    fill: none;
+    stroke: rgba(45, 41, 36, .16);
+    stroke-width: 1;
+}
+
+.qicore-route-content :is(
+    .marketing-hero-copy,
+    .hero-blueprint-card,
+    .about-narrative,
+    .qicore-film-section,
+    .capability-card,
+    .news-entry,
+    .team-mission-section,
+    .values-grid article,
+    .careers-panel,
+    .marketing-footer
+) {
+    border-width: 1.25px;
+    border-style: solid;
+    border-color: rgba(45, 41, 36, .17);
+}
+
+@media (max-width: 620px) {
+    .team-mission-section { margin-bottom: 12px; }
+    .team-mission-flow { left: 8%; top: 42px; width: 84%; height: calc(100% - 60px); }
+}
+
+.oyscat-workshop-section.is-withdrawn { display: none; }
 
 .oyscat-workshop-section {
     padding: 112px max(5vw, 36px) 0;
@@ -5652,4 +5793,95 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
     .oyscat-workshop-corner.corner-top { left: 14px; top: 14px; }
     .oyscat-workshop-corner.corner-bottom { right: 14px; bottom: 14px; }
     .oyscat-workshop-figure figcaption { align-items: flex-start; flex-direction: column; gap: 7px; }
+}
+
+/* QiCore card calibration marks: restrained color, borrowed from the voxel palette. */
+:is(
+    .about-narrative,
+    .qicore-film-section,
+    .capability-card,
+    .news-entry,
+    .team-mission-section,
+    .values-grid article,
+    .careers-panel
+) {
+    --qicore-card-accent: #91a99a;
+    --qicore-card-accent-two: #d7c276;
+    position: relative;
+    border-width: 1.25px;
+    border-color: rgba(45, 41, 36, .16);
+}
+
+:is(
+    .about-narrative,
+    .qicore-film-section,
+    .capability-card,
+    .news-entry,
+    .team-mission-section,
+    .values-grid article,
+    .careers-panel
+)::after {
+    content: "";
+    position: absolute;
+    z-index: 8;
+    right: 18px;
+    top: 17px;
+    width: 36px;
+    height: 6px;
+    background:
+        linear-gradient(90deg,
+            var(--qicore-card-accent) 0 10px,
+            transparent 10px 13px,
+            var(--qicore-card-accent-two) 13px 23px,
+            transparent 23px 26px,
+            rgba(42, 38, 34, .18) 26px 36px);
+    pointer-events: none;
+}
+
+.about-narrative,
+.capability-card:nth-child(1),
+.values-grid article:nth-child(1) {
+    --qicore-card-accent: #cf8e82;
+    --qicore-card-accent-two: #d8c47d;
+}
+
+.qicore-film-section,
+.capability-card:nth-child(3),
+.values-grid article:nth-child(3) {
+    --qicore-card-accent: #d8c47d;
+    --qicore-card-accent-two: #9ba8b5;
+}
+
+.news-entry {
+    --qicore-card-accent: #a6cf56;
+    --qicore-card-accent-two: #91a99a;
+}
+
+.careers-panel {
+    --qicore-card-accent: #9ba8b5;
+    --qicore-card-accent-two: #cf8e82;
+}
+
+@media (max-width: 620px) {
+    :is(
+        .about-narrative,
+        .qicore-film-section,
+        .capability-card,
+        .news-entry,
+        .team-mission-section,
+        .values-grid article,
+        .careers-panel
+    )::after {
+        right: 13px;
+        top: 13px;
+        width: 31px;
+        height: 5px;
+        background:
+            linear-gradient(90deg,
+                var(--qicore-card-accent) 0 9px,
+                transparent 9px 11px,
+                var(--qicore-card-accent-two) 11px 20px,
+                transparent 20px 22px,
+                rgba(42, 38, 34, .18) 22px 31px);
+    }
 }

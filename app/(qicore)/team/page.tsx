@@ -15,15 +15,30 @@ export default function TeamPage() {
         <div className="team-mission-visual" aria-hidden="true">
           <span className="team-mission-record">QICORE / MISSION 01</span>
           <span className="team-mission-number">01</span>
-          <div className="team-mission-diagram">
-            <span className="mission-digital">AI</span>
-            <i className="mission-bridge" />
-            <span className="mission-voxel"><i /><i /><i /></span>
-          </div>
-          <div className="team-mission-axis">
-            <span>Digital intent</span>
-            <span>Physical object</span>
-          </div>
+          <svg className="team-mission-flow" viewBox="0 0 280 360" role="presentation">
+            <g className="mission-intent-block">
+              <text x="76" y="26">DIGITAL / INTENT</text>
+              <rect x="68" y="48" width="144" height="76" rx="2" />
+              <circle cx="96" cy="86" r="7" />
+              <path d="M116 72h68M116 87h50M116 102h34" />
+            </g>
+            <path className="mission-flow-line" d="M140 124C140 158 109 160 109 188S140 214 140 238" />
+            <g className="mission-flow-nodes">
+              <circle cx="140" cy="148" r="4" />
+              <circle cx="109" cy="188" r="4" />
+              <circle cx="134" cy="224" r="4" />
+            </g>
+            <g className="mission-object-block">
+              <polygon className="mission-object-front" points="102,254 168,254 168,320 102,320" />
+              <polygon className="mission-object-top" points="102,254 132,232 198,232 168,254" />
+              <polygon className="mission-object-side" points="168,254 198,232 198,298 168,320" />
+              <circle cx="119" cy="301" r="3" />
+              <circle cx="133" cy="301" r="3" />
+              <circle cx="147" cy="301" r="3" />
+              <text x="85" y="348">PHYSICAL / OBJECT</text>
+            </g>
+            <path className="mission-ground-line" d="M50 332H228" />
+          </svg>
         </div>
 
         <div className="team-mission-copy">
