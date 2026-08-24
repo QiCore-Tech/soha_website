@@ -1,14 +1,19 @@
 import type { ReactNode } from "react";
 import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
+import {
+  MarketingHeroArt,
+  type MarketingHeroArtVariant
+} from "@/components/marketing-hero-art";
 
 type MarketingPageProps = {
   eyebrow: { zh: string; en: string };
   title: { zh: string; en: string };
   intro: { zh: string; en: string };
+  heroArt: MarketingHeroArtVariant;
   children: ReactNode;
 };
 
-export function MarketingPage({ eyebrow, title, intro, children }: MarketingPageProps) {
+export function MarketingPage({ eyebrow, title, intro, heroArt, children }: MarketingPageProps) {
   return (
     <main className="marketing-page">
       <div className="marketing-board">
@@ -27,17 +32,7 @@ export function MarketingPage({ eyebrow, title, intro, children }: MarketingPage
               <span data-lang="en">{intro.en}</span>
             </p>
           </div>
-          <div className="company-hero-art" data-qicore-waterfall="1" aria-hidden="true">
-            <div className="company-blueprint-card">
-              <span className="company-art-index">QICORE / 001</span>
-              <strong><i>Qi</i>Core</strong>
-              <span className="company-art-axis axis-x" />
-              <span className="company-art-axis axis-y" />
-              <span className="company-art-block block-one" />
-              <span className="company-art-block block-two" />
-              <span className="company-art-block block-three" />
-            </div>
-          </div>
+          <MarketingHeroArt variant={heroArt} />
         </section>
 
         {children}

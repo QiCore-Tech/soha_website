@@ -10,6 +10,7 @@ const newsCategories = [
 export default function NewsPage() {
   return (
     <MarketingPage
+      heroArt="signal"
       eyebrow={{ zh: "新闻与动态", en: "News & Updates" }}
       title={{ zh: "持续发生的创造。", en: "Creation in motion." }}
       intro={{

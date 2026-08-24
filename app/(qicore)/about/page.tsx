@@ -28,6 +28,7 @@ const capabilities = [
 export default function AboutPage() {
   return (
     <MarketingPage
+      heroArt="system"
       eyebrow={{ zh: "关于 QiCore", en: "About QiCore" }}
       title={{ zh: "让智能硬件，更容易被创造。", en: "Make intelligent hardware easier to create." }}
       intro={{

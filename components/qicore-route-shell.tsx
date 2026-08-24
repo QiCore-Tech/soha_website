@@ -2,7 +2,13 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
+import type {
+  CSSProperties,
+  KeyboardEvent as ReactKeyboardEvent,
+  MouseEvent as ReactMouseEvent,
+  PointerEvent as ReactPointerEvent,
+  ReactNode
+} from "react";
 import { getCachedQiCoreRouteHtml, setCachedQiCoreRouteHtml } from "@/lib/qicore-client-navigation";
 
 type QiCoreRouteShellProps = {
@@ -35,6 +41,8 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const transitionTimerRef = useRef<number | null>(null);
   const transitionFrameRef = useRef<number | null>(null);
+  const heroPointerFrameRef = useRef<number | null>(null);
+  const activeHeroCardRef = useRef<HTMLElement | null>(null);
   const activeSnapshotRef = useRef<RouteSnapshot | null>(null);
   const [activeFrame, setActiveFrame] = useState<RouteFrame>({ pathname, content: children });
   const [outgoingFrame, setOutgoingFrame] = useState<RouteSnapshot | null>(null);
@@ -125,6 +133,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   useEffect(() => () => {
     if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
     if (transitionFrameRef.current) window.cancelAnimationFrame(transitionFrameRef.current);
+    if (heroPointerFrameRef.current) window.cancelAnimationFrame(heroPointerFrameRef.current);
   }, []);
 
   useEffect(() => {
@@ -142,11 +151,79 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     const y = event.clientY / window.innerHeight - 0.5;
     contentRef.current.style.setProperty("--info-rx", `${y * -0.95}deg`);
     contentRef.current.style.setProperty("--info-ry", `${x * 1.1}deg`);
+
+    const target = event.target instanceof Element ? event.target : null;
+    const art = target?.closest<HTMLElement>(".qicore-route-panel.is-active .themed-hero-art") ?? null;
+    const card = art?.querySelector<HTMLElement>(".hero-blueprint-card") ?? null;
+
+    if (activeHeroCardRef.current && activeHeroCardRef.current !== card) {
+      resetHeroCard(activeHeroCardRef.current);
+    }
+    activeHeroCardRef.current = card;
+
+    if (!card || event.pointerType === "touch" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rect = card.getBoundingClientRect();
+    const pointerX = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2));
+    const pointerY = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2));
+
+    if (heroPointerFrameRef.current !== null) window.cancelAnimationFrame(heroPointerFrameRef.current);
+    heroPointerFrameRef.current = window.requestAnimationFrame(() => {
+      card.dataset.pointerActive = "true";
+      card.style.setProperty("--hero-rotate-x", `${(-pointerY * 2.05).toFixed(3)}deg`);
+      card.style.setProperty("--hero-rotate-y", `${(pointerX * 2.7).toFixed(3)}deg`);
+      card.style.setProperty("--hero-shift-x", `${(pointerX * 5.5).toFixed(2)}px`);
+      card.style.setProperty("--hero-shift-y", `${(pointerY * 4.5).toFixed(2)}px`);
+      card.style.setProperty("--hero-near-x", `${(pointerX * 13).toFixed(2)}px`);
+      card.style.setProperty("--hero-near-y", `${(pointerY * 11).toFixed(2)}px`);
+      card.style.setProperty("--hero-far-x", `${(-pointerX * 5.5).toFixed(2)}px`);
+      card.style.setProperty("--hero-far-y", `${(-pointerY * 4.5).toFixed(2)}px`);
+      card.style.setProperty("--hero-accent-x", `${(pointerX * 8).toFixed(2)}px`);
+      card.style.setProperty("--hero-accent-y", `${(pointerY * 7).toFixed(2)}px`);
+      card.style.setProperty("--hero-accent-rotate", `${(pointerX * 4).toFixed(2)}deg`);
+    });
   }
 
   function resetPointerTilt() {
     contentRef.current?.style.setProperty("--info-rx", "0deg");
     contentRef.current?.style.setProperty("--info-ry", "0deg");
+    resetHeroCard(activeHeroCardRef.current);
+    activeHeroCardRef.current = null;
+  }
+
+  function resetHeroCard(card: HTMLElement | null) {
+    if (!card) return;
+    card.dataset.pointerActive = "false";
+    card.style.setProperty("--hero-rotate-x", "0deg");
+    card.style.setProperty("--hero-rotate-y", "0deg");
+    card.style.setProperty("--hero-shift-x", "0px");
+    card.style.setProperty("--hero-shift-y", "0px");
+    card.style.setProperty("--hero-near-x", "0px");
+    card.style.setProperty("--hero-near-y", "0px");
+    card.style.setProperty("--hero-far-x", "0px");
+    card.style.setProperty("--hero-far-y", "0px");
+    card.style.setProperty("--hero-accent-x", "0px");
+    card.style.setProperty("--hero-accent-y", "0px");
+    card.style.setProperty("--hero-accent-rotate", "0deg");
+  }
+
+  function toggleHeroInteraction(target: EventTarget | null) {
+    if (!(target instanceof Element)) return;
+    const art = target.closest<HTMLElement>(".qicore-route-panel.is-active .themed-hero-art");
+    if (!art) return;
+    const isActive = art.classList.toggle("is-hero-activated");
+    art.setAttribute("aria-pressed", String(isActive));
+  }
+
+  function handleContentClick(event: ReactMouseEvent<HTMLDivElement>) {
+    toggleHeroInteraction(event.target);
+  }
+
+  function handleContentKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (!target?.matches(".themed-hero-art")) return;
+    event.preventDefault();
+    toggleHeroInteraction(target);
   }
 
   return (
@@ -157,6 +234,8 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
         ref={contentRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={resetPointerTilt}
+        onClick={handleContentClick}
+        onKeyDown={handleContentKeyDown}
       >
         {outgoingFrame && (
           <div

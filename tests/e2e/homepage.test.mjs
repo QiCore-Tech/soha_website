@@ -281,6 +281,34 @@ test("in-place company navigation preserves the waterfall entry animation", asyn
   });
 });
 
+test("cached company-page illustrations keep pointer and click interactions", async () => {
+  await withPage(async (page) => {
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.locator('.marketing-nav-links a[href="/news"]').click();
+    await page.waitForURL("**/news");
+
+    const newsArt = page.locator(".qicore-route-panel.is-active .themed-hero-art");
+    const newsCard = newsArt.locator(".hero-blueprint-card");
+    const newsBox = await newsCard.boundingBox();
+    assert.ok(newsBox, "the cached news illustration should be visible");
+    await page.mouse.move(newsBox.x + newsBox.width * .78, newsBox.y + newsBox.height * .24);
+    await page.waitForFunction(() => (
+      document.querySelector(".qicore-route-panel.is-active .hero-blueprint-card")?.dataset.pointerActive === "true"
+    ));
+    assert.notEqual(await newsCard.evaluate((element) => getComputedStyle(element).transform), "none");
+    await newsArt.click();
+    assert.equal(await newsArt.getAttribute("aria-pressed"), "true");
+
+    await page.locator('.marketing-nav-links a[href="/team"]').click();
+    await page.waitForURL("**/team");
+    const teamArt = page.locator(".qicore-route-panel.is-active .themed-hero-art");
+    await teamArt.click();
+    assert.equal(await teamArt.getAttribute("aria-pressed"), "true");
+    assert.equal(await teamArt.evaluate((element) => element.classList.contains("is-hero-activated")), true);
+  });
+});
+
 test("saved voxels stay mounted across company navigation", async () => {
   await withPage(async (page) => {
     await placeVoxelAtGrid(page, 4, 4);

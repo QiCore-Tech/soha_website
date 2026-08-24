@@ -3,6 +3,7 @@ import { BilingualText, MarketingPage } from "@/components/marketing-page";
 export default function TeamPage() {
   return (
     <MarketingPage
+      heroArt="workbench"
       eyebrow={{ zh: "团队与职业", en: "Team & Careers" }}
       title={{ zh: "和真正好奇的人，一起创造。", en: "Build with the truly curious." }}
       intro={{
