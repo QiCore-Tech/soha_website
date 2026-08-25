@@ -5,27 +5,27 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://qicore.ai"),
   title: {
-    default: "气核科技 QiCore | 智能硬件创造平台",
+    default: "气核科技 QiCore | 所想，即造",
     template: "%s | QiCore"
   },
   description:
-    "气核科技 QiCore 首创生成式物理造物，致力于让每个人实现所想即所造。了解 QiCore、OysCat、最新动态与团队。",
+    "气核科技 QiCore 正在构建从意图到真实造物的新方式。了解 QiCore、OysCat、最新动态与团队。",
   alternates: {
     canonical: "/"
   },
   openGraph: {
-    title: "气核科技 QiCore | OysCat 智能硬件创造平台",
+    title: "气核科技 QiCore | 所想，即造",
     description:
-      "QiCore pioneers a new paradigm for intent-driven physical creation. Discover our work, OysCat, and the team behind it.",
+      "QiCore is building tools for intent-driven physical creation. Discover our work, OysCat, and the team behind it.",
     url: "https://qicore.ai/",
     siteName: "气核科技 qicore",
     type: "website"
   },
   twitter: {
     card: "summary",
-    title: "气核科技 QiCore | OysCat 智能硬件创造平台",
+    title: "气核科技 QiCore | 所想，即造",
     description:
-      "QiCore pioneers a new paradigm for intent-driven physical creation. Discover our work, OysCat, and the team behind it."
+      "QiCore is building tools for intent-driven physical creation. Discover our work, OysCat, and the team behind it."
   },
   icons: {
     icon: "/favicon.svg"

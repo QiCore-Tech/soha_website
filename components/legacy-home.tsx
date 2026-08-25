@@ -60,11 +60,11 @@ export function LegacyHome() {
                 <div className="slogan-detail">
                   <p className="company-note">
                     <span data-lang="zh">
-                      <span className="brand">气核科技（QiCore）</span> 首创生成式物理造物，致力于让每个人实现「所想即所造」。欢迎了解公司业务，
+                      <span className="brand">气核科技（QiCore）</span> 专注于生成式物理造物，致力于让每个人实现「所想即所造」。欢迎了解公司业务，
                       <span className="hiring">WE ARE HIRING</span>。
                     </span>
                     <span data-lang="en">
-                      <span className="brand">QiCore Technology</span> pioneers a new paradigm for intent-driven physical creation. Discover our work and grow with us —{" "}
+                      <span className="brand">QiCore Technology</span> is building tools for intent-driven physical creation. Discover our work and grow with us —{" "}
                       <span className="hiring">WE ARE HIRING</span>.
                     </span>
                   </p>
@@ -134,8 +134,8 @@ export function LegacyHome() {
             <span data-lang="en">Where creation begins.</span>
           </h1>
           <p className="luon-slogan">
-            <span data-lang="zh">面向智能硬件创造者的全链路工作空间</span>
-            <span data-lang="en">The end-to-end workspace for intelligent hardware creators</span>
+            <span data-lang="zh">面向创客与硬件创造者的全链路工作空间</span>
+            <span data-lang="en">The end-to-end workspace for makers and hardware creators</span>
           </p>
           <div className="oyscat-scene-actions" data-home-interactive-control>
             <a className="oyscat-primary-action" href="/oyscat">
