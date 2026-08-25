@@ -363,7 +363,7 @@ export function HomePage() {
               <div className="slogan-drawer">
                 <div className="slogan-detail">
                   <p className="company-note">
-                    <span className="brand">气核科技（qicore）</span> 专注于智能硬件创造与新一代平台研发，欢迎了解公司业务，
+                    <span className="brand">气核科技（qicore）</span> 把想法带到现实，欢迎了解公司业务，
                     <span className="hiring">WE ARE HIRING</span>。
                   </p>
                 </div>

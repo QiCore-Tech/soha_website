@@ -2,40 +2,16 @@ import { BilingualText, MarketingPage } from "@/components/marketing-page";
 import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
 import { QiCoreFilm } from "@/components/qicore-film";
 
-const capabilities = [
-  {
-    number: "01",
-    zh: "产品与体验",
-    en: "Product & experience",
-    detailZh: "从真实使用场景出发，把复杂技术组织成清晰、自然的产品体验。",
-    detailEn: "Turn complex technologies into clear, natural product experiences grounded in real use."
-  },
-  {
-    number: "02",
-    zh: "软硬件工程",
-    en: "Software & hardware",
-    detailZh: "让电子、结构、嵌入式与软件在同一条产品路径上协同推进。",
-    detailEn: "Advance electronics, mechanics, embedded systems, and software along one product path."
-  },
-  {
-    number: "03",
-    zh: "验证与制造",
-    en: "Validation & manufacturing",
-    detailZh: "持续连接设计、原型、验证与制造，把创意推进到可交付的现实。",
-    detailEn: "Connect design, prototyping, validation, and manufacturing to make ideas deliverable."
-  }
-];
-
 export default function AboutPage() {
   return (
     <MarketingPage
       heroArt="system"
       pageClassName="about-page"
       eyebrow={{ zh: "关于 QiCore", en: "About QiCore" }}
-      title={{ zh: "让智能硬件，更容易被创造。", en: "Make Physical Products by Simply Describing What You Want" }}
+      title={{ zh: "空想具现", en: "Prompt the Physical World." }}
       intro={{
-        zh: "QiCore 气核科技是一家面向下一代智能硬件的产品与技术公司。我们把设计、工程和制造放在同一条创造路径上。",
-        en: "QiCore is bringing a new way to build in the physical world: simply describe what you want."
+        zh: "如今仅凭一句指令，AI 能写代码、出设计图、生成 3D 模型，但这一切始终都停在屏幕上。你让它做一个“会旋转会发光的音响”，它会给你一整套装配指南，或是一段渲染出来的视频，告诉你这东西大概长什么样，却无法真正在物理世界中帮你实现。",
+        en: "Generative AI has made digital creation accessible to anyone. A single prompt can now generate code, designs, and virtually any kind of digital content."
       }}
     >
       <QiCoreFilm />
@@ -47,13 +23,13 @@ export default function AboutPage() {
             <div className="about-narrative-transition" aria-hidden="true">
               <span>DIGITAL</span><i /><span>PHYSICAL</span>
             </div>
-            <h2>用<span>更简单</span>的方式，创造物理世界。</h2>
+            <h2>在 QiCore，<span>指令的终点</span>，就是物理世界。</h2>
             <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
           </div>
           <ol className="about-narrative-copy" data-qicore-waterfall="3">
-            <li><span>01 / DIGITAL</span><strong>数字创造已经很简单</strong><p>一句提示词，就能生成代码、设计与数字内容。</p></li>
-            <li><span>02 / PHYSICAL</span><strong>物理创造仍然割裂</strong><p>结构、电子、编程与制造之间，仍有很高的协作门槛。</p></li>
-            <li className="is-qicore"><span>03 / QICORE</span><strong>从意图，直接走向现实</strong><p>描述你想要什么，让完整产品沿同一条路径被创造。</p></li>
+            <li><span>01 / DIGITAL</span><strong>数字创作，人人可及</strong><p>如今仅凭一句指令，AI 就能生成代码、设计图和几乎所有数字内容。</p></li>
+            <li><span>02 / PHYSICAL</span><strong>到了现实，门槛仍然很高</strong><p>从概念到实物，需要跨越机械、电子、编程和制造工艺等多个专业领域。</p></li>
+            <li className="is-qicore"><span>03 / QICORE</span><strong>让 AI 走进物理世界</strong><p>让每个创意都有机会成为实体，从一个想法开始，直接驱动制造终端。</p></li>
           </ol>
         </div>
         <div className="about-narrative-layout" data-lang="en">
@@ -61,25 +37,54 @@ export default function AboutPage() {
             <div className="about-narrative-transition" aria-hidden="true">
               <span>DIGITAL</span><i /><span>PHYSICAL</span>
             </div>
-            <h2>Create the physical world. <span>Simply.</span></h2>
+            <h2>Prompt the <span>Physical World.</span></h2>
             <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
           </div>
           <ol className="about-narrative-copy" data-qicore-waterfall="3">
-            <li><span>01 / DIGITAL</span><strong>Digital creation is already simple</strong><p>One prompt can generate code, designs, and digital content.</p></li>
-            <li><span>02 / PHYSICAL</span><strong>Physical creation is still fragmented</strong><p>Mechanics, electronics, software, and manufacturing remain difficult to unify.</p></li>
-            <li className="is-qicore"><span>03 / QICORE</span><strong>From intent to reality</strong><p>Describe what you want. Create the whole product along one connected path.</p></li>
+            <li><span>01 / DIGITAL</span><strong>Digital creation is already within reach</strong><p>Generative AI has made digital creation accessible to anyone. A single prompt can now generate code, designs, and virtually any kind of digital content.</p></li>
+            <li><span>02 / PHYSICAL</span><strong>Physical creation tells a very different story</strong><p>Turning an idea into something tangible still demands expertise in mechanics, electronics, programming, and often manufacturing processes. For non-experts, the barrier remains steep.</p></li>
+            <li className="is-qicore"><span>03 / QICORE</span><strong>From intent to reality</strong><p>QiCore is here to rewrite that equation. Digital creation is already open to everyone. Physical creation should be too.</p></li>
           </ol>
         </div>
       </section>
 
-      <section className="capability-grid marketing-section" data-lang="zh" aria-label="QiCore capabilities">
-        {capabilities.map((capability, index) => (
-          <article className="capability-card" data-qicore-waterfall={index + 4} key={capability.number}>
-            <span>{capability.number}</span>
-            <h3><BilingualText zh={capability.zh} en={capability.en} /></h3>
-            <p><BilingualText zh={capability.detailZh} en={capability.detailEn} /></p>
-          </article>
-        ))}
+      <section className="marketing-section about-vision-appendix">
+        <div className="about-vision-diagram" aria-hidden="true">
+          <svg viewBox="0 0 280 248" role="presentation">
+            <g className="field-note-intent">
+              <rect x="20" y="26" width="106" height="72" rx="2" />
+              <circle cx="43" cy="62" r="7" />
+              <path d="M61 49h46M61 63h34M61 77h23" />
+              <path className="field-note-corner" d="M20 40V26h14M112 26h14v14" />
+            </g>
+            <path className="field-note-connector" d="M126 62h35m0 0-8-6m8 6-8 6" />
+            <g className="field-note-object">
+              <polygon className="field-note-object-front" points="160,119 219,119 219,178 160,178" />
+              <polygon className="field-note-object-top" points="160,119 184,101 243,101 219,119" />
+              <polygon className="field-note-object-side" points="219,119 243,101 243,160 219,178" />
+              <rect x="178" y="140" width="23" height="18" rx="1" />
+              <circle cx="184" cy="149" r="2.5" />
+              <circle cx="193" cy="149" r="2.5" />
+              <circle cx="202" cy="149" r="2.5" />
+            </g>
+            <path className="field-note-baseline" d="M48 202h166" />
+            <path className="field-note-accent" d="M52 202h34" />
+          </svg>
+          <span>INTENT → PHYSICAL OBJECT</span>
+        </div>
+        <div data-lang="zh">
+          <p>数字世界的创作与物理世界之间，隔着一条鸿沟。在屏幕上生成一份作品，和向物理世界下发指令并产出实物，完全是两码事。对于缺乏专业背景的人来说，这道门槛依旧高不可攀。</p>
+          <p>我们所要做的，正是让 AI 的能力延伸至物理世界，赋予每个人“以意图造物”的权利。大至复杂的现实装置，小至触手可及的日常物件，无论功能繁简、形态各异，每一个创意都应有机会成为实体。过去，制造依赖经年累月的训练；未来，它只从一个想法开始，便能跨过重重壁垒，直接驱动制造终端。</p>
+          <p>我们正全力以赴将愿景化为现实，让创想与实物之间，天堑变通途。</p>
+        </div>
+        <div data-lang="en">
+          <p>Complex creations or simple objects. Complex functions or none at all. QiCore reasons for its form and its function, and turns that intent into an object you can hold.</p>
+          <p>Here is the equation we believe in:</p>
+          <p>Expertise required + years of training = the old way in.<br />Intent alone = the new one.</p>
+          <p>For decades, making things belonged to a few: engineers, manufacturers, specialists holding knowledge the rest of us couldn&apos;t access. That knowledge was real, and it was necessary. But necessity doesn&apos;t mean exclusivity.</p>
+          <p>The wall between imagining something and building it was never meant to be permanent. It was only ever a limit of the tools we had.</p>
+          <p>With QiCore, creation starts with a single thing: your intent.</p>
+        </div>
       </section>
 
       <section className="hardware-strip company-product-strip marketing-section">
@@ -107,8 +112,8 @@ export default function AboutPage() {
           </h2>
           <p className="company-product-summary">
             <BilingualText
-              zh="由模块化电子硬件与 AI 创造工作空间组成，让真实造物更容易开始。"
-              en="A modular electronics system and AI creation workspace that make building in the physical world easier to begin."
+              zh="OysCat 是 QiCore 推出的首款造物系统，面向创客、硬件开发者，以及所有想要探索全新创造方式的人群。"
+              en="OysCat is QiCore's first product family, built for makers, hardware creators, and DIY enthusiasts."
             />
           </p>
           <a className="company-cta dark" href="/oyscat">

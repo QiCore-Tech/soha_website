@@ -3,15 +3,16 @@ import { BilingualText, MarketingPage } from "@/components/marketing-page";
 export default function TeamPage() {
   return (
     <MarketingPage
+      pageClassName="team-page"
       heroArt="workbench"
       eyebrow={{ zh: "团队与职业", en: "Team & Careers" }}
-      title={{ zh: "和真正好奇的人，一起创造。", en: "Create with the Truly Curious" }}
+      title={{ zh: "好奇，动手。", en: "Curious. Hands‑on." }}
       intro={{
-        zh: "我们是一支把设计、工程与制造放在同一张桌上的团队。我们相信好奇心、判断力，以及把复杂问题做得简单。",
-        en: "Founded in January 2026, QiCore Technology is building the infrastructure for AI-driven physical creation."
+        zh: "我们来自设计、工程、AI 和制造等不同领域。有人画图，有人写代码，也有人在工作台前反复调试。2026 年，我们为了同一个目标走到一起：让更多人都能把自己的想法做成现实。",
+        en: "We come from design, engineering, AI, and manufacturing. Some of us sketch, some write code, and some keep testing at the workbench. In 2026, we came together around one goal: to help more people turn their ideas into something real."
       }}
     >
-      <section className="marketing-section team-mission-section" data-lang="en" data-qicore-waterfall="2">
+      <section className="marketing-section team-mission-section" data-qicore-waterfall="2">
         <div className="team-mission-visual" aria-hidden="true">
           <span className="team-mission-record">QICORE / MISSION 01</span>
           <span className="team-mission-number">01</span>
@@ -42,40 +43,40 @@ export default function TeamPage() {
         </div>
 
         <div className="team-mission-copy">
-          <p className="section-kicker">Our mission</p>
-          <p className="team-mission-lead">Our mission is to extend AI&apos;s scope from the digital world into the physical world.</p>
-          <p>We believe the ability to create real objects should not belong only to large companies or specialized engineering teams. It should be accessible to anyone with an idea.</p>
+          <p className="section-kicker"><BilingualText zh="我们为何出发" en="Why we build" /></p>
+          <p className="team-mission-lead"><BilingualText zh="让每个想法，都有机会成真。" en="Give every idea a chance to become real." /></p>
+          <p><BilingualText zh="AI 已经会写代码、画图、生成内容，但从屏幕上的想法到手里的实物，仍有一段路。我们想把这段路走通。造物不该只是大公司的专利，也不该只属于少数专业团队。只要有想法，就该有把它做出来的机会。" en="AI can already write code, draw images, and generate content. But there is still a gap between an idea on screen and a thing in your hands. We want to close it. Making should not be reserved for well-funded companies or specialist teams. If you have an idea, you should have a way to bring it to life." /></p>
         </div>
       </section>
 
       <section className="marketing-section values-grid">
         <article data-qicore-waterfall="3">
           <span>01</span>
-          <h2><BilingualText zh="跨过边界" en="Cross boundaries" /></h2>
-          <p><BilingualText zh="产品不按学科切割，我们也不会。" en="Products are not divided by discipline, and neither are we." /></p>
+          <h2><BilingualText zh="不拘一格" en="Cross boundaries" /></h2>
+          <p><BilingualText zh="好产品不会困在一门学科里，我们也不会。" en="Good work does not stay in one discipline. Neither do we." /></p>
         </article>
         <article data-qicore-waterfall="4">
           <span>02</span>
-          <h2><BilingualText zh="保持具体" en="Stay concrete" /></h2>
-          <p><BilingualText zh="用原型、数据和真实使用来推进讨论。" en="Move discussions forward with prototypes, data, and real use." /></p>
+          <h2><BilingualText zh="脚踏实地" en="Stay concrete" /></h2>
+          <p><BilingualText zh="少一点空谈，多一点原型、数据和真实使用。" en="Less talk, more prototypes, data, and real use." /></p>
         </article>
         <article data-qicore-waterfall="5">
           <span>03</span>
-          <h2><BilingualText zh="长期创造" en="Create for the long run" /></h2>
-          <p><BilingualText zh="为今天交付，也为下一次突破积累。" en="Deliver today while compounding toward the next breakthrough." /></p>
+          <h2><BilingualText zh="久久为功" en="Build for the long run" /></h2>
+          <p><BilingualText zh="今天把事做好，也为明天多走一步。" en="Deliver today. Keep building for tomorrow." /></p>
         </article>
       </section>
 
       <section className="marketing-section careers-panel">
         <div data-qicore-waterfall="6">
-          <p className="section-kicker">Join QiCore</p>
-          <h2><BilingualText zh="下一位创造者，会是你吗？" en="Could the next creator be you?" /></h2>
+          <p className="section-kicker"><BilingualText zh="加入 QiCore" en="Join QiCore" /></p>
+          <h2><BilingualText zh="来 QiCore，一起把想法做出来。" en="Come build with QiCore." /></h2>
         </div>
         <div data-qicore-waterfall="7">
           <p>
             <BilingualText
-              zh="具体职位将陆续更新。你也可以直接把作品、经历和你最想解决的问题发给我们。"
-              en="Open roles will be published here. You can also send us your work, experience, and the problem you most want to solve."
+              zh="职位会陆续公开，但如果你已经有想法，欢迎现在就来找我们。把你的作品、经历，或那个让你一直惦记的问题发给我们。我们不太在意简历是不是漂亮，更想知道：你为什么出发，又想把什么做出来。"
+              en="Open roles will appear here, but if you already have an idea, come find us. Send us your work, your story, or the problem you cannot stop thinking about. We care less about a perfect résumé than what drives you and what you want to make."
             />
           </p>
           <a className="lime-cta" href="mailto:hr@qicore.ai">

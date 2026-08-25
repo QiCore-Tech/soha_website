@@ -5,7 +5,7 @@ import { OysCatNav } from "@/components/oyscat-nav";
 
 export const metadata: Metadata = {
   title: "OysCat 产品",
-  description: "OysCat 产品介绍、产品入口与未来产品预告。"
+  description: "OysCat 产品介绍、Workspace 与电子模块。"
 };
 
 export default function OysCatPage() {
@@ -17,11 +17,11 @@ export default function OysCatPage() {
         <div className="oyscat-product-copy">
           <img className="oyscat-product-wordmark" src="/brand/oyscat-wordmark.png" alt="OysCat" />
           <p className="oyscat-product-kicker">QiCore Product 01</p>
-          <h1><BilingualText zh="让创造，自然发生。" en="Where creation begins." /></h1>
+          <h1><BilingualText zh="OysCat：游戏化创造，迈出第一步。" en="OysCat: Gamified Creation. Our First Step." /></h1>
           <p className="oyscat-product-intro">
             <BilingualText
-              zh="OysCat 是 QiCore 面向智能硬件创造者推出的首个产品体系。这里将汇集当前产品、硬件模块，以及未来的创造工具。"
-              en="OysCat is QiCore's first product family for intelligent hardware creators—a home for current products, hardware modules, and the tools still to come."
+              zh="OysCat 是 QiCore 推出的首款造物系统，面向创客、硬件开发者，以及所有想要探索全新创造方式的人群。"
+              en="OysCat is QiCore's first product family, built for makers, hardware creators, and DIY enthusiasts."
             />
           </p>
           <div className="oyscat-product-actions">
@@ -42,25 +42,87 @@ export default function OysCatPage() {
         </div>
       </section>
 
-      <section className="oyscat-product-principles" aria-label="OysCat product principles">
-        <article>
-          <span>01</span>
-          <h2><BilingualText zh="一体化创造" en="Create as one" /></h2>
-          <p><BilingualText zh="从想法、设计到软硬件实现，减少工具之间的断点。" en="Reduce the gaps between ideas, design, software, and hardware." /></p>
-        </article>
-        <article>
-          <span>02</span>
-          <h2><BilingualText zh="面向真实产品" en="Built for reality" /></h2>
-          <p><BilingualText zh="每个入口都指向可以验证、迭代和交付的真实结果。" en="Every entry point leads toward outcomes that can be tested, iterated, and delivered." /></p>
-        </article>
-        <article>
-          <span>03</span>
-          <h2><BilingualText zh="持续生长" en="Designed to grow" /></h2>
-          <p><BilingualText zh="产品体系将随新的模块、设备和创造工具持续扩展。" en="The product family will expand with new modules, devices, and creative tools." /></p>
-        </article>
+      <section className="oyscat-positioning-note" aria-label="OysCat product positioning">
+        <div className="oyscat-positioning-heading">
+          <p className="section-kicker">Why OysCat</p>
+          <h2><BilingualText zh="让想法从屏幕走进现实。" en="From the screen into the physical world." /></h2>
+        </div>
+        <div className="oyscat-positioning-copy">
+          <p><BilingualText zh="如果你玩过 Minecraft 等建造类游戏，对 OysCat 的操作模式会很有熟悉感。不一样的是，游戏里搭建的内容只存在于屏幕中，而 OysCat 能让你的设计从虚拟走进现实，变成真正可以运行的物品。" en="If you've played Minecraft, you already know how to use OysCat. The difference is this: what you build on screen can be made into real objects that work, move, and respond." /></p>
+          <p><BilingualText zh="你可以快速制作原型，在投入实体制作前先验证想法。设计、仿真、制造，在同一条创作流程中完成。" en="You can prototype fast, and validate an idea before you commit to it. Design, simulate, build are all in one pass, no iterative back-and-forth." /></p>
+        </div>
       </section>
 
-      <section className="oyscat-system-section" aria-label="OysCat creation system">
+      <section className="oyscat-workspace-gallery" id="workspace-works" aria-labelledby="workspace-gallery-title">
+        <header className="oyscat-workspace-gallery-heading">
+          <p className="section-kicker">Workspace / Case studies</p>
+          <div>
+            <h2 id="workspace-gallery-title">
+              <BilingualText zh="从画布，到作品。" en="From canvas to creation." />
+            </h2>
+            <p>
+              <BilingualText
+                zh="从体素结构到运动模块，作品先在画布里成形，再进入真实世界。"
+                en="From voxel structures to motion modules, ideas take shape on the canvas before they enter the physical world."
+              />
+            </p>
+          </div>
+        </header>
+
+        <div className="oyscat-workspace-gallery-grid">
+          <figure className="oyscat-workspace-gallery-featured">
+            <div className="oyscat-workspace-gallery-image">
+              <img
+                src="/media/oyscat-workspace/motion-study-main.webp"
+                alt="A dual-arm motion study assembled from modular joints in OysCat Workspace"
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="oyscat-workspace-gallery-mark">MOTION STUDY / 01</span>
+            </div>
+            <figcaption>
+              <strong><BilingualText zh="双机械臂运动研究" en="Dual-arm Motion Study" /></strong>
+              <span><BilingualText zh="关节模块 · 姿态组合 · 行为仿真" en="Joint modules · pose studies · behavior simulation" /></span>
+            </figcaption>
+          </figure>
+
+          <div className="oyscat-workspace-gallery-stack">
+            <figure>
+              <div className="oyscat-workspace-gallery-image">
+                <img
+                  src="/media/oyscat-workspace/voxel-rover-crop.webp"
+                  alt="A wheeled rover assembled in OysCat Workspace"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="oyscat-workspace-gallery-mark">WORKSPACE CAPTURE / 02</span>
+              </div>
+              <figcaption>
+                <strong><BilingualText zh="体素移动平台" en="Voxel Rover" /></strong>
+                <span><BilingualText zh="四轮底盘 · 驱动模块 · 结构体素" en="Four-wheel chassis · drive modules · structural voxels" /></span>
+              </figcaption>
+            </figure>
+
+            <figure>
+              <div className="oyscat-workspace-gallery-image">
+                <img
+                  src="/media/oyscat-workspace/voxel-vehicle-crop.webp"
+                  alt="A modular vehicle assembled from voxel blocks in OysCat Workspace"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="oyscat-workspace-gallery-mark">STRUCTURE STUDY / 03</span>
+              </div>
+              <figcaption>
+                <strong><BilingualText zh="模块化车体" en="Modular Vehicle" /></strong>
+                <span><BilingualText zh="可扩展的体素结构" en="An expandable voxel structure" /></span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="oyscat-system-section" id="products" aria-label="OysCat creation system">
         <div className="oyscat-system-heading">
           <p>Two core layers</p>
           <h2>
@@ -76,7 +138,7 @@ export default function OysCatPage() {
             <span className="oyscat-system-index">01 / INTELLIGENCE</span>
             <div className="oyscat-system-card-copy">
               <p className="oyscat-system-role">
-                <BilingualText zh="AI 创造引擎的首个版本" en="The first version of the AI Creation Engine" />
+                <BilingualText zh="OysCat 工作台" en="OysCat Workspace" />
               </p>
               <h3>Workspace</h3>
               <div className="oyscat-system-keywords" aria-label="Workspace capabilities">
@@ -87,10 +149,13 @@ export default function OysCatPage() {
               </div>
               <p>
                 <BilingualText
-                  zh="一个面向物理造物设计与控制的 AI 工作空间，将从构想到真实物体所需的工具整合进同一个环境。"
-                  en="An AI-powered workspace that brings the tools for moving from an idea to a working physical object into one environment."
+                  zh="从外观结构到功能实现，全流程创作都可在同一个工作台内完成。"
+                  en="This is where you build structure and electronics, together, on one canvas."
                 />
               </p>
+              <p className="oyscat-system-detail"><BilingualText zh="系统内所有部件均以标准化模块呈现，你可以像搭积木一样自由拼接。" en="Design by stacking voxels: cubes, panels, cylinders, etc." /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="直接定义作品要实现的效果，AI 会自动生成对应代码。" en={'Simply tell it what it should do: "aim at the red balloon and shoot." The AI writes the code for you, and imbues your design with the intended behaviors.'} /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="Workspace 支持实时仿真，验证通过后再进入实体组装。" en="The Workspace runs real-time simulation. This is your final checkpoint, bridging the virtual and physical worlds. What follows is physical." /></p>
               <a href="https://beta-hk.oyscat.com/" className="oyscat-system-link">
                 <BilingualText zh="进入 Workspace" en="Open Workspace" /><span aria-hidden="true">↗</span>
               </a>
@@ -108,7 +173,7 @@ export default function OysCatPage() {
             <span className="oyscat-system-index">02 / PHYSICAL</span>
             <div className="oyscat-system-card-copy">
               <p className="oyscat-system-role">
-                <BilingualText zh="物理体素框架的一部分" en="Part of the Physical Voxel Framework" />
+                <BilingualText zh="OysCat 电子模块" en="OysCat E-Modules" />
               </p>
               <h3>Electronic Modules</h3>
               <div className="oyscat-system-keywords" aria-label="Electronic module capabilities">
@@ -119,10 +184,13 @@ export default function OysCatPage() {
               </div>
               <p>
                 <BilingualText
-                  zh="将物理能力封装为可复用的标准化硬件积木，无需焊接或从零布线，即可组合出真实功能。"
-                  en="Reusable, standardized hardware blocks that combine into real functions—without soldering or wiring circuits from scratch."
+                  zh="工作台中的每一个功能模块，都对应一款真实的实体模块。"
+                  en="Every electronics module you place in Workspace maps to a physical one."
                 />
               </p>
+              <p className="oyscat-system-detail"><BilingualText zh="它在现实中的表现，与仿真结果保持一致。" en="Its real-world performance exactly matches your simulation." /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="运动、显示、感知、声音、控制……不同功能对应不同的标准模块。" en="These are standardized hardware blocks, designed by function: motion, lighting, sensing, sound, control. Snap them together." /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="无需焊接、布线或手动搭建电路，把模块拼接起来，作品就能运行。" en="No soldering, no wiring, no circuits to build by hand. Snap them together, and your creation is complete." /></p>
             </div>
             <div className="oyscat-module-diagram" aria-hidden="true">
               <span /><span /><span /><span />
@@ -135,70 +203,10 @@ export default function OysCatPage() {
         </p>
       </section>
 
-      <section className="oyscat-workshop-section is-withdrawn" aria-label="OysCat workshop notes">
-        <header className="oyscat-workshop-heading">
-          <p>Field notes / Closed beta</p>
-          <div>
-            <h2><BilingualText zh="在真实的工作台上生长。" en="Made at the workbench." /></h2>
-            <p>
-              <BilingualText
-                zh="每一个模块都在反复搭建、连接与测试中被打磨。这里记录 OysCat 从原型走向真实创造工具的过程。"
-                en="Every module is shaped through repeated building, connecting, and testing. This is where OysCat moves from prototype to a tool for real creation."
-              />
-            </p>
-          </div>
-        </header>
-
-        <figure className="oyscat-workshop-figure">
-          <div className="oyscat-workshop-image">
-            <img
-              src="/media/oyscat-generated-v2/oyscat-product-pixel-workshop-wide-v2.png"
-              alt="Pixel-art OysCat workshop with a family of modular hardware blocks"
-              loading="lazy"
-              decoding="async"
-            />
-            <span className="oyscat-workshop-corner corner-top">OYS / WORKBENCH 01</span>
-            <span className="oyscat-workshop-corner corner-bottom">BUILD · CONNECT · TEST</span>
-          </div>
-          <figcaption>
-            <span><BilingualText zh="正在开发" en="In development" /></span>
-            <span><BilingualText zh="硬件模块 · Workspace · 创作者内测" en="Hardware modules · Workspace · Creator beta" /></span>
-          </figcaption>
-        </figure>
-      </section>
-
-      <section className="oyscat-product-catalog" id="products">
-        <div className="product-section-heading">
-          <p>Product entrance</p>
-          <h2><BilingualText zh="现在，以及接下来。" en="Now, and what comes next." /></h2>
-        </div>
-
-        <article className="featured-product-card">
-          <div className="featured-product-copy">
-            <small className="featured-record">RECORD / HARDWARE / 001</small>
-            <span className="product-status"><BilingualText zh="首款硬件 · 即将发布" en="First hardware · Coming soon" /></span>
-            <h3><BilingualText zh="OysCat 智能硬件模块" en="OysCat intelligent hardware module" /></h3>
-            <p><BilingualText zh="黑色电子模块的正式产品信息、规格与发布计划将在这里公布。" en="Official product information, specifications, and release plans for the black electronics module will be announced here." /></p>
-          </div>
-          <div className="module-teaser" aria-hidden="true">
-            <span className="module-shell"><i /><i /><i /></span>
-            <span className="module-glow" />
-            <small>PRODUCT 01 / PREVIEW</small>
-          </div>
-        </article>
-
-        <div className="future-product-grid" id="future">
-          <article>
-            <span>02</span>
-            <h3><BilingualText zh="下一款产品" en="Next product" /></h3>
-            <p><BilingualText zh="入口预留中" en="Reserved for what's next" /></p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3><BilingualText zh="未来产品" en="Future product" /></h3>
-            <p><BilingualText zh="入口预留中" en="Reserved for what's next" /></p>
-          </article>
-        </div>
+      <section className="oyscat-product-conclusion">
+        <p className="section-kicker">The road ahead</p>
+        <h2><BilingualText zh="OysCat 只是开始。" en="OysCat is just the beginning." /></h2>
+        <p><BilingualText zh="它是 QiCore 迈向更大愿景的第一步：说出想要什么，让它真正被做出来。" en={"It's the first step on our roadmap toward the full promise: prompt it, and it's made."} /></p>
       </section>
 
       <footer className="oyscat-product-footer">
