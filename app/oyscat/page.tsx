@@ -62,8 +62,8 @@ export default function OysCatPage() {
             </h2>
             <p>
               <BilingualText
-                zh="从体素结构到运动模块，作品先在画布里成形，再进入真实世界。"
-                en="From voxel structures to motion modules, ideas take shape on the canvas before they enter the physical world."
+                zh="从机械臂到游戏控制台，作品先在 Workspace 里成形，再走向真实世界。"
+                en="From robotic arms to game consoles, ideas take shape in Workspace before they become real."
               />
             </p>
           </div>
@@ -91,15 +91,15 @@ export default function OysCatPage() {
               <div className="oyscat-workspace-gallery-image">
                 <img
                   src="/media/oyscat-workspace/voxel-rover-crop.webp"
-                  alt="A wheeled rover assembled in OysCat Workspace"
+                  alt="A modular game console assembled in OysCat Workspace"
                   loading="lazy"
                   decoding="async"
                 />
-                <span className="oyscat-workspace-gallery-mark">WORKSPACE CAPTURE / 02</span>
+                <span className="oyscat-workspace-gallery-mark">INTERACTION STUDY / 02</span>
               </div>
               <figcaption>
-                <strong><BilingualText zh="体素移动平台" en="Voxel Rover" /></strong>
-                <span><BilingualText zh="四轮底盘 · 驱动模块 · 结构体素" en="Four-wheel chassis · drive modules · structural voxels" /></span>
+                <strong><BilingualText zh="模块化游戏控制台" en="Modular Game Console" /></strong>
+                <span><BilingualText zh="摇杆控制 · 状态显示 · 体素结构" en="Joystick control · status display · voxel structure" /></span>
               </figcaption>
             </figure>
 
