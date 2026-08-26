@@ -17,7 +17,12 @@ export default function OysCatPage() {
         <div className="oyscat-product-copy">
           <img className="oyscat-product-wordmark" src="/brand/oyscat-wordmark.png" alt="OysCat" />
           <p className="oyscat-product-kicker">QiCore Product 01</p>
-          <h1><BilingualText zh="OysCat：游戏化创造，迈出第一步。" en="OysCat: Gamified Creation. Our First Step." /></h1>
+          <h1>
+            <BilingualText
+              zh={<>游戏化创造，<br />迈出第一步。</>}
+              en={<>Gamified Creation.<br />Our First Step.</>}
+            />
+          </h1>
           <p className="oyscat-product-intro">
             <BilingualText
               zh="OysCat 是 QiCore 推出的首款造物系统，面向创客、硬件开发者，以及所有想要探索全新创造方式的人群。"

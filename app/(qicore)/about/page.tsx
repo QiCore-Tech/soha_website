@@ -8,10 +8,10 @@ export default function AboutPage() {
       heroArt="system"
       pageClassName="about-page"
       eyebrow={{ zh: "关于 QiCore", en: "About QiCore" }}
-      title={{ zh: "空想具现", en: "Prompt the Physical World." }}
+      title={{ zh: "让想法成真", en: "Make Ideas Real." }}
       intro={{
-        zh: "如今仅凭一句指令，AI 能写代码、出设计图、生成 3D 模型，但这一切始终都停在屏幕上。你让它做一个“会旋转会发光的音响”，它会给你一整套装配指南，或是一段渲染出来的视频，告诉你这东西大概长什么样，却无法真正在物理世界中帮你实现。",
-        en: "Generative AI has made digital creation accessible to anyone. A single prompt can now generate code, designs, and virtually any kind of digital content."
+        zh: "QiCore 正在搭建一套从意图到实物的创作系统，让更多人能够亲手做出自己的作品。",
+        en: "QiCore is building a creation system that takes an idea from intent to object—so more people can make something of their own."
       }}
     >
       <QiCoreFilm />
@@ -27,7 +27,7 @@ export default function AboutPage() {
             <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
           </div>
           <ol className="about-narrative-copy" data-qicore-waterfall="3">
-            <li><span>01 / DIGITAL</span><strong>数字创作，人人可及</strong><p>如今仅凭一句指令，AI 就能生成代码、设计图和几乎所有数字内容。</p></li>
+            <li><span>01 / DIGITAL</span><strong>数字创作，触手可及</strong><p>如今，一句指令就能生成代码、设计图和 3D 模型。</p></li>
             <li><span>02 / PHYSICAL</span><strong>到了现实，门槛仍然很高</strong><p>从概念到实物，需要跨越机械、电子、编程和制造工艺等多个专业领域。</p></li>
             <li className="is-qicore"><span>03 / QICORE</span><strong>让 AI 走进物理世界</strong><p>让每个创意都有机会成为实体，从一个想法开始，直接驱动制造终端。</p></li>
           </ol>
@@ -41,7 +41,7 @@ export default function AboutPage() {
             <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
           </div>
           <ol className="about-narrative-copy" data-qicore-waterfall="3">
-            <li><span>01 / DIGITAL</span><strong>Digital creation is already within reach</strong><p>Generative AI has made digital creation accessible to anyone. A single prompt can now generate code, designs, and virtually any kind of digital content.</p></li>
+            <li><span>01 / DIGITAL</span><strong>Digital creation is now within reach</strong><p>A single prompt can already generate code, designs, and 3D models.</p></li>
             <li><span>02 / PHYSICAL</span><strong>Physical creation tells a very different story</strong><p>Turning an idea into something tangible still demands expertise in mechanics, electronics, programming, and often manufacturing processes. For non-experts, the barrier remains steep.</p></li>
             <li className="is-qicore"><span>03 / QICORE</span><strong>From intent to reality</strong><p>QiCore is here to rewrite that equation. Digital creation is already open to everyone. Physical creation should be too.</p></li>
           </ol>
