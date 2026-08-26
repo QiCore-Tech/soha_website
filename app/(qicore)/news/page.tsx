@@ -1,5 +1,6 @@
 import { MarketingPage } from "@/components/marketing-page";
 import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
+import { NewsEntryInteraction } from "@/components/news-entry-interaction";
 
 export default function NewsPage() {
   return (
@@ -14,6 +15,7 @@ export default function NewsPage() {
       }}
     >
       <section className="marketing-section news-feed">
+        <NewsEntryInteraction />
         <div className="news-feed-heading" data-qicore-waterfall="2">
           <p className="section-kicker">Latest entry</p>
           <span>01 ARTICLE / 2026</span>
@@ -49,7 +51,7 @@ export default function NewsPage() {
                 <span data-lang="zh">29 位来自工程、建造游戏与创意行业的用户，开始用 OysCat 搭建自己的项目。</span>
                 <span data-lang="en">Twenty-nine creators are now building their own projects with the first closed beta.</span>
               </p>
-              <span className="news-entry-toggle" aria-hidden="true">
+              <button className="news-entry-toggle" type="button">
                 <span className="news-entry-toggle-closed">
                   <span data-lang="zh">展开正文</span>
                   <span data-lang="en">Read story</span>
@@ -59,7 +61,7 @@ export default function NewsPage() {
                   <span data-lang="en">Close story</span>
                 </span>
                 <i />
-              </span>
+              </button>
             </div>
           </summary>
 

@@ -201,9 +201,14 @@ export function ProductTransition() {
     }
 
     document.body.classList.add("is-product-transition-arriving", `is-product-${direction}`);
+    // Keep a watchdog outside requestAnimationFrame. Browsers can pause a
+    // frame callback when a tab is backgrounded or the page is restoring from
+    // bfcache; without this fallback the overlay would keep swallowing the
+    // cursor and pointer events indefinitely.
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+    timerRef.current = window.setTimeout(cleanup, duration + 180);
     frameRef.current = window.requestAnimationFrame(() => {
       setState({ direction, phase: "arriving" });
-      timerRef.current = window.setTimeout(cleanup, duration + 40);
     });
   }, [cleanup]);
 
