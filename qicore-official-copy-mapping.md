@@ -121,7 +121,7 @@
 
 | 中文 | English |
 | --- | --- |
-| OysCat 是 QiCore 推出的首款造物系统，面向创客、硬件开发者，以及所有想要探索新创造方式的人。 | OysCat is QiCore's first product family, built for makers, hardware creators, and DIY enthusiasts. |
+| OysCat 是 QiCore 推出的首款造物系统，面向所有想把想法做出来的人。 | OysCat is QiCore's first product family, made for anyone who wants to turn an idea into something real. |
 | 认识 OysCat | Explore OysCat |
 | 进入产品站 | Enter product site |
 
@@ -133,7 +133,7 @@ About 页面只放这一层介绍。Workspace、电子模块、仿真和模块�
 
 | 中文 | English |
 | --- | --- |
-| OysCat 是 QiCore 推出的首款造物系统，面向创客、硬件开发者，以及所有想要探索新创造方式的人。 | OysCat is QiCore's first product family, built for makers, hardware creators, and DIY enthusiasts. |
+| OysCat 是 QiCore 推出的首款造物系统，面向所有想把想法做出来的人。 | OysCat is QiCore's first product family, made for anyone who wants to turn an idea into something real. |
 | 如果你玩过建造类游戏，对 OysCat 的操作模式会很有熟悉感。不一样的是，游戏里搭建的内容只存在于屏幕中，而 OysCat 能让你的设计从虚拟走进现实，变成真正可以运行的物品。 | If you've played Minecraft, you already know how to use OysCat. The difference is this: what you build on screen can be made into real objects that work, move, and respond. |
 | 你可以快速制作原型，在投入实体制作前先验证想法。 | You can prototype fast, and validate an idea before you commit to it. |
 | 设计、仿真、制造，在同一条创作流程中完成。 | Design, simulate, build are all in one pass, no iterative back-and-forth. |

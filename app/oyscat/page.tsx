@@ -25,8 +25,8 @@ export default function OysCatPage() {
           </h1>
           <p className="oyscat-product-intro">
             <BilingualText
-              zh="OysCat 是 QiCore 推出的首款造物系统，面向创客、硬件开发者，以及所有想要探索全新创造方式的人群。"
-              en="OysCat is QiCore's first product family, built for makers, hardware creators, and DIY enthusiasts."
+              zh="OysCat 是 QiCore 推出的首款造物系统，面向每一个想把想法做出来的人。"
+              en="OysCat is QiCore's first product family, made for anyone who wants to turn an idea into something real."
             />
           </p>
           <div className="oyscat-product-actions">
