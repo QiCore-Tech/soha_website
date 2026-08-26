@@ -5895,6 +5895,147 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
     .about-page .about-narrative-copy li:last-child { padding: 18px; }
 }
 
+/* OysCat product page: keep the record composed inside a quiet frame. */
+.oyscat-product-page > :not(.oyscat-nav) {
+    width: min(1440px, calc(100% - clamp(48px, 10vw, 144px)));
+    margin-left: auto;
+    margin-right: auto;
+}
+.oyscat-product-page > .oyscat-product-hero {
+    min-height: 690px;
+    padding-left: clamp(30px, 4vw, 64px);
+    padding-right: clamp(30px, 4vw, 64px);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(32px, 5vw, 76px);
+}
+.oyscat-product-copy { max-width: 560px; }
+.oyscat-product-copy h1 { max-width: 560px; }
+.oyscat-product-visual { min-height: 540px; margin-left: 0; }
+
+.oyscat-positioning-note {
+    margin-bottom: 0;
+    padding-top: clamp(72px, 8vw, 112px);
+    padding-bottom: clamp(78px, 8vw, 116px);
+    border-bottom: 0;
+}
+.oyscat-workspace-gallery {
+    margin-top: 0;
+    padding-top: clamp(62px, 7vw, 96px);
+    padding-bottom: clamp(82px, 8vw, 120px);
+    border-top: 1px solid var(--journal-line);
+}
+.oyscat-workspace-gallery-heading {
+    grid-template-columns: minmax(150px, .42fr) minmax(0, 1.58fr);
+    margin-bottom: clamp(28px, 3vw, 44px);
+}
+.oyscat-workspace-gallery-heading h2 {
+    max-width: 570px;
+    font-size: clamp(2.25rem, 4vw, 4.5rem);
+}
+.oyscat-workspace-gallery-grid {
+    grid-template-columns: minmax(0, 1.22fr) minmax(290px, .78fr);
+    gap: 20px;
+}
+.oyscat-workspace-gallery-featured,
+.oyscat-workspace-gallery-stack figure {
+    border-color: rgba(36,33,29,.16);
+    background: rgba(247,246,242,.94);
+    padding: 14px 14px 0;
+}
+.oyscat-workspace-gallery-featured .oyscat-workspace-gallery-image { aspect-ratio: 1.28 / 1; }
+.oyscat-workspace-gallery-stack .oyscat-workspace-gallery-image { aspect-ratio: 1.78 / 1; }
+.oyscat-workspace-gallery-featured figcaption,
+.oyscat-workspace-gallery-stack figcaption { padding: 15px 2px 17px; }
+
+.oyscat-system-section { padding: clamp(82px, 9vw, 126px) 0 0; }
+.oyscat-system-card { min-height: 540px; }
+.oyscat-system-conclusion {
+    position: relative;
+    border-color: var(--journal-line);
+    background: rgba(247,246,242,.72);
+}
+.oyscat-system-conclusion::before {
+    display: none;
+}
+.oyscat-product-conclusion { margin-top: clamp(82px, 9vw, 126px); }
+.oyscat-product-footer { width: min(1440px, calc(100% - clamp(48px, 10vw, 144px))); margin-left: auto; margin-right: auto; }
+
+/* Shared OysCat record cards: ordinary copy sits on a quiet, tactile surface. */
+.oyscat-positioning-note,
+.oyscat-workspace-gallery,
+.oyscat-product-conclusion {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(36,33,29,.14);
+    border-radius: 4px;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.26), transparent 38%),
+        rgba(226,224,218,.58);
+}
+.oyscat-positioning-note::before,
+.oyscat-workspace-gallery::before,
+.oyscat-product-conclusion::before {
+    position: absolute;
+    top: 19px;
+    left: clamp(22px, 3vw, 42px);
+    color: rgba(36,33,29,.36);
+    font-family: 'Geist Mono', monospace;
+    font-size: .52rem;
+    letter-spacing: .14em;
+}
+.oyscat-positioning-note::before { content: "PRODUCT NOTE / 01"; }
+.oyscat-workspace-gallery::before { content: "WORKSPACE LOG / 02"; }
+.oyscat-product-conclusion::before { content: "PRODUCT RECORD / 03"; }
+.oyscat-positioning-note::after,
+.oyscat-workspace-gallery::after {
+    content: "";
+    position: absolute;
+    top: 22px;
+    right: clamp(22px, 3vw, 42px);
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(177,243,62,.55);
+    border-radius: 50%;
+    opacity: .7;
+}
+.oyscat-positioning-note { padding-left: clamp(28px, 4vw, 62px); padding-right: clamp(28px, 4vw, 62px); }
+.oyscat-workspace-gallery { padding-left: clamp(28px, 4vw, 62px); padding-right: clamp(28px, 4vw, 62px); }
+.oyscat-product-conclusion { padding-left: clamp(28px, 4vw, 62px); padding-right: clamp(28px, 4vw, 62px); }
+.oyscat-positioning-heading,
+.oyscat-workspace-gallery-heading { position: relative; z-index: 1; }
+.oyscat-system-conclusion {
+    border-radius: 4px;
+    background:
+        linear-gradient(rgba(36,33,29,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36,33,29,.035) 1px, transparent 1px),
+        rgba(226,224,218,.64);
+    background-size: 28px 28px;
+}
+.oyscat-system-conclusion::after {
+    content: "INTENT  →  OBJECT";
+    position: absolute;
+    top: 24px;
+    right: clamp(22px, 3vw, 42px);
+    color: rgba(36,33,29,.4);
+    font-family: 'Geist Mono', monospace;
+    font-size: .52rem;
+    letter-spacing: .12em;
+}
+
+@media (max-width: 900px) {
+    .oyscat-product-page > :not(.oyscat-nav),
+    .oyscat-product-page > .oyscat-product-footer {
+        width: calc(100% - 44px);
+    }
+    .oyscat-product-page > .oyscat-product-hero { padding-left: 22px; padding-right: 22px; }
+    .oyscat-product-visual { min-height: 430px; margin-left: 0; }
+    .oyscat-system-section { padding-top: 86px; }
+    .oyscat-positioning-note,
+    .oyscat-workspace-gallery,
+    .oyscat-product-conclusion { padding-left: 22px; padding-right: 22px; }
+    .oyscat-system-conclusion::after { display: none; }
+}
+
 /* OysCat Workspace case studies: screenshots sit on the same quiet paper as the product page. */
 .oyscat-workspace-gallery {
     margin: 94px max(5vw, 36px) 0;
@@ -6569,6 +6710,52 @@ button.themed-hero-art:focus-visible .hero-blueprint-card {
                 transparent 20px 22px,
         rgba(42, 38, 34, .18) 22px 31px);
     }
+}
+
+/* Final OysCat gallery rhythm: loaded after every legacy gallery declaration. */
+.oyscat-workspace-gallery {
+    margin: clamp(38px, 5vw, 72px) auto 0;
+    padding: clamp(82px, 7vw, 104px) clamp(28px, 4vw, 62px) clamp(82px, 8vw, 118px);
+    border: 1px solid rgba(36,33,29,.14);
+    border-radius: 4px;
+}
+.oyscat-workspace-gallery-heading {
+    grid-template-columns: minmax(150px, .42fr) minmax(0, 1.58fr);
+    gap: clamp(34px, 5vw, 78px);
+    margin-bottom: clamp(34px, 4vw, 52px);
+}
+.oyscat-workspace-gallery-heading h2 {
+    max-width: 570px;
+    font-size: clamp(2.25rem, 4vw, 4.5rem);
+}
+.oyscat-workspace-gallery-grid {
+    grid-template-columns: minmax(0, 1.22fr) minmax(290px, .78fr);
+    gap: 20px;
+}
+.oyscat-workspace-gallery-featured,
+.oyscat-workspace-gallery-stack figure {
+    padding: 16px 16px 0;
+    border-color: rgba(36,33,29,.16);
+    background: rgba(247,246,242,.94);
+}
+.oyscat-workspace-gallery-stack { gap: 20px; }
+.oyscat-workspace-gallery-featured .oyscat-workspace-gallery-image { aspect-ratio: 1.28 / 1; }
+.oyscat-workspace-gallery-stack .oyscat-workspace-gallery-image { aspect-ratio: 1.78 / 1; }
+.oyscat-workspace-gallery-featured figcaption,
+.oyscat-workspace-gallery-stack figcaption { padding: 15px 2px 17px; }
+
+@media (max-width: 780px) {
+    .oyscat-workspace-gallery {
+        margin: 34px auto 0;
+        padding: 72px 22px 76px;
+    }
+    .oyscat-workspace-gallery-heading { grid-template-columns: 1fr; gap: 16px; }
+    .oyscat-workspace-gallery-grid { grid-template-columns: 1fr; }
+    .oyscat-workspace-gallery-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; }
+}
+
+@media (max-width: 520px) {
+    .oyscat-workspace-gallery-stack { grid-template-columns: 1fr; }
 }
 
 /* Final About card pass: opaque paper surfaces and one clear reading hierarchy. */
