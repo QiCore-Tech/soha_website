@@ -58,6 +58,87 @@ export default function OysCatPage() {
         </div>
       </section>
 
+      <section className="oyscat-system-section" id="products" aria-label="OysCat creation system">
+        <div className="oyscat-system-heading">
+          <p>Two core layers</p>
+          <h2>
+            <BilingualText
+              zh="从一句意图，到一个真实工作的物体。"
+              en="From intent to a real, working object."
+            />
+          </h2>
+        </div>
+
+        <div className="oyscat-system-grid">
+          <article className="oyscat-system-card is-workspace">
+            <span className="oyscat-system-index">01 / INTELLIGENCE</span>
+            <div className="oyscat-system-card-media">
+              <img
+                src="/media/oyscat-workspace/workspace-overview.png"
+                alt="OysCat Workspace canvas with modular voxel construction and motor modules"
+              />
+            </div>
+            <div className="oyscat-system-card-copy">
+              <p className="oyscat-system-role">
+                <BilingualText zh="OysCat 工作台" en="OysCat Workspace" />
+              </p>
+              <h3>Workspace</h3>
+              <p>
+                <BilingualText
+                  zh="从外观结构到功能实现，全流程创作都可在同一个工作台内完成。"
+                  en="This is where you build structure and electronics, together, on one canvas."
+                />
+              </p>
+              <p className="oyscat-system-detail"><BilingualText zh="系统内所有部件均以标准化模块呈现，你可以像搭积木一样自由拼接。" en="Design by stacking voxels: cubes, panels, cylinders, etc." /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="直接定义作品要实现的效果，AI 会自动生成对应代码。" en={'Simply tell it what it should do: "aim at the red balloon and shoot." The AI writes the code for you, and imbues your design with the intended behaviors.'} /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="Workspace 支持实时仿真，验证通过后再进入实体组装。" en="The Workspace runs real-time simulation. This is your final checkpoint, bridging the virtual and physical worlds. What follows is physical." /></p>
+              <a href="https://beta-hk.oyscat.com/" className="oyscat-system-link">
+                <BilingualText zh="进入 Workspace" en="Open Workspace" /><span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <div className="oyscat-workspace-diagram" aria-hidden="true">
+              <span className="workspace-node node-intent">INTENT</span>
+              <span className="workspace-node node-model">MODEL</span>
+              <span className="workspace-node node-code">CODE</span>
+              <span className="workspace-node node-real">REAL</span>
+              <i /><i /><i />
+            </div>
+          </article>
+
+          <article className="oyscat-system-card is-hardware">
+            <span className="oyscat-system-index">02 / PHYSICAL</span>
+            <div className="oyscat-system-card-media">
+              <img
+                src="/media/oyscat-workspace/electronic-modules-dark-studio.png"
+                alt="Two OysCat electronic modules photographed in a dark studio"
+              />
+            </div>
+            <div className="oyscat-system-card-copy">
+              <p className="oyscat-system-role">
+                <BilingualText zh="OysCat 电子模块" en="OysCat E-Modules" />
+              </p>
+              <h3>Electronic Modules</h3>
+              <p>
+                <BilingualText
+                  zh="工作台中的每一个功能模块，都对应一款真实的实体模块。"
+                  en="Every electronics module you place in Workspace maps to a physical one."
+                />
+              </p>
+              <p className="oyscat-system-detail"><BilingualText zh="它在现实中的表现，与仿真结果保持一致。" en="Its real-world performance exactly matches your simulation." /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="运动、显示、感知、声音、控制……不同功能对应不同的标准模块。" en="These are standardized hardware blocks, designed by function: motion, lighting, sensing, sound, control. Snap them together." /></p>
+              <p className="oyscat-system-detail"><BilingualText zh="无需焊接、布线或手动搭建电路，把模块拼接起来，作品就能运行。" en="No soldering, no wiring, no circuits to build by hand. Snap them together, and your creation is complete." /></p>
+            </div>
+            <div className="oyscat-module-diagram" aria-hidden="true">
+              <span /><span /><span /><span />
+              <i>MOVE</i><i>LIGHT</i><i>SENSE</i><i>CTRL</i>
+            </div>
+          </article>
+        </div>
+        <p className="oyscat-system-conclusion">
+          <BilingualText zh="你只需要描述你想要什么。" en="You only need to describe what you want." />
+        </p>
+      </section>
+
       <section className="oyscat-workspace-gallery" id="workspace-works" aria-labelledby="workspace-gallery-title">
         <header className="oyscat-workspace-gallery-heading">
           <p className="section-kicker">Workspace / Case studies</p>
@@ -67,8 +148,8 @@ export default function OysCatPage() {
             </h2>
             <p>
               <BilingualText
-                zh="从机械臂到游戏控制台，作品先在 Workspace 里成形，再走向真实世界。"
-                en="From robotic arms to game consoles, ideas take shape in Workspace before they become real."
+                zh="从机械臂到机械狗与游戏控制台，作品先在 Workspace 里成形，再走向真实世界。"
+                en="From robotic arms to quadrupeds and game consoles, ideas take shape in Workspace before they become real."
               />
             </p>
           </div>
@@ -95,12 +176,28 @@ export default function OysCatPage() {
             <figure>
               <div className="oyscat-workspace-gallery-image">
                 <img
+                  src="/media/oyscat-workspace/quadruped-study.png"
+                  alt="A modular quadruped robot assembled from voxels in OysCat Workspace"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="oyscat-workspace-gallery-mark">QUADRUPED STUDY / 02</span>
+              </div>
+              <figcaption>
+                <strong><BilingualText zh="模块化机械狗" en="Modular Quadruped" /></strong>
+                <span><BilingualText zh="步态研究 · 关节协同 · 体素构造" en="Gait study · joint coordination · voxel construction" /></span>
+              </figcaption>
+            </figure>
+
+            <figure>
+              <div className="oyscat-workspace-gallery-image">
+                <img
                   src="/media/oyscat-workspace/voxel-rover-crop.webp"
                   alt="A modular game console assembled in OysCat Workspace"
                   loading="lazy"
                   decoding="async"
                 />
-                <span className="oyscat-workspace-gallery-mark">INTERACTION STUDY / 02</span>
+                <span className="oyscat-workspace-gallery-mark">INTERACTION STUDY / 03</span>
               </div>
               <figcaption>
                 <strong><BilingualText zh="模块化游戏控制台" en="Modular Game Console" /></strong>
@@ -116,7 +213,7 @@ export default function OysCatPage() {
                   loading="lazy"
                   decoding="async"
                 />
-                <span className="oyscat-workspace-gallery-mark">STRUCTURE STUDY / 03</span>
+                <span className="oyscat-workspace-gallery-mark">STRUCTURE STUDY / 04</span>
               </div>
               <figcaption>
                 <strong><BilingualText zh="模块化车体" en="Modular Vehicle" /></strong>
@@ -125,87 +222,6 @@ export default function OysCatPage() {
             </figure>
           </div>
         </div>
-      </section>
-
-      <section className="oyscat-system-section" id="products" aria-label="OysCat creation system">
-        <div className="oyscat-system-heading">
-          <p>Two core layers</p>
-          <h2>
-            <BilingualText
-              zh="从一句意图，到一个真实工作的物体。"
-              en="From intent to a real, working object."
-            />
-          </h2>
-        </div>
-
-        <div className="oyscat-system-grid">
-          <article className="oyscat-system-card is-workspace">
-            <span className="oyscat-system-index">01 / INTELLIGENCE</span>
-            <div className="oyscat-system-card-copy">
-              <p className="oyscat-system-role">
-                <BilingualText zh="OysCat 工作台" en="OysCat Workspace" />
-              </p>
-              <h3>Workspace</h3>
-              <div className="oyscat-system-keywords" aria-label="Workspace capabilities">
-                <span><BilingualText zh="建模" en="MODEL" /></span>
-                <span><BilingualText zh="编程" en="CODE" /></span>
-                <span><BilingualText zh="仿真" en="SIMULATE" /></span>
-                <span><BilingualText zh="控制" en="CONTROL" /></span>
-              </div>
-              <p>
-                <BilingualText
-                  zh="从外观结构到功能实现，全流程创作都可在同一个工作台内完成。"
-                  en="This is where you build structure and electronics, together, on one canvas."
-                />
-              </p>
-              <p className="oyscat-system-detail"><BilingualText zh="系统内所有部件均以标准化模块呈现，你可以像搭积木一样自由拼接。" en="Design by stacking voxels: cubes, panels, cylinders, etc." /></p>
-              <p className="oyscat-system-detail"><BilingualText zh="直接定义作品要实现的效果，AI 会自动生成对应代码。" en={'Simply tell it what it should do: "aim at the red balloon and shoot." The AI writes the code for you, and imbues your design with the intended behaviors.'} /></p>
-              <p className="oyscat-system-detail"><BilingualText zh="Workspace 支持实时仿真，验证通过后再进入实体组装。" en="The Workspace runs real-time simulation. This is your final checkpoint, bridging the virtual and physical worlds. What follows is physical." /></p>
-              <a href="https://beta-hk.oyscat.com/" className="oyscat-system-link">
-                <BilingualText zh="进入 Workspace" en="Open Workspace" /><span aria-hidden="true">↗</span>
-              </a>
-            </div>
-            <div className="oyscat-workspace-diagram" aria-hidden="true">
-              <span className="workspace-node node-intent">INTENT</span>
-              <span className="workspace-node node-model">3D</span>
-              <span className="workspace-node node-code">CODE</span>
-              <span className="workspace-node node-real">REAL</span>
-              <i /><i /><i />
-            </div>
-          </article>
-
-          <article className="oyscat-system-card is-hardware">
-            <span className="oyscat-system-index">02 / PHYSICAL</span>
-            <div className="oyscat-system-card-copy">
-              <p className="oyscat-system-role">
-                <BilingualText zh="OysCat 电子模块" en="OysCat E-Modules" />
-              </p>
-              <h3>Electronic Modules</h3>
-              <div className="oyscat-system-keywords" aria-label="Electronic module capabilities">
-                <span><BilingualText zh="运动" en="MOVE" /></span>
-                <span><BilingualText zh="灯光" en="LIGHT" /></span>
-                <span><BilingualText zh="传感" en="SENSE" /></span>
-                <span><BilingualText zh="控制" en="CONTROL" /></span>
-              </div>
-              <p>
-                <BilingualText
-                  zh="工作台中的每一个功能模块，都对应一款真实的实体模块。"
-                  en="Every electronics module you place in Workspace maps to a physical one."
-                />
-              </p>
-              <p className="oyscat-system-detail"><BilingualText zh="它在现实中的表现，与仿真结果保持一致。" en="Its real-world performance exactly matches your simulation." /></p>
-              <p className="oyscat-system-detail"><BilingualText zh="运动、显示、感知、声音、控制……不同功能对应不同的标准模块。" en="These are standardized hardware blocks, designed by function: motion, lighting, sensing, sound, control. Snap them together." /></p>
-              <p className="oyscat-system-detail"><BilingualText zh="无需焊接、布线或手动搭建电路，把模块拼接起来，作品就能运行。" en="No soldering, no wiring, no circuits to build by hand. Snap them together, and your creation is complete." /></p>
-            </div>
-            <div className="oyscat-module-diagram" aria-hidden="true">
-              <span /><span /><span /><span />
-              <i>MOVE</i><i>LIGHT</i><i>SENSE</i><i>CTRL</i>
-            </div>
-          </article>
-        </div>
-        <p className="oyscat-system-conclusion">
-          <BilingualText zh="你只需要描述你想要什么。" en="You only need to describe what you want." />
-        </p>
       </section>
 
       <section className="oyscat-product-conclusion">
