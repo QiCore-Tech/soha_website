@@ -75,12 +75,12 @@ export default function TeamPage() {
         <div data-qicore-waterfall="7">
           <p>
             <BilingualText
-              zh="职位会陆续公开，但如果你已经有想法，欢迎现在就来找我们。把你的作品、经历，或那个让你一直惦记的问题发给我们。我们不太在意简历是不是漂亮，更想知道：你为什么出发，又想把什么做出来。"
-              en="Open roles will appear here, but if you already have an idea, come find us. Send us your work, your story, or the problem you cannot stop thinking about. We care less about a perfect résumé than what drives you and what you want to make."
+              zh="我们正在寻找愿意认真解决问题、也愿意把想法做出来的人。查看开放职位和岗位要求，找到适合你的方向。"
+              en="We are looking for thoughtful people who like turning ideas into real work. Explore our open roles and find where you could fit."
             />
           </p>
-          <a className="lime-cta" href="mailto:hr@qicore.ai">
-            hr@qicore.ai <span aria-hidden="true">↗</span>
+          <a className="lime-cta" href="/careers">
+            <BilingualText zh="查看开放职位" en="View open roles" /> <span aria-hidden="true">↗</span>
           </a>
         </div>
       </section>

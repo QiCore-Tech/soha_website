@@ -9,32 +9,35 @@ type MarketingPageProps = {
   eyebrow: { zh: string; en: string };
   title: { zh: string; en: string };
   intro: { zh: string; en: string };
-  heroArt: MarketingHeroArtVariant;
+  heroArt?: MarketingHeroArtVariant;
+  showHero?: boolean;
   pageClassName?: string;
   children: ReactNode;
 };
 
-export function MarketingPage({ eyebrow, title, intro, heroArt, pageClassName, children }: MarketingPageProps) {
+export function MarketingPage({ eyebrow, title, intro, heroArt, showHero = true, pageClassName, children }: MarketingPageProps) {
   return (
     <main className={`marketing-page${pageClassName ? ` ${pageClassName}` : ""}`}>
       <div className="marketing-board">
-        <section className="marketing-hero">
-          <div className="marketing-hero-copy" data-qicore-waterfall="0">
-            <p className="marketing-eyebrow">
-              <span data-lang="zh">{eyebrow.zh}</span>
-              <span data-lang="en">{eyebrow.en}</span>
-            </p>
-            <h1>
-              <span data-lang="zh">{title.zh}</span>
-              <span data-lang="en">{title.en}</span>
-            </h1>
-            <p className="marketing-intro">
-              <span data-lang="zh">{intro.zh}</span>
-              <span data-lang="en">{intro.en}</span>
-            </p>
-          </div>
-          <MarketingHeroArt variant={heroArt} />
-        </section>
+        {showHero ? (
+          <section className="marketing-hero">
+            <div className="marketing-hero-copy" data-qicore-waterfall="0">
+              <p className="marketing-eyebrow">
+                <span data-lang="zh">{eyebrow.zh}</span>
+                <span data-lang="en">{eyebrow.en}</span>
+              </p>
+              <h1>
+                <span data-lang="zh">{title.zh}</span>
+                <span data-lang="en">{title.en}</span>
+              </h1>
+              <p className="marketing-intro">
+                <span data-lang="zh">{intro.zh}</span>
+                <span data-lang="en">{intro.en}</span>
+              </p>
+            </div>
+            {heroArt ? <MarketingHeroArt variant={heroArt} /> : null}
+          </section>
+        ) : null}
 
         {children}
 
@@ -48,6 +51,10 @@ export function MarketingPage({ eyebrow, title, intro, heroArt, pageClassName, c
           </div>
           <div className="marketing-footer-links" data-qicore-waterfall="8">
             <a href="mailto:info@qicore.ai">info@qicore.ai</a>
+            <a href="/careers">
+              <span data-lang="zh">查看招聘</span>
+              <span data-lang="en">View openings</span>
+            </a>
             <a href="mailto:hr@qicore.ai">hr@qicore.ai</a>
             <a className="marketing-footer-product" href="/oyscat">
               <OysCatProductWordmark className="qicore-footer-oyscat-wordmark" />
