@@ -1,30 +1,31 @@
 "use client";
 
-import { useEffect } from "react";
-
-/**
- * Keep the news card itself passive: only the explicit read button toggles
- * the native details element. The delegated setup also survives route swaps
- * handled by the QiCore shell.
- */
+/** Keep the card passive and let only this control toggle its parent entry. */
 export function NewsEntryInteraction() {
-  useEffect(() => {
-    const entries = Array.from(document.querySelectorAll<HTMLDetailsElement>(".news-entry"));
-    const cleanups = entries.map((entry) => {
-      const toggle = entry.querySelector<HTMLButtonElement>(".news-entry-toggle");
-      if (!toggle) return () => {};
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-      const handleToggle = (event: MouseEvent) => {
-        event.preventDefault();
-        entry.open = !entry.open;
-      };
+    const entry = event.currentTarget.closest<HTMLDetailsElement>(".news-entry");
+    if (entry) entry.open = !entry.open;
+  };
 
-      toggle.addEventListener("click", handleToggle);
-      return () => toggle.removeEventListener("click", handleToggle);
-    });
-
-    return () => cleanups.forEach((cleanup) => cleanup());
-  }, []);
-
-  return null;
+  return (
+    <button
+      className="news-entry-toggle"
+      type="button"
+      aria-label="展开或收起正文"
+      onClick={handleClick}
+    >
+      <span className="news-entry-toggle-closed">
+        <span data-lang="zh">展开正文</span>
+        <span data-lang="en">Read story</span>
+      </span>
+      <span className="news-entry-toggle-open">
+        <span data-lang="zh">收起正文</span>
+        <span data-lang="en">Close story</span>
+      </span>
+      <i aria-hidden="true" />
+    </button>
+  );
 }

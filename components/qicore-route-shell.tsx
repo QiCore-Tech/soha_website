@@ -269,7 +269,18 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     art.setAttribute("aria-pressed", String(isActive));
   }
 
+  function handleNewsEntryInteraction(event: ReactMouseEvent<HTMLDivElement>) {
+    const target = event.target instanceof Element ? event.target : null;
+    const toggle = target?.closest<HTMLButtonElement>(".news-entry-toggle");
+    const entry = toggle?.closest<HTMLDetailsElement>(".news-entry");
+    if (!toggle || !entry || !entry.closest(".qicore-route-panel.is-active")) return;
+
+    event.preventDefault();
+    entry.open = !entry.open;
+  }
+
   function handleContentClick(event: ReactMouseEvent<HTMLDivElement>) {
+    handleNewsEntryInteraction(event);
     handleFilmInteraction(event.target);
     toggleHeroInteraction(event.target);
   }

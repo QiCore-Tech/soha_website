@@ -183,7 +183,7 @@ test("mobile navigation reaches OysCat content pages", async () => {
     await page.waitForURL("**/about");
     await page.locator(".locale-toggle").click();
     await page.waitForFunction(() => document.documentElement.dataset.locale === "en");
-    assert.equal(await page.getByRole("heading", { name: "Make Physical Products by Simply Describing What You Want" }).isVisible(), true);
+    assert.equal(await page.getByRole("heading", { name: "Make Ideas Real." }).isVisible(), true);
   });
 });
 
@@ -207,7 +207,7 @@ test("saved English locale is applied before hydration", async () => {
 
     assert.equal(await page.locator("html").getAttribute("data-locale"), "en");
     assert.equal(await page.locator("html").getAttribute("lang"), "en");
-    assert.equal(await page.getByRole("heading", { name: "Make Physical Products by Simply Describing What You Want" }).isVisible(), true);
+    assert.equal(await page.getByRole("heading", { name: "Make Ideas Real." }).isVisible(), true);
     assert.equal(await page.getByRole("heading", { name: "让智能硬件更容易被创造。" }).isVisible(), false);
     assert.equal(
       await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
@@ -247,7 +247,7 @@ test("in-place company navigation preserves the waterfall entry animation", asyn
     await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-outgoing h1"));
     assert.match(
       await page.locator(".qicore-route-panel.is-outgoing h1").textContent(),
-      /Make Physical Products by Simply Describing What You Want/,
+      /Make Ideas Real/,
       "the outgoing layer must retain the previous page"
     );
     assert.match(
@@ -319,7 +319,9 @@ test("cached news content keeps its native story disclosure interactive", async 
 
     const story = page.locator(".qicore-route-panel.is-active .news-entry");
     assert.equal(await story.getAttribute("open"), null);
-    await story.locator("summary").click();
+    await story.locator("h2").dispatchEvent("click");
+    assert.equal(await story.getAttribute("open"), null, "the card itself must remain passive");
+    await story.locator(".news-entry-toggle").click();
     assert.equal(await story.getAttribute("open"), "");
     assert.match(await story.locator(".news-entry-toggle").innerText(), /Close story|收起正文/);
   });
@@ -334,7 +336,7 @@ test("QiCore film plays inline without leaving the About page", async () => {
     await page.locator(".qicore-film-poster").click();
     const player = page.locator(".qicore-film-screen iframe");
     assert.equal(await player.count(), 1);
-    assert.match(await player.getAttribute("src"), /youtube-nocookie\.com\/embed\/lqwWjw_-WnY/);
+    assert.match(await player.getAttribute("src"), /youtube-nocookie\.com\/embed\/kXsAVhzLfh4/);
     assert.match(page.url(), /\/about$/);
 
     await page.locator(".qicore-film-close").click();
@@ -425,7 +427,7 @@ test("company navigation preserves the shared canvas while product navigation re
     await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-active h1"));
     assert.match(
       await page.locator(".qicore-route-panel.is-active h1").textContent(),
-      /Make Physical Products by Simply Describing What You Want/
+      /Make Ideas Real/
     );
 
     await page.evaluate(() => {
