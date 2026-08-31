@@ -109,15 +109,15 @@ export function CareersBoard({ roles, filters, applicationUrl }: CareersBoardPro
               </div>
               <div className="career-role-columns">
                 <div>
-                  <h3><span data-lang="zh">你会做什么</span><span data-lang="en">What you will do</span></h3>
+                  <h3><span data-lang="zh">工作内容</span><span data-lang="en">What you will do</span></h3>
                   <RoleList items={role.responsibilities} emptyLabel={{ zh: "内容即将更新。", en: "Details coming soon." }} />
                 </div>
                 <div>
-                  <h3><span data-lang="zh">我们希望你</span><span data-lang="en">What we are looking for</span></h3>
+                  <h3><span data-lang="zh">任职要求</span><span data-lang="en">What we are looking for</span></h3>
                   <RoleList items={role.requirements} emptyLabel={{ zh: "内容即将更新。", en: "Details coming soon." }} />
                 </div>
                 <div>
-                  <h3><span data-lang="zh">如果你还带来这些</span><span data-lang="en">It is a plus if you</span></h3>
+                  <h3><span data-lang="zh">加分项</span><span data-lang="en">Nice to have</span></h3>
                   <RoleList items={role.niceToHave} emptyLabel={{ zh: "不设额外门槛。", en: "No extra requirements." }} />
                 </div>
               </div>
