@@ -364,7 +364,7 @@ export function HomePage() {
                 <div className="slogan-detail">
                   <p className="company-note">
                     <span className="brand">气核科技（qicore）</span> 把想法带到现实，欢迎了解公司业务，
-                    <span className="hiring">WE ARE HIRING</span>。
+                    <a className="hiring" href="/careers">WE ARE HIRING</a>。
                   </p>
                 </div>
               </div>

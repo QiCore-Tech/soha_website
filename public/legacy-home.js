@@ -1705,13 +1705,16 @@
                     }
                 } else {
                     const sloganRect = shadowState.slogan.viewportRect;
-                    const padX = sloganExpanded ? 28 : 10;
-                    const padY = sloganExpanded ? 24 : 10;
-                    const isInsideSloganZone = sloganRect &&
+                    const sloganCardRect = sloganCard.getBoundingClientRect();
+                    const padX = sloganExpanded ? 14 : 10;
+                    const hoverBottom = sloganRect && (sloganExpanded
+                        ? Math.max(sloganCardRect.bottom + 12, sloganRect.bottom + 164)
+                        : sloganRect.bottom + 10);
+                    const isInsideSloganZone = !!sloganRect &&
                         mouseX >= sloganRect.left - padX &&
                         mouseX <= sloganRect.right + padX &&
-                        mouseY >= sloganRect.top - padY &&
-                        mouseY <= sloganRect.bottom + padY;
+                        mouseY >= sloganRect.top - 10 &&
+                        mouseY <= hoverBottom;
 
                     if (isInsideSloganZone !== sloganExpanded) {
                         sloganExpanded = isInsideSloganZone;
