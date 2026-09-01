@@ -30,6 +30,12 @@ export function LegacyHome() {
             <p>
               Make Smart <span className="slogan-separator" /> 气造万物
             </p>
+            <span className="slogan-action-separator" aria-hidden="true" />
+            <span className="projection-careers-link" aria-hidden="true">
+              <span data-lang="zh">加入我们</span>
+              <span data-lang="en">Join us</span>
+              <span>→</span>
+            </span>
           </div>
           <div className="projection-shadow projection-footer" id="footer-shadow">
             <div className="icon-indicator" />
@@ -55,17 +61,21 @@ export function LegacyHome() {
                 <p>
                   Make Smart <span className="slogan-separator" /> 气造万物
                 </p>
+                <span className="slogan-action-separator" aria-hidden="true" />
+                <a className="slogan-careers-link" href="/careers" aria-label="查看开放岗位">
+                  <span data-lang="zh">加入我们</span>
+                  <span data-lang="en">Join us</span>
+                  <span className="slogan-careers-arrow" aria-hidden="true">→</span>
+                </a>
               </div>
               <div className="slogan-drawer">
                 <div className="slogan-detail">
                   <p className="company-note">
                     <span data-lang="zh">
-                      <span className="brand">气核科技（QiCore）</span> 专注于生成式物理造物，致力于让每个人实现「所想即所造」。欢迎了解公司业务，
-                      <a className="hiring" href="/careers">WE ARE HIRING</a>。
+                      <span className="brand">气核科技（QiCore）</span> 专注于生成式物理造物，致力于让每个人实现「所想即所造」。
                     </span>
                     <span data-lang="en">
-                      <span className="brand">QiCore Technology</span> is building tools for intent-driven physical creation. Discover our work and grow with us —{" "}
-                      <a className="hiring" href="/careers">WE ARE HIRING</a>.
+                      <span className="brand">QiCore Technology</span> is building tools for intent-driven physical creation.
                     </span>
                   </p>
                 </div>

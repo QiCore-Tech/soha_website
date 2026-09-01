@@ -359,12 +359,17 @@ export function HomePage() {
                 <p>
                   Make Smart <span className="slogan-separator" /> 气造万物
                 </p>
+                <span className="slogan-action-separator" aria-hidden="true" />
+                <a className="slogan-careers-link" href="/careers" aria-label="查看开放岗位">
+                  <span data-lang="zh">加入我们</span>
+                  <span data-lang="en">Join us</span>
+                  <span className="slogan-careers-arrow" aria-hidden="true">→</span>
+                </a>
               </div>
               <div className="slogan-drawer">
                 <div className="slogan-detail">
                   <p className="company-note">
-                    <span className="brand">气核科技（qicore）</span> 把想法带到现实，欢迎了解公司业务，
-                    <a className="hiring" href="/careers">WE ARE HIRING</a>。
+                    <span className="brand">气核科技（QiCore）</span> 把想法带到现实，让每个人离真实造物更近一步。
                   </p>
                 </div>
               </div>
