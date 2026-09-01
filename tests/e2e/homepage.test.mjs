@@ -76,6 +76,20 @@ test("floating navigation is isolated from the voxel palette", async () => {
   });
 });
 
+test("homepage slogan exposes a direct careers entry", async () => {
+  await withPage(async (page) => {
+    const careersLink = page.locator(".slogan-card .slogan-careers-link");
+    await careersLink.waitFor({ state: "visible" });
+
+    assert.equal(await careersLink.getAttribute("href"), "/careers");
+    assert.match(await careersLink.innerText(), /加入我们|Join us/);
+
+    await careersLink.click();
+    await page.waitForURL("**/careers");
+    assert.equal(await page.locator(".careers-page").isVisible(), true);
+  });
+});
+
 test("right clicking a placed voxel deletes it instead of opening the palette", async () => {
   await withPage(async (page) => {
     await placeVoxelAtGrid(page, 5, 5);

@@ -702,9 +702,9 @@
         .projection-footer { filter: blur(7px); }
 
         .projection-slogan {
-            padding: 12px 36px;
+            padding: 11px 24px;
             border-radius: 100px;
-            gap: 14px;
+            gap: 16px;
         }
         .projection-slogan p {
             font-family: 'Outfit', 'MiSans', sans-serif;
@@ -716,6 +716,14 @@
         }
         .projection-slogan .slogan-separator {
             background-color: rgba(0, 0, 0, 0.28);
+        }
+        .projection-careers-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: inherit;
+            font: inherit;
+            white-space: nowrap;
         }
 
         .projection-footer {
@@ -761,7 +769,7 @@
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            width: min(392px, 72vw);
+            width: min(430px, calc(100vw - 44px));
             height: 188px;
             transform: translateZ(50px) translateY(-10vh);
             pointer-events: none;
@@ -778,10 +786,10 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 14px;
+            display: flex; align-items: center; justify-content: center; gap: 16px;
             cursor: default;
             text-align: center;
-            padding: 12px 36px;
+            padding: 11px 24px;
             border-radius: 999px;
             border: 1px solid rgba(0, 0, 0, 0.045);
             background: rgba(242, 242, 244, 0.82);
@@ -837,8 +845,41 @@
             font-weight: 560;
             letter-spacing: 0.14em;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .slogan-separator { display: inline-block; width: 3px; height: 3px; background-color: rgba(101, 96, 88, 0.34); transform: rotate(45deg); }
+        .slogan-action-separator {
+            width: 1px;
+            height: 16px;
+            flex: none;
+            background: rgba(83, 78, 71, 0.13);
+        }
+        .slogan-careers-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex: none;
+            color: rgba(97, 92, 84, 0.92);
+            font-family: 'Outfit', 'MiSans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 560;
+            letter-spacing: 0.14em;
+            line-height: 1;
+            text-transform: uppercase;
+            white-space: nowrap;
+            text-decoration: none;
+            text-underline-offset: 4px;
+            transition: color 180ms ease, text-decoration-color 180ms ease;
+        }
+        .slogan-careers-link:hover {
+            color: rgba(43, 40, 36, 0.98);
+            text-decoration: underline;
+        }
+        .slogan-careers-link:focus-visible {
+            outline: 2px solid rgba(94, 119, 48, 0.48);
+            outline-offset: 2px;
+        }
+        .slogan-careers-arrow { font-size: 0.9em; letter-spacing: 0; }
         .slogan-card.is-expanded .slogan-drawer {
             max-height: 132px;
             opacity: 1;
@@ -1308,17 +1349,26 @@
             .slogan-bar {
                 width: auto;
                 max-width: 100%;
-                padding: 11px 20px;
+                gap: 11px;
+                padding: 10px 16px;
             }
             .slogan-bar p,
             .projection-slogan p {
-                font-size: clamp(0.72rem, 3.5vw, 0.86rem);
-                letter-spacing: 0.1em;
+                font-size: clamp(0.68rem, 3.15vw, 0.82rem);
+                letter-spacing: 0.08em;
                 white-space: nowrap;
             }
             .projection-slogan {
-                padding: 11px 20px;
+                gap: 11px;
+                padding: 10px 16px;
             }
+            .slogan-careers-link,
+            .projection-careers-link {
+                gap: 5px;
+                font-size: clamp(0.68rem, 3.15vw, 0.82rem);
+                letter-spacing: 0.08em;
+            }
+            .slogan-action-separator { height: 14px; }
             .slogan-detail { display: none; }
             .palette-overlay { display: none; }
         }
