@@ -1,6 +1,5 @@
 import { request } from "node:https";
 import type { CareerRole, CareerText } from "@/lib/careers-data";
-import { CAREER_ROLES } from "@/lib/careers-data";
 
 const FEISHU_API_ORIGIN = "https://open.feishu.cn";
 
@@ -265,7 +264,16 @@ function mapRecords(records: FeishuRecord[]): CareerRole[] {
 
 export async function getCareerRoles(): Promise<CareerRole[]> {
   const config = readConfig();
-  if (!config) return CAREER_ROLES;
+  if (!config) {
+    if (process.env.VERCEL_ENV === "production") {
+      throw new Error(
+        "Feishu Careers is not configured for the production deployment. " +
+        "Refusing to publish an empty or stale careers page."
+      );
+    }
+
+    return [];
+  }
 
   const token = await getTenantAccessToken(config);
   const records = await getRecords(config, token);
