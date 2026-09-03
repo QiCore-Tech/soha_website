@@ -1753,9 +1753,13 @@ body:has(.marketing-page) {
 .marketing-page * { user-select: text; }
 .marketing-page a, .marketing-page button { cursor: pointer; user-select: none; }
 
-/* Keep the short Team hero lockup together on wide layouts. */
-.team-page .marketing-hero h1 { max-width: 900px; }
-.team-page .marketing-hero h1 [data-lang="en"] { white-space: nowrap; }
+/* Keep the Team hero lockup inside its copy card at every viewport. */
+.team-page .marketing-hero h1 { max-width: 100%; }
+.team-page .marketing-hero h1 [data-lang="en"] {
+    white-space: normal;
+    text-wrap: balance;
+    overflow-wrap: normal;
+}
 
 /* Keep Chinese editorial headlines balanced instead of leaving a single glyph on its own line. */
 .news-page .marketing-hero h1 [data-lang="zh"] {
@@ -1770,8 +1774,7 @@ body:has(.marketing-page) {
 .team-page .team-mission-lead { max-width: none; }
 
 @media (max-width: 900px) {
-    .team-page .marketing-hero h1 { max-width: 100%; }
-    .team-page .marketing-hero h1 [data-lang="en"] { white-space: normal; }
+    .team-page .marketing-hero h1 [data-lang="en"] { text-wrap: pretty; }
     .news-page .marketing-hero h1 [data-lang="zh"] {
         max-width: 100%;
         font-size: clamp(3rem, 14vw, 5rem);
