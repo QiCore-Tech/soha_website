@@ -1,5 +1,6 @@
 "use client";
 
+import { openProductImage } from "@/lib/product-image-viewer";
 import { prepareOyscatArrival } from "@/lib/oyscat-arrival";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -45,6 +46,8 @@ type TransitionKind =
 
 export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   const pathname = usePathname();
+  const closeImage = useRef<(() => void) | null>(null);
+  useEffect(() => () => { closeImage.current?.(); }, [pathname]);
   const gatewayArrival = useRef(false);
   const cancelArrival = useRef<(() => void) | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -162,7 +165,9 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   }, [hasVisibleContent]);
 
   useEffect(() => {
-    const videos = Array.from(contentRef.current?.querySelectorAll<HTMLVideoElement>(".qicore-route-panel.is-active video[data-workspace-demo]") ?? []);
+    const container = contentRef.current;
+    if (!container) return;
+    const videos = new Set<HTMLVideoElement>();
     const visible = new Set<HTMLVideoElement>();
     const sync = () => videos.forEach(video => {
       if (visible.has(video) && !document.hidden) {
@@ -173,19 +178,40 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const video = entry.target as HTMLVideoElement;
+        if (!videos.has(video)) return;
         if (entry.isIntersecting && entry.intersectionRatio >= .3) visible.add(video);
         else visible.delete(video);
       });
       sync();
     }, { threshold: [0, .3] });
-    videos.forEach(video => observer.observe(video));
+    const refresh = () => {
+      const current = new Set(container.querySelectorAll<HTMLVideoElement>(".qicore-route-panel.is-active video[data-workspace-demo]"));
+      videos.forEach(video => {
+        if (current.has(video)) return;
+        observer.unobserve(video);
+        video.pause();
+        visible.delete(video);
+        videos.delete(video);
+      });
+      current.forEach(video => {
+        if (videos.has(video)) return;
+        videos.add(video);
+        video.muted = true;
+        observer.observe(video);
+      });
+    };
+    // Cached route HTML can replace the video after the route transition renders.
+    const mutations = new MutationObserver(refresh);
+    mutations.observe(container, { childList: true, subtree: true, attributes: true, attributeFilter: ["class"] });
+    refresh();
     document.addEventListener("visibilitychange", sync);
     return () => {
+      mutations.disconnect();
       observer.disconnect();
       document.removeEventListener("visibilitychange", sync);
       videos.forEach(video => video.pause());
     };
-  }, [activeFrame]);
+  }, []);
 
   useEffect(() => {
     function handleRouteRequest(event: Event) {
@@ -443,6 +469,14 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
         ref={contentRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={resetPointerTilt}
+        onClickCapture={event => {
+          const trigger = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-product-image]") : null;
+          if (!trigger) return;
+          event.preventDefault();
+          event.stopPropagation();
+          closeImage.current?.();
+          closeImage.current = openProductImage(trigger);
+        }}
         onClick={handleContentClick}
         onSubmit={handleContentSubmit}
         onKeyDown={handleContentKeyDown}

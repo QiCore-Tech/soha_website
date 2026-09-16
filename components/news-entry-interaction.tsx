@@ -14,7 +14,6 @@ export function NewsEntryInteraction() {
     <button
       className="news-entry-toggle"
       type="button"
-      aria-label="展开或收起正文"
       onClick={handleClick}
     >
       <span className="news-entry-toggle-closed">

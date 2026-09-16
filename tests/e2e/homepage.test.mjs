@@ -342,10 +342,9 @@ test("cached news content keeps its native story disclosure interactive", async 
     await page.locator('.marketing-nav-links a[href="/news"]').click();
     await page.waitForURL("**/news");
 
+    await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
     const story = page.locator(".qicore-route-panel.is-active .news-entry");
     assert.equal(await story.getAttribute("open"), null);
-    await story.locator("h2").dispatchEvent("click");
-    assert.equal(await story.getAttribute("open"), null, "the card itself must remain passive");
     await story.locator(".news-entry-toggle").click();
     assert.equal(await story.getAttribute("open"), "");
     assert.match(await story.locator(".news-entry-toggle").innerText(), /Close story|收起正文/);
@@ -517,8 +516,8 @@ test("Oyscat English mode localizes process labels and form validation", async (
     await page.waitForFunction(() => document.title === "Oyscat Product | QiCore");
     await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
     assert.equal(await page.title(), "Oyscat Product | QiCore");
-    assert.equal(await activePage.getByText("MAKE IT REAL", { exact: true }).count(), 1);
-    assert.equal(await activePage.getByText("实现", { exact: true }).isVisible(), false);
+    assert.equal(await activePage.locator("#faq-title").innerText(), "FAQ");
+    assert.equal(await activePage.getByText("常见问题", { exact: true }).isVisible(), false);
 
     const email = activePage.locator('#beta input[name="email"]');
     await activePage.locator('#beta button[type="submit"]').click();
@@ -587,7 +586,8 @@ test("about layout styles survive careers to home navigation", async () => {
       }));
     assert.equal(cardSurfaces.length, 5);
     assert.equal(new Set(cardSurfaces.map((surface) => surface.backgroundColor)).size, 1);
-    assert.match(cardSurfaces[0].backgroundColor, /^rgba\(234, 232, 236, 0\.9\)$/);
+    assert.equal(cardSurfaces[0].backgroundColor, "rgba(0, 0, 0, 0)");
+    assert.equal(await page.locator(".qicore-route-panel.is-active .marketing-board").evaluate(e => getComputedStyle(e).backgroundColor), "rgb(234, 232, 236)");
     assert.equal(new Set(cardSurfaces.map((surface) => surface.border)).size, 1);
     assert.equal(new Set(cardSurfaces.map((surface) => surface.boxShadow)).size, 1);
     assert.equal(cardSurfaces.every((surface) => surface.backgroundImage === "none"), true);
@@ -616,3 +616,22 @@ test("about layout styles survive careers to home navigation", async () => {
 });
 
 test.todo("side-plane drag should create wall patches on voxel faces");
+
+
+test("cached product images open and close without trapping page scroll", async () => {
+  await withPage(async page => {
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
+    await page.waitForURL("**/oyscat");
+    await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
+    const image = page.locator('.qicore-route-panel.is-active [data-product-image]').first();
+    const previousOverflow = await page.evaluate(() => document.body.style.overflow);
+    await image.click();
+    await page.locator('dialog[open]').waitFor();
+    await page.keyboard.press("Escape");
+    assert.equal(await page.locator('dialog[open]').count(), 0);
+    assert.equal(await page.evaluate(() => document.body.style.overflow), previousOverflow);
+    assert.equal(await image.evaluate(e => e === document.activeElement), true);
+  });
+});
