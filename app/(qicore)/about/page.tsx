@@ -3,9 +3,9 @@ import { QiCoreFilm } from "@/components/qicore-film";
 import styles from "./about.module.css";
 
 const people = [
-  { image: "jake", name: "罗世豪", english: "Jake Luo", role: "创始人 & CEO", roleEn: "Founder & CEO", bio: "原 DJI 核心产品研发负责人", bioEn: "Former core product R&D lead at DJI" },
-  { image: "wenda", name: "盛文达", english: "Wenda Sheng", role: "联合创始人 & CTO", roleEn: "Co-founder & CTO", bio: "原 DJI 资深硬件系统专家", bioEn: "Former senior hardware systems expert at DJI" },
-  { image: "braylen", name: "黄扬", english: "Braylen Huang", role: "联合创始人 & CPO", roleEn: "Co-founder & CPO", bio: "原 DJI 资深软件系统专家", bioEn: "Former senior software systems expert at DJI" },
+  { image: "jake", name: "罗世豪", english: "Jake Luo", role: "创始人 & CEO", roleEn: "Founder & CEO" },
+  { image: "wenda", name: "盛文达", english: "Wenda Sheng", role: "联合创始人 & CTO", roleEn: "Co-founder & CTO" },
+  { image: "braylen", name: "黄扬", english: "Braylen Huang", role: "联合创始人 & CPO", roleEn: "Co-founder & CPO" },
 ];
 
 export default function AboutPage() {
@@ -69,7 +69,7 @@ export default function AboutPage() {
         <div className={styles.people}>
           {people.map(person => <article className={styles.person} key={person.image} data-qicore-waterfall="5">
             <img src={`/media/v3/${person.image}.webp`} alt={`${person.name} / ${person.english}`} loading="lazy" />
-            <div className={styles.personText}><h3><Bi zh={person.name} en={person.english} /></h3><p className={styles.englishName} data-lang="zh">{person.english}</p><p className={styles.role}><Bi zh={person.role} en={person.roleEn} /></p><p className={styles.bio}><Bi zh={person.bio} en={person.bioEn} /></p></div>
+            <div className={styles.personText}><h3><Bi zh={person.name} en={person.english} /></h3><p className={styles.englishName} data-lang="zh">{person.english}</p><p className={styles.role}><Bi zh={person.role} en={person.roleEn} /></p></div>
           </article>)}
         </div>
       </section>

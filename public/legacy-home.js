@@ -992,24 +992,15 @@
             resetChargeVisualState();
             if (paletteState !== 'closed') forceClosePalette();
 
-            document.body.classList.remove('is-returning');
-            document.body.classList.add('is-transitioning', 'luon-theme');
-
-            window.setTimeout(() => {
-                const navigationEvent = new CustomEvent('qicore:navigate', {
-                    cancelable: true,
-                    detail: { href: '/oyscat' }
-                });
-                if (window.dispatchEvent(navigationEvent)) {
-                    window.location.assign('/oyscat');
-                    return;
-                }
-                document.body.classList.remove('is-transitioning', 'luon-theme');
-                isLuonAnimating = false;
-                interactionLocked = false;
-                btnTrigger.disabled = false;
-                btnTrigger.classList.remove('is-opening');
-            }, 900);
+            const navigationEvent = new CustomEvent('qicore:navigate', {
+                cancelable: true,
+                detail: { href: '/oyscat', gateway: true }
+            });
+            if (window.dispatchEvent(navigationEvent)) window.location.assign('/oyscat');
+            isLuonAnimating = false;
+            interactionLocked = false;
+            btnTrigger.disabled = false;
+            btnTrigger.classList.remove('is-opening');
         }
 
         function returnFromLuonScene() {

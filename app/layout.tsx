@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import aboutLayoutStyles from "./(qicore)/about/about.module.css";
 import oyscatLayoutStyles from "./(qicore)/oyscat/oyscat.module.css";
+import "../components/oyscat-image.module.css";
+import "../components/oyscat-pixel-scenes.module.css";
+import "../components/oyscat-beta-scene.module.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
