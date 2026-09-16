@@ -81,7 +81,7 @@ hooks/                  # 性能等级与交互相关 hooks
 lib/                    # 站点数据和 QiCore 路由状态
 public/brand/           # QiCore / OysCat 品牌资产
 public/media/           # 产品与新闻媒体
-public/illustrations/   # QiCore 内容页插图与概念资产
+public/illustrations/   # QiCore 内容页插图与概念资产（仅本地，不入库，见 .gitignore）
 tests/e2e/              # 页面和路由回归测试
 tests/perf/             # 运行时与交互性能基准
 ops/recruitment-mailer/ # 私有部署的投递确认邮件 Worker（仓库中不含任何生产凭证）
