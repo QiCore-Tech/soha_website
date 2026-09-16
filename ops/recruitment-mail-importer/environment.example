@@ -1,0 +1,16 @@
+# Copy to a private server-side .env. Never commit real credentials or IDs.
+FEISHU_APP_ID=
+FEISHU_APP_SECRET=
+FEISHU_RECRUITMENT_MAILBOX=hr@example.com
+FEISHU_CAREERS_BASE_TOKEN=
+FEISHU_APPLICATION_TABLE_ID=
+FEISHU_RESUME_ATTACHMENT_FIELD_ID=
+
+# The first deployment should use the current Unix timestamp in milliseconds.
+# It is persisted in SQLite, so later restarts do not skip mail received offline.
+IMPORT_START_FROM_MS=
+POLL_SECONDS=300
+MAX_ATTACHMENT_BYTES=52428800
+DB_PATH=/data/state.sqlite3
+HEARTBEAT_PATH=/data/heartbeat
+LOG_LEVEL=INFO

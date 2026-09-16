@@ -1,0 +1,37 @@
+services:
+  recruitment-mailer:
+    build:
+      context: .
+    image: qicore/recruitment-mailer:local
+    container_name: qicore-recruitment-mailer
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - recruitment-mailer-data:/data
+    networks:
+      - mail-relay
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import os,time; p='/data/heartbeat'; assert os.path.exists(p) and time.time()-os.path.getmtime(p) < 180"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+networks:
+  mail-relay:
+    external: true
+    name: ${MAIL_NETWORK_NAME:-mail-relay}
+
+volumes:
+  recruitment-mailer-data:
+    name: recruitment-mailer-data
