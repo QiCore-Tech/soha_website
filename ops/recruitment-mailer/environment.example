@@ -1,0 +1,23 @@
+# Copy this file to .env on the private deployment host.
+# Never commit the resulting .env file or replace placeholders in this template.
+FEISHU_APP_ID=cli_replace_me
+FEISHU_APP_SECRET=replace_me
+FEISHU_CAREERS_BASE_TOKEN=replace_me
+FEISHU_APPLICATION_TABLE_ID=tbl_replace_me
+
+# Ignore applications created before the worker is first enabled.
+START_FROM_MS=replace_with_unix_milliseconds
+POLL_SECONDS=30
+MAX_ATTEMPTS=5
+
+# The worker connects to an existing private SMTP relay and does not hold its password.
+MAIL_NETWORK_NAME=mail-relay
+SMTP_HOST=replace_with_private_relay_hostname
+SMTP_PORT=25
+MAIL_FROM_NAME=QiCore 招聘
+MAIL_FROM_ADDRESS=noreply@qicore.tech
+MAIL_REPLY_TO=hr@qicore.ai
+
+DB_PATH=/data/state.sqlite3
+HEARTBEAT_PATH=/data/heartbeat
+LOG_LEVEL=INFO
