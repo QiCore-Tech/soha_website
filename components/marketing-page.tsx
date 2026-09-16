@@ -10,12 +10,13 @@ type MarketingPageProps = {
   title: { zh: string; en: string };
   intro: { zh: string; en: string };
   heroArt?: MarketingHeroArtVariant;
+  heroVisual?: ReactNode;
   showHero?: boolean;
   pageClassName?: string;
   children: ReactNode;
 };
 
-export function MarketingPage({ eyebrow, title, intro, heroArt, showHero = true, pageClassName, children }: MarketingPageProps) {
+export function MarketingPage({ eyebrow, title, intro, heroArt, heroVisual, showHero = true, pageClassName, children }: MarketingPageProps) {
   return (
     <main className={`marketing-page${pageClassName ? ` ${pageClassName}` : ""}`}>
       <div className="marketing-board">
@@ -35,7 +36,7 @@ export function MarketingPage({ eyebrow, title, intro, heroArt, showHero = true,
                 <span data-lang="en">{intro.en}</span>
               </p>
             </div>
-            {heroArt ? <MarketingHeroArt variant={heroArt} /> : null}
+            {heroVisual ?? (heroArt ? <MarketingHeroArt variant={heroArt} /> : null)}
           </section>
         ) : null}
 

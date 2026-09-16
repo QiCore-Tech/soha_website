@@ -1,0 +1,35 @@
+.scene { width: 100%; margin: 26px 0 0; color: #242820; }
+.scene svg { display: block; width: 100%; height: auto; overflow: visible; }
+.compact { width: 200px; max-width: 100%; margin: 0 0 18px; }
+.compact svg { max-height: 108px; }
+.buildOne, .buildTwo, .buildThree { animation: assemble 6s steps(4,end) infinite; }
+.buildTwo { animation-delay: .4s; }
+.buildThree { animation-delay: .8s; }
+.cursor { animation: cursor-place 6s steps(8,end) infinite; }
+.confirm { animation: confirm 6s steps(1,end) infinite; }
+.spark { transform-box: fill-box; transform-origin: center; animation: twinkle 4s steps(2,end) infinite; }
+.plug { animation: plug-in 6s steps(4,end) infinite; }
+.signal { animation: transmit 3s linear infinite; }
+.lamp, .rays { animation: illuminate 6s steps(1,end) infinite; }
+.gear { animation: gear-turn 12s steps(12,end) infinite; }
+.rover { animation: rover-hop 4s steps(4,end) infinite; }
+.speed { animation: speed 4s steps(2,end) infinite; }
+@keyframes assemble { 0%,12% { opacity: .15; translate: 0 -8px; } 28%,85% { opacity: 1; translate: 0 0; } 100% { opacity: .15; translate: 0 -8px; } }
+@keyframes cursor-place { 0%,100% { transform: translate(148px,78px); } 25%,45% { transform: translate(98px,50px); } 65%,85% { transform: translate(120px,78px); } }
+@keyframes confirm { 0%,50%,100% { opacity: .15; } 55%,90% { opacity: 1; } }
+@keyframes twinkle { 0%,85%,100% { opacity: .3; scale: .75; } 35%,65% { opacity: 1; scale: 1; } }
+@keyframes plug-in { 0%,12%,100% { translate: -6px 0; } 25%,88% { translate: 0 0; } }
+@keyframes transmit { to { stroke-dashoffset: -168; } }
+@keyframes illuminate { 0%,20%,100% { opacity: .25; } 28%,90% { opacity: 1; } }
+@keyframes gear-turn { to { transform: rotate(360deg); } }
+@keyframes rover-hop { 0%,100% { translate: 0 0; } 30% { translate: 4px -4px; } 60% { translate: 8px 0; } }
+@keyframes speed { 0%,100% { opacity: .25; } 30%,70% { opacity: 1; } }
+@media(prefers-reduced-motion:reduce) { .scene svg * { animation: none !important; } .cursor { transform: translate(136px,72px); } }
+
+.pencil { animation: pencil-draw 6s steps(8,end) infinite; }
+.snapLeft { animation: snap-left 6s steps(6,end) infinite; }
+.snapRight { animation: snap-right 6s steps(6,end) infinite; }
+@keyframes pencil-draw { 0%,100% { transform: translate(98px,30px) rotate(25deg); } 45%,70% { transform: translate(68px,30px) rotate(25deg); } }
+@keyframes snap-left { 0%,15%,100% { translate: 0 0; } 40%,85% { translate: 16px 0; } }
+@keyframes snap-right { 0%,15%,100% { translate: 0 0; } 40%,85% { translate: -16px 0; } }
+@media(prefers-reduced-motion:reduce) { .pencil { transform: translate(98px,30px) rotate(25deg); } }

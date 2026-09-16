@@ -1,0 +1,28 @@
+.scene { position:relative; padding:18px 18px 0; border-bottom:1px solid rgba(42,38,34,.12); overflow:hidden; }
+.scene svg { display:block; width:100%; max-height:200px; height:auto; }
+.caption { display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; color:#64665b; font-size:11px; line-height:1.5; }
+.caption > span:first-child { font:9px/1.7 'Geist Mono',monospace; letter-spacing:.06em; }
+.cat { animation:cat-breathe 4s ease-in-out infinite; transform-origin:132px 144px; }
+.tail { animation:tail-wave 3s ease-in-out infinite; transform-origin:86px 118px; }
+.letter { animation:letter-nudge 5s ease-in-out infinite; }
+.orbit { animation:star-float 5s ease-in-out infinite; }
+.spark { opacity:.5; }
+.writing,.sending,.done,.check { display:none; }
+:global(#beta):has(input:focus) .idle { display:none; }
+:global(#beta):has(input:focus) .writing { display:inline; }
+:global(#beta):has(input:focus) .cat { transform:translateX(8px); animation:none; }
+:global(#beta):has(input:focus) .tail { animation-duration:1s; }
+:global(#beta):has(form[data-submitting="true"]) .caption > span:not(:first-child) { display:none; }
+:global(#beta):has(form[data-submitting="true"]) .caption > span.sending { display:inline; }
+:global(#beta):has(form[data-submitting="true"]) .letter { animation:deliver 1.5s ease-in-out infinite; }
+:global(#beta):has([data-beta-status][data-state="success"]:not([hidden])) .caption > span:not(:first-child) { display:none; }
+:global(#beta):has([data-beta-status][data-state="success"]:not([hidden])) .caption > span.done { display:inline; }
+:global(#beta):has([data-beta-status][data-state="success"]:not([hidden])) .check { display:block; }
+:global(#beta):has([data-beta-status][data-state="success"]:not([hidden])) .letter { opacity:0; animation:none; }
+@keyframes cat-breathe { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-2px); } }
+@keyframes tail-wave { 0%,100% { transform:rotate(-7deg); } 50% { transform:rotate(9deg); } }
+@keyframes letter-nudge { 0%,60%,100% { transform:translate(0,0) rotate(0); } 72% { transform:translate(7px,-4px) rotate(-2deg); } 84% { transform:translate(3px,0); } }
+@keyframes star-float { 0%,100% { transform:translateY(0); opacity:.4; } 50% { transform:translateY(-5px); opacity:1; } }
+@keyframes deliver { 0% { transform:translate(0,0); opacity:0; } 15% { opacity:1; } 75%,100% { transform:translate(125px,-28px) scale(.94); opacity:0; } }
+@media(max-width:760px) { .scene { padding:14px 6px 0; } .caption { gap:6px; } }
+@media(prefers-reduced-motion:reduce) { .scene * { animation:none !important; } }

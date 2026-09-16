@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { ProductTransition } from "@/components/product-transition";
+import aboutLayoutStyles from "./(qicore)/about/about.module.css";
+import oyscatLayoutStyles from "./(qicore)/oyscat/oyscat.module.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,14 +10,14 @@ export const metadata: Metadata = {
     template: "%s | QiCore"
   },
   description:
-    "气核科技 QiCore 正在构建从意图到真实造物的新方式。了解 QiCore、OysCat、最新动态与团队。",
+    "气核科技 QiCore 正在构建从意图到真实造物的新方式。了解 QiCore、Oyscat、最新动态与团队。",
   alternates: {
     canonical: "/"
   },
   openGraph: {
     title: "气核科技 QiCore | 所想，即造",
     description:
-      "QiCore is building tools for intent-driven physical creation. Discover our work, OysCat, and the team behind it.",
+      "QiCore is building tools for intent-driven physical creation. Discover our work, Oyscat, and the team behind it.",
     url: "https://qicore.ai/",
     siteName: "气核科技 qicore",
     type: "website"
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "气核科技 QiCore | 所想，即造",
     description:
-      "QiCore is building tools for intent-driven physical creation. Discover our work, OysCat, and the team behind it."
+      "QiCore is building tools for intent-driven physical creation. Discover our work, Oyscat, and the team behind it."
   },
   icons: {
     icon: "/favicon.svg"
@@ -53,9 +54,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://cdn.jsdelivr.net/npm/misans-vf@1.0.0/lib/MiSans.min.css"
         />
       </head>
-      <body>
+      <body className={`${aboutLayoutStyles.siteStyles} ${oyscatLayoutStyles.siteStyles}`}>
         {children}
-        <ProductTransition />
         <script
           type="application/ld+json"
           suppressHydrationWarning

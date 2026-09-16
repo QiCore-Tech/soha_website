@@ -6,3 +6,11 @@ node_modules/
 out/
 .artifacts/
 .vercel/
+
+.local-preview/
+.next-preview/
+.env*
+!.env.example
+
+artifacts/
+test-results/

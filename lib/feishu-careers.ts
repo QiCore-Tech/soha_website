@@ -265,6 +265,11 @@ function mapRecords(records: FeishuRecord[]): CareerRole[] {
 export async function getCareerRoles(): Promise<CareerRole[]> {
   const config = readConfig();
   if (!config) {
+    // Local development only. Never use fixtures in a build or Vercel deployment.
+    if (process.env.NODE_ENV === "development" && !process.env.VERCEL && !process.env.VERCEL_ENV) {
+      const { LOCAL_CAREER_SAMPLE } = await import("./careers-local-sample");
+      return [LOCAL_CAREER_SAMPLE];
+    }
     if (process.env.VERCEL_ENV === "production") {
       throw new Error(
         "Feishu Careers is not configured for the production deployment. " +

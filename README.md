@@ -149,3 +149,20 @@ git diff --check
 QiCore 官网把公司介绍做成了一张可以继续工作的画板：
 
 **从一个想法开始，把它拆开、连接、验证，最后让它在现实里运行。**
+
+
+## 本地内容评审（2026-09-15 修正版）
+
+启动：`node scripts/local-preview.mjs`，地址 http://127.0.0.1:3016 。
+
+按用户最新确认，保留原背景、UI 样式、首页、导航栏造型和所有原转场。全局 CSS、MarketingPage、QiCoreRouteShell、ProductTransition 和首页交互脚本未修改。本轮只调整内容与导航文字：产品文案、流程、Demo、FAQ、申请表，公司介绍、近期/长期方向、三位团队与招聘入口。原 /team 地址复用关于内容，不增加新转场。原产品独立入场及背景保留；平整静态背景和独立产品站合并暂不实施。
+
+报名通过 `/api/beta` 写入飞书多维表格，只有飞书确认记录创建成功才返回成功提示。`node scripts/local-preview.mjs` 与 Vercel 使用同一份 API 和飞书应用身份（不发送邮件）；普通 `next dev` 不运行 Vercel API。配置独立的 `FEISHU_BETA_APP_ID`、`FEISHU_BETA_APP_SECRET`、`FEISHU_BETA_BASE_TOKEN`、`FEISHU_BETA_TABLE_ID`，并将目标多维表格授权给该应用。凭据和表标识仅保存在服务端环境变量，不进入客户端。2026-09-16 已通过本地首屏、页尾表单实测应用身份写入并读回核对；Vercel Production 配置已保存，网站尚未推送或部署。
+
+检查：构建通过；原回归 19 项通过、1 项既有新闻点击测试失败、1 项原有 TODO。新闻失败与本轮改动前基线一致，未改其行为。`node scripts/check-content.mjs` 检查手机端、FAQ、本地保存、三位成员及案例图片。没有推送或部署。
+
+### Local careers sample
+
+When no Feishu careers data source is configured, `next dev` displays one bilingual sample role from `lib/careers-local-sample.ts`. It is labeled as a local sample. Configured Feishu data always takes precedence.
+
+The fallback requires `NODE_ENV=development` and both `VERCEL` and `VERCEL_ENV` to be absent. Production builds, production servers, and Vercel preview/production deployments cannot use the sample. The existing production error for a missing Feishu configuration remains in place. Do not import this fixture into client components or public assets.
