@@ -31,35 +31,65 @@ const principles = [
 
 const faqs = [
   {
-    zh: "如何开始使用 Oyscat？",
-    en: "How can I get started with Oyscat?",
-    answerZh: "先留下邮箱申请内测。团队筛选后，将为入选用户提供内测账号和体验安排。",
-    answerEn: "Apply with your email. Selected applicants will receive a beta account and onboarding information from our team.",
+    "zh": "如何开始使用 Oyscat？",
+    "en": "How Can I Get Started with Oyscat?",
+    "answerZh": [
+      "几分钟即可上手：使用邮箱注册，浏览官方项目，完成新手教程，即可开始创作。",
+      "相信直觉，跟随想象，自由构建。在 Oyscat 中的创作没有标准答案。"
+    ],
+    "answerEn": [
+      "Start in minutes: Sign up with your email, explore the official projects, and complete the beginner tutorial. You’re ready to start creating.",
+      "Just create: Trust your instincts, follow your imagination, and build freely. There is no single right way to create."
+    ]
   },
   {
-    zh: "Oyscat 的独特之处？",
-    en: "What makes Oyscat different?",
-    answerZh: "造物过程像搭积木一样直观，并把设计、仿真与实体搭建连接在同一个系统中，让用户专注于想法本身。",
-    answerEn: "Oyscat makes building as intuitive as assembling blocks, connecting design, simulation, and physical construction in one system.",
+    "zh": "Oyscat 的独特之处？",
+    "en": "What Makes Oyscat Different?",
+    "answerZh": [
+      "造物过程类似搭积木，不用学复杂操作，专注想法就行。",
+      "从想法到实物一步到位：设计、制作全程打通，都在这一个系统里完成。"
+    ],
+    "answerEn": [
+      "An intuitive way to build: Just like you would with building blocks, so you can focus on your ideas.",
+      "End-to-end creation: From design to physical creation, Oyscat connects the entire process in one system."
+    ]
   },
   {
-    zh: "电子模块如何连接虚拟与现实？",
-    en: "How do electronic blocks connect the virtual and physical worlds?",
-    answerZh: "工作台中的功能模块与实体电子模块相对应，帮助用户把虚拟设计转化为实际搭建。具体绑定、下载与运行能力以内测开放范围为准。",
-    answerEn: "Workspace blocks correspond to physical electronic blocks. Binding, download, and runtime capabilities depend on the current beta release.",
+    "zh": "Oyscat 电子模块如何连接虚拟与现实？",
+    "en": "How do Oyscat Electronic Blocks connect the virtual and physical worlds?",
+    "answerZh": [
+      "工作台里的每一个虚拟电子模块，都有外观、功能完全一致的实体电子模块与之对应；",
+      "为每个模块编写的控制程序，可直接下载到对应的实体电子模块，实现仿真动作和现实模块运行的完全同步。"
+    ],
+    "answerEn": [
+      "Each electronic block in the Oyscat Workspace has a matching physical electronic block with the same appearance and function.",
+      "The control program created for each virtual electronic block can be downloaded directly to its corresponding physical block, allowing it to work the same way in the real world as it does in simulation."
+    ]
   },
   {
-    zh: "如何将工作台中的作品制作成实物？",
-    en: "How can I turn a Workspace design into a physical creation?",
-    answerZh: "根据作品设计准备结构件与电子模块，再完成装配和运行验证。当前支持的导出及制作流程将在内测指引中说明。",
-    answerEn: "Prepare the structure and electronic blocks, then assemble and validate the creation. Supported export and fabrication workflows will be covered in the beta guide.",
+    "zh": "用 Oyscat 工作台完成的造物，如何落地实体制作？",
+    "en": "How can I build my creation after designing it in Oyscat Workspace?",
+    "answerZh": [
+      "搭配 3D 打印：作品的静态结构可一键导出 3D 模型，打印得到的外壳能和电子模块直接拼装；",
+      "多种自由造壳方式：可用瓦楞纸、木板、亚克力等材料手工制作外壳，适配不同创作条件。"
+    ],
+    "answerEn": [
+      "Use 3D printing: Export the static parts directly as 3D-printable files. The printed shell can then fit directly with the Oyscat Electronic Blocks, just like building with blocks.",
+      "Build your own shell:  Use corrugated cardboard, wood, acrylic, or whatever materials you have on hand."
+    ]
   },
   {
-    zh: "Oyscat 解决了哪些痛点？",
-    en: "How does Oyscat help?",
-    answerZh: "减少机械、电子和编程之间的重复开发与实物试错，让创作者更专注于作品功能和体验。",
-    answerEn: "It reduces repetitive work across mechanics, electronics, and programming, along with the cost of physical trial and error.",
-  },
+    "zh": "Oyscat 解决了哪些痛点？",
+    "en": "How does Oyscat help?",
+    "answerZh": [
+      "消除硬件选型、电路设计，同时控制程序交由 AI 完成，用户只需描述创意，专注设计作品功能。",
+      "复杂电子项目开发周期长、试错成本高，Oyscat 在虚拟环境前置验证方案，仿真验证通过，硬件方案即可实物落地，缩短原型周期、减少物料损耗，实现 “想造就造”。"
+    ],
+    "answerEn": [
+      "Skip the complexity: No hardware selection or circuit design. AI handles the control programs, so you can describe your idea and focus on what you want to create.",
+      "Test before you build: Validate your design in a virtual environment before building it physically, reducing prototyping time and material waste."
+    ]
+  }
 ];
 
 function PixelCat({ className }: { className?: string }) {
@@ -74,33 +104,7 @@ function ProductHeroVisual() {
     <div className={`company-hero-art ${styles.heroArt}`} data-qicore-waterfall="1">
       <div className={`company-blueprint-card ${styles.heroCard}`} data-oyscat-landing-card>
         <span className={styles.heroIndex}>QICORE / PRODUCT 01</span>
-        <form className={styles.heroBetaInvite} data-oyscat-beta-form>
-          <label className={styles.inputLabel} htmlFor="hero-beta-email"><Bi zh="填写邮箱申请内测资格" en="Enter your email to apply for beta" /></label>
-          <div className={styles.heroBetaFields}>
-            <div className={styles.inputStage}>
-              <input className={styles.heroBetaInput} id="hero-beta-email" name="email" type="email" required maxLength={254} autoComplete="email" placeholder=" " />
-          <div className={styles.heroBetaTicker} aria-hidden="true">
-            <div className={styles.heroBetaTickerTrack}>
-              {[0, 1].map((group) => (
-                <span className={styles.heroBetaTickerGroup} key={group}>
-                  <span><Bi zh="填写邮箱申请内测资格" en="ENTER YOUR EMAIL TO APPLY FOR BETA" /></span>
-                  <span className={styles.pixelCatPack}>
-                    <PixelCat className={styles.pixelCat} />
-                    <PixelCat className={styles.pixelCat} />
-                    <PixelCat className={styles.pixelCat} />
-                  </span>
-                </span>
-              ))}
-            </div>
-          </div>
-            </div>
-            <button className={styles.heroBetaButton} type="submit"><OyscatCompanion className={styles.buttonCat} /><Bi zh="申请" en="Apply" /></button>
-          </div>
-          <p className={styles.heroBetaStatus} data-beta-status role="status" aria-live="polite" hidden>
-            <span data-lang="zh">感谢您的报名，我们将尽快与您联系。</span>
-            <span data-lang="en">Thanks for signing up. We&apos;ll reach out to you soon.</span>
-          </p>
-        </form>
+
         <img className={styles.heroShell} src="/brand/oyscat-shell-derived.svg" alt="" />
 
         <span className={styles.heroSymbolFrame} data-oyscat-landing-cat>
@@ -154,16 +158,15 @@ export default function OyscatPage() {
           <p className="section-kicker">02 / OYSCAT WORKSPACE</p>
           <OyscatPixelScene kind="workspace" compact />
           <h2 id="workspace-title"><Bi zh="Oyscat 造物工作台" en="Oyscat Workspace" /></h2>
-          <p className={styles.storyLead}><Bi zh="直观的拖拽与积木式拼搭，赋予用户自由造物体验。" en="Intuitive drag-and-drop and block-based building let users create freely." /></p>
           <ul>
+            <li><Bi zh="直观的拖拽与积木式拼搭，赋予用户自由造物体验。" en="Intuitive drag-and-drop and block-based building let users create freely." /></li>
             <li><Bi zh="自动编写控制程序并实时仿真，实现组装前的全流程闭环验证。" en="AI generates control programs and runs real-time simulations, enabling full validation before physical assembly." /></li>
             <li><Bi zh="消除跨界工程门槛与高成本试错，加速想法直达实体。" en="Eliminate interdisciplinary engineering barriers and costly trial and error, taking ideas straight to reality." /></li>
           </ul>
-          <a className={styles.textLink} href="#beta"><Bi zh="申请体验" en="Apply for access" /><span aria-hidden="true">↘</span></a>
         </div>
         <figure className={styles.storyMedia} data-qicore-waterfall="4">
           <div className={styles.mediaStage}>
-            <video autoPlay muted loop playsInline preload="metadata" poster="/media/v3/workspace-poster.jpg" aria-label="Oyscat Workspace demo">
+            <video data-workspace-demo muted loop playsInline preload="metadata" poster="/media/v3/workspace-poster.jpg" aria-label="Oyscat Workspace demo">
               <source src="/media/v3/workspace-demo.mp4" type="video/mp4" />
             </video>
             <div className={styles.mediaHud} aria-hidden="true">
@@ -179,7 +182,7 @@ export default function OyscatPage() {
       <section className={`marketing-section ${styles.storyCard} ${styles.hardwareCard}`} aria-labelledby="blocks-title">
         <figure className={styles.storyMedia} data-qicore-waterfall="3">
           <div className={`${styles.mediaStage} ${styles.hardwareStage}`}>
-            <OyscatImage src="/media/oyscat-workspace/electronic-modules-dark-studio.png" zh="Oyscat 电子模块" en="Oyscat Electronic Blocks" large />
+            <OyscatImage src="/media/oyscat-workspace/electronic-modules-dark-studio.png" zh="Oyscat 电子模块" en="Oyscat Electronic Blocks" large showPrompt={false} />
             <div className={styles.moduleLegend} aria-hidden="true">
               <span><i />INPUT</span>
               <span><i />MOTION</span>
@@ -191,35 +194,12 @@ export default function OyscatPage() {
         </figure>
         <div className={styles.storyCopy} data-qicore-waterfall="4">
           <p className="section-kicker">03 / ELECTRONIC BLOCKS</p>
-          <OyscatPixelScene kind="connect" compact />
           <h2 id="blocks-title"><Bi zh="Oyscat 电子模块" en="Oyscat Electronic Blocks" /></h2>
-          <p className={styles.storyLead}><Bi zh="丰富多样的去中心化电子模块，自由组合，即插即用。" en="A rich, diverse collection of decentralized electronic blocks, built for plug-and-play, freeform combination." /></p>
           <ul>
-            <li><Bi zh="自研高效微内核，实现超低延时协同。" en="Our in-house microkernel enables ultra-low-latency coordination." /></li>
-            <li><Bi zh="硬件模块随心擦写重构，让每一次拆解都成为下一次造物的起点。" en="Blocks are erasable and reconfigurable, turning every teardown into the start of the next creation." /></li>
+            <li><Bi zh="丰富多样的去中心化电子模块，自由组合，即插即用" en="A rich, diverse collection of decentralized electronic blocks, built for plug-and-play, flexible combination." /></li>
+            <li><Bi zh="自研高效微内核，实现超低延时协同" en="Our original R&D microkernel enables ultra-low-latency coordination." /></li>
+            <li><Bi zh="硬件模块随心擦写重构，让每一次拆解都成为下一次造物的起点" en="Oyscat Electronic Blocks are fully erasable and reconfigurable, turning every disassembly into the starting point for your next creation." /></li>
           </ul>
-        </div>
-      </section>
-
-      <section className={`marketing-section ${styles.process}`} aria-label="Oyscat creation process" data-qicore-waterfall="4">
-        <div className={styles.processHeader}>
-          <p className="section-kicker">04 / CREATION FLOW</p>
-          <span aria-hidden="true"><i /> IDEA SIGNAL / RUNNING</span>
-        </div>
-        <div className={styles.processLine}>
-          {[
-            { zh: "构想", en: "THINK" },
-            { zh: "设计", en: "DESIGN" },
-            { zh: "仿真", en: "SIMULATE" },
-            { zh: "搭建", en: "BUILD" },
-            { zh: "实现", en: "MAKE IT REAL" },
-          ].map((step, index) => (
-            <span key={step.en}>
-              <i>{String(index + 1).padStart(2, "0")}</i>
-              <b aria-hidden="true" />
-              <Bi zh={step.zh} en={step.en} />
-            </span>
-          ))}
         </div>
       </section>
 
@@ -228,7 +208,6 @@ export default function OyscatPage() {
           <p className="section-kicker">05 / FROM SCREEN TO REALITY</p>
 
           <h2 id="cases-title"><Bi zh="从屏幕到现实，轻松完成造物" en="From screen to reality. Create with ease." /></h2>
-          <p><Bi zh="作品先在 Workspace 中完成设计与验证，再使用标准化电子模块走向真实世界。" en="Design and validate in Workspace, then bring the creation into the physical world with standardized electronic blocks." /></p>
         </header>
         <div className={styles.caseGrid}>
           <figure data-qicore-waterfall="5">
@@ -249,8 +228,7 @@ export default function OyscatPage() {
       <section className={`marketing-section ${styles.faq}`} id="faq" aria-labelledby="faq-title">
         <header data-qicore-waterfall="5">
           <p className="section-kicker">06 / FAQ</p>
-          <h2 id="faq-title"><Bi zh="你可能想知道" en="Good questions." /></h2>
-          <p><Bi zh="以下能力描述以内测实际开放范围为准。" en="Feature availability depends on the current beta release." /></p>
+          <h2 id="faq-title"><Bi zh="常见问题" en="FAQ" /></h2>
         </header>
         <div className={styles.faqList} data-qicore-waterfall="6">
           {faqs.map((faq, index) => (
@@ -260,7 +238,7 @@ export default function OyscatPage() {
                 <span className={styles.faqQuestion}><Bi zh={faq.zh} en={faq.en} /></span>
                 <i className={styles.faqToggle} aria-hidden="true">＋</i>
               </summary>
-              <p><Bi zh={faq.answerZh} en={faq.answerEn} /></p>
+              <ul>{faq.answerZh.map((text, index) => <li key={text}><Bi zh={text} en={faq.answerEn[index]} /></li>)}</ul>
             </details>
           ))}
         </div>

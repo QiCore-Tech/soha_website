@@ -33,3 +33,5 @@
 @keyframes snap-left { 0%,15%,100% { translate: 0 0; } 40%,85% { translate: 16px 0; } }
 @keyframes snap-right { 0%,15%,100% { translate: 0 0; } 40%,85% { translate: -16px 0; } }
 @media(prefers-reduced-motion:reduce) { .pencil { transform: translate(98px,30px) rotate(25deg); } }
+
+.scene svg * { animation: none !important; transition: none !important; }

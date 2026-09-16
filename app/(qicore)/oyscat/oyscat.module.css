@@ -454,7 +454,7 @@
 .caseGrid strong { font-size: 13px; font-weight: 450; }
 .caseGrid figcaption > span { color: rgba(42, 38, 34, .45); font-family: "Geist Mono", monospace; font-size: 8px; letter-spacing: .1em; }
 
-.faq { display: grid; grid-template-columns: minmax(250px, .32fr) minmax(0, .68fr); gap: 54px; padding: 52px 48px 58px; }
+.faq { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; padding: 52px 48px 58px; }
 .faq > header > p:last-child { max-width: 27em; margin: 28px 0 0; color: rgba(42,38,34,.7); font-size: 14px; line-height: 1.8; }
 .faqList { border-top: 1px solid rgba(42,38,34,.18); }
 .faqList details { border-bottom: 1px solid rgba(42,38,34,.16); }
@@ -729,3 +729,34 @@
 .betaEmailSlot:focus-within .betaEmailTrack { animation-play-state:paused; }
 @keyframes invitation-reel { 0%,24% { transform:translateY(0); } 33%,57% { transform:translateY(-24px); } 66%,90% { transform:translateY(-48px); } 100% { transform:translateY(-72px); } }
 @media(prefers-reduced-motion:reduce) { .betaEmailTrack { animation:none; } }
+
+@media (max-width: 1000px) {
+  .page .principleGrid, .page .caseGrid {
+    display: grid;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 86%;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    padding-bottom: 18px;
+    scrollbar-width: thin;
+    scrollbar-color: #8c9b76 transparent;
+  }
+  .page .principleGrid > article, .page .caseGrid > figure {
+    min-width: 0;
+    margin: 0;
+    scroll-snap-align: start;
+  }
+}
+
+.faqList details > ul {
+  margin: 0;
+  padding: 0 48px 28px 64px;
+  color: var(--product-muted);
+  font-size: clamp(15px, 1.2vw, 18px);
+  line-height: 1.85;
+}
+.faqList details > ul > li + li { margin-top: 12px; }
+@media(max-width:620px) { .faqList details > ul { padding: 0 18px 24px 32px; } }

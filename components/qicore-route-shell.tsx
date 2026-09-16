@@ -162,6 +162,32 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   }, [hasVisibleContent]);
 
   useEffect(() => {
+    const videos = Array.from(contentRef.current?.querySelectorAll<HTMLVideoElement>(".qicore-route-panel.is-active video[data-workspace-demo]") ?? []);
+    const visible = new Set<HTMLVideoElement>();
+    const sync = () => videos.forEach(video => {
+      if (visible.has(video) && !document.hidden) {
+        video.muted = true;
+        void video.play().catch(() => {});
+      } else video.pause();
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting && entry.intersectionRatio >= .3) visible.add(video);
+        else visible.delete(video);
+      });
+      sync();
+    }, { threshold: [0, .3] });
+    videos.forEach(video => observer.observe(video));
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", sync);
+      videos.forEach(video => video.pause());
+    };
+  }, [activeFrame]);
+
+  useEffect(() => {
     function handleRouteRequest(event: Event) {
       const routeEvent = event as CustomEvent<{ href?: string; gateway?: boolean }>;
       const href = routeEvent.detail?.href;

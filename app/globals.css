@@ -7573,3 +7573,25 @@ body:has(.careers-page) {
 .careers-page .careers-note .lime-cta:hover { background:#26292c; border-color:#26292c; box-shadow:0 5px 14px rgba(58,61,64,.22); }
 .careers-page .careers-quick-link span:last-child,
 .careers-page .careers-note .lime-cta span:last-child { font-size:18px; }
+
+/* Content lives on a continuous paper surface; the home canvas stays unchanged. */
+.marketing-page .marketing-board {
+    background: #eae8ec !important;
+    border: 1px solid rgba(45,41,36,.16);
+    border-radius: 6px;
+    box-shadow: 0 18px 60px rgba(0,0,0,.12) !important;
+    overflow: hidden;
+}
+.marketing-page .marketing-board :is(.marketing-section, .marketing-hero, .marketing-hero-copy, .company-blueprint-card, .hero-blueprint-card, .about-narrative, .qicore-film-section, .news-entry, .careers-panel, .marketing-footer) {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    backdrop-filter: none !important;
+}
+.marketing-page .marketing-board > :is(.marketing-section, .marketing-footer) {
+    margin-top: 0 !important;
+    border-top: 1px solid rgba(45,41,36,.13) !important;
+}
+.marketing-page .marketing-board .marketing-footer { margin-bottom: 0; }

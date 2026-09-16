@@ -21,10 +21,10 @@ export default function AboutPage() {
         <div className={styles.copy} data-qicore-waterfall="2">
           <p className="section-kicker">01 / ABOUT QICORE</p>
           <h2 id="company-heading"><Bi zh="公司介绍" en="About QiCore" /></h2>
-          <p><Bi zh="生成式人工智能的革命性突破，已实现人类意图向数字产物（文本、图像、音频等）的高效生成。然而，从人类意图直达物理实体，依然是一道难以逾越的工程鸿沟。" en="Generative AI can now convert human intent into digital artifacts (text, images, and audio) with remarkable efficiency. However, turning human intent into physical artifacts remains an unsolved engineering challenge." /></p>
-          <p className={styles.statement}><Bi zh="气核科技是一家 AI 驱动的智能硬件设计与制造公司。" en="QiCore Technology is an AI-native company for smart hardware design and manufacturing." /></p>
+          <p><Bi zh="生成式人工智能的革命性突破，已实现人类意图向数字产物（文本、图像、音频等）的高效生成。然而，从人类意图直达物理实体，依然是一道难以逾越的工程鸿沟。" en="Generative AI can now convert human intent into digital artifacts with remarkable efficiency. However, turning human intent into physical artifacts remains an unsolved engineering challenge." /></p>
+          <p className={styles.statement}><Bi zh="气核科技是一家AI驱动的智能硬件设计与制造公司" en="Qicore Technology is an AI-native company for smart hardware design and manufacturing." /></p>
           <p><Bi zh={<>首创<strong>生成式物理具现</strong>概念，致力于将人类的造物意图直接转化为功能性物理实体。</>} en={<>We pioneered the concept of <strong>Generative Physical Instantiation (GenPI)</strong>, turning human intent directly into functional physical artifacts.</>} /></p>
-          <p><Bi zh="从助力创客与开发者实现原型的敏捷化构建，到最终赋能大众迈向零门槛的个性化智能造物时代。" en="From enabling makers and developers to prototype hardware innovatively, completely, and confidently, to ultimately making personalized smart hardware creation accessible to everyone." /></p>
+          <p><Bi zh="从助力创客与开发者实现原型的敏捷化构建，到最终赋能大众迈向零门槛的个性化智能造物时代。" en="From enabling makers and developers to prototype hardware innovatively and efficiently, to making personalized smart hardware creation accessible to everyone." /></p>
         </div>
         <figure className={styles.diagram} data-qicore-waterfall="3">
           <svg viewBox="0 0 280 240" role="img" aria-labelledby="genpi-title">
@@ -53,14 +53,10 @@ export default function AboutPage() {
         <article data-qicore-waterfall="3">
           <p className="section-kicker">02 / <Bi zh="近期聚焦" en="Near-term Focus" /></p>
           <h2><Bi zh="高效敏捷的电气化造物系统" en="A streamlined, high-efficiency creation system that makes electronics projects effortless." /></h2>
-          <p className={styles.directionCopy}><Bi zh="以 Oyscat 为第一阶段落点，连接设计、仿真与标准化电子模块，缩短从构想到可运行原型的路径。" en="Oyscat is our first step: connecting design, simulation and standardized electronic blocks to shorten the path from an idea to a working prototype." /></p>
-          <span className={styles.directionTag}>NOW / OYSCAT</span>
         </article>
         <article data-qicore-waterfall="4">
           <p className="section-kicker">03 / <Bi zh="长期使命" en="Long-term Mission" /></p>
-          <h2><Bi zh="全范畴的生成式物理造物生态系统" en="A full-spectrum generative ecosystem for physical creation." /></h2>
-          <p className={styles.directionCopy}><Bi zh="持续扩展可被生成、验证和制造的对象范围，让更多造物意图能够转化为功能性物理实体。" en="We will expand what can be generated, validated and made, enabling more creative intent to become functional physical artifacts." /></p>
-          <span className={styles.directionTag}>VISION / GENPI</span>
+          <h2><Bi zh="全范畴的生成式物理造物生态系统" en="A full-spectrum ecosystem for generative physical creation." /></h2>
         </article>
       </section>
 
