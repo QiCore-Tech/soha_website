@@ -58,6 +58,7 @@ QiCore 官网的视觉核心不是“大字报”，而是一个持续存在的�
 | `/about` | About QiCore | 公司介绍、Why QiCore、团队与第一款产品 |
 | `/news` | News & Updates | 产品进展、内测消息与品牌记录 |
 | `/team` | Team | 团队原则、工作方式与开放岗位 |
+| `/careers` | Careers | 飞书同步的开放岗位与公开投递入口 |
 | `/oyscat` | OysCat Products | 产品介绍、Electronic Modules 与 Workspace |
 
 QiCore 的内容页共享同一块画板；OysCat 页面则是独立的产品叙事空间。页面之间的跳转关系属于信息架构的一部分，而不是单纯的链接集合。
@@ -80,10 +81,14 @@ hooks/                  # 性能等级与交互相关 hooks
 lib/                    # 站点数据和 QiCore 路由状态
 public/brand/           # QiCore / OysCat 品牌资产
 public/media/           # 产品与新闻媒体
-public/illustrations/   # QiCore 内容页插图与概念资产
+public/illustrations/   # QiCore 内容页插图与概念资产（仅本地，不入库，见 .gitignore）
 tests/e2e/              # 页面和路由回归测试
 tests/perf/             # 运行时与交互性能基准
+ops/recruitment-mailer/ # 私有部署的投递确认邮件 Worker（仓库中不含任何生产凭证）
 ```
+
+招聘岗位的飞书内容同步、投递自动化和确认邮件链路记录在
+[`ops/recruitment-mailer/README.md`](ops/recruitment-mailer/README.md)。公开仓库只保存代码、数据契约和脱敏配置模板；所有凭证、资源 ID、内网信息和候选人数据必须留在部署环境。
 
 ## 本地开发
 
