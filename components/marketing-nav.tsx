@@ -10,11 +10,19 @@ type Locale = "zh" | "en";
 
 const navItems = [
   { href: "/", zh: "首页", en: "Home" },
-  { href: "/about", zh: "关于 QiCore", en: "About QiCore" },
-  { href: "/news", zh: "新闻与动态", en: "News & Updates" },
-  { href: "/team", zh: "团队", en: "Team" },
-  { href: "/oyscat", zh: "OysCat 产品", en: "OysCat Products" }
+  { href: "/oyscat", zh: "Oyscat", en: "Oyscat" },
+  { href: "/news", zh: "新闻动态", en: "News" },
+  { href: "/about", zh: "关于我们", en: "About us" }
 ];
+
+const pageTitles: Record<string, { zh: string; en: string }> = {
+  "/": { zh: "气核科技 QiCore | 所想，即造", en: "QiCore Technology | Think It. Make It." },
+  "/about": { zh: "关于我们 | QiCore", en: "About Us | QiCore" },
+  "/careers": { zh: "开放岗位 | QiCore", en: "Careers | QiCore" },
+  "/news": { zh: "新闻动态 | QiCore", en: "News | QiCore" },
+  "/oyscat": { zh: "Oyscat 产品 | QiCore", en: "Oyscat Product | QiCore" },
+  "/team": { zh: "团队 | QiCore", en: "Team | QiCore" },
+};
 
 export function MarketingNav() {
   const pathname = usePathname();
@@ -48,6 +56,19 @@ export function MarketingNav() {
   useEffect(() => {
     void preloadQiCoreRouteHtml();
   }, []);
+
+  useEffect(() => {
+    const title = pageTitles[pathname] ?? pageTitles["/"];
+    const localizedTitle = title[locale];
+    const applyLocalizedTitle = () => {
+      if (document.title !== localizedTitle) document.title = localizedTitle;
+    };
+
+    applyLocalizedTitle();
+    const observer = new MutationObserver(applyLocalizedTitle);
+    observer.observe(document.head, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, [locale, pathname]);
 
   function toggleLocale() {
     const nextLocale: Locale = locale === "zh" ? "en" : "zh";

@@ -10,10 +10,6 @@ export function QiCoreFilm() {
           <span data-lang="zh">走进 QiCore</span>
           <span data-lang="en">Inside QiCore</span>
         </h2>
-        <p className="qicore-film-description">
-          <span data-lang="zh">看看我们如何从一个想法，做出第一款产品。</span>
-          <span data-lang="en">Step inside QiCore and see how we turned an idea into our first product.</span>
-        </p>
         <dl className="qicore-film-meta" aria-label="Film information">
           <div><dt>Film</dt><dd>MAKE SMART</dd></div>
           <div><dt>Year</dt><dd>2026</dd></div>

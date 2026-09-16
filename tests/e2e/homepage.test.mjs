@@ -178,17 +178,28 @@ test("right long press clears the canvas", async () => {
   });
 });
 
-test("OysCat gateway transitions to the independent product site", async () => {
+test("Oyscat gateway opens the integrated product page", async () => {
   await withPage(async (page) => {
+    await page.evaluate(() => {
+      window.__QICORE_GATEWAY_CANVAS_PROBE__ = document.getElementById("canvas-area");
+    });
     const gatewayBox = await page.locator("#btn-trigger").boundingBox();
-    assert.ok(gatewayBox, "OysCat gateway should be visible");
+    assert.ok(gatewayBox, "Oyscat gateway should be visible");
     await page.mouse.click(gatewayBox.x + gatewayBox.width / 2, gatewayBox.y + gatewayBox.height / 2);
     await page.waitForURL("**/oyscat");
-    assert.equal(await page.locator(".oyscat-product-page").count(), 1);
+    const productPage = page.locator(".qicore-route-panel.is-active .oyscat-page");
+    await productPage.waitFor({ state: "visible" });
+    assert.equal(await productPage.count(), 1);
+    assert.equal(await page.locator(".oyscat-nav").count(), 0);
+    assert.equal(
+      await page.evaluate(() => window.__QICORE_GATEWAY_CANVAS_PROBE__ === document.getElementById("canvas-area")),
+      true,
+      "the shared QiCore canvas must survive the gateway navigation",
+    );
   });
 });
 
-test("mobile navigation reaches OysCat content pages", async () => {
+test("mobile navigation reaches Oyscat content pages", async () => {
   await withPage(async (page) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
@@ -197,7 +208,7 @@ test("mobile navigation reaches OysCat content pages", async () => {
     await page.waitForURL("**/about");
     await page.locator(".locale-toggle").click();
     await page.waitForFunction(() => document.documentElement.dataset.locale === "en");
-    assert.equal(await page.getByRole("heading", { name: "Make Ideas Real." }).isVisible(), true);
+    assert.equal(await page.getByRole("heading", { name: "MAKE SMART" }).isVisible(), true);
   });
 });
 
@@ -221,7 +232,7 @@ test("saved English locale is applied before hydration", async () => {
 
     assert.equal(await page.locator("html").getAttribute("data-locale"), "en");
     assert.equal(await page.locator("html").getAttribute("lang"), "en");
-    assert.equal(await page.getByRole("heading", { name: "Make Ideas Real." }).isVisible(), true);
+    assert.equal(await page.getByRole("heading", { name: "MAKE SMART" }).isVisible(), true);
     assert.equal(await page.getByRole("heading", { name: "让智能硬件更容易被创造。" }).isVisible(), false);
     assert.equal(
       await page.locator('[data-qicore-waterfall="0"]').evaluate((element) => getComputedStyle(element).animationName),
@@ -261,7 +272,7 @@ test("in-place company navigation preserves the waterfall entry animation", asyn
     await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-outgoing h1"));
     assert.match(
       await page.locator(".qicore-route-panel.is-outgoing h1").textContent(),
-      /Make Ideas Real/,
+      /MAKE SMART/,
       "the outgoing layer must retain the previous page"
     );
     assert.match(
@@ -315,8 +326,8 @@ test("cached company-page illustrations keep pointer and click interactions", as
     await newsArt.click();
     assert.equal(await newsArt.getAttribute("aria-pressed"), "true");
 
-    await page.locator('.marketing-nav-links a[href="/team"]').click();
-    await page.waitForURL("**/team");
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
     const teamArt = page.locator(".qicore-route-panel.is-active .themed-hero-art");
     await teamArt.click();
     assert.equal(await teamArt.getAttribute("aria-pressed"), "true");
@@ -409,7 +420,7 @@ test("returning home hides the title before hydration", async () => {
   }
 });
 
-test("company navigation preserves the shared canvas while product navigation requests HTML", async () => {
+test("company and product navigation share the QiCore route shell", async () => {
   await withPage(async (page) => {
     const routeDataRequests = [];
     page.on("request", (request) => {
@@ -441,7 +452,7 @@ test("company navigation preserves the shared canvas while product navigation re
     await page.waitForFunction(() => document.querySelector(".qicore-route-panel.is-active h1"));
     assert.match(
       await page.locator(".qicore-route-panel.is-active h1").textContent(),
-      /Make Ideas Real/
+      /MAKE SMART/
     );
 
     await page.evaluate(() => {
@@ -451,11 +462,77 @@ test("company navigation preserves the shared canvas while product navigation re
     await page.waitForURL("**/oyscat");
 
     assert.equal(
-      await page.evaluate(() => document.documentElement.dataset.navigationDocumentProbe ?? null),
-      null,
-      "the QiCore document must not survive the product-site navigation"
+      await page.evaluate(() => document.documentElement.dataset.navigationDocumentProbe),
+      "stale-company-page",
+      "the QiCore document must survive integrated product navigation"
     );
+    assert.equal(
+      await page.evaluate(() => window.__QICORE_CANVAS_NODE_PROBE__ === document.getElementById("canvas-area")),
+      true,
+      "the shared canvas must remain mounted on the Oyscat product page",
+    );
+    assert.equal(await page.locator(".qicore-route-panel.is-active .oyscat-page").count(), 1);
+    assert.equal(await page.locator(".oyscat-nav").count(), 0);
     assert.equal(await page.evaluate(() => document.contentType), "text/html");
+  });
+});
+
+test("integrated Oyscat page keeps its market content and beta interaction", async () => {
+  await withPage(async (page) => {
+    await page.route("**/api/beta", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: true, id: "local-review", token: "review-token" }),
+    }));
+
+    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
+    await page.waitForURL("**/oyscat");
+    const activePage = page.locator(".qicore-route-panel.is-active .oyscat-page");
+    assert.match(await activePage.locator("h1").innerText(), /想造就造\s*所想即所得/);
+    assert.equal(await activePage.getByRole("heading", { name: "Oyscat 造物工作台" }).count(), 1);
+    assert.equal(await activePage.getByRole("heading", { name: "Oyscat 电子模块" }).count(), 1);
+    assert.equal(await activePage.locator("#faq details").count(), 5);
+
+    const email = activePage.locator('#beta input[name="email"]');
+    await email.fill("review@example.com");
+    await activePage.locator('#beta button[type="submit"]').click();
+    await activePage.locator("#beta [data-beta-status]").waitFor({ state: "visible" });
+    assert.equal(await email.inputValue(), "");
+    assert.match(await activePage.locator("#beta [data-beta-status]").innerText(), /感谢您的报名/);
+  });
+});
+
+test("Oyscat English mode localizes process labels and form validation", async () => {
+  await withPage(async (page) => {
+    await page.route("**/api/beta", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ ok: true, id: "local-review", token: "review-token" }),
+    }));
+    await page.locator(".locale-toggle").click();
+    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
+    await page.waitForURL("**/oyscat");
+
+    const activePage = page.locator(".qicore-route-panel.is-active .oyscat-page");
+    await page.waitForFunction(() => document.title === "Oyscat Product | QiCore");
+    await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
+    assert.equal(await page.title(), "Oyscat Product | QiCore");
+    assert.equal(await activePage.getByText("MAKE IT REAL", { exact: true }).count(), 1);
+    assert.equal(await activePage.getByText("实现", { exact: true }).isVisible(), false);
+
+    const email = activePage.locator('#beta input[name="email"]');
+    await activePage.locator('#beta button[type="submit"]').click();
+    assert.equal(await email.evaluate((element) => element.validationMessage), "Enter your email address.");
+
+    await email.fill("invalid-email");
+    await activePage.locator('#beta button[type="submit"]').click();
+    assert.equal(await email.evaluate((element) => element.validationMessage), "Enter a valid email address.");
+
+    await email.fill("review@example.com");
+    await activePage.locator('#beta button[type="submit"]').click();
+    await activePage.locator("#beta [data-beta-status]").waitFor({ state: "visible" });
+    assert.equal(await email.inputValue(), "");
+    assert.match(await activePage.locator("#beta [data-beta-status]").innerText(), /Thanks for signing up/);
   });
 });
 
@@ -471,6 +548,70 @@ test("returning from a company page keeps an interactive voxel homepage", async 
     );
     await placeVoxelAtGrid(page, 4, 4);
     assert.equal(await getVoxelCount(page), 1);
+  });
+});
+
+test("about layout styles survive careers to home navigation", async () => {
+  await withPage(async (page) => {
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.locator('#team').waitFor({ state: "visible" });
+
+    await page.getByRole("link", { name: "查看开放职位", exact: true }).click();
+    await page.waitForURL("**/careers");
+    await page.locator('.careers-back-link').click();
+    await page.waitForURL(server.baseURL + "/");
+
+    await page.locator('.marketing-nav-links a[href="/about"]').click();
+    await page.waitForURL("**/about");
+    await page.locator('#team').waitFor({ state: "visible" });
+
+    const beforeReload = await page.locator('#team article').first().evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { width: parseFloat(style.width), height: parseFloat(style.height), display: style.display };
+    });
+    assert.equal(beforeReload.display, "grid");
+    assert.ok(beforeReload.width < 400);
+    assert.ok(beforeReload.height < 300);
+
+    const cardSurfaces = await page
+      .locator('.qicore-route-panel.is-active .marketing-board > section.marketing-section')
+      .evaluateAll((elements) => elements.map((element) => {
+        const style = getComputedStyle(element);
+        return {
+          backgroundColor: style.backgroundColor,
+          backgroundImage: style.backgroundImage,
+          border: style.border,
+          boxShadow: style.boxShadow,
+        };
+      }));
+    assert.equal(cardSurfaces.length, 5);
+    assert.equal(new Set(cardSurfaces.map((surface) => surface.backgroundColor)).size, 1);
+    assert.match(cardSurfaces[0].backgroundColor, /^rgba\(234, 232, 236, 0\.9\)$/);
+    assert.equal(new Set(cardSurfaces.map((surface) => surface.border)).size, 1);
+    assert.equal(new Set(cardSurfaces.map((surface) => surface.boxShadow)).size, 1);
+    assert.equal(cardSurfaces.every((surface) => surface.backgroundImage === "none"), true);
+
+    const personCardBackgrounds = await page.locator('#team article').evaluateAll((elements) =>
+      elements.map((element) => getComputedStyle(element).backgroundColor),
+    );
+    assert.equal(new Set(personCardBackgrounds).size, 1);
+    assert.equal(personCardBackgrounds[0], "rgba(0, 0, 0, 0)");
+
+    await page.reload();
+    const afterReload = await page.locator('#team article').first().evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { width: parseFloat(style.width), height: parseFloat(style.height), display: style.display };
+    });
+    assert.equal(afterReload.display, beforeReload.display);
+    assert.ok(
+      Math.abs(afterReload.width - beforeReload.width) < 1,
+      JSON.stringify({ beforeReload, afterReload }),
+    );
+    assert.ok(
+      Math.abs(afterReload.height - beforeReload.height) < 1,
+      JSON.stringify({ beforeReload, afterReload }),
+    );
   });
 });
 

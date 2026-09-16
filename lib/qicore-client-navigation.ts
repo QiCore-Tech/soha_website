@@ -1,4 +1,4 @@
-const QICORE_CONTENT_ROUTES = ["/about", "/news", "/team"] as const;
+const QICORE_CONTENT_ROUTES = ["/oyscat", "/about", "/news", "/team"] as const;
 const QICORE_ROUTES = new Set<string>(["/", ...QICORE_CONTENT_ROUTES]);
 const routeHtmlCache = new Map<string, string>();
 

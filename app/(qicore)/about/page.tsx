@@ -1,140 +1,83 @@
-import { BilingualText, MarketingPage } from "@/components/marketing-page";
-import { OysCatProductWordmark } from "@/components/oyscat-product-wordmark";
+import { BilingualText as Bi, MarketingPage } from "@/components/marketing-page";
 import { QiCoreFilm } from "@/components/qicore-film";
+import styles from "./about.module.css";
+
+const people = [
+  { image: "jake", name: "罗世豪", english: "Jake Luo", role: "创始人 & CEO", roleEn: "Founder & CEO", bio: "原 DJI 核心产品研发负责人", bioEn: "Former core product R&D lead at DJI" },
+  { image: "wenda", name: "盛文达", english: "Wenda Sheng", role: "联合创始人 & CTO", roleEn: "Co-founder & CTO", bio: "原 DJI 资深硬件系统专家", bioEn: "Former senior hardware systems expert at DJI" },
+  { image: "braylen", name: "黄扬", english: "Braylen Huang", role: "联合创始人 & CPO", roleEn: "Co-founder & CPO", bio: "原 DJI 资深软件系统专家", bioEn: "Former senior software systems expert at DJI" },
+];
 
 export default function AboutPage() {
   return (
     <MarketingPage
       heroArt="system"
-      pageClassName="about-page"
+      pageClassName={`about-page ${styles.page}`}
       eyebrow={{ zh: "关于 QiCore", en: "About QiCore" }}
-      title={{ zh: "让想法成真", en: "Make Ideas Real." }}
-      intro={{
-        zh: "QiCore 正在搭建一套从意图到实物的创作系统，让更多人能够亲手做出自己的作品。",
-        en: "QiCore is building a creation system that takes an idea from intent to object—so more people can make something of their own."
-      }}
+      title={{ zh: "MAKE SMART", en: "MAKE SMART" }}
+      intro={{ zh: "气核科技是一家 AI 驱动的智能硬件设计与制造公司。", en: "QiCore Technology is an AI-native company for smart hardware design and manufacturing." }}
     >
+      <section className={`marketing-section about-narrative ${styles.company}`} aria-labelledby="company-heading">
+        <div className={styles.copy} data-qicore-waterfall="2">
+          <p className="section-kicker">01 / ABOUT QICORE</p>
+          <h2 id="company-heading"><Bi zh="公司介绍" en="About QiCore" /></h2>
+          <p><Bi zh="生成式人工智能的革命性突破，已实现人类意图向数字产物（文本、图像、音频等）的高效生成。然而，从人类意图直达物理实体，依然是一道难以逾越的工程鸿沟。" en="Generative AI can now convert human intent into digital artifacts (text, images, and audio) with remarkable efficiency. However, turning human intent into physical artifacts remains an unsolved engineering challenge." /></p>
+          <p className={styles.statement}><Bi zh="气核科技是一家 AI 驱动的智能硬件设计与制造公司。" en="QiCore Technology is an AI-native company for smart hardware design and manufacturing." /></p>
+          <p><Bi zh={<>首创<strong>生成式物理具现</strong>概念，致力于将人类的造物意图直接转化为功能性物理实体。</>} en={<>We pioneered the concept of <strong>Generative Physical Instantiation (GenPI)</strong>, turning human intent directly into functional physical artifacts.</>} /></p>
+          <p><Bi zh="从助力创客与开发者实现原型的敏捷化构建，到最终赋能大众迈向零门槛的个性化智能造物时代。" en="From enabling makers and developers to prototype hardware innovatively, completely, and confidently, to ultimately making personalized smart hardware creation accessible to everyone." /></p>
+        </div>
+        <figure className={styles.diagram} data-qicore-waterfall="3">
+          <svg viewBox="0 0 280 240" role="img" aria-labelledby="genpi-title">
+            <title id="genpi-title">GenPI：从造物意图到物理实体 / From intent to physical artifacts</title>
+            <g fill="none" stroke="currentColor" strokeWidth="1">
+              <path opacity=".15" d="M20 40h240M20 100h240M20 160h240M20 220h240M40 20v200M100 20v200M160 20v200M220 20v200" />
+              <rect x="28" y="40" width="104" height="66" rx="2" fill="#eae8ec" />
+              <circle cx="48" cy="61" r="5" fill="#d8c47d" strokeOpacity=".5" />
+              <path opacity=".55" d="M63 61h48M44 79h53M44 89h36" />
+              <path strokeDasharray="3 4" opacity=".55" d="M132 73h39q15 0 15 15v24" />
+              <path opacity=".55" d="m181 106 5 6 5-6" />
+              <path d="m150 145 41-23 41 23-41 24Z" fill="#d8c47d" strokeOpacity=".55" />
+              <path d="m150 145 41 24v48l-41-24Z" fill="#91a99a" strokeOpacity=".55" />
+              <path d="m191 169 41-24v48l-41 24Z" fill="#b4bcb6" strokeOpacity=".55" />
+              <path opacity=".3" d="M136 222h109" />
+            </g>
+            <g fill="currentColor" fontFamily="monospace" fontSize="8" letterSpacing="1" opacity=".6"><text x="28" y="28">01 / INTENT</text><text x="149" y="113">02 / PHYSICAL</text></g>
+          </svg>
+          <figcaption><strong>GenPI</strong><span>GENERATIVE PHYSICAL<br />INSTANTIATION</span></figcaption>
+        </figure>
+      </section>
+
       <QiCoreFilm />
 
-      <section className="marketing-section about-narrative">
-        <p className="section-kicker" data-qicore-waterfall="2">Why QiCore</p>
-        <div className="about-narrative-layout" data-lang="zh">
-          <div className="about-narrative-statement" data-qicore-waterfall="2">
-            <div className="about-narrative-transition" aria-hidden="true">
-              <span>DIGITAL</span><i /><span>PHYSICAL</span>
-            </div>
-            <h2>在 QiCore，<span>指令的终点</span>，就是物理世界。</h2>
-            <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
-          </div>
-          <ol className="about-narrative-copy" data-qicore-waterfall="3">
-            <li><span>01 / DIGITAL</span><strong>数字创作，触手可及</strong><p>如今，一句指令就能生成代码、设计图和 3D 模型。</p></li>
-            <li><span>02 / PHYSICAL</span><strong>到了现实，门槛仍然很高</strong><p>从概念到实物，需要跨越机械、电子、编程和制造工艺等多个专业领域。</p></li>
-            <li className="is-qicore"><span>03 / QICORE</span><strong>让 AI 走进物理世界</strong><p>让每个创意都有机会成为实体，从一个想法开始，直接驱动制造终端。</p></li>
-          </ol>
-        </div>
-        <div className="about-narrative-layout" data-lang="en">
-          <div className="about-narrative-statement" data-qicore-waterfall="2">
-            <div className="about-narrative-transition" aria-hidden="true">
-              <span>DIGITAL</span><i /><span>PHYSICAL</span>
-            </div>
-            <h2>Prompt the <span>Physical World.</span></h2>
-            <div className="about-narrative-blocks" aria-hidden="true"><i /><i /><i /></div>
-          </div>
-          <ol className="about-narrative-copy" data-qicore-waterfall="3">
-            <li><span>01 / DIGITAL</span><strong>Digital creation is now within reach</strong><p>A single prompt can already generate code, designs, and 3D models.</p></li>
-            <li><span>02 / PHYSICAL</span><strong>Physical creation tells a very different story</strong><p>Turning an idea into something tangible still demands expertise in mechanics, electronics, programming, and often manufacturing processes. For non-experts, the barrier remains steep.</p></li>
-            <li className="is-qicore"><span>03 / QICORE</span><strong>From intent to reality</strong><p>QiCore is here to rewrite that equation. Digital creation is already open to everyone. Physical creation should be too.</p></li>
-          </ol>
+      <section className={`marketing-section careers-panel ${styles.direction}`} aria-label="近期聚焦与长期使命">
+        <article data-qicore-waterfall="3">
+          <p className="section-kicker">02 / <Bi zh="近期聚焦" en="Near-term Focus" /></p>
+          <h2><Bi zh="高效敏捷的电气化造物系统" en="A streamlined, high-efficiency creation system that makes electronics projects effortless." /></h2>
+          <p className={styles.directionCopy}><Bi zh="以 Oyscat 为第一阶段落点，连接设计、仿真与标准化电子模块，缩短从构想到可运行原型的路径。" en="Oyscat is our first step: connecting design, simulation and standardized electronic blocks to shorten the path from an idea to a working prototype." /></p>
+          <span className={styles.directionTag}>NOW / OYSCAT</span>
+        </article>
+        <article data-qicore-waterfall="4">
+          <p className="section-kicker">03 / <Bi zh="长期使命" en="Long-term Mission" /></p>
+          <h2><Bi zh="全范畴的生成式物理造物生态系统" en="A full-spectrum generative ecosystem for physical creation." /></h2>
+          <p className={styles.directionCopy}><Bi zh="持续扩展可被生成、验证和制造的对象范围，让更多造物意图能够转化为功能性物理实体。" en="We will expand what can be generated, validated and made, enabling more creative intent to become functional physical artifacts." /></p>
+          <span className={styles.directionTag}>VISION / GENPI</span>
+        </article>
+      </section>
+
+      <section className={`marketing-section about-narrative ${styles.team}`} id="team" aria-labelledby="team-heading">
+        <header data-qicore-waterfall="4"><p className="section-kicker">04 / OUR TEAM</p><h2 id="team-heading"><Bi zh="核心团队" en="Our team" /></h2></header>
+        <div className={styles.people}>
+          {people.map(person => <article className={styles.person} key={person.image} data-qicore-waterfall="5">
+            <img src={`/media/v3/${person.image}.webp`} alt={`${person.name} / ${person.english}`} loading="lazy" />
+            <div className={styles.personText}><h3><Bi zh={person.name} en={person.english} /></h3><p className={styles.englishName} data-lang="zh">{person.english}</p><p className={styles.role}><Bi zh={person.role} en={person.roleEn} /></p><p className={styles.bio}><Bi zh={person.bio} en={person.bioEn} /></p></div>
+          </article>)}
         </div>
       </section>
 
-      <section className="marketing-section about-vision-appendix">
-        <div className="about-vision-diagram" aria-hidden="true">
-          <svg viewBox="0 0 280 248" role="presentation">
-            <g className="field-note-intent">
-              <rect x="20" y="26" width="106" height="72" rx="2" />
-              <circle cx="43" cy="62" r="7" />
-              <path d="M61 49h46M61 63h34M61 77h23" />
-              <path className="field-note-corner" d="M20 40V26h14M112 26h14v14" />
-            </g>
-            <path className="field-note-connector" d="M126 62h35m0 0-8-6m8 6-8 6" />
-            <g className="field-note-object">
-              <polygon className="field-note-object-front" points="160,119 219,119 219,178 160,178" />
-              <polygon className="field-note-object-top" points="160,119 184,101 243,101 219,119" />
-              <polygon className="field-note-object-side" points="219,119 243,101 243,160 219,178" />
-              <rect x="178" y="140" width="23" height="18" rx="1" />
-              <circle cx="184" cy="149" r="2.5" />
-              <circle cx="193" cy="149" r="2.5" />
-              <circle cx="202" cy="149" r="2.5" />
-            </g>
-            <path className="field-note-baseline" d="M48 202h166" />
-            <path className="field-note-accent" d="M52 202h34" />
-          </svg>
-          <span>INTENT → PHYSICAL OBJECT</span>
-        </div>
-        <div data-lang="zh">
-          <p>数字世界的创作与物理世界之间，隔着一条鸿沟。在屏幕上生成一份作品，和向物理世界下发指令并产出实物，完全是两码事。对于缺乏专业背景的人来说，这道门槛依旧高不可攀。</p>
-          <p>我们所要做的，正是让 AI 的能力延伸至物理世界，赋予每个人“以意图造物”的权利。大至复杂的现实装置，小至触手可及的日常物件，无论功能繁简、形态各异，每一个创意都应有机会成为实体。过去，制造依赖经年累月的训练；未来，它只从一个想法开始，便能跨过重重壁垒，直接驱动制造终端。</p>
-          <p>我们正全力以赴将愿景化为现实，让创想与实物之间，天堑变通途。</p>
-        </div>
-        <div data-lang="en">
-          <p>Complex creations or simple objects. Complex functions or none at all. QiCore reasons for its form and its function, and turns that intent into an object you can hold.</p>
-          <p>Here is the equation we believe in:</p>
-          <p>Expertise required + years of training = the old way in.<br />Intent alone = the new one.</p>
-          <p>For decades, making things belonged to a few: engineers, manufacturers, specialists holding knowledge the rest of us couldn&apos;t access. That knowledge was real, and it was necessary. But necessity doesn&apos;t mean exclusivity.</p>
-          <p>The wall between imagining something and building it was never meant to be permanent. It was only ever a limit of the tools we had.</p>
-          <p>With QiCore, creation starts with a single thing: your intent.</p>
-        </div>
+      <section className={`marketing-section careers-panel ${styles.join}`}>
+        <h2 data-qicore-waterfall="6"><Bi zh="加入我们" en="Join Us" /></h2>
+        <a className="company-cta dark" href="/careers" data-qicore-waterfall="7"><Bi zh="查看开放职位" en="View open roles" /><span aria-hidden="true">↗</span></a>
       </section>
-
-      <section className="hardware-strip company-product-strip marketing-section">
-        <div className="hardware-copy" data-qicore-waterfall="4">
-          <p className="section-kicker">Our first product</p>
-          <h2>
-            <BilingualText
-              zh={
-                <span className="company-product-heading">
-                  <span className="company-product-heading-brand">
-                    <OysCatProductWordmark className="qicore-heading-oyscat-wordmark" />
-                  </span>
-                  <span>，是我们迈出的第一步。</span>
-                </span>
-              }
-              en={
-                <span className="company-product-heading">
-                  <span className="company-product-heading-brand">
-                    <OysCatProductWordmark className="qicore-heading-oyscat-wordmark" />
-                  </span>
-                  <span>is our first step.</span>
-                </span>
-              }
-            />
-          </h2>
-          <p className="company-product-summary">
-            <BilingualText
-              zh="OysCat 是 QiCore 推出的首款造物系统，面向每一个想把想法做出来的人。"
-              en="OysCat is QiCore's first product family, made for anyone who wants to turn an idea into something real."
-            />
-          </p>
-          <a className="company-cta dark" href="/oyscat">
-            <BilingualText zh="进入产品站" en="Enter product site" />
-            <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <div className="company-product-identity" data-qicore-waterfall="5">
-          <span className="company-product-code">
-            PRODUCT 01 /
-            <OysCatProductWordmark className="qicore-code-oyscat-wordmark" decorative />
-          </span>
-          <div className="company-product-emblem">
-            <img src="/brand/oyscat-cat-head-whiskers.svg" alt="" aria-hidden="true" />
-          </div>
-          <div className="company-product-word">
-            <OysCatProductWordmark className="qicore-display-oyscat-wordmark" />
-          </div>
-        </div>
-      </section>
-
     </MarketingPage>
   );
 }

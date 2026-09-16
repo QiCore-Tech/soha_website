@@ -8,6 +8,7 @@ out/
 .vercel/
 .vercel
 .env*
+!.env.example
 
 # Local review material and internal concept assets - keep out of the public repo.
 design-review/
@@ -15,3 +16,9 @@ oyscat-screenshot/
 public/illustrations/
 __pycache__/
 *.pyc
+
+.local-preview/
+.next-preview/
+
+artifacts/
+test-results/

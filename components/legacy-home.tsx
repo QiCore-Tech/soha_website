@@ -102,12 +102,12 @@ export function LegacyHome() {
 
       </div>
 
-      <button className="luon-gateway oyscat-gateway" id="btn-trigger" type="button" aria-label="Meet OysCat" data-oyscat-entry>
+      <button className="luon-gateway oyscat-gateway" id="btn-trigger" type="button" aria-label="Meet Oyscat" data-oyscat-entry>
         <img className="oyscat-gateway-art" src="/brand/oyscat-symbol.svg" alt="" />
         <span className="gateway-copy">
           <small>QiCore Workspace</small>
           <span className="gateway-text">
-            <img src="/brand/oyscat-wordmark.png" alt="OysCat" />
+            <img src="/brand/oyscat-wordmark.png" alt="Oyscat" />
           </span>
         </span>
         <span className="gateway-arrow" aria-hidden="true">↗</span>
@@ -137,7 +137,7 @@ export function LegacyHome() {
         </div>
 
         <div className="luon-text-group" id="luon-text-group">
-          <img className="oyscat-wordmark" src="/brand/oyscat-wordmark.png" alt="OysCat" />
+          <img className="oyscat-wordmark" src="/brand/oyscat-wordmark.png" alt="Oyscat" />
           <p className="luon-subtitle" id="luon-typewriter" />
           <h1 className="luon-title">
             <span data-lang="zh">让创造，自然发生。</span>
@@ -149,8 +149,8 @@ export function LegacyHome() {
           </p>
           <div className="oyscat-scene-actions" data-home-interactive-control>
             <a className="oyscat-primary-action" href="/oyscat">
-              <span data-lang="zh">了解 OysCat</span>
-              <span data-lang="en">Discover OysCat</span>
+              <span data-lang="zh">了解 Oyscat</span>
+              <span data-lang="en">Discover Oyscat</span>
             </a>
             <a className="oyscat-secondary-action" href="https://beta-hk.oyscat.com/">
               <span data-lang="zh">进入 Workspace</span>

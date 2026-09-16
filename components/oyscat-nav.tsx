@@ -25,8 +25,8 @@ export function OysCatNav() {
 
   return (
     <header className="oyscat-nav">
-      <a className="oyscat-nav-brand" href="/oyscat" aria-label="OysCat products">
-        <img src="/brand/oyscat-wordmark.png" alt="OysCat" />
+      <a className="oyscat-nav-brand" href="/oyscat" aria-label="Oyscat products">
+        <img src="/brand/oyscat-wordmark.png" alt="Oyscat" />
       </a>
       <span className="oyscat-nav-index">QICORE / PRODUCT 01</span>
       <div className="oyscat-nav-actions">

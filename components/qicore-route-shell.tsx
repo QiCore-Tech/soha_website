@@ -4,12 +4,18 @@ import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type {
   CSSProperties,
+  FormEvent as ReactFormEvent,
   KeyboardEvent as ReactKeyboardEvent,
   MouseEvent as ReactMouseEvent,
   PointerEvent as ReactPointerEvent,
   ReactNode
 } from "react";
-import { getCachedQiCoreRouteHtml, setCachedQiCoreRouteHtml } from "@/lib/qicore-client-navigation";
+import {
+  getCachedQiCoreRouteHtml,
+  isQiCoreRoute,
+  loadQiCoreRouteHtml,
+  setCachedQiCoreRouteHtml,
+} from "@/lib/qicore-client-navigation";
 
 type QiCoreRouteShellProps = {
   canvas: ReactNode;
@@ -145,6 +151,28 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   }, [hasVisibleContent]);
 
   useEffect(() => {
+    function handleRouteRequest(event: Event) {
+      const routeEvent = event as CustomEvent<{ href?: string }>;
+      const href = routeEvent.detail?.href;
+      if (!href || !isQiCoreRoute(href) || href === window.location.pathname) return;
+
+      event.preventDefault();
+      void (async () => {
+        try {
+          if (href !== "/") await loadQiCoreRouteHtml(href);
+          window.sessionStorage.removeItem("qicore-route-entry");
+          window.history.pushState(null, "", href);
+        } catch {
+          window.location.assign(href);
+        }
+      })();
+    }
+
+    window.addEventListener("qicore:navigate", handleRouteRequest);
+    return () => window.removeEventListener("qicore:navigate", handleRouteRequest);
+  }, []);
+
+  useEffect(() => {
     const handleFilmEscape = (event: globalThis.KeyboardEvent) => {
       if (event.key !== "Escape") return;
       contentRef.current
@@ -154,6 +182,30 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
     document.addEventListener("keydown", handleFilmEscape);
     return () => document.removeEventListener("keydown", handleFilmEscape);
+  }, []);
+
+  useEffect(() => {
+    const content = contentRef.current;
+    if (!content) return;
+
+    const handleInvalid = (event: Event) => {
+      const input = event.target instanceof HTMLInputElement ? event.target : null;
+      if (!input?.matches('[data-oyscat-beta-form] input[name="email"]')) return;
+
+      const isEnglish = document.documentElement.dataset.locale === "en";
+      if (input.validity.valueMissing) {
+        input.setCustomValidity(isEnglish ? "Enter your email address." : "请输入邮箱地址。");
+      } else if (input.validity.typeMismatch) {
+        input.setCustomValidity(isEnglish ? "Enter a valid email address." : "请输入有效的邮箱地址。");
+      } else {
+        input.setCustomValidity("");
+      }
+
+      input.addEventListener("input", () => input.setCustomValidity(""), { once: true });
+    };
+
+    content.addEventListener("invalid", handleInvalid, true);
+    return () => content.removeEventListener("invalid", handleInvalid, true);
   }, []);
 
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
@@ -285,6 +337,54 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     toggleHeroInteraction(event.target);
   }
 
+  async function handleContentSubmit(event: ReactFormEvent<HTMLDivElement>) {
+    const target = event.target instanceof HTMLFormElement ? event.target : null;
+    const form = target?.closest<HTMLFormElement>("[data-oyscat-beta-form]");
+    if (!form || !form.closest(".qicore-route-panel.is-active")) return;
+
+    event.preventDefault();
+    if (form.dataset.submitting === "true") return;
+    const input = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const status = form.querySelector<HTMLElement>("[data-beta-status]");
+    const email = input?.value.trim() ?? "";
+    if (!input || !button || !status || !email || !input.checkValidity()) {
+      input?.reportValidity();
+      return;
+    }
+
+    form.dataset.submitting = "true";
+    button.disabled = true;
+    status.hidden = true;
+
+    try {
+      const response = await fetch("/api/beta", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, locale: document.documentElement.dataset.locale ?? "zh", source: input.id === "hero-beta-email" ? "hero" : "footer" }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error("Beta application failed");
+
+      input.value = "";
+      status.dataset.state = "success";
+      const zh = status.querySelector<HTMLElement>('[data-lang="zh"]');
+      const en = status.querySelector<HTMLElement>('[data-lang="en"]');
+      if (zh) zh.textContent = "感谢您的报名，我们将尽快与您联系。";
+      if (en) en.textContent = "Thanks for signing up. We'll reach out to you soon.";
+    } catch {
+      status.dataset.state = "error";
+      const zh = status.querySelector<HTMLElement>('[data-lang="zh"]');
+      const en = status.querySelector<HTMLElement>('[data-lang="en"]');
+      if (zh) zh.textContent = "提交失败，请稍后重试。你的输入已保留。";
+      if (en) en.textContent = "Could not submit. Please try again; your input is preserved.";
+    } finally {
+      status.hidden = false;
+      button.disabled = false;
+      delete form.dataset.submitting;
+    }
+  }
+
   function handleContentKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key !== "Enter" && event.key !== " ") return;
     const target = event.target instanceof HTMLElement ? event.target : null;
@@ -294,7 +394,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   }
 
   return (
-    <div className={`qicore-route-shell${hasVisibleContent ? " is-content" : " is-home"}${isContentRoute ? "" : " is-canvas-interactive"}${transitionKind === "to-home" ? " is-returning-home" : ""}`}>
+    <div className={`qicore-route-shell${hasVisibleContent ? " is-content" : " is-home"}${isContentRoute ? "" : " is-canvas-interactive"}${pathname === "/oyscat" ? " is-oyscat-content" : ""}${transitionKind === "to-home" ? " is-returning-home" : ""}`}>
       <div className="qicore-persistent-canvas">{canvas}</div>
       <div
         className={`qicore-route-content is-${transitionKind}`}
@@ -302,6 +402,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
         onPointerMove={handlePointerMove}
         onPointerLeave={resetPointerTilt}
         onClick={handleContentClick}
+        onSubmit={handleContentSubmit}
         onKeyDown={handleContentKeyDown}
       >
         {outgoingFrame && (

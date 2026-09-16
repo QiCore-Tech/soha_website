@@ -1,0 +1,23 @@
+.preview { position:relative; display:block; width:100%; padding:0; border:0; background:rgba(36,33,29,.04); overflow:hidden; cursor:zoom-in; color:#292521; isolation:isolate; }
+.preview > img { display:block; width:100%; height:230px; object-fit:contain; transition:transform 450ms cubic-bezier(.22,1,.36,1),filter 450ms; }
+.preview[data-large="true"] > img { height:390px; background:#171817; }
+.prompt { position:absolute; right:12px; bottom:12px; display:flex; align-items:center; gap:8px; padding:9px 12px; background:rgba(239,243,232,.94); border:1px solid rgba(42,55,28,.2); border-radius:3px; font-size:12px; line-height:1.2; box-shadow:0 3px 12px #00000012; transition:background 200ms,transform 200ms; }
+.cat { width:20px; height:20px; background:url('/brand/oyscat-cat-head-whiskers.svg') center/contain no-repeat; }
+.preview[data-in-view="true"][data-viewed="false"] .cat { animation:peek 4.8s ease-in-out infinite; }
+.preview[data-in-view="true"][data-viewed="false"] .prompt { animation:invite 4.8s ease-in-out infinite; }
+.preview:focus-visible { outline:2px solid #6b8b36; outline-offset:4px; }
+@media(hover:hover) { .preview:hover > img { transform:scale(1.035); filter:brightness(1.05); } .preview:hover .prompt { background:#b3ee54; transform:translateY(-3px); animation:none; } }
+.preview:active > img { transform:scale(1.01); }
+.viewer { position:fixed; inset:0; width:100vw; height:100dvh; max-width:none; max-height:none; margin:0; padding:clamp(16px,4vw,56px); border:0; background:transparent; color:#292521; }
+.viewer[open] { display:grid; place-items:center; }
+.viewer::backdrop { background:rgba(19,22,20,.78); backdrop-filter:blur(8px); }
+.sheet { width:min(1100px,100%); padding:16px; border:1px solid #ffffff50; border-radius:6px; background:#eae8ec; box-shadow:0 20px 80px #0006; }
+.sheet header { display:flex; justify-content:space-between; gap:16px; align-items:center; padding:0 0 14px; }
+.sheet h2 { margin:0; font-size:clamp(16px,2vw,22px); font-weight:500; }
+.sheet header button { flex-shrink:0; padding:10px 14px; border:1px solid #29252140; border-radius:3px; background:transparent; color:inherit; cursor:pointer; }
+.sheet > img { display:block; width:100%; max-height:calc(100dvh - 180px); object-fit:contain; background:#222522; }
+.srOnly { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@keyframes peek { 0%,65%,100% { transform:translateY(0) rotate(0); } 73% { transform:translateY(-3px) rotate(-9deg); } 82% { transform:translateY(0) rotate(7deg); } }
+@keyframes invite { 0%,65%,100% { box-shadow:0 3px 12px #00000012; } 78% { box-shadow:0 0 0 4px #b3ee542e; } }
+@media(max-width:760px) { .preview > img { height:220px; } .preview[data-large="true"] > img { height:240px; } }
+@media(prefers-reduced-motion:reduce) { .preview *, .prompt { animation:none !important; transition:none !important; } .preview:hover > img { transform:none; } }

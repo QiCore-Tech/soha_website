@@ -13,7 +13,7 @@ export function OysCatProductWordmark({
       src="/brand/oyscat-wordmark.png"
       width={845}
       height={302}
-      alt={decorative ? "" : "OysCat"}
+      alt={decorative ? "" : "Oyscat"}
       aria-hidden={decorative || undefined}
     />
   );
