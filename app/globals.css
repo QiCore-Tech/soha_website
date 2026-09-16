@@ -7595,3 +7595,15 @@ body:has(.careers-page) {
     border-top: 1px solid rgba(45,41,36,.13) !important;
 }
 .marketing-page .marketing-board .marketing-footer { margin-bottom: 0; }
+
+.careers-page .marketing-board .marketing-footer {
+    padding: 38px clamp(24px, 5vw, 72px) 30px;
+}
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: document-fade-out 220ms ease both; }
+::view-transition-new(root) { animation: document-slide-in 380ms cubic-bezier(.22,1,.36,1) both; }
+@keyframes document-fade-out { to { opacity: 0; } }
+@keyframes document-slide-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}

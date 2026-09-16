@@ -26,5 +26,3 @@
 @keyframes deliver { 0% { transform:translate(0,0); opacity:0; } 15% { opacity:1; } 75%,100% { transform:translate(125px,-28px) scale(.94); opacity:0; } }
 @media(max-width:760px) { .scene { padding:14px 6px 0; } .caption { gap:6px; } }
 @media(prefers-reduced-motion:reduce) { .scene * { animation:none !important; } }
-
-.scene * { animation: none !important; transition: none !important; }

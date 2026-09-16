@@ -156,7 +156,6 @@ export default function OyscatPage() {
       <section className={`marketing-section ${styles.storyCard}`} id="system" aria-labelledby="workspace-title">
         <div className={styles.storyCopy} data-qicore-waterfall="3">
           <p className="section-kicker">02 / OYSCAT WORKSPACE</p>
-          <OyscatPixelScene kind="workspace" compact />
           <h2 id="workspace-title"><Bi zh="Oyscat 造物工作台" en="Oyscat Workspace" /></h2>
           <ul>
             <li><Bi zh="直观的拖拽与积木式拼搭，赋予用户自由造物体验。" en="Intuitive drag-and-drop and block-based building let users create freely." /></li>

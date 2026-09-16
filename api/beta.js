@@ -11,7 +11,10 @@ async function saveToFeishu(fields) {
       body: JSON.stringify(body)
     });
     const data = await response.json();
-    if (!response.ok || data.code !== 0) throw new Error("FEISHU_WRITE_FAILED");
+    if (!response.ok || data.code !== 0) {
+      console.error("Beta Feishu request failed", { stage: token ? "record" : "auth", status: response.status, code: data.code });
+      throw new Error("FEISHU_WRITE_FAILED");
+    }
     return data;
   }
   const auth = await request("/open-apis/auth/v3/tenant_access_token/internal", { app_id: appId, app_secret: appSecret });
