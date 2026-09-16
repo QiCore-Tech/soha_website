@@ -72,7 +72,7 @@ function PixelCat({ className }: { className?: string }) {
 function ProductHeroVisual() {
   return (
     <div className={`company-hero-art ${styles.heroArt}`} data-qicore-waterfall="1">
-      <div className={`company-blueprint-card ${styles.heroCard}`}>
+      <div className={`company-blueprint-card ${styles.heroCard}`} data-oyscat-landing-card>
         <span className={styles.heroIndex}>QICORE / PRODUCT 01</span>
         <form className={styles.heroBetaInvite} data-oyscat-beta-form>
           <label className={styles.inputLabel} htmlFor="hero-beta-email"><Bi zh="填写邮箱申请内测资格" en="Enter your email to apply for beta" /></label>
@@ -103,7 +103,7 @@ function ProductHeroVisual() {
         </form>
         <img className={styles.heroShell} src="/brand/oyscat-shell-derived.svg" alt="" />
 
-        <span className={styles.heroSymbolFrame}>
+        <span className={styles.heroSymbolFrame} data-oyscat-landing-cat>
           <img
             className={styles.heroSymbol}
             src="/brand/oyscat-workspace-loading-320-12fps.webp"

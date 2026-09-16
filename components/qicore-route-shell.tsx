@@ -1,5 +1,6 @@
 "use client";
 
+import { prepareOyscatArrival } from "@/lib/oyscat-arrival";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type {
@@ -44,6 +45,8 @@ type TransitionKind =
 
 export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   const pathname = usePathname();
+  const gatewayArrival = useRef(false);
+  const cancelArrival = useRef<(() => void) | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const transitionTimerRef = useRef<number | null>(null);
   const transitionFrameRef = useRef<number | null>(null);
@@ -116,6 +119,13 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
+    if (gatewayArrival.current && pathname === "/oyscat") {
+      gatewayArrival.current = false;
+      setOutgoingFrame(null);
+      setTransitionKind("idle");
+      return;
+    }
+
     const duration = nextTransition === "from-home" ? 2050 : nextTransition === "between-content" ? 1800 : 850;
     const beginTransition = () => {
       setTransitionKind(nextTransition);
@@ -140,6 +150,7 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
     if (transitionFrameRef.current) window.cancelAnimationFrame(transitionFrameRef.current);
     if (heroPointerFrameRef.current) window.cancelAnimationFrame(heroPointerFrameRef.current);
+    cancelArrival.current?.();
   }, []);
 
   useEffect(() => {
@@ -152,11 +163,16 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
   useEffect(() => {
     function handleRouteRequest(event: Event) {
-      const routeEvent = event as CustomEvent<{ href?: string }>;
+      const routeEvent = event as CustomEvent<{ href?: string; gateway?: boolean }>;
       const href = routeEvent.detail?.href;
       if (!href || !isQiCoreRoute(href) || href === window.location.pathname) return;
 
       event.preventDefault();
+      if (routeEvent.detail.gateway) {
+        gatewayArrival.current = true;
+        cancelArrival.current?.();
+        cancelArrival.current = prepareOyscatArrival();
+      }
       void (async () => {
         try {
           if (href !== "/") await loadQiCoreRouteHtml(href);
