@@ -6,6 +6,8 @@ const people = [
   { image: "jake", name: "罗世豪", english: "Jake Luo", role: "创始人 & CEO", roleEn: "Founder & CEO" },
   { image: "wenda", name: "盛文达", english: "Wenda Sheng", role: "联合创始人 & CTO", roleEn: "Co-founder & CTO" },
   { image: "braylen", name: "黄扬", english: "Braylen Huang", role: "联合创始人 & CPO", roleEn: "Co-founder & CPO" },
+  { image: "allen", name: "罗世港", english: "Allen Luo", role: "生产与供应链负责人", roleEn: "Head of Manufacturing and Supply Chain" },
+  { image: "wmd", name: "戴淯全", english: "WMD", role: "硬件与嵌入式负责人", roleEn: "Head of Hardware and Embedded Systems" },
 ];
 
 export default function AboutPage() {
