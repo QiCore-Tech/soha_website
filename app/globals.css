@@ -7617,7 +7617,7 @@ body:has(.careers-page) {
  .touch-actions { display:flex; gap:4px; margin-top:10px; padding-top:8px; border-top:1px solid #29252120; }
  .touch-actions button { min-height:40px; flex:1; background:transparent; border:0; color:inherit; font-size:12px; }
  .touch-actions button:disabled { opacity:.3; }
- .qicore-route-shell.is-home #canvas-area { touch-action:none; -webkit-touch-callout:none; user-select:none; }
+ .qicore-route-shell.is-home #canvas-area { touch-action:pinch-zoom; -webkit-touch-callout:none; user-select:none; }
 }
 
 /* Same tile size, spacing, sharp borders and order as the desktop palette. */
@@ -7647,3 +7647,18 @@ body:has(.careers-page) {
 .clear-confirm-actions button { flex:1; min-height:44px; padding:8px; font:inherit; font-size:13px; border:1px solid #29252140; border-radius:4px; color:inherit; background:transparent; }
 .clear-confirm-actions [data-confirm] { background:#393c3f; border-color:#393c3f; color:#fff; }
 .clear-confirm-actions button:focus-visible { outline:2px solid #8fa892; outline-offset:3px; }
+
+/* Keep the mobile product entry out of the canvas's 3D depth plane. */
+@media (pointer: coarse), (max-width: 768px) {
+  .qicore-route-shell .oyscat-gateway,
+  .qicore-route-shell .oyscat-gateway:hover,
+  .qicore-route-shell .oyscat-gateway:focus-visible {
+    transform: none;
+    transform-style: flat;
+    backface-visibility: hidden;
+  }
+  .qicore-route-shell .oyscat-gateway > * { pointer-events: none; }
+}
+
+/* Retired standalone product scene must never intercept the home canvas. */
+#scene-luon[hidden] { display: none !important; }

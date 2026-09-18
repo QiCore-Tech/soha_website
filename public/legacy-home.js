@@ -1344,6 +1344,10 @@
         btnTrigger.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
+            if (isMobileView && e.detail !== 0) {
+                const rect = btnTrigger.getBoundingClientRect();
+                if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
+            }
             enterLuonScene();
         });
 
@@ -1688,7 +1692,7 @@
             }
 
             if (isQiCoreContentRoute) {
-                paperCanvas.style.transform = isMobileView ? `translate(${touchPanX}px,${touchPanY}px) scale(${touchZoom}) rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)` : `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
+                paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
                 renderSettleFrames = Math.max(0, renderSettleFrames - 1);
                 if (isMobileView || renderSettleFrames > 0 || Math.abs(targetSceneStrength - sceneStrengthState) > 0.05) {
                     scheduleRender(false);
@@ -1776,7 +1780,7 @@
             }
 
             // 全境 3D 倾斜
-            paperCanvas.style.transform = isMobileView ? `translate(${touchPanX}px,${touchPanY}px) scale(${touchZoom}) rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)` : `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
+            paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
             if (homeNav && !document.body.classList.contains('is-qicore-navigating')) {
                 homeNav.style.setProperty('--home-nav-rx', `${sceneRotX}deg`);
                 homeNav.style.setProperty('--home-nav-ry', `${sceneRotY}deg`);
@@ -1857,7 +1861,7 @@
         // Touch building uses the same voxel model, collision checks and persistence.
         const touchPoints = new Map();
         let touchStart = null, touchHold = 0, touchMoved = false, touchCandidate = null;
-        let touchZoom = 1, touchPanX = 0, touchPanY = 0;
+        let nativeTouchGesture = false;
         let touchRedo = [];
         const touchBar = document.createElement('div');
         touchBar.className = 'touch-builder';
@@ -1936,8 +1940,7 @@
         const touchEnabled = () => isMobileView && location.pathname === '/' && !interactionLocked;
         function cancelTouchPreview() { clearTimeout(touchHold); touchCandidate = null; hidePreviewVoxel(); }
         paperCanvas.addEventListener('pointerdown', e => {
-            if (!touchEnabled() || e.pointerType !== 'touch' || e.target.closest('a,button')) return;
-            e.preventDefault();
+            if (!touchEnabled() || nativeTouchGesture || e.pointerType !== 'touch' || e.target.closest('a,button')) return;
             paperCanvas.setPointerCapture(e.pointerId);
             touchPoints.set(e.pointerId, {x:e.clientX,y:e.clientY});
             if (touchPoints.size > 1) { touchMoved = true; cancelTouchPreview(); return; }
@@ -1965,12 +1968,9 @@
             const previous = touchPoints.get(e.pointerId);
             if (!previous) return;
             const next = {x:e.clientX,y:e.clientY};
-            if (touchPoints.size === 2) {
-                const other = [...touchPoints.entries()].find(([id]) => id !== e.pointerId)[1];
-                const oldDistance = Math.hypot(previous.x-other.x,previous.y-other.y);
-                const newDistance = Math.hypot(next.x-other.x,next.y-other.y);
-                if (oldDistance > 10) touchZoom = clamp(touchZoom * newDistance / oldDistance, .65, 2.2);
-                touchPanX += (next.x-previous.x)/2; touchPanY += (next.y-previous.y)/2;
+            if (nativeTouchGesture || touchPoints.size > 1) {
+                touchMoved = true;
+                cancelTouchPreview();
             } else if (touchStart && Math.hypot(next.x-touchStart.x,next.y-touchStart.y) > 9) {
                 clearTimeout(touchHold);
                 if (!touchMoved && touchStart.point) {
@@ -1994,7 +1994,7 @@
             if (!touchPoints.has(e.pointerId)) return;
             const candidate = touchCandidate;
             cancelTouchPreview();
-            if (e.type === 'pointerup' && touchEnabled() && !touchMoved && candidate) {
+            if (e.type === 'pointerup' && touchEnabled() && !nativeTouchGesture && !touchMoved && candidate) {
                 if (isVoxelWithinCanvas(candidate) && !doesVoxelIntersectAny(candidate)) {
                     saveState(); touchRedo = []; appendVoxel(candidate); clearPendingPlacementColor();
                 }
@@ -2002,6 +2002,23 @@
             touchPoints.delete(e.pointerId);
             if (!touchPoints.size) touchStart = null;
         }
+        // Keep browser pinch gestures separate until every physical finger lifts.
+        document.addEventListener('touchstart', event => {
+            if (event.touches.length < 2) return;
+            nativeTouchGesture = true;
+            touchMoved = true;
+            cancelTouchPreview();
+            closeTouchPalette();
+        }, { passive: true, capture: true });
+        const finishNativeTouchGesture = event => {
+            if (event.touches.length) return;
+            nativeTouchGesture = false;
+            touchPoints.clear();
+            touchStart = null;
+            cancelTouchPreview();
+        };
+        document.addEventListener('touchend', finishNativeTouchGesture, { passive: true });
+        document.addEventListener('touchcancel', finishNativeTouchGesture, { passive: true });
         paperCanvas.addEventListener('pointerup', finishTouch);
         paperCanvas.addEventListener('pointercancel', finishTouch);
 

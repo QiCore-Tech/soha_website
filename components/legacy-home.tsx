@@ -113,7 +113,7 @@ export function LegacyHome() {
         <span className="gateway-arrow" aria-hidden="true">↗</span>
       </button>
 
-      <section className="scene-luon" id="scene-luon" aria-hidden="true">
+      <section className="scene-luon" id="scene-luon" aria-hidden="true" inert hidden>
         <button className="return-cmd" id="btn-return" type="button">
           <span data-lang="zh">返回创造场</span>
           <span data-lang="en">Back to canvas</span>
@@ -147,17 +147,7 @@ export function LegacyHome() {
             <span data-lang="zh">面向创客与硬件创造者的全链路工作空间</span>
             <span data-lang="en">The end-to-end workspace for makers and hardware creators</span>
           </p>
-          <div className="oyscat-scene-actions" data-home-interactive-control>
-            <a className="oyscat-primary-action" href="/oyscat">
-              <span data-lang="zh">了解 Oyscat</span>
-              <span data-lang="en">Discover Oyscat</span>
-            </a>
-            <a className="oyscat-secondary-action" href="https://beta-hk.oyscat.com/">
-              <span data-lang="zh">进入 Workspace</span>
-              <span data-lang="en">Open Workspace</span>
-              <span aria-hidden="true">↗</span>
-            </a>
-          </div>
+
         </div>
       </section>
 
