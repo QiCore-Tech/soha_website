@@ -1888,7 +1888,7 @@ body:has(.marketing-page) {
         width: 38px;
         height: 38px;
         border: 1px solid rgba(255,255,255,.12);
-        border-radius: 11px;
+        border-radius: 19px;
         background: rgba(255,255,255,.06);
     }
     .marketing-menu-toggle span { width: 15px; height: 1px; background: #fff; transition: transform 180ms ease; }
@@ -7607,3 +7607,43 @@ body:has(.careers-page) {
 @media (prefers-reduced-motion: reduce) {
     ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
+
+.touch-builder { display:none; }
+@media (pointer:coarse) {
+ body:not(.is-qicore-content-route):has(.qicore-route-shell.is-home) .touch-builder:not([hidden]) { display:block; position:fixed; z-index:110; width:176px; padding:12px; border:1px solid #29252130; border-radius:8px; background:#eeecf0ed; backdrop-filter:blur(16px); color:#292521; box-shadow:0 12px 36px #0002; }
+ .touch-colors { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+ .touch-colors button { width:44px; height:44px; border:2px solid transparent; border-radius:4px; box-shadow:inset 0 0 0 1px #29252115; }
+ .touch-colors button[aria-pressed="true"] { border-color:#242424; }
+ .touch-actions { display:flex; gap:4px; margin-top:10px; padding-top:8px; border-top:1px solid #29252120; }
+ .touch-actions button { min-height:40px; flex:1; background:transparent; border:0; color:inherit; font-size:12px; }
+ .touch-actions button:disabled { opacity:.3; }
+ .qicore-route-shell.is-home #canvas-area { touch-action:none; -webkit-touch-callout:none; user-select:none; }
+}
+
+/* Same tile size, spacing, sharp borders and order as the desktop palette. */
+@media (pointer:coarse) {
+ body:not(.is-qicore-content-route):has(.qicore-route-shell.is-home) .touch-builder:not([hidden]) {
+   width:168px; padding:0; border:0; border-radius:0; background:transparent; backdrop-filter:none; box-shadow:none;
+ }
+ .touch-colors { grid-template-columns:repeat(3,48px); gap:12px; }
+ .touch-colors button {
+   position:relative; width:48px; height:48px; border:1.5px solid rgba(20,20,25,.85); border-radius:0;
+   box-shadow:inset 0 2px 6px #ffffff1a,inset 0 -2px 6px #0000000d;
+   padding:7px; text-align:left; display:flex; align-items:flex-end;
+   font:700 8px 'Geist Mono',monospace; letter-spacing:.08em; color:#141419c7;
+ }
+ .touch-colors button[data-color-key="multicolor"], .touch-colors button[data-color-key="black"] { color:#fff; text-shadow:0 1px 2px #0005; }
+ .touch-colors button[aria-pressed="true"] { outline:2px solid #292521; outline-offset:3px; }
+ .touch-actions { gap:12px; margin-top:12px; padding:0; border:0; }
+ .touch-actions button { border:1px solid #29252155; border-radius:0; background:#eae8eced; backdrop-filter:blur(10px); }
+}
+
+.clear-confirm { width:min(360px,calc(100vw - 40px)); margin:auto; padding:28px; border:1px solid rgba(45,41,36,.22); border-radius:8px; background:#eae8ec; color:#292521; box-shadow:0 24px 70px #0003; }
+.clear-confirm::backdrop { background:rgba(28,28,29,.3); backdrop-filter:blur(6px); }
+.clear-confirm-kicker { font:10px 'Geist Mono',monospace; letter-spacing:.14em; color:#77716b; }
+.clear-confirm h2 { margin:22px 0 12px; font-size:24px; font-weight:450; line-height:1.35; }
+.clear-confirm p { margin:0; font-size:14px; line-height:1.8; color:#68625d; }
+.clear-confirm-actions { display:flex; gap:12px; margin-top:28px; }
+.clear-confirm-actions button { flex:1; min-height:44px; padding:8px; font:inherit; font-size:13px; border:1px solid #29252140; border-radius:4px; color:inherit; background:transparent; }
+.clear-confirm-actions [data-confirm] { background:#393c3f; border-color:#393c3f; color:#fff; }
+.clear-confirm-actions button:focus-visible { outline:2px solid #8fa892; outline-offset:3px; }

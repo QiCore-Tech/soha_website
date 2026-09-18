@@ -284,7 +284,7 @@
         }
 
         function applyViewMode() {
-            gridPlane.style.pointerEvents = isMobileView ? 'none' : 'auto';
+            gridPlane.style.pointerEvents = 'auto';
             if (isMobileView) resetInteractionState();
         }
 
@@ -1688,7 +1688,7 @@
             }
 
             if (isQiCoreContentRoute) {
-                paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
+                paperCanvas.style.transform = isMobileView ? `translate(${touchPanX}px,${touchPanY}px) scale(${touchZoom}) rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)` : `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
                 renderSettleFrames = Math.max(0, renderSettleFrames - 1);
                 if (isMobileView || renderSettleFrames > 0 || Math.abs(targetSceneStrength - sceneStrengthState) > 0.05) {
                     scheduleRender(false);
@@ -1776,7 +1776,7 @@
             }
 
             // 全境 3D 倾斜
-            paperCanvas.style.transform = `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
+            paperCanvas.style.transform = isMobileView ? `translate(${touchPanX}px,${touchPanY}px) scale(${touchZoom}) rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)` : `rotateX(${sceneRotX}deg) rotateY(${sceneRotY}deg)`;
             if (homeNav && !document.body.classList.contains('is-qicore-navigating')) {
                 homeNav.style.setProperty('--home-nav-rx', `${sceneRotX}deg`);
                 homeNav.style.setProperty('--home-nav-ry', `${sceneRotY}deg`);
@@ -1853,6 +1853,158 @@
                 scheduleRender(false);
             }
         }
+
+        // Touch building uses the same voxel model, collision checks and persistence.
+        const touchPoints = new Map();
+        let touchStart = null, touchHold = 0, touchMoved = false, touchCandidate = null;
+        let touchZoom = 1, touchPanX = 0, touchPanY = 0;
+        let touchRedo = [];
+        const touchBar = document.createElement('div');
+        touchBar.className = 'touch-builder';
+        touchBar.setAttribute('data-home-interactive-control', '');
+        touchBar.hidden = true;
+        touchBar.innerHTML = `<div class="touch-colors"></div><div class="touch-actions"></div>`;
+        const closeTouchPalette = () => { touchBar.hidden = true; };
+        function openTouchPalette(x, y) {
+            touchBar.style.left = `${clamp(x - 84, 12, innerWidth - 180)}px`;
+            touchBar.style.top = `${clamp(y >= 320 ? y - 260 : y + 28, 80, innerHeight - 252)}px`;
+            touchBar.hidden = false;
+            touchBar.querySelectorAll('.touch-colors button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.colorKey === activeColorMode)));
+            const buttons = touchBar.querySelectorAll('.touch-actions button');
+            buttons[0].disabled = !historyStack.length;
+            buttons[1].disabled = !voxels.length;
+        }
+        document.addEventListener('pointerdown', e => {
+            if (touchBar.hidden || touchBar.contains(e.target) || touchPoints.size || e.pointerType !== 'touch') return;
+            closeTouchPalette();
+            e.preventDefault(); e.stopImmediatePropagation();
+        }, true);
+        paperCanvas.addEventListener('contextmenu', e => { if (isMobileView) e.preventDefault(); });
+        const colors = touchBar.querySelector('.touch-colors');
+        ['front', 'back', 'left', 'right', 'multicolor', 'top', 'bottom', 'white', 'black'].forEach(key => {
+            const button = document.createElement('button');
+            button.style.background = getPaletteBlockBackground(key, true);
+            button.dataset.colorKey = key;
+            button.setAttribute('aria-pressed', String(activeColorMode === key));
+            if (['multicolor', 'white', 'black'].includes(key)) button.textContent = key === 'multicolor' ? 'MULTI' : key.toUpperCase();
+            button.setAttribute('aria-label', key);
+            button.onclick = () => {
+                activeColorMode = key;
+                colors.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+                clearPendingPlacementColor();
+                closeTouchPalette();
+            };
+            colors.append(button);
+        });
+        function touchAction(zh, en, action) {
+            const button = document.createElement('button');
+            button.innerHTML = `<span data-lang="zh">${zh}</span><span data-lang="en">${en}</span>`;
+            button.onclick = action;
+            touchBar.querySelector('.touch-actions').append(button);
+        }
+        touchAction('↶ 撤销', '↶ Undo', () => { if (historyStack.length) { touchRedo.push(JSON.parse(JSON.stringify(voxels))); undo(); } closeTouchPalette(); });
+        touchAction('清空', 'Clear', () => {
+            closeTouchPalette();
+            if (!voxels.length) return;
+            const en = document.documentElement.dataset.locale === 'en';
+            const dialog = document.createElement('dialog');
+            dialog.className = 'clear-confirm';
+            dialog.setAttribute('aria-labelledby', 'clear-confirm-title');
+            dialog.setAttribute('aria-describedby', 'clear-confirm-description');
+            dialog.innerHTML = `<span class="clear-confirm-kicker">QICORE / CANVAS</span>
+                <h2 id="clear-confirm-title">${en ? 'Start with a clear canvas?' : '清空画布，重新搭建？'}</h2>
+                <p id="clear-confirm-description">${en ? 'All blocks will be removed. You can undo this from the palette.' : '所有积木将被移除，你仍可以在色盘中撤销恢复。'}</p>
+                <div class="clear-confirm-actions"><button type="button" data-cancel>${en ? 'Keep building' : '继续搭建'}</button><button type="button" data-confirm>${en ? 'Clear canvas' : '清空画布'}</button></div>`;
+            document.body.append(dialog);
+            interactionLocked = true;
+            const close = () => { dialog.close(); dialog.remove(); interactionLocked = false; };
+            dialog.querySelector('[data-cancel]').onclick = close;
+            dialog.oncancel = event => { event.preventDefault(); close(); };
+            dialog.onclick = event => { if (event.target === dialog) {
+                const r = dialog.getBoundingClientRect();
+                if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) close();
+            } };
+            dialog.querySelector('[data-confirm]').onclick = () => {
+                close();
+                touchRedo = [];
+                executeClearAnimation();
+            };
+            dialog.showModal();
+            dialog.querySelector('[data-cancel]').focus();
+        });
+        document.body.append(touchBar);
+        const touchEnabled = () => isMobileView && location.pathname === '/' && !interactionLocked;
+        function cancelTouchPreview() { clearTimeout(touchHold); touchCandidate = null; hidePreviewVoxel(); }
+        paperCanvas.addEventListener('pointerdown', e => {
+            if (!touchEnabled() || e.pointerType !== 'touch' || e.target.closest('a,button')) return;
+            e.preventDefault();
+            paperCanvas.setPointerCapture(e.pointerId);
+            touchPoints.set(e.pointerId, {x:e.clientX,y:e.clientY});
+            if (touchPoints.size > 1) { touchMoved = true; cancelTouchPreview(); return; }
+            const point = resolveGridCoords(e);
+            touchStart = { x:e.clientX, y:e.clientY, point, voxel:e.target.closest('.voxel')?.dataset.id };
+            touchMoved = false;
+            touchCandidate = point ? getPlacementVoxel(point, getPreviewColorKey()) : null;
+            if (touchCandidate) ensurePreviewVoxel(touchCandidate);
+            drawStartPoint = point;
+            drawPlane = point?.plane;
+            drawFaceName = e.target.classList.contains('face') ? getFaceName(e.target) : 'top';
+            drawStartClientX = e.clientX;
+            drawStartClientY = e.clientY;
+            touchHold = setTimeout(() => {
+                if (touchMoved || !touchStart || touchPoints.size !== 1) return;
+                touchMoved = true; touchCandidate = null; hidePreviewVoxel();
+                if (touchStart.voxel) {
+                    saveState(); touchRedo = []; removeVoxel(touchStart.voxel);
+                } else if (touchStart.point) {
+                    openTouchPalette(touchStart.x, touchStart.y);
+                }
+            }, 480);
+        });
+        paperCanvas.addEventListener('pointermove', e => {
+            const previous = touchPoints.get(e.pointerId);
+            if (!previous) return;
+            const next = {x:e.clientX,y:e.clientY};
+            if (touchPoints.size === 2) {
+                const other = [...touchPoints.entries()].find(([id]) => id !== e.pointerId)[1];
+                const oldDistance = Math.hypot(previous.x-other.x,previous.y-other.y);
+                const newDistance = Math.hypot(next.x-other.x,next.y-other.y);
+                if (oldDistance > 10) touchZoom = clamp(touchZoom * newDistance / oldDistance, .65, 2.2);
+                touchPanX += (next.x-previous.x)/2; touchPanY += (next.y-previous.y)/2;
+            } else if (touchStart && Math.hypot(next.x-touchStart.x,next.y-touchStart.y) > 9) {
+                clearTimeout(touchHold);
+                if (!touchMoved && touchStart.point) {
+                    const target = document.elementFromPoint(e.clientX, e.clientY);
+                    let hit = null;
+                    if (target) {
+                        const rect = target.getBoundingClientRect();
+                        hit = resolveGridCoords({ target, clientX: e.clientX, clientY: e.clientY,
+                            offsetX: (e.clientX - rect.left) * target.clientWidth / rect.width,
+                            offsetY: (e.clientY - rect.top) * target.clientHeight / rect.height });
+                    }
+                    const end = resolveDragCoords(e, hit);
+                    const candidate = end ? buildVoxelFromDrag(touchStart.point, end, touchStart.point.plane, getPreviewColorKey()) : null;
+                    touchCandidate = candidate && isVoxelWithinCanvas(candidate) && !doesVoxelIntersectAny(candidate) ? candidate : null;
+                    if (touchCandidate) ensurePreviewVoxel(touchCandidate); else hidePreviewVoxel();
+                }
+            }
+            touchPoints.set(e.pointerId,next); scheduleRender(true);
+        });
+        function finishTouch(e) {
+            if (!touchPoints.has(e.pointerId)) return;
+            const candidate = touchCandidate;
+            cancelTouchPreview();
+            if (e.type === 'pointerup' && touchEnabled() && !touchMoved && candidate) {
+                if (isVoxelWithinCanvas(candidate) && !doesVoxelIntersectAny(candidate)) {
+                    saveState(); touchRedo = []; appendVoxel(candidate); clearPendingPlacementColor();
+                }
+            }
+            touchPoints.delete(e.pointerId);
+            if (!touchPoints.size) touchStart = null;
+        }
+        paperCanvas.addEventListener('pointerup', finishTouch);
+        paperCanvas.addEventListener('pointercancel', finishTouch);
+
         scheduleRender(true);
         scheduleFooterWake();
 
