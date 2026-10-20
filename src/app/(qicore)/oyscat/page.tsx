@@ -1,5 +1,6 @@
 
 import { messages } from "@/i18n/messages";
+import { createPageMetadata, oyscatStructuredData, seoCopy } from "@/configs/seo";
 import { OyscatImage } from "@/features/oyscat/components/oyscat-image";
 import { OyscatPixelScene } from "@/features/oyscat/components/oyscat-pixel-scenes";
 import type { Metadata } from "next";
@@ -7,10 +8,12 @@ import { OyscatTestimonials } from "@/features/oyscat/components/oyscat-testimon
 import { BilingualText as Bi, MarketingPage } from "@/components/marketing-page";
 import styles from "./oyscat.module.css";
 
-export const metadata: Metadata = {
-  title: messages.oyscat.oyscat2.zh,
-  description: messages.oyscat.oyscat3.zh,
-};
+export const metadata: Metadata = createPageMetadata({
+  title: messages.pageTitles.oyscatProductQicore.zh,
+  description: seoCopy.productDescription.zh,
+  path: "/oyscat",
+  keywords: `${seoCopy.keywords.zh},Oyscat Workspace,Oyscat电子模块,AI造物系统,生成式AI建模,3D打印造物`
+});
 
 // Shared rhythm with the homepage: roomy chapters, hairline rules, big type.
 const container = "mx-auto! w-full max-w-(--site-content-max) px-(--site-gutter)!";
@@ -101,6 +104,19 @@ const faqs = [
   }
 ];
 
+const faqStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.zh,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answerZh.join(" ")
+    }
+  }))
+};
+
 function ProductHeroVisual() {
   return (
     <div className={styles.heroArt} data-qicore-waterfall="1">
@@ -133,6 +149,16 @@ export default function OyscatPage() {
       title={messages.oyscat.thinkItBuildItGetExactlyWhat}
       intro={messages.oyscat.oyscatIsANewCreationSystemFor}
     >
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(oyscatStructuredData).replace(/</g, "\\u003c") }}
+      />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData).replace(/</g, "\\u003c") }}
+      />
       <section className={`${styles.hero} overflow-hidden border-b border-black/10`} aria-labelledby="oyscat-hero-title">
         <div aria-hidden="true" className={styles.heroGrid} />
         <div className={`${container} relative grid items-center gap-12 pt-[clamp(7.5rem,16vh,11rem)]! pb-16! md:gap-14 lg:grid-cols-[1.02fr_.98fr] lg:gap-16 lg:pb-24!`}>

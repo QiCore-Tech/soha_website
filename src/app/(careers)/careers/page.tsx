@@ -1,5 +1,5 @@
 import { messages } from "@/i18n/messages";
-import type { Metadata } from "next";
+import { createPageMetadata, seoCopy } from "@/configs/seo";
 import { ArrowUpRight } from "lucide-react";
 import { CareersBoard } from "@/features/careers/components/careers-board";
 import { BilingualText as Bi, MarketingPage } from "@/components/marketing-page";
@@ -8,10 +8,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { CAREER_FILTERS } from "@/features/careers/data/careers-data";
 import { getCareerRoles } from "@/services/server/feishu-careers";
 
-export const metadata: Metadata = {
-  title: messages.careers.qicoreCareers.zh,
-  description: messages.careers.exploreQicoreSOpenRolesRequirementsAndHow.zh
-};
+export const metadata = createPageMetadata({
+  title: seoCopy.careersTitle.zh,
+  description: seoCopy.careersDescription.zh,
+  path: "/careers",
+  keywords: `${seoCopy.keywords.zh},QiCore招聘,气核科技招聘,Oyscat招聘`
+});
 
 const steps = [
   {

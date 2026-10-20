@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import { messages } from "@/i18n/messages";
+import { createPageMetadata, seoCopy } from "@/configs/seo";
 import { ArrowRight } from "lucide-react";
 import { MarketingPage } from "@/components/marketing-page";
 import { SectionHeading } from "@/components/section-heading";
 import { BilingualText as Bi } from "@/components/bilingual-text";
+
+export const metadata: Metadata = createPageMetadata({
+  title: seoCopy.newsTitle.zh,
+  description: seoCopy.newsDescription.zh,
+  path: "/news",
+  keywords: `${seoCopy.keywords.zh},Oyscat内测,气核科技新闻`
+});
 
 export default function NewsPage() {
   return (

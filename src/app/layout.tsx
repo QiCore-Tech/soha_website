@@ -8,6 +8,7 @@ import { SiteScrollReveal } from "@/components/site-scroll-reveal";
 import { GlobalClickSpark } from "@/components/click-spark";
 import type { Metadata, Viewport } from "next";
 import { siteConfig } from "@/configs/site";
+import { seoCopy, SHARE_IMAGE, websiteStructuredData } from "@/configs/seo";
 import oyscatLayoutStyles from "./(qicore)/oyscat/oyscat.module.css";
 // Cached route snapshots never load route CSS chunks, so every module a
 // content page renders with is loaded globally here.
@@ -30,31 +31,52 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.canonicalOrigin),
   title: {
-    default: messages.pageTitles.qicoreTechnologyThinkItMakeIt.zh,
+    default: seoCopy.defaultTitle.zh,
     template: messages.common.titleTemplate.zh
   },
-  description:
-    messages.layout.qicoreQicoreOyscat.zh,
+  description: seoCopy.defaultDescription.zh,
+  keywords: seoCopy.keywords.zh.split(",").map((keyword) => keyword.trim()).filter(Boolean),
+  authors: [{ name: "深圳气核科技有限公司", url: siteConfig.canonicalOrigin }],
+  creator: "深圳气核科技有限公司",
+  publisher: "深圳气核科技有限公司",
+  category: "AI 造物系统、智能硬件与电子模块",
   alternates: {
     canonical: "/"
   },
   openGraph: {
-    title: messages.layout.qicoreTechnologyThinkItMakeIt.zh,
-    description:
-      messages.layout.qicoreIsBuildingToolsForIntentDriven.zh,
+    title: seoCopy.defaultTitle.zh,
+    description: seoCopy.defaultDescription.zh,
     url: "https://qicore.ai/",
-    siteName: messages.layout.qicoreTechnology.zh,
-    type: "website"
+    siteName: messages.common.companyName.zh,
+    locale: "zh_CN",
+    type: "website",
+    images: [{ url: SHARE_IMAGE.path, width: SHARE_IMAGE.width, height: SHARE_IMAGE.height, alt: SHARE_IMAGE.alt }]
   },
   twitter: {
-    card: "summary",
-    title: messages.layout.qicoreTechnologyThinkItMakeIt.zh,
-    description:
-      messages.layout.qicoreIsBuildingToolsForIntentDriven.zh
+    card: "summary_large_image",
+    site: "@Oyscat",
+    creator: "@Oyscat",
+    title: seoCopy.defaultTitle.zh,
+    description: seoCopy.defaultDescription.zh,
+    images: [SHARE_IMAGE.path]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1
+    }
   },
   icons: {
-    icon: "/favicon.svg"
-  }
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg"
+  },
+  formatDetection: { telephone: false }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -85,13 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: messages.layout.qicoreTechnology2.zh,
-              alternateName: messages.common.organizationAliases.map((text) => text.zh),
-              url: "https://qicore.ai"
-            })
+            __html: JSON.stringify(websiteStructuredData).replace(/</g, "\\u003c")
           }}
         />
       </body>

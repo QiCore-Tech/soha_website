@@ -20,12 +20,12 @@ export const pageTitles: Record<string, LocalizedText> = {
 };
 
 export const pageDescriptions: Record<string, LocalizedText> = {
-  "/": messages.layout.qicoreQicoreOyscat,
-  "/about": messages.about.qicoreTechnologyIsAnAiNativeCompany,
-  "/team": messages.about.qicoreTechnologyIsAnAiNativeCompany,
-  "/careers": messages.careers.exploreQicoreSOpenRolesRequirementsAndHow,
-  "/news": messages.news.followQicoreAsIntentDrivenPhysicalCreation,
-  "/oyscat": messages.oyscat.oyscat3,
+  "/": messages.seo.defaultDescription,
+  "/about": messages.seo.aboutDescription,
+  "/team": messages.seo.aboutDescription,
+  "/careers": messages.seo.careersDescription,
+  "/news": messages.seo.newsDescription,
+  "/oyscat": messages.seo.productDescription,
   "/style-lab": messages.styleLab.styleExplorationOnlyTheMainWebsiteIsUnchanged,
 };
 

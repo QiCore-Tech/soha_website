@@ -28,8 +28,20 @@
         "@context": "https://schema.org",
         "@type": "Organization",
         name: catalog.common.companyName[locale],
-        alternateName: catalog.common.brand[locale],
-        url: "https://qicore.ai"
+        legalName: catalog.seo.organizationLegalName[locale],
+        alternateName: ["QiCore", "QiCore Technology", "气核科技", catalog.common.companyName[locale]],
+        url: "https://qicore.ai",
+        logo: "https://qicore.ai/brand/oyscat-symbol.svg",
+        description: catalog.seo.organizationDescription[locale],
+        email: "info@qicore.ai",
+        sameAs: [
+          "https://space.bilibili.com/3745036743215474",
+          "https://xhslink.cn/m/85xQ3j0HIh4",
+          "https://www.facebook.com/share/1baynW2wi6/",
+          "https://www.instagram.com/oyscat_official",
+          "https://x.com/Oyscat",
+          "https://www.youtube.com/@OyscatOfficial/videos"
+        ]
       });
     }
   }

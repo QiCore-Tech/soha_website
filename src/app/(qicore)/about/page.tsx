@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { messages } from "@/i18n/messages";
+import { createPageMetadata, seoCopy } from "@/configs/seo";
 import { BilingualText as Bi, MarketingPage } from "@/components/marketing-page";
 import { SectionHeading } from "@/components/section-heading";
 import { AboutVisual } from "@/features/about/components/about-visual";
@@ -11,6 +13,13 @@ const people = [
   { image: "wmd", name: messages.about.wmd.zh, english: messages.about.wmd.en, role: messages.about.headOfHardwareAndEmbeddedSystems.zh, roleEn: messages.about.headOfHardwareAndEmbeddedSystems.en, bio: messages.about.leadsHardwareAndEmbeddedSystemsBuildingTheCore.zh, bioEn: messages.about.leadsHardwareAndEmbeddedSystemsBuildingTheCore.en },
   { image: "zhong", name: messages.about.zhongWanzhen.zh, english: messages.about.zhongWanzhen.en, role: messages.about.headOfMarketing.zh, roleEn: messages.about.headOfMarketing.en, bio: messages.about.leadsMarketingStrategyBrandAndGrowth.zh, bioEn: messages.about.leadsMarketingStrategyBrandAndGrowth.en },
 ];
+
+export const metadata: Metadata = createPageMetadata({
+  title: seoCopy.aboutTitle.zh,
+  description: seoCopy.aboutDescription.zh,
+  path: "/about",
+  keywords: `${seoCopy.keywords.zh},深圳气核科技,QiCore团队,Oyscat团队`
+});
 
 export default function AboutPage() {
   return (

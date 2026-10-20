@@ -2795,30 +2795,88 @@
       "en": "MAKER "
     }
   },
+  "seo": {
+    "organizationLegalName": {
+      "zh": "深圳气核科技有限公司",
+      "en": "Shenzhen QiCore Technology Co., Ltd."
+    },
+    "defaultTitle": {
+      "zh": "Oyscat 官网｜深圳气核科技有限公司 QiCore",
+      "en": "Oyscat Official | Shenzhen QiCore Technology Co., Ltd."
+    },
+    "defaultDescription": {
+      "zh": "Oyscat 官网：深圳气核科技有限公司（QiCore）旗下 AI 造物系统。用一句话生成模型，在 Oyscat Workspace 中完成结构设计、实时仿真与电子模块编程，再把作品带入现实。了解 Oyscat 产品、电子模块、气核科技团队与最新动态。",
+      "en": "Oyscat Official: an AI-powered creation system by Shenzhen QiCore Technology Co., Ltd. Generate 3D models from a prompt, design and simulate in Oyscat Workspace, program reusable electronic modules, and bring physical creations to life."
+    },
+    "organizationDescription": {
+      "zh": "深圳气核科技有限公司（QiCore）专注 AI 原生造物与智能硬件，旗下 Oyscat 提供从 AI 建模、实时仿真到电子模块编程与实体制作的一体化造物体验。",
+      "en": "Shenzhen QiCore Technology Co., Ltd. builds AI-native creation systems and smart hardware. Its product Oyscat connects AI modeling, real-time simulation, electronic-module programming, and physical fabrication in one workflow."
+    },
+    "productDescription": {
+      "zh": "Oyscat 是深圳气核科技有限公司（QiCore）推出的 AI 造物系统。用户可在 Oyscat Workspace 中通过自然语言生成模型、搭建结构、编写控制程序并实时仿真，再结合可复用电子模块与 3D 打印完成实体作品。",
+      "en": "Oyscat is an AI creation system from Shenzhen QiCore Technology Co., Ltd. In Oyscat Workspace, users generate models from natural language, assemble structures, program and simulate behavior, then build physical creations with reusable electronic modules and 3D printing."
+    },
+    "footerIntroduction": {
+      "zh": "深圳气核科技有限公司（QiCore）是一家 AI 原生造物科技公司，旗下 Oyscat 将 AI 建模、实时仿真与可复用电子模块连接起来，让每个人都能从想法出发，完成可运行、可落地的实体造物。",
+      "en": "Shenzhen QiCore Technology Co., Ltd. is an AI-native creation company. Its product Oyscat connects AI modeling, real-time simulation, and reusable electronic modules so anyone can turn an idea into a working physical creation."
+    },
+    "aboutTitle": {
+      "zh": "关于气核科技｜深圳气核科技有限公司 QiCore",
+      "en": "About QiCore | Shenzhen QiCore Technology Co., Ltd."
+    },
+    "aboutDescription": {
+      "zh": "了解深圳气核科技有限公司（QiCore）的使命、团队与产品方向。气核科技专注 AI 原生造物与智能硬件，旗下 Oyscat 连接 AI 建模、实时仿真、电子模块与实体制作。",
+      "en": "Learn about Shenzhen QiCore Technology Co., Ltd., its mission, team, and product direction. QiCore builds AI-native creation tools and smart hardware, including Oyscat."
+    },
+    "newsTitle": {
+      "zh": "新闻动态｜Oyscat 与气核科技 QiCore",
+      "en": "News | Oyscat and QiCore"
+    },
+    "newsDescription": {
+      "zh": "查看深圳气核科技有限公司（QiCore）与 Oyscat 的最新动态，包括产品内测进展、电子模块更新、团队故事和 AI 造物系统的新能力。",
+      "en": "Read the latest news from Shenzhen QiCore Technology Co., Ltd. and Oyscat, including beta milestones, electronic-module updates, team stories, and new AI creation capabilities."
+    },
+    "teamTitle": {
+      "zh": "核心团队｜深圳气核科技有限公司 QiCore",
+      "en": "Team | Shenzhen QiCore Technology Co., Ltd."
+    },
+    "careersTitle": {
+      "zh": "招聘岗位｜深圳气核科技有限公司 QiCore",
+      "en": "Careers | Shenzhen QiCore Technology Co., Ltd."
+    },
+    "careersDescription": {
+      "zh": "加入深圳气核科技有限公司（QiCore），参与 Oyscat AI 造物系统、电子模块、工作台与智能硬件的研发，把创意变成可运行、可量产的产品。",
+      "en": "Join Shenzhen QiCore Technology Co., Ltd. and help build Oyscat's AI creation system, electronic modules, workspace, and smart hardware."
+    },
+    "keywords": {
+      "zh": "Oyscat,Oyscat官网,Oyscat 官网,深圳气核科技有限公司,气核科技,QiCore,AI造物,AI建模,电子模块,智能硬件,实时仿真,造物平台",
+      "en": "Oyscat,Oyscat official website,QiCore,Shenzhen QiCore Technology,AI creation system,AI modeling,electronic modules,smart hardware,real-time simulation"
+    }
+  },
   "pageTitles": {
     "qicoreTechnologyThinkItMakeIt": {
-      "zh": "气核科技 QiCore | 所想，即造",
-      "en": "QiCore Technology | Think It. Make It."
+      "zh": "Oyscat 官网｜深圳气核科技有限公司 QiCore",
+      "en": "Oyscat Official | Shenzhen QiCore Technology Co., Ltd."
     },
     "aboutUsQicore": {
-      "zh": "关于我们 | QiCore",
-      "en": "About Us | QiCore"
+      "zh": "关于气核科技｜深圳气核科技有限公司 QiCore",
+      "en": "About QiCore | Shenzhen QiCore Technology Co., Ltd."
     },
     "careersQicore": {
-      "zh": "开放岗位 | QiCore",
-      "en": "Careers | QiCore"
+      "zh": "招聘岗位｜深圳气核科技有限公司 QiCore",
+      "en": "Careers | Shenzhen QiCore Technology Co., Ltd."
     },
     "newsQicore": {
-      "zh": "新闻动态 | QiCore",
-      "en": "News | QiCore"
+      "zh": "新闻动态｜Oyscat 与气核科技 QiCore",
+      "en": "News | Oyscat and QiCore"
     },
     "oyscatProductQicore": {
-      "zh": "Oyscat 产品 | QiCore",
-      "en": "Oyscat Product | QiCore"
+      "zh": "Oyscat 官网｜AI 建模与电子模块造物系统 | QiCore",
+      "en": "Oyscat Official | AI Modeling and Electronic Creation System"
     },
     "teamQicore": {
-      "zh": "团队 | QiCore",
-      "en": "Team | QiCore"
+      "zh": "核心团队｜深圳气核科技有限公司 QiCore",
+      "en": "Team | Shenzhen QiCore Technology Co., Ltd."
     },
     "relaxQicore": {
       "zh": "轻松一刻 | QiCore",

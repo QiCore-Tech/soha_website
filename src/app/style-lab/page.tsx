@@ -1,8 +1,17 @@
 
+import type { Metadata } from "next";
 import { messages } from "@/i18n/messages";
+import { createPageMetadata } from "@/configs/seo";
 import { BilingualText as Bi } from "@/components/marketing-page";
 import type { LocalizedText } from "@/types/locale";
 import styles from "./style-lab.module.css";
+
+export const metadata: Metadata = createPageMetadata({
+  title: messages.pageTitles.styleLabQicore.zh,
+  description: messages.styleLab.styleExplorationOnlyTheMainWebsiteIsUnchanged.zh,
+  path: "/style-lab",
+  noIndex: true
+});
 
 const directions = [
   { id: "styleEditorial", className: "editorialChoice", label: messages.styleLab.aEditorial, note: messages.styleLab.clearAndStructuredLikeAContemporaryDesignJournal },
