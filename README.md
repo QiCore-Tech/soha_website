@@ -14,14 +14,14 @@ QiCore 是一家面向下一代智能硬件的产品与技术公司。我们把�
 
 我们相信，数字世界已经越来越容易被创造，而物理世界仍然被专业工具、学科边界和复杂流程分割。QiCore 想做的是缩短这段距离：让人可以从自己的意图出发，经过清晰的设计与工程协作，最终得到一个真实、可工作的产品。
 
-### OysCat：第一步
+### Oyscat：第一步
 
-OysCat 是 QiCore 的第一款产品，也是这套创造方式的第一个入口。它由两层组成：
+Oyscat 是 QiCore 的第一款产品，也是这套创造方式的第一个入口。它由两层组成：
 
 - **Electronic Modules**：将运动、灯光、传感、声音与控制等物理能力封装成可复用的标准化硬件模块。
 - **Workspace**：把建模、编程、仿真和硬件控制放进同一个 AI 驱动的工作空间。
 
-OysCat 不只是一个黑色的电子模块，也不只是一个软件界面。它更像一组可以不断组合的词汇：用户描述想要什么，系统帮助把意图翻译成结构、逻辑和动作，再把它带回现实。
+Oyscat 不只是一个黑色的电子模块，也不只是一个软件界面。它更像一组可以不断组合的词汇：用户描述想要什么，系统帮助把意图翻译成结构、逻辑和动作，再把它带回现实。
 
 ## 官网不是一张海报，而是一张工作台
 
@@ -43,12 +43,12 @@ QiCore 官网的视觉核心不是“大字报”，而是一个持续存在的�
 
 从首页进入 About、News 或 Team 时，导航栏会先升起，新的内容从它下面逐层展开；返回首页时，内容收回，画板重新成为主角。转场使用克制的加减速，而不是突兀的跳转，保持“同一空间中的换页感”。
 
-### 5. 两种视觉角色：QiCore 与 OysCat
+### 5. 两种视觉角色：QiCore 与 Oyscat
 
 - **QiCore** 是公司与创造系统：亮色、纸张、网格、克制的排版，强调长期主义、协作和完整产品路径。
-- **OysCat** 是产品入口：保留 QiCore 的纸张与留白，但允许黑色电子模块、绿色信号和更明确的产品语言出现。
+- **Oyscat** 是产品入口：保留 QiCore 的纸张与留白，但允许黑色电子模块、绿色信号和更明确的产品语言出现。
 
-两者不是两套互不相干的品牌，而是同一条路径上的两个层级：QiCore 讲“为什么以及如何创造”，OysCat 展示“第一件被创造出来的东西”。
+两者不是两套互不相干的品牌，而是同一条路径上的两个层级：QiCore 讲“为什么以及如何创造”，Oyscat 展示“第一件被创造出来的东西”。
 
 ## 页面地图
 
@@ -59,9 +59,9 @@ QiCore 官网的视觉核心不是“大字报”，而是一个持续存在的�
 | `/news` | News & Updates | 产品进展、内测消息与品牌记录 |
 | `/team` | Team | 团队原则、工作方式与开放岗位 |
 | `/careers` | Careers | 飞书同步的开放岗位与公开投递入口 |
-| `/oyscat` | OysCat Products | 产品介绍、Electronic Modules 与 Workspace |
+| `/oyscat` | Oyscat Products | 产品介绍、Electronic Modules 与 Workspace |
 
-QiCore 的内容页共享同一块画板；OysCat 页面则是独立的产品叙事空间。页面之间的跳转关系属于信息架构的一部分，而不是单纯的链接集合。
+QiCore 的内容页共享同一块画板；Oyscat 页面则是独立的产品叙事空间。页面之间的跳转关系属于信息架构的一部分，而不是单纯的链接集合。
 
 ## 技术结构
 
@@ -72,18 +72,22 @@ QiCore 的内容页共享同一块画板；OysCat 页面则是独立的产品叙
 - **Static Export**：生产环境输出静态页面，适合部署到 Vercel，降低运行时依赖。
 - **In-page bilingual content**：中英文内容共存，通过 `data-lang` 切换，避免语言切换时先闪过另一种语言。
 
-核心目录：
+核心目录（源码、测试与脚本在 `src/`；`i18n/`、`public/`、`ops/` 和产物留根）：
 
 ```text
-app/                    # 页面路由与页面级内容
-components/             # 导航、画板、产品转场、影片等共享组件
-hooks/                  # 性能等级与交互相关 hooks
-lib/                    # 站点数据和 QiCore 路由状态
-public/brand/           # QiCore / OysCat 品牌资产
+src/app/                    # 页面路由与页面级内容
+src/components/             # 导航、画板、产品转场、影片等共享组件
+src/hooks/                  # 性能等级与交互相关 hooks
+src/lib/                # 基础适配和 QiCore 路由状态
+src/features/           # home/careers/oyscat/news/legacy-voxel 领域
+src/api/                # 独立 API 实现
+api/                    # Vercel 自动发现所需薄入口
+i18n/                   # 根级语言协议与统一 messages.json 文案库
+public/brand/           # QiCore / Oyscat 品牌资产
 public/media/           # 产品与新闻媒体
 public/illustrations/   # QiCore 内容页插图与概念资产（仅本地，不入库，见 .gitignore）
-tests/e2e/              # 页面和路由回归测试
-tests/perf/             # 运行时与交互性能基准
+src/tests/e2e/              # 页面和路由回归测试
+src/tests/perf/             # 运行时与交互性能基准
 ops/recruitment-mailer/ # 私有部署的投递确认邮件 Worker（仓库中不含任何生产凭证）
 ```
 
@@ -144,10 +148,10 @@ git diff --check
 
 1. **先保证层级，再添加效果。** 插图、色块和动画都服务于信息，不让装饰抢走内容。
 2. **保持 QiCore 的克制。** 低对比网格、细边框和少量颜色比大面积渐变更接近品牌的长期气质。
-3. **OysCat 可以更黑，但不能脱离画板。** 黑色模块是产品特征，纸张、留白和排版仍然继承 QiCore。
+3. **Oyscat 可以更黑，但不能脱离画板。** 黑色模块是产品特征，纸张、留白和排版仍然继承 QiCore。
 4. **动作要有物理感，幅度要小。** 进入、退出、悬浮和透视都需要加减速；阅读内容页时优先稳定与可点击性。
 5. **所有视觉变化都要考虑性能。** 低性能设备应能减少透视、粒子和高成本动画，而不影响页面信息结构。
-6. **不要破坏真实资产。** OysCat 商标、猫头、产品模块图和视频入口应优先使用已有品牌资产，生成图只作为经过设计审核的补充。
+6. **不要破坏真实资产。** Oyscat 商标、猫头、产品模块图和视频入口应优先使用已有品牌资产，生成图只作为经过设计审核的补充。
 
 ## 一句话
 
@@ -158,16 +162,16 @@ QiCore 官网把公司介绍做成了一张可以继续工作的画板：
 
 ## 本地内容评审（2026-09-15 修正版）
 
-启动：`node scripts/local-preview.mjs`，地址 http://127.0.0.1:3016 。
+启动：`node src/scripts/local-preview.mjs`，默认地址 http://127.0.0.1:3000（先执行 `npm run build`，端口可用 `PORT` 修改） 。
 
 按用户最新确认，保留原背景、UI 样式、首页、导航栏造型和所有原转场。全局 CSS、MarketingPage、QiCoreRouteShell、ProductTransition 和首页交互脚本未修改。本轮只调整内容与导航文字：产品文案、流程、Demo、FAQ、申请表，公司介绍、近期/长期方向、三位团队与招聘入口。原 /team 地址复用关于内容，不增加新转场。原产品独立入场及背景保留；平整静态背景和独立产品站合并暂不实施。
 
-报名通过 `/api/beta` 写入飞书多维表格，只有飞书确认记录创建成功才返回成功提示。`node scripts/local-preview.mjs` 与 Vercel 使用同一份 API 和飞书应用身份（不发送邮件）；普通 `next dev` 不运行 Vercel API。配置独立的 `FEISHU_BETA_APP_ID`、`FEISHU_BETA_APP_SECRET`、`FEISHU_BETA_BASE_TOKEN`、`FEISHU_BETA_TABLE_ID`，并将目标多维表格授权给该应用。凭据和表标识仅保存在服务端环境变量，不进入客户端。2026-09-16 已通过本地首屏、页尾表单实测应用身份写入并读回核对；Vercel Production 配置已保存，网站尚未推送或部署。
+报名通过 `/api/beta` 写入飞书多维表格，只有飞书确认记录创建成功才返回成功提示。当前 `node src/scripts/local-preview.mjs` 仅只读服务根级 `out/`，拒绝写请求，不运行 API、不连接飞书；普通 `next dev` 同样不运行独立 Vercel API。以下为历史生产集成记录，不代表本次预览会写入外部系统。配置独立的 `FEISHU_BETA_APP_ID`、`FEISHU_BETA_APP_SECRET`、`FEISHU_BETA_BASE_TOKEN`、`FEISHU_BETA_TABLE_ID`，并将目标多维表格授权给该应用。凭据和表标识仅保存在服务端环境变量，不进入客户端。2026-09-16 已通过本地首屏、页尾表单实测应用身份写入并读回核对；Vercel Production 配置已保存，网站尚未推送或部署。
 
-检查：构建通过；原回归 19 项通过、1 项既有新闻点击测试失败、1 项原有 TODO。新闻失败与本轮改动前基线一致，未改其行为。`node scripts/check-content.mjs` 检查手机端、FAQ、本地保存、三位成员及案例图片。没有推送或部署。
+检查：构建通过；原回归 19 项通过、1 项既有新闻点击测试失败、1 项原有 TODO。新闻失败与本轮改动前基线一致，未改其行为。当时的内容检查覆盖手机端、FAQ、本地保存、三位成员及案例图片（该历史检查脚本不在当前仓库，勿作为现行命令使用）。没有推送或部署。
 
 ### Local careers sample
 
-When no Feishu careers data source is configured, `next dev` displays one bilingual sample role from `lib/careers-local-sample.ts`. It is labeled as a local sample. Configured Feishu data always takes precedence.
+When no Feishu careers data source is configured, `next dev` displays one bilingual sample role from `src/features/careers/data/careers-local-sample.ts`. It is labeled as a local sample. Configured Feishu data always takes precedence.
 
 The fallback requires `NODE_ENV=development` and both `VERCEL` and `VERCEL_ENV` to be absent. Production builds, production servers, and Vercel preview/production deployments cannot use the sample. The existing production error for a missing Feishu configuration remains in place. Do not import this fixture into client components or public assets.

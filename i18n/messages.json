@@ -1,0 +1,3288 @@
+{
+  "careers": {
+    "apply": {
+      "zh": "投递",
+      "en": "Apply"
+    },
+    "sendYourBackgroundAndWorkSoWeCan": {
+      "zh": "提交你的经历与作品，让我们先认识你。",
+      "en": "Send your background and work so we can meet you."
+    },
+    "talk": {
+      "zh": "交流",
+      "en": "Talk"
+    },
+    "talkWithTheTeamAboutYourProjectsQuestions": {
+      "zh": "与团队聊聊你做过的项目、关心的问题和方向。",
+      "en": "Talk with the team about your projects, questions, and direction."
+    },
+    "build": {
+      "zh": "加入",
+      "en": "Build"
+    },
+    "whenItFitsBothWaysStartBringingIdeas": {
+      "zh": "确认彼此合适后，一起把想法带进真实世界。",
+      "en": "When it fits both ways, start bringing ideas into the real world."
+    },
+    "qicoreCareers2026": {
+      "zh": "QiCore 招聘 / 2026",
+      "en": "QiCore Careers / 2026"
+    },
+    "findYourPlace": {
+      "zh": "找到你想做的事",
+      "en": "Find your place"
+    },
+    "joinQicore": {
+      "zh": "加入气核",
+      "en": "Join QiCore"
+    },
+    "viewRoles": {
+      "zh": "查看职位",
+      "en": "View roles"
+    },
+    "exploreOurCurrentOpeningsRoleDetailsAnd": {
+      "zh": "这里集中展示当前开放职位、具体岗位要求和投递方式，找到你想做的事，和我们一起把想法带进真实世界",
+      "en": "Explore our current openings, role details, and how to apply; find your place and bring new ideas into the real world with us"
+    },
+    "fromHelloToShipped": {
+      "zh": "从投递，到加入。",
+      "en": "From hello to shipped."
+    },
+    "nothingThatFits": {
+      "zh": "没有看到合适的职位？",
+      "en": "Nothing that fits?"
+    },
+    "youCanStillIntroduceYourselfTellUs": {
+      "zh": "也可以直接联系我们，简单介绍你的经历、擅长的方向和希望参与的工作。",
+      "en": "You can still introduce yourself. Tell us about your experience, strengths, and the work you hope to do."
+    },
+    "generalApplication": {
+      "zh": "主动投递",
+      "en": "General application"
+    },
+    "qicoreCareers": {
+      "zh": "加入 QiCore · Careers",
+      "en": "Join QiCore · Careers"
+    },
+    "exploreQicoreSOpenRolesRequirementsAndHow": {
+      "zh": "查看 QiCore 的开放职位、岗位要求与投递方式。",
+      "en": "Explore QiCore's open roles, requirements, and how to apply."
+    },
+    "step01": {
+      "zh": "步骤 01",
+      "en": "STEP 01"
+    },
+    "step02": {
+      "zh": "步骤 02",
+      "en": "STEP 02"
+    },
+    "step03": {
+      "zh": "步骤 03",
+      "en": "STEP 03"
+    },
+    "text02HowWeHire": {
+      "zh": "02 / 招聘流程",
+      "en": "02 / How we hire"
+    },
+    "text03GeneralApplication": {
+      "zh": "03 / 主动投递",
+      "en": "03 / General application"
+    },
+    "text04GeneralApplication": {
+      "zh": "04 / 主动投递",
+      "en": "04 / General application"
+    }
+  },
+  "about": {
+    "jakeLuo": {
+      "zh": "罗世豪",
+      "en": "Jake Luo"
+    },
+    "founderCeo": {
+      "zh": "创始人 & CEO",
+      "en": "Founder & CEO"
+    },
+    "leadsQicoreSStrategyOrganizationAndProductDirection": {
+      "zh": "负责气核科技的整体战略、组织与产品方向，带领团队把造物意图转化为真实产品。",
+      "en": "Leads QiCore's strategy, organization and product direction, turning creation intent into real products."
+    },
+    "wendaSheng": {
+      "zh": "盛文达",
+      "en": "Wenda Sheng"
+    },
+    "coFounderCto": {
+      "zh": "联合创始人 & CTO",
+      "en": "Co-founder & CTO"
+    },
+    "leadsTechnicalArchitectureAndRDDrivingGenerative": {
+      "zh": "负责技术架构与研发体系，推动生成式物理具现从概念走向工程实现。",
+      "en": "Leads technical architecture and R&D, driving Generative Physical Instantiation from concept to engineering."
+    },
+    "braylenHuang": {
+      "zh": "黄扬",
+      "en": "Braylen Huang"
+    },
+    "coFounderCpo": {
+      "zh": "联合创始人 & CPO",
+      "en": "Co-founder & CPO"
+    },
+    "ownsProductDefinitionAndExperienceDesignMakingComplex": {
+      "zh": "负责产品定义与体验设计，让复杂的电气化造物变得直观易用。",
+      "en": "Owns product definition and experience design, making complex electronics creation intuitive."
+    },
+    "allenLuo": {
+      "zh": "罗世港",
+      "en": "Allen Luo"
+    },
+    "headOfManufacturingAndSupplyChain": {
+      "zh": "生产与供应链负责人",
+      "en": "Head of Manufacturing and Supply Chain"
+    },
+    "overseesManufacturingAndSupplyChainTakingProductsFrom": {
+      "zh": "负责生产体系与供应链管理，保障产品从原型到量产的高效落地。",
+      "en": "Oversees manufacturing and supply chain, taking products from prototype to volume production."
+    },
+    "wmd": {
+      "zh": "戴淯全",
+      "en": "Wilmot Dai"
+    },
+    "zhongWanzhen": {
+      "zh": "钟宛臻",
+      "en": "Teresa Zhong"
+    },
+    "headOfMarketing": {
+      "zh": "市场部负责人",
+      "en": "Head of Marketing"
+    },
+    "leadsMarketingStrategyBrandAndGrowth": {
+      "zh": "负责市场战略、品牌传播与增长。",
+      "en": "Leads marketing strategy, brand communications, and growth."
+    },
+    "headOfHardwareAndEmbeddedSystems": {
+      "zh": "硬件与嵌入式负责人",
+      "en": "Head of Hardware and Embedded Systems"
+    },
+    "leadsHardwareAndEmbeddedSystemsBuildingTheCore": {
+      "zh": "负责硬件与嵌入式系统研发，构建连接虚拟仿真与物理模块的核心底座。",
+      "en": "Leads hardware and embedded systems, building the core that connects simulation and physical modules."
+    },
+    "text01AboutQicore": {
+      "zh": "01 / 关于 QiCore",
+      "en": "01 / About QiCore"
+    },
+    "makeSmart": {
+      "zh": "MAKE SMART",
+      "en": "MAKE SMART"
+    },
+    "qicoreTechnologyIsAnAiNativeCompany": {
+      "zh": "气核科技是一家 AI 驱动的智能硬件设计与制造公司",
+      "en": "QiCore Technology is an AI-driven smart hardware design and manufacturing company."
+    },
+    "creationBeginsWithIntent": {
+      "zh": "让造物，始于意图。",
+      "en": "Creation begins with intent."
+    },
+    "generativeAiCanNowConvertHumanIntent": {
+      "zh": "生成式人工智能的革命性突破，已实现人类意图向数字产物的高效生成。然而，从人类意图直达物理实体，依然是一道难以逾越的工程鸿沟。",
+      "en": "Revolutionary breakthroughs in generative AI have enabled human intent to be efficiently translated into digital outputs. Yet turning human intent directly into physical entities remains a formidable engineering gap."
+    },
+    "companyPurpose": {
+      "zh": "气核科技首创生成式物理具现概念，致力于将人类的造物意图直接转化为功能性物理实体，",
+      "en": "QiCore pioneered the concept of Generative Physical Instantiation, dedicated to translating human creative intent directly into functional physical entities, "
+    },
+    "empowerPersonalizedCreation": {
+      "zh": "赋能大众迈向零门槛的个性化智能造物时代。",
+      "en": "empowering everyone to enter an era of personalized smart creation with no barriers to entry."
+    },
+    "qicoreTechnologyIsAnAiNativeCompany2": {
+      "zh": "气核科技是一家 AI 驱动的智能硬件设计与制造公司。",
+      "en": "Qicore Technology is an AI-native company for smart hardware design and manufacturing."
+    },
+    "fromEnablingMakersAndDevelopersToPrototype": {
+      "zh": "从助力创客与开发者实现原型的敏捷化构建，到最终赋能大众迈向零门槛的个性化智能造物时代。",
+      "en": "From enabling makers and developers to prototype hardware innovatively and efficiently, to making personalized smart hardware creation accessible to everyone."
+    },
+    "ourTeam": {
+      "zh": "核心团队",
+      "en": "Our team"
+    },
+    "wePioneeredTheConceptOf": {
+      "zh": "首创",
+      "en": "We pioneered the concept of "
+    },
+    "generativePhysicalInstantiationGenpi": {
+      "zh": "生成式物理具现",
+      "en": "Generative Physical Instantiation (GenPI)"
+    },
+    "turningHumanIntentDirectlyIntoFunctionalPhysicalArtifacts": {
+      "zh": "概念，致力于将人类的造物意图直接转化为功能性物理实体。",
+      "en": ", turning human intent directly into functional physical artifacts."
+    },
+    "chapterCompany": {
+      "zh": "关于气核",
+      "en": "ABOUT QICORE"
+    },
+    "chapterTeam": {
+      "zh": "核心团队",
+      "en": "OUR TEAM"
+    },
+    "mission": {
+      "zh": "使命",
+      "en": "Mission"
+    },
+    "missionStatement": {
+      "zh": "将工程师的能力，变成每个人的标配",
+      "en": "Make an engineer's capabilities part of everyone's toolkit."
+    },
+    "vision": {
+      "zh": "愿景",
+      "en": "Vision"
+    },
+    "visionCreation": {
+      "zh": "想造就造，所想即所得",
+      "en": "Create whenever inspiration strikes. Bring what you imagine to life."
+    },
+    "visionIntent": {
+      "zh": "意图驱动，万物皆可造",
+      "en": "Driven by intent, anything can be created."
+    }
+  },
+  "news": {
+    "newsUpdates": {
+      "zh": "新闻与动态",
+      "en": "News & Updates"
+    },
+    "creationInMotion": {
+      "zh": "创造，正在发生",
+      "en": "Creation is happening"
+    },
+    "followQicoreAsIntentDrivenPhysicalCreation": {
+      "zh": "记录气核科技从研发、内测到落地实践的每一步",
+      "en": "Follow QiCore as it moves from R&D and closed beta into real-world practice"
+    },
+    "august162026": {
+      "zh": "2026.8.16",
+      "en": "August 16, 2026"
+    },
+    "productUpdates": {
+      "zh": "产品动态",
+      "en": "Product Updates"
+    },
+    "qicoreOpensItsFirstClosedBeta": {
+      "zh": "气核正式开启首批内测",
+      "en": "QiCore Opens Its First Closed Beta"
+    },
+    "twentyNineCreatorsAreNowBuildingTheir": {
+      "zh": "41 位来自不同背景的参与者，开始使用 Oyscat 搭建属于自己的项目。",
+      "en": "Forty-one participants from diverse backgrounds are now building their own projects with Oyscat."
+    },
+    "qicoreAnnouncedThatOyscatHasOfficiallyEntered": {
+      "zh": "气核科技（QiCore）宣布，Oyscat 已正式进入首批内测阶段，共招募 41 位内测用户，涵盖工程师、Minecraft 等建造经营游戏爱好者、文艺工作者等多元背景。",
+      "en": "QiCore announced that Oyscat has officially entered its first closed beta phase."
+    },
+    "theProgramIncludes29BetaUsersFrom": {
+      "zh": "内测版本开放了 Oyscat Workspace 与部分硬件模块的核心功能，用户已开始使用 Oyscat 搭建各自的硬件项目。",
+      "en": "The program includes 41 beta users from diverse backgrounds, including engineers, Minecraft fans, and creative professionals."
+    },
+    "theClosedBetaOpensAccessToThe": {
+      "zh": "团队将根据实际反馈持续优化 Workspace 的设计流程与模块兼容性，后续将陆续开放更多硬件模块，并计划扩大内测规模。",
+      "en": "The closed beta opens access to the core capabilities of the Oyscat system, covering both the Oyscat Workspace and selected hardware modules. Users have started building their own hardware projects with Oyscat. Feedback from this first group of users will help QiCore refine the design workflow and improve module compatibility. QiCore will continue to release additional hardware modules and plans to expand the closed beta program in the coming months."
+    },
+    "tuneInToTheNextSignal": {
+      "zh": "接收下一段信号。",
+      "en": "Tune in to the next signal."
+    },
+    "theOyscatBetaKeepsMovingNewModules": {
+      "zh": "Oyscat 内测持续推进，新的模块、更新与故事会在这里陆续记录。",
+      "en": "The Oyscat beta keeps moving. New modules, updates, and stories will be recorded here as they happen."
+    },
+    "exploreOyscat": {
+      "zh": "探索 Oyscat",
+      "en": "Explore Oyscat"
+    },
+    "aboutQicore": {
+      "zh": "了解气核",
+      "en": "About QiCore"
+    },
+    "text01LatestEntry": {
+      "zh": "01 / 最新动态",
+      "en": "01 / LATEST ENTRY"
+    },
+    "betaUsersSignal01": {
+      "zh": "内测用户 / 信号 01",
+      "en": "BETA USERS / SIGNAL 01"
+    },
+    "closedBeta": {
+      "zh": "封闭内测",
+      "en": "Closed Beta"
+    },
+    "text02FollowTheSignal": {
+      "zh": "02 / 关注动态",
+      "en": "02 / FOLLOW THE SIGNAL"
+    },
+    "value29": {
+      "zh": "29",
+      "en": "29"
+    }
+  },
+  "oyscat": {
+    "aiPoweredDesignAndSimulationSystemWith": {
+      "zh": "AI 驱动的设计与仿真系统",
+      "en": "AI-powered design and simulation system with professional-level precision"
+    },
+    "standardizedDecentralizedAndReusableElectronicBlocks": {
+      "zh": "标准化、去中心化且可重复利用的电子模块",
+      "en": "Standardized, decentralized, and reusable electronic blocks"
+    },
+    "empoweringAnyoneToBuildElectronicCreationsFast": {
+      "zh": "赋能用户实现极致敏捷的电气化造物",
+      "en": "Empowering anyone to build electronic creations, fast and flexible"
+    },
+    "howCanIGetStartedWithOyscat": {
+      "zh": "如何开始使用 Oyscat？",
+      "en": "How Can I Get Started with Oyscat?"
+    },
+    "startInMinutesSignUpWithYour": {
+      "zh": "几分钟即可上手：使用邮箱注册，浏览官方项目，完成新手教程，即可开始创作。",
+      "en": "Start in minutes: Sign up with your email, explore the official projects, and complete the beginner tutorial. You’re ready to start creating."
+    },
+    "justCreateTrustYourInstinctsFollowYour": {
+      "zh": "相信直觉，跟随想象，自由构建。在 Oyscat 中的创作没有标准答案。",
+      "en": "Just create: Trust your instincts, follow your imagination, and build freely. There is no single right way to create."
+    },
+    "whatMakesOyscatDifferent": {
+      "zh": "Oyscat 的独特之处？",
+      "en": "What Makes Oyscat Different?"
+    },
+    "anIntuitiveWayToBuildJustLike": {
+      "zh": "造物过程类似搭积木，不用学复杂操作，专注想法就行。",
+      "en": "An intuitive way to build: Just like you would with building blocks, so you can focus on your ideas."
+    },
+    "endToEndCreationFromDesignTo": {
+      "zh": "从想法到实物一步到位：设计、制作全程打通，都在这一个系统里完成。",
+      "en": "End-to-end creation: From design to physical creation, Oyscat connects the entire process in one system."
+    },
+    "howDoOyscatElectronicBlocksConnectThe": {
+      "zh": "Oyscat 电子模块如何连接虚拟与现实？",
+      "en": "How do Oyscat Electronic Blocks connect the virtual and physical worlds?"
+    },
+    "eachElectronicBlockInTheOyscatWorkspace": {
+      "zh": "工作台里的每一个虚拟电子模块，都有外观、功能完全一致的实体电子模块与之对应；",
+      "en": "Each electronic block in the Oyscat Workspace has a matching physical electronic block with the same appearance and function."
+    },
+    "theControlProgramCreatedForEachVirtual": {
+      "zh": "为每个模块编写的控制程序，可直接下载到对应的实体电子模块，实现仿真动作和现实模块运行的完全同步。",
+      "en": "The control program created for each virtual electronic block can be downloaded directly to its corresponding physical block, allowing it to work the same way in the real world as it does in simulation."
+    },
+    "howCanIBuildMyCreationAfter": {
+      "zh": "用 Oyscat 工作台完成的造物，如何落地实体制作？",
+      "en": "How can I build my creation after designing it in Oyscat Workspace?"
+    },
+    "use3dPrintingExportTheStaticParts": {
+      "zh": "搭配 3D 打印：作品的静态结构可一键导出 3D 模型，打印得到的外壳能和电子模块直接拼装；",
+      "en": "Use 3D printing: Export the static parts directly as 3D-printable files. The printed shell can then fit directly with the Oyscat Electronic Blocks, just like building with blocks."
+    },
+    "buildYourOwnShellUseCorrugatedCardboard": {
+      "zh": "多种自由造壳方式：可用瓦楞纸、木板、亚克力等材料手工制作外壳，适配不同创作条件。",
+      "en": "Build your own shell:  Use corrugated cardboard, wood, acrylic, or whatever materials you have on hand."
+    },
+    "howDoesOyscatHelp": {
+      "zh": "Oyscat 解决了哪些痛点？",
+      "en": "How does Oyscat help?"
+    },
+    "skipTheComplexityNoHardwareSelectionOr": {
+      "zh": "消除硬件选型、电路设计，同时控制程序交由 AI 完成，用户只需描述创意，专注设计作品功能。",
+      "en": "Skip the complexity: No hardware selection or circuit design. AI handles the control programs, so you can describe your idea and focus on what you want to create."
+    },
+    "testBeforeYouBuildValidateYourDesign": {
+      "zh": "复杂电子项目开发周期长、试错成本高，Oyscat 在虚拟环境前置验证方案，仿真验证通过，硬件方案即可实物落地，缩短原型周期、减少物料损耗，实现 “想造就造”。",
+      "en": "Test before you build: Validate your design in a virtual environment before building it physically, reducing prototyping time and material waste."
+    },
+    "oyscat": {
+      "zh": "Oyscat",
+      "en": "Oyscat"
+    },
+    "oyscatQicoreProduct01": {
+      "zh": "Oyscat / 气核产品 01",
+      "en": "Oyscat / QiCore Product 01"
+    },
+    "thinkItBuildItGetExactlyWhat": {
+      "zh": "想造就造\n所想即所得",
+      "en": "Think it. Build it.\nGet exactly what you imagined."
+    },
+    "oyscatIsANewCreationSystemFor": {
+      "zh": "Oyscat 是气核推出的首款造物系统，让电气化造物变得更高效、更敏捷。",
+      "en": "Oyscat is a new creation system for the physical world. It makes electronics projects streamlined, efficient, and effortless."
+    },
+    "thinkItBuildIt": {
+      "zh": "想造就造",
+      "en": "Think it. Build it."
+    },
+    "getExactlyWhatYouImagined": {
+      "zh": "所想即所得",
+      "en": "Get exactly what you imagined."
+    },
+    "exploreTheWorkspace": {
+      "zh": "了解工作台",
+      "en": "Explore the workspace"
+    },
+    "aMoreAgileWayToCreateWith": {
+      "zh": "让电气化造物更敏捷",
+      "en": "A more agile way to create with electronics"
+    },
+    "fromDesignAndSimulationToStandardizedBlocks": {
+      "zh": "从设计、仿真到标准化模块，Oyscat 把复杂的电气化造物，收进一套清晰的工作流。",
+      "en": "From design and simulation to standardized blocks, Oyscat folds complex electronics into one clear workflow."
+    },
+    "oyscatWorkspace": {
+      "zh": "Oyscat 造物工作台",
+      "en": "Oyscat Workspace"
+    },
+    "intuitiveDragAndDropAndBlockBased": {
+      "zh": "直观的拖拽与积木式拼搭，赋予用户自由造物体验。",
+      "en": "Intuitive drag-and-drop and block-based building let users create freely."
+    },
+    "aiGeneratesControlProgramsAndRunsReal": {
+      "zh": "自动编写控制程序并实时仿真，实现组装前的全流程闭环验证。",
+      "en": "AI generates control programs and runs real-time simulations, enabling full validation before physical assembly."
+    },
+    "eliminateInterdisciplinaryEngineeringBarriersAndCostlyTrial": {
+      "zh": "消除跨界工程门槛与高成本试错，加速想法直达实体。",
+      "en": "Eliminate interdisciplinary engineering barriers and costly trial and error, taking ideas straight to reality."
+    },
+    "oyscatWorkspaceDemo": {
+      "zh": "Oyscat 工作台演示",
+      "en": "Oyscat Workspace demo"
+    },
+    "oyscatElectronicBlocks": {
+      "zh": "Oyscat 电子模块",
+      "en": "Oyscat Electronic Blocks"
+    },
+    "aRichDiverseCollectionOfDecentralizedElectronic": {
+      "zh": "丰富多样的去中心化电子模块，自由组合，即插即用",
+      "en": "A rich, diverse collection of decentralized electronic blocks, built for plug-and-play, flexible combination."
+    },
+    "ourOriginalRDMicrokernelEnablesUltra": {
+      "zh": "自研高效微内核，实现超低延时协同",
+      "en": "Our original R&D microkernel enables ultra-low-latency coordination."
+    },
+    "oyscatElectronicBlocksAreFullyErasableAnd": {
+      "zh": "硬件模块随心擦写重构，让每一次拆解都成为下一次造物的起点",
+      "en": "Oyscat Electronic Blocks are fully erasable and reconfigurable, turning every disassembly into the starting point for your next creation."
+    },
+    "faq": {
+      "zh": "常见问题",
+      "en": "FAQ"
+    },
+    "oyscat2": {
+      "zh": "Oyscat 产品",
+      "en": "Oyscat Product"
+    },
+    "oyscat3": {
+      "zh": "Oyscat 将设计、仿真与标准化电子模块连接起来，让电气化造物更高效、更敏捷。",
+      "en": "Oyscat connects design, simulation, and standardized electronic blocks for more efficient, agile creation."
+    },
+    "text01Design": {
+      "zh": "01 / 设计",
+      "en": "01 / DESIGN"
+    },
+    "text02Modules": {
+      "zh": "02 / 模块",
+      "en": "02 / MODULES"
+    },
+    "text03Creation": {
+      "zh": "03 / 造物",
+      "en": "03 / CREATION"
+    },
+    "qicoreProduct01": {
+      "zh": "QICORE / 产品 01",
+      "en": "QICORE / PRODUCT 01"
+    },
+    "ideaSimulationReality": {
+      "zh": "想法 · 仿真 · 现实",
+      "en": "IDEA · SIMULATION · REALITY"
+    },
+    "status": {
+      "zh": "状态",
+      "en": "STATUS"
+    },
+    "closedBeta": {
+      "zh": "封闭内测",
+      "en": "CLOSED BETA"
+    },
+    "model": {
+      "zh": "模型",
+      "en": "MODEL"
+    },
+    "text11Physical": {
+      "zh": "1 : 1 实体",
+      "en": "1 : 1 PHYSICAL"
+    },
+    "text01WhyOyscat": {
+      "zh": "01 / 为什么选择 Oyscat",
+      "en": "01 / WHY OYSCAT"
+    },
+    "system": {
+      "zh": "系统",
+      "en": "SYSTEM"
+    },
+    "oyscatCore": {
+      "zh": "OYSCAT 核心",
+      "en": "OYSCAT CORE"
+    },
+    "span": {
+      "zh": "范围",
+      "en": "SPAN"
+    },
+    "designBuild": {
+      "zh": "设计 · 构建",
+      "en": "DESIGN · BUILD"
+    },
+    "oy0": {
+      "zh": "OY / 0",
+      "en": "OY / 0"
+    },
+    "text02OyscatWorkspace": {
+      "zh": "02 / OYSCAT 工作台",
+      "en": "02 / OYSCAT WORKSPACE"
+    },
+    "live": {
+      "zh": "实时",
+      "en": "LIVE"
+    },
+    "sim01": {
+      "zh": "仿真 / 01",
+      "en": "SIM / 01"
+    },
+    "linked": {
+      "zh": "已连接",
+      "en": "LINKED"
+    },
+    "workspaceLiveSimulation": {
+      "zh": "工作台 / 实时仿真",
+      "en": "WORKSPACE / LIVE SIMULATION"
+    },
+    "text011DigitalModel": {
+      "zh": "1:1 数字模型",
+      "en": "01:1 DIGITAL MODEL"
+    },
+    "text03ElectronicBlocks": {
+      "zh": "03 / 电子模块",
+      "en": "03 / ELECTRONIC BLOCKS"
+    },
+    "input": {
+      "zh": "输入",
+      "en": "INPUT"
+    },
+    "motion": {
+      "zh": "运动",
+      "en": "MOTION"
+    },
+    "light": {
+      "zh": "灯光",
+      "en": "LIGHT"
+    },
+    "power": {
+      "zh": "电源",
+      "en": "POWER"
+    },
+    "electronicBlocksFamily": {
+      "zh": "电子模块 / 全系列",
+      "en": "ELECTRONIC BLOCKS / FAMILY"
+    },
+    "physicalSystem02": {
+      "zh": "物理系统 02",
+      "en": "PHYSICAL SYSTEM 02"
+    },
+    "text06Faq": {
+      "zh": "06 / 常见问题",
+      "en": "06 / FAQ"
+    }
+  },
+  "layout": {
+    "qicoreQicoreOyscat": {
+      "zh": "气核科技 QiCore 正在构建从意图到真实造物的新方式。了解 QiCore、Oyscat、最新动态与团队。",
+      "en": "QiCore is building a new path from intent to physical creation. Discover QiCore, Oyscat, our latest news, and the team."
+    },
+    "qicoreTechnologyThinkItMakeIt": {
+      "zh": "气核科技 QiCore | 所想，即造",
+      "en": "QiCore Technology | Think It. Make It."
+    },
+    "qicoreIsBuildingToolsForIntentDriven": {
+      "zh": "气核科技正在构建意图驱动的物理造物工具。了解我们的工作、Oyscat 以及背后的团队。",
+      "en": "QiCore is building tools for intent-driven physical creation. Discover our work, Oyscat, and the team behind it."
+    },
+    "qicoreTechnology": {
+      "zh": "气核科技 qicore",
+      "en": "QiCore Technology"
+    },
+    "qicoreTechnology2": {
+      "zh": "气核科技",
+      "en": "QiCore Technology"
+    }
+  },
+  "styleLab": {
+    "productExperience": {
+      "zh": "产品与体验",
+      "en": "Product & Experience"
+    },
+    "hardwareSoftwareEngineering": {
+      "zh": "软硬件工程",
+      "en": "Hardware & Software Engineering"
+    },
+    "validationManufacturing": {
+      "zh": "验证与制造",
+      "en": "Validation & Manufacturing"
+    },
+    "aEditorial": {
+      "zh": "A 编辑部目录",
+      "en": "A Editorial"
+    },
+    "clearAndStructuredLikeAContemporaryDesignJournal": {
+      "zh": "清晰、有秩序、像一本当代设计杂志",
+      "en": "Clear and structured, like a contemporary design journal"
+    },
+    "bQuietArchive": {
+      "zh": "B 安静档案馆",
+      "en": "B Quiet Archive"
+    },
+    "understatedAndRationalOrganizedAroundAContentIndex": {
+      "zh": "低调、理性，以内容索引代替视觉口号",
+      "en": "Understated and rational, organized around a content index"
+    },
+    "cHumanAtelier": {
+      "zh": "C 人文工作室",
+      "en": "C Human Atelier"
+    },
+    "gentleAndSpaciousFocusedOnCreatorsAndLasting": {
+      "zh": "温和、留白，突出创造者与长期主义",
+      "en": "Gentle and spacious, focused on creators and lasting work"
+    },
+    "dEngineeringJournal": {
+      "zh": "D 工程手记",
+      "en": "D Engineering Journal"
+    },
+    "aLightTechnicalFeelThroughDrawingsNotesAnd": {
+      "zh": "图纸、注释与实验记录组成的轻技术感",
+      "en": "A light technical feel through drawings, notes, and experiments"
+    },
+    "qicoreStyleLab": {
+      "zh": "QiCore 风格实验室",
+      "en": "QiCore Style Lab"
+    },
+    "styleExplorationOnlyTheMainWebsiteIsUnchanged": {
+      "zh": "仅用于风格选择，不影响正式页面",
+      "en": "Style exploration only; the main website is unchanged"
+    },
+    "backToTheWebsite": {
+      "zh": "返回官网",
+      "en": "Back to the website"
+    },
+    "qicoreTechnology": {
+      "zh": "气核科技 · QICORE TECHNOLOGY",
+      "en": "QICORE TECHNOLOGY"
+    },
+    "company": {
+      "zh": "公司",
+      "en": "Company"
+    },
+    "news": {
+      "zh": "新闻",
+      "en": "NEWS"
+    },
+    "team": {
+      "zh": "团队",
+      "en": "TEAM"
+    },
+    "oyscat": {
+      "zh": "Oyscat ↗",
+      "en": "Oyscat ↗"
+    },
+    "en": {
+      "zh": "中文 · EN",
+      "en": "中文 · EN"
+    },
+    "creation": {
+      "zh": "创造",
+      "en": "CREATION"
+    },
+    "engineering": {
+      "zh": "工程",
+      "en": "Engineering"
+    },
+    "product": {
+      "zh": "产品",
+      "en": "Product"
+    },
+    "intelligentHardwareMadeHuman": {
+      "zh": "智能硬件，以人为本",
+      "en": "INTELLIGENT HARDWARE, MADE HUMAN"
+    },
+    "turnComplexTechnology": {
+      "zh": "把复杂的技术，",
+      "en": "Turn complex technology"
+    },
+    "intoIntuitiveCreation": {
+      "zh": "变成自然的创造。",
+      "en": "into intuitive creation."
+    },
+    "qicoreConnectsDesignEngineeringAndManufacturingSoSmart": {
+      "zh": "QiCore 将设计、工程与制造放在同一条创造路径上，让智能硬件更容易从想法走向现实。",
+      "en": "QiCore connects design, engineering, and manufacturing so smart hardware can move more easily from idea to reality."
+    },
+    "discoverQicore": {
+      "zh": "了解 QiCore →",
+      "en": "Discover QiCore →"
+    },
+    "objectStudy001": {
+      "zh": "物件研究 / 001",
+      "en": "OBJECT STUDY / 001"
+    },
+    "qicore": {
+      "zh": "QICORE",
+      "en": "QICORE"
+    },
+    "about": {
+      "zh": "关于",
+      "en": "ABOUT"
+    },
+    "people": {
+      "zh": "团队",
+      "en": "PEOPLE"
+    },
+    "oyscat2": {
+      "zh": "OYSCAT ↗",
+      "en": "OYSCAT ↗"
+    },
+    "qCore2026": {
+      "zh": "Q/CORE — 2026",
+      "en": "Q/CORE — 2026"
+    },
+    "hangzhouShenzhen": {
+      "zh": "杭州 · 深圳",
+      "en": "Hangzhou · Shenzhen"
+    },
+    "aSmartHardwareCreationCompany": {
+      "zh": "智能硬件创造公司",
+      "en": "A Smart Hardware Creation Company"
+    },
+    "exploringNewToolsProductsAndWaysToCollaborate": {
+      "zh": "研究新的工具、产品与协作方式。",
+      "en": "Exploring new tools, products, and ways to collaborate."
+    },
+    "startingWithCompleteSystemsNotIsolatedTechnologies": {
+      "zh": "从完整系统出发，而不是孤立的技术环节。",
+      "en": "Starting with complete systems, not isolated technologies."
+    },
+    "qicore2": {
+      "zh": "QiCore",
+      "en": "QiCore"
+    },
+    "whoWeAre": {
+      "zh": "我们是谁",
+      "en": "Who We Are"
+    },
+    "whatWeAreCreating": {
+      "zh": "正在创造",
+      "en": "What We Are Creating"
+    },
+    "joinUs": {
+      "zh": "加入我们",
+      "en": "Join Us"
+    },
+    "weBelieveGoodTechnology": {
+      "zh": "我们相信，好的技术",
+      "en": "We believe good technology"
+    },
+    "shouldGivePeopleMoreFreedomToCreate": {
+      "zh": "应该让人更自由地创造。",
+      "en": "should give people more freedom to create."
+    },
+    "weAreDesignersEngineersAndMakersStartingWith": {
+      "zh": "我们是一群设计师、工程师和制造者。我们从人的感受出发，研究智能硬件如何被更自然地想象、构建与使用。",
+      "en": "We are designers, engineers, and makers. Starting with people's experience, we explore more intuitive ways to imagine, build, and use smart hardware."
+    },
+    "fromIdeaToRealProduct": {
+      "zh": "从想法到真实产品",
+      "en": "From Idea to Real Product"
+    },
+    "readOurStory": {
+      "zh": "阅读我们的故事 →",
+      "en": "Read Our Story →"
+    },
+    "makeSmart": {
+      "zh": "Make Smart · 气造万物",
+      "en": "Make Smart · Create Anything"
+    },
+    "qiCore": {
+      "zh": "QI / CORE",
+      "en": "QI / CORE"
+    },
+    "index": {
+      "zh": "目录",
+      "en": "INDEX"
+    },
+    "stories": {
+      "zh": "故事",
+      "en": "STORIES"
+    },
+    "product01": {
+      "zh": "产品 01 ↗",
+      "en": "PRODUCT 01 ↗"
+    },
+    "note024CreationSystems": {
+      "zh": "手记 024 / 造物系统",
+      "en": "NOTE 024 / CREATION SYSTEMS"
+    },
+    "createSomethingThatReallyWorks": {
+      "zh": "创造一件真正工作的东西。",
+      "en": "Create Something That Really Works."
+    },
+    "designIsMoreThanAppearanceAndEngineeringIs": {
+      "zh": "设计不是表面，工程也不是终点。我们关心的是一个想法如何穿过所有边界，最终成为人们愿意使用的产品。",
+      "en": "Design is more than appearance, and engineering is not the end. We care about how an idea crosses every boundary to become a product people want to use."
+    },
+    "prototypeFieldScale14": {
+      "zh": "原型区域 / 比例 1:4",
+      "en": "PROTOTYPE FIELD / SCALE 1:4"
+    },
+    "startWithPeopleSExperience": {
+      "zh": "从人的使用感受开始。",
+      "en": "Start with people's experience."
+    },
+    "bringHardwareAndSoftwareToTheSameTable": {
+      "zh": "让软硬件在同一张桌上工作。",
+      "en": "Bring hardware and software to the same table."
+    },
+    "replaceAbstractDebateWithRealPrototypes": {
+      "zh": "用真实原型代替抽象争论。",
+      "en": "Replace abstract debate with real prototypes."
+    },
+    "productExperienceCopy": {
+      "zh": "把复杂技术组织成清晰、自然的产品体验。",
+      "en": "Organize complex technology into a clear, intuitive product experience."
+    },
+    "engineeringCopy": {
+      "zh": "电子、结构、嵌入式与软件在同一路径协同。",
+      "en": "Connect electronics, structure, embedded systems, and software along one shared path."
+    },
+    "manufacturingCopy": {
+      "zh": "连接原型、验证与制造，持续推进真实交付。",
+      "en": "Connect prototyping, validation, and manufacturing to keep moving toward real delivery."
+    },
+    "value01": {
+      "zh": "01",
+      "en": "01"
+    },
+    "value02": {
+      "zh": "02",
+      "en": "02"
+    },
+    "value03": {
+      "zh": "03",
+      "en": "03"
+    }
+  },
+  "marketingFooter": {
+    "contactUs": {
+      "zh": "联系我们",
+      "en": "Contact us"
+    },
+    "socialMedia": {
+      "zh": "社交媒体",
+      "en": "Social media"
+    },
+    "comingSoon": {
+      "zh": "待开放",
+      "en": "Coming soon"
+    },
+    "weChat": {
+      "zh": "公众号",
+      "en": "WeChat"
+    },
+    "bilibili": {
+      "zh": "B站",
+      "en": "Bilibili"
+    },
+    "xiaohongshu": {
+      "zh": "小红书",
+      "en": "Xiaohongshu"
+    },
+    "facebook": {
+      "zh": "Facebook",
+      "en": "Facebook"
+    },
+    "instagram": {
+      "zh": "Instagram",
+      "en": "Instagram"
+    },
+    "twitter": {
+      "zh": "Twitter / X",
+      "en": "Twitter / X"
+    },
+    "youTube": {
+      "zh": "YouTube",
+      "en": "YouTube"
+    },
+    "makeSmart": {
+      "zh": "气造万物",
+      "en": "MAKE SMART"
+    },
+    "footerNavigation": {
+      "zh": "页脚导航",
+      "en": "Footer navigation"
+    },
+    "careers": {
+      "zh": "招聘",
+      "en": "Careers"
+    },
+    "qicoreTechnology": {
+      "zh": "气核科技（QiCore）",
+      "en": "QiCore Technology"
+    },
+    "infoQicoreAi": {
+      "zh": "info@qicore.ai",
+      "en": "info@qicore.ai"
+    },
+    "hrQicoreAi": {
+      "zh": "hr@qicore.ai",
+      "en": "hr@qicore.ai"
+    },
+    "qicoreTechnology2": {
+      "zh": " QiCore Technology",
+      "en": " QiCore Technology"
+    },
+    "text3d": {
+      "zh": "3D：",
+      "en": "3D: "
+    },
+    "macbookPro13Inch2020Timblewee": {
+      "zh": "Macbook Pro 13 inch 2020 — timblewee",
+      "en": "Macbook Pro 13 inch 2020 — timblewee"
+    },
+    "ccBy40": {
+      "zh": "CC BY 4.0",
+      "en": "CC BY 4.0"
+    },
+    "adaptedForScrollAnimation": {
+      "zh": " · 已改编用于滚动动画",
+      "en": " · adapted for scroll animation"
+    }
+  },
+  "marketingHeroArt": {
+    "qicoreSystem01": {
+      "zh": "QICORE / 系统 01",
+      "en": "QICORE / SYSTEM 01"
+    },
+    "ideaPrototypeReality": {
+      "zh": "想法 · 原型 · 现实",
+      "en": "IDEA · PROTOTYPE · REALITY"
+    },
+    "ideaReality": {
+      "zh": "想法 → 现实",
+      "en": "IDEA → REALITY"
+    },
+    "interactWithTheQicoreCreationSystem": {
+      "zh": "与 QiCore 造物系统互动",
+      "en": "Interact with the QiCore creation system"
+    },
+    "qicoreSignal02": {
+      "zh": "QICORE / 信号 02",
+      "en": "QICORE / SIGNAL 02"
+    },
+    "researchReleaseUpdate": {
+      "zh": "研发 · 发布 · 更新",
+      "en": "RESEARCH · RELEASE · UPDATE"
+    },
+    "followTheSignal": {
+      "zh": "关注动态",
+      "en": "FOLLOW THE SIGNAL"
+    },
+    "tuneTheQicoreNewsSignal": {
+      "zh": "调节 QiCore 新闻信号",
+      "en": "Tune the QiCore news signal"
+    },
+    "qicoreWorkbench03": {
+      "zh": "QICORE / 工作台 03",
+      "en": "QICORE / WORKBENCH 03"
+    },
+    "designCodeMake": {
+      "zh": "设计 · 编程 · 造物",
+      "en": "DESIGN · CODE · MAKE"
+    },
+    "createTogether": {
+      "zh": "一起创造",
+      "en": "CREATE TOGETHER"
+    },
+    "bringTheQicoreTeamToTheWorkbench": {
+      "zh": "邀请 QiCore 团队来到工作台",
+      "en": "Bring the QiCore team to the workbench"
+    },
+    "text01Idea": {
+      "zh": "01 / 想法",
+      "en": "01 / IDEA"
+    },
+    "text02Prototype": {
+      "zh": "02 / 原型",
+      "en": "02 / PROTOTYPE"
+    },
+    "text03Reality": {
+      "zh": "03 / 现实",
+      "en": "03 / REALITY"
+    },
+    "q": {
+      "zh": "Q",
+      "en": "Q"
+    },
+    "form": {
+      "zh": "形态",
+      "en": "FORM"
+    },
+    "logic": {
+      "zh": "逻辑",
+      "en": "LOGIC"
+    },
+    "motion": {
+      "zh": "运动",
+      "en": "MOTION"
+    },
+    "activeChannels": {
+      "zh": "活动频道",
+      "en": "ACTIVE CHANNELS"
+    },
+    "live": {
+      "zh": "实时",
+      "en": "LIVE"
+    },
+    "rD": {
+      "zh": "研发",
+      "en": "R&D"
+    },
+    "release": {
+      "zh": "发布",
+      "en": "RELEASE"
+    },
+    "update": {
+      "zh": "更新",
+      "en": "UPDATE"
+    },
+    "story": {
+      "zh": "故事",
+      "en": "STORY"
+    },
+    "recording": {
+      "zh": "记录",
+      "en": "RECORDING"
+    },
+    "creation": {
+      "zh": "创造",
+      "en": "CREATION"
+    },
+    "design": {
+      "zh": "设计",
+      "en": "DESIGN"
+    },
+    "code": {
+      "zh": "编程",
+      "en": "CODE"
+    },
+    "make": {
+      "zh": "造物",
+      "en": "MAKE"
+    },
+    "oneTable": {
+      "zh": "一张工作台",
+      "en": "ONE TABLE"
+    },
+    "manyDisciplines": {
+      "zh": "多个领域",
+      "en": "MANY DISCIPLINES"
+    },
+    "value04": {
+      "zh": "04",
+      "en": "04"
+    }
+  },
+  "marketingNav": {
+    "joinUs": {
+      "zh": "加入我们",
+      "en": "Join us"
+    },
+    "relax": {
+      "zh": "轻松一刻",
+      "en": "Take a break"
+    },
+    "home": {
+      "zh": "首页",
+      "en": "Home"
+    },
+    "oyscat": {
+      "zh": "Oyscat",
+      "en": "Oyscat"
+    },
+    "news": {
+      "zh": "新闻动态",
+      "en": "News"
+    },
+    "aboutUs": {
+      "zh": "关于我们",
+      "en": "About us"
+    },
+    "home2": {
+      "zh": "QiCore 首页",
+      "en": "Home"
+    },
+    "mainNavigation": {
+      "zh": "主导航",
+      "en": "Main navigation"
+    },
+    "toggleNavigation": {
+      "zh": "切换导航",
+      "en": "Toggle navigation"
+    },
+    "qicore": {
+      "zh": "QiCore",
+      "en": "QiCore"
+    },
+    "qicoreTechnology": {
+      "zh": "气核科技",
+      "en": "Technology"
+    },
+    "label": {
+      "zh": "中",
+      "en": "中"
+    },
+    "en": {
+      "zh": "EN",
+      "en": "EN"
+    }
+  },
+  "qicoreFilm": {
+    "insideQicore": {
+      "zh": "走进 QiCore",
+      "en": "Inside QiCore"
+    },
+    "filmInformation": {
+      "zh": "影片信息",
+      "en": "Film information"
+    },
+    "watchOnYoutube": {
+      "zh": "在 YouTube 观看",
+      "en": "Watch on YouTube"
+    },
+    "playQicoreTechnologyMakeSmart": {
+      "zh": "播放 QiCore Technology：MAKE SMART",
+      "en": "Play QiCore Technology: MAKE SMART"
+    },
+    "playFilm": {
+      "zh": "播放影片",
+      "en": "Play film"
+    },
+    "closeFilm": {
+      "zh": "关闭影片",
+      "en": "Close film"
+    },
+    "text03Film": {
+      "zh": "03 / 影片",
+      "en": "03 / Film"
+    },
+    "film": {
+      "zh": "影片",
+      "en": "Film"
+    },
+    "makeSmart": {
+      "zh": "MAKE SMART",
+      "en": "MAKE SMART"
+    },
+    "year": {
+      "zh": "年份",
+      "en": "Year"
+    },
+    "length": {
+      "zh": "时长",
+      "en": "Length"
+    },
+    "text169DigitalFilm": {
+      "zh": "16:9 / 数字影片",
+      "en": "16:9 / DIGITAL FILM"
+    },
+    "qicoreTechnology": {
+      "zh": "气核科技 · QICORE TECHNOLOGY",
+      "en": "QICORE TECHNOLOGY"
+    },
+    "value2026": {
+      "zh": "2026",
+      "en": "2026"
+    },
+    "value0101": {
+      "zh": "01:01",
+      "en": "01:01"
+    }
+  },
+  "dialog": {
+    "close": {
+      "zh": "关闭",
+      "en": "Close"
+    }
+  },
+  "aboutVisual": {
+    "text01Intent": {
+      "zh": "01 / 意图",
+      "en": "01 / INTENT"
+    },
+    "text02Physical": {
+      "zh": "02 / 实体",
+      "en": "02 / PHYSICAL"
+    },
+    "intentPrompt": {
+      "zh": "一句话描述你想造的东西",
+      "en": "Describe what you want to make"
+    },
+    "generation": {
+      "zh": "生成",
+      "en": "GENERATE"
+    },
+    "fromIntentToPhysical": {
+      "zh": "从意图直接生成物理实体",
+      "en": "FROM INTENT TO PHYSICAL OBJECT"
+    },
+    "intentToPhysicalAria": {
+      "zh": "左侧的造物意图经 GenPI 生成右侧的物理实体",
+      "en": "A creation intent on the left becomes a physical object on the right through GenPI"
+    },
+    "genpi": {
+      "zh": "GenPI",
+      "en": "GenPI"
+    },
+    "generativePhysical": {
+      "zh": "生成式物理",
+      "en": "GENERATIVE PHYSICAL"
+    },
+    "instantiation": {
+      "zh": "具现",
+      "en": "INSTANTIATION"
+    },
+    "genpiIndex": {
+      "zh": "QICORE / GENPI",
+      "en": "QICORE / GENPI"
+    }
+  },
+  "careersBoard": {
+    "openRoles": {
+      "zh": "开放职位",
+      "en": "Open roles"
+    },
+    "weAreLookingForPeopleWhoThink": {
+      "zh": "我们在找愿意把事情想清楚、做出来，也愿意和团队一起成长的人。",
+      "en": "We are looking for people who think clearly, build carefully, and want to grow with the team."
+    },
+    "generalApplication": {
+      "zh": "主动投递",
+      "en": "General application"
+    },
+    "filterOpenRoles": {
+      "zh": "筛选开放职位",
+      "en": "Filter open roles"
+    },
+    "updated": {
+      "zh": "最后更新 · ",
+      "en": "Updated · "
+    },
+    "posted": {
+      "zh": "发布于 ",
+      "en": "Posted "
+    },
+    "whatYouWillDo": {
+      "zh": "工作内容",
+      "en": "What you will do"
+    },
+    "detailsComingSoon": {
+      "zh": "内容即将更新。",
+      "en": "Details coming soon."
+    },
+    "whatWeAreLookingFor": {
+      "zh": "任职要求",
+      "en": "What we are looking for"
+    },
+    "niceToHave": {
+      "zh": "加分项",
+      "en": "Nice to have"
+    },
+    "noExtraRequirements": {
+      "zh": "不设额外门槛。",
+      "en": "No extra requirements."
+    },
+    "workingHere": {
+      "zh": "工作方式与福利",
+      "en": "Working here"
+    },
+    "weCanTalkThroughTheDetails": {
+      "zh": "面试时详细沟通。",
+      "en": "We can talk through the details."
+    },
+    "applyForThisRole": {
+      "zh": "投递这个职位",
+      "en": "Apply for this role"
+    },
+    "noOpenRolesMatchRightNowIntroduce": {
+      "zh": "当前没有符合条件的职位。欢迎主动投递，让我们先认识你。",
+      "en": "No open roles match right now. Introduce yourself and we will keep you in mind."
+    },
+    "text01OpenRoles": {
+      "zh": "01 / 开放职位",
+      "en": "01 / Open roles"
+    },
+    "roles": {
+      "zh": "职位",
+      "en": "roles"
+    },
+    "role": {
+      "zh": "职位",
+      "en": "role"
+    }
+  },
+  "careersHeroArt": {
+    "teamMap2026": {
+      "zh": "团队图谱 / 2026",
+      "en": "TEAM MAP / 2026"
+    },
+    "scale11": {
+      "zh": "比例 1:1",
+      "en": "SCALE 1:1"
+    },
+    "openRoles": {
+      "zh": "开放职位",
+      "en": "OPEN ROLES"
+    }
+  },
+  "careersData": {
+    "allRoles": {
+      "zh": "全部岗位",
+      "en": "All roles"
+    }
+  },
+  "careersLocalSample": {
+    "compensationDiscussed": {
+      "zh": "薪资面议",
+      "en": "Compensation discussed"
+    },
+    "fullSocialInsuranceAndHousingFundFrom": {
+      "zh": "入职即缴纳五险一金",
+      "en": "Full social insurance and housing fund from day one"
+    },
+    "fiveDayWorkWeekWithFlexibleClock": {
+      "zh": "周末双休，弹性打卡（09:30–10:30 / 18:30–19:30）",
+      "en": "Five-day work week with flexible clock-in (09:30–10:30 / 18:30–19:30)"
+    },
+    "paidAnnualLeaveAndPublicHolidays": {
+      "zh": "带薪年假与法定节假日",
+      "en": "Paid annual leave and public holidays"
+    },
+    "structuralEngineer": {
+      "zh": "结构工程师",
+      "en": "Structural Engineer"
+    },
+    "structureManufacturing": {
+      "zh": "结构与制造",
+      "en": "Structure & Manufacturing"
+    },
+    "shenzhenFullTimeInternshipsAvailable": {
+      "zh": "深圳 · 全职 · 提供实习岗位",
+      "en": "Shenzhen · Full-time · Internships available"
+    },
+    "fromConceptToMassProductionTurningA": {
+      "zh": "从概念到量产，把一个好想法做成可靠的产品。",
+      "en": "From concept to mass production, turning a good idea into a reliable product."
+    },
+    "ownProductStructuralDesignAndDevelopmentFrom": {
+      "zh": "负责产品结构设计与开发，参与从概念评估到量产落地的全过程。",
+      "en": "Own product structural design and development, from concept evaluation through mass production."
+    },
+    "produce2d3dEngineeringDrawingsAndBuild": {
+      "zh": "绘制并输出 2D / 3D 工程图纸，编制产品 BOM。",
+      "en": "Produce 2D / 3D engineering drawings and build the product BOM."
+    },
+    "coordinateWithManufacturingAndSupplyChainPreparing": {
+      "zh": "对接生产与供应链，编制 SOP、检验标准等技术资料。",
+      "en": "Coordinate with manufacturing and supply chain, preparing SOPs, inspection standards, and related documents."
+    },
+    "takePartInPrototypingToolingPilotRuns": {
+      "zh": "参与手板、开模、试产和量产，及时解决结构、工艺与装配问题。",
+      "en": "Take part in prototyping, tooling, pilot runs, and mass production, resolving structural, process, and assembly issues."
+    },
+    "continuouslyImproveStructuresAndProcessesToReduce": {
+      "zh": "持续推进结构优化、工艺改良和降本增效。",
+      "en": "Continuously improve structures and processes to reduce cost and raise efficiency."
+    },
+    "bachelorSDegreeOrAboveInMechanical": {
+      "zh": "本科及以上学历，机械设计制造、机电工程等相关专业。",
+      "en": "Bachelor's degree or above in mechanical design and manufacturing, mechatronics, or a related field."
+    },
+    "text25YearsOfStructuralDesignExperience": {
+      "zh": "2–5 年结构设计经验，有消费电子或家电产品量产案例。",
+      "en": "2–5 years of structural design experience with shipped consumer-electronics or home-appliance products."
+    },
+    "proficientWith2d3dToolsSuchAs": {
+      "zh": "熟练使用 Creo / Pro-E、SolidWorks、AutoCAD 等 2D / 3D 工具。",
+      "en": "Proficient with 2D / 3D tools such as Creo / Pro-E, SolidWorks, and AutoCAD."
+    },
+    "familiarWithPlasticsMetalAndSiliconePlus": {
+      "zh": "熟悉塑胶、五金、硅胶材料，以及注塑、冲压、压铸和表面处理工艺。",
+      "en": "Familiar with plastics, metal, and silicone, plus injection molding, stamping, die casting, and surface finishing."
+    },
+    "knowledgeableAboutProductSafetyAndEnvironmentalRequirements": {
+      "zh": "了解电子产品安规与环保要求，如 CE、FCC、RoHS、3C。",
+      "en": "Knowledgeable about product safety and environmental requirements such as CE, FCC, RoHS, and CCC."
+    },
+    "aSolidUnderstandingOfProductLifecycleManagement": {
+      "zh": "对产品生命周期管理有系统认识，能推动跨部门协作。",
+      "en": "A solid understanding of product lifecycle management with the ability to drive cross-functional collaboration."
+    },
+    "skilledAtBreakingDownComplexProblemsAnd": {
+      "zh": "善于拆解复杂问题，愿意和设计、电子、品质及供应链团队一起工作。",
+      "en": "Skilled at breaking down complex problems and happy to work with design, electronics, quality, and supply chain teams."
+    },
+    "paidAnnualLeaveAndPublicHolidaysWith": {
+      "zh": "带薪年假与法定节假日，扁平高效的工程师文化",
+      "en": "Paid annual leave and public holidays, with a flat, efficient engineering culture"
+    },
+    "mechanicalDesign": {
+      "zh": "机械 / 结构",
+      "en": "Mechanical design"
+    },
+    "productEngineering": {
+      "zh": "产品结构",
+      "en": "Product engineering"
+    },
+    "manufacturingDfm": {
+      "zh": "量产 / DFM",
+      "en": "Manufacturing / DFM"
+    },
+    "hardwareEngineer": {
+      "zh": "硬件工程师",
+      "en": "Hardware Engineer"
+    },
+    "hardwareEngineering": {
+      "zh": "硬件研发",
+      "en": "Hardware engineering"
+    },
+    "ownConsumerElectronicsHardwareFromArchitectureSchematics": {
+      "zh": "负责消费电子产品从硬件方案、原理图和 PCB Layout，到样机调试、试产及量产落地的全过程。你将参与 Oyscat 及电子模块的硬件研发，把设计真正做成稳定、可靠、可生产的产品。",
+      "en": "Own consumer-electronics hardware from architecture, schematics, and PCB layout through prototype bring-up, pilot runs, and mass production. You will work on Oyscat and electronic modules, turning designs into stable, reliable, producible products."
+    },
+    "leadConsumerElectronicsHardwareFromArchitectureSchematics": {
+      "zh": "主导消费电子产品从硬件方案、原理图和 PCB Layout，到样机调试、试产及量产落地的全过程。",
+      "en": "Lead consumer-electronics hardware from architecture, schematics, and PCB layout through prototype debugging, pilot runs, and mass production."
+    },
+    "designSelectAndValidateCircuitBlocksIncluding": {
+      "zh": "负责 MCU、主控外围、模拟与数字电路、电源与锂电池、USB / Type-C、传感器等电路模块的设计、选型与验证。",
+      "en": "Design, select, and validate circuit blocks including MCUs and their peripherals, analog and digital circuits, power and lithium batteries, USB / Type-C, and sensors."
+    },
+    "bringUpPrototypesDebugHardwareIsolateFaults": {
+      "zh": "完成样机 Bring-up、硬件调试、故障定位和失效分析，处理手板焊接、飞线、改板及 Rework。",
+      "en": "Bring up prototypes, debug hardware, isolate faults, and perform failure analysis, including hand soldering, jumper wires, board rework, and re-spins."
+    },
+    "followUpOnPilotBuildsAndWork": {
+      "zh": "跟进产品试产，与嵌入式、结构、工厂和测试团队协作，推动产品顺利量产。",
+      "en": "Follow up on pilot builds and work with embedded, mechanical, factory, and test teams to move products smoothly into mass production."
+    },
+    "maintainSchematicsPcbFilesBomsTestReports": {
+      "zh": "维护原理图、PCB、BOM、测试报告及调试记录等研发资料。",
+      "en": "Maintain schematics, PCB files, BOMs, test reports, and debugging records."
+    },
+    "bachelorSDegreeOrAboveElectronicsAutomation": {
+      "zh": "本科及以上学历，电子信息、自动化、通信工程、微电子等相关专业优先。",
+      "en": "Bachelor's degree or above; electronics, automation, communications, or microelectronics preferred."
+    },
+    "text25YearsOfConsumerElectronicsHardware": {
+      "zh": "具备 2–5 年消费电子硬件开发经验，至少完整负责过 1–2 款产品从开发到量产的全过程。",
+      "en": "2–5 years of consumer-electronics hardware experience, having owned 1–2 products end to end from development to mass production."
+    },
+    "ableToIndependentlyDeliverHardwareArchitectureSchematic": {
+      "zh": "能够独立完成硬件方案、原理图设计和 PCB Layout，熟练使用 Altium Designer、Cadence Allegro、KiCad、立创 EDA 等至少一种工具。",
+      "en": "Able to independently deliver hardware architecture, schematic design, and PCB layout, proficient with at least one of Altium Designer, Cadence Allegro, KiCad, or LCEDA."
+    },
+    "familiarWithAnalogAndDigitalCircuitsPower": {
+      "zh": "熟悉模拟与数字电路、电源与锂电池、常用通信接口及传感器相关设计。",
+      "en": "Familiar with analog and digital circuits, power and lithium-battery design, common communication interfaces, and sensors."
+    },
+    "proficientWithOscilloscopesLogicAnalyzersAndMultimeters": {
+      "zh": "熟练使用示波器、逻辑分析仪和万用表，能够独立完成样机 Bring-up、波形分析和硬件问题排查。",
+      "en": "Proficient with oscilloscopes, logic analyzers, and multimeters, able to independently bring up prototypes, analyze waveforms, and troubleshoot hardware issues."
+    },
+    "skilledAtHandSolderingAndReworkIncluding": {
+      "zh": "具备手板焊接和 Rework 能力，能够处理飞线改板及小封装元件。",
+      "en": "Skilled at hand soldering and rework, including jumper modifications and small-package components."
+    },
+    "aHardwareInternshipIsAlsoOpenInterns": {
+      "zh": "同时开放硬件实习岗位。实习候选人应为本科及以上在读，不强制要求工作年限和量产经历，但需要具备较完整的板卡、机器人或电子设计项目经验，以及基本的 EDA、仪器使用、焊接和调试能力。",
+      "en": "A hardware internship is also open. Interns should be enrolled undergraduates or above; no fixed years of experience or mass-production record is required, but candidates should have substantial board, robotics, or electronics project experience plus basic EDA, instrument, soldering, and debugging skills."
+    },
+    "experienceDevelopingOrDebuggingDdr3Ddr4Lpddr": {
+      "zh": "有 DDR3 / DDR4 / LPDDR 板卡开发、调试或信号完整性分析经验。",
+      "en": "Experience developing or debugging DDR3 / DDR4 / LPDDR boards, or with signal-integrity analysis."
+    },
+    "experienceWithMotorDriveDisplayOrAudio": {
+      "zh": "有电机驱动、屏幕或音频相关产品开发经验。",
+      "en": "Experience with motor-drive, display, or audio products."
+    },
+    "experienceWithPcbaIssueHandlingYieldImprovement": {
+      "zh": "有 PCBA 异常处理、生产良率改善、替代料处理、BOM 成本控制或生产测试方案设计经验。",
+      "en": "Experience with PCBA issue handling, yield improvement, alternate-part qualification, BOM cost control, or production test planning."
+    },
+    "experienceWithEmcEsdRemediationAndCertifications": {
+      "zh": "有 EMC / ESD 整改，以及 3C、CE、FCC、RoHS 等认证经验。",
+      "en": "Experience with EMC / ESD remediation and certifications such as CCC, CE, FCC, and RoHS."
+    },
+    "experienceInRobomasterRoboconOrOtherRobotics": {
+      "zh": "有 RoboMaster、RoboCon 或其他机器人、电子设计类竞赛经验。",
+      "en": "Experience in RoboMaster, RoboCon, or other robotics and electronics-design competitions."
+    },
+    "circuitPcbDesign": {
+      "zh": "电路 / PCB",
+      "en": "Circuit / PCB design"
+    },
+    "consumerElectronics": {
+      "zh": "消费电子",
+      "en": "Consumer electronics"
+    },
+    "internship": {
+      "zh": "实习",
+      "en": "Internship"
+    },
+    "fullStackSoftwareEngineer": {
+      "zh": "软件全栈工程师",
+      "en": "Full-stack Software Engineer"
+    },
+    "softwarePlatform": {
+      "zh": "软件与平台",
+      "en": "Software & Platform"
+    },
+    "buildTheOyscatWebWorkspaceAndCompanion": {
+      "zh": "参与 Oyscat Web 工作台和智能硬件配套平台的开发，把复杂功能做成稳定、易用的产品。",
+      "en": "Build the Oyscat web workspace and companion platform for smart hardware, turning complex capabilities into stable, easy-to-use products."
+    },
+    "contributeToTheOyscatWebWorkspaceAnd": {
+      "zh": "参与 Oyscat Web 工作台及智能硬件配套平台的开发，负责从需求分析到上线维护的完整流程。",
+      "en": "Contribute to the Oyscat web workspace and smart-hardware platform across the full cycle from requirements analysis to launch and maintenance."
+    },
+    "designAndBuildFrontendAndBackendFeatures": {
+      "zh": "负责前后端功能、接口、数据和权限系统的设计与开发。",
+      "en": "Design and build frontend and backend features, APIs, data, and permission systems."
+    },
+    "helpImplementWeb3dScenesInteractiveTools": {
+      "zh": "参与 Web 3D 场景、交互工具及硬件控制相关功能的实现。",
+      "en": "Help implement web 3D scenes, interactive tools, and hardware-control features."
+    },
+    "useAiAndAgentsForTaskBreakdown": {
+      "zh": "使用 AI 和 Agent 完成需求拆解、编码、调试、重构与测试，并对生成结果负责。",
+      "en": "Use AI and agents for task breakdown, coding, debugging, refactoring, and testing, and take responsibility for the results."
+    },
+    "workWithProductDesignEmbeddedMechanicalAnd": {
+      "zh": "配合产品、设计、嵌入式、结构及测试人员解决实际问题，推动功能稳定交付。",
+      "en": "Work with product, design, embedded, mechanical, and test teammates to solve real problems and deliver features reliably."
+    },
+    "handsOnFullStackExperienceWithTypescript": {
+      "zh": "具备实际的前后端开发经验，熟悉 TypeScript，以及 React 或 Vue 中的一种；能够使用 Node.js、Go 或 Python 完成后端开发。",
+      "en": "Hands-on full-stack experience with TypeScript and either React or Vue, plus backend development in Node.js, Go, or Python."
+    },
+    "web3dExperienceAbleToContributeTo": {
+      "zh": "具备 Web 3D 开发经验，能够参与三维场景、模型交互或可视化工具的开发。",
+      "en": "Web 3D experience, able to contribute to 3D scenes, model interaction, or visualization tools."
+    },
+    "ableToIndependentlyDesignAndBuildModules": {
+      "zh": "能够独立完成模块设计和开发，处理接口、数据、权限、部署及线上问题。",
+      "en": "Able to independently design and build modules, handling APIs, data, permissions, deployment, and production issues."
+    },
+    "comfortableUsingAiCodingToolsDailyBreaking": {
+      "zh": "日常熟练使用 AI 编程工具，能够将需求拆解给 Agent 执行，并独立判断生成代码的质量、安全性和可维护性。",
+      "en": "Comfortable using AI coding tools daily, breaking work down for agents to execute, and independently judging the quality, security, and maintainability of generated code."
+    },
+    "noFixedYearsOfExperienceWeValue": {
+      "zh": "不限定工作年限，更看重实际作品、代码质量和解决问题的能力；欢迎能力突出的应届生及实习转正候选人。",
+      "en": "No fixed years of experience; we value real work, code quality, and problem-solving. Outstanding new graduates and intern-to-full-time candidates are welcome."
+    },
+    "familiarityWithThreeJsReactThreeFiber": {
+      "zh": "熟悉 Three.js、React Three Fiber、WebGL、Unity 或其他图形与游戏开发技术。",
+      "en": "Familiarity with Three.js, React Three Fiber, WebGL, Unity, or other graphics and game-development technologies."
+    },
+    "experienceWithWebsocketMqttSerialBluetoothOr": {
+      "zh": "有 WebSocket、MQTT、串口、蓝牙或局域网设备通信经验。",
+      "en": "Experience with WebSocket, MQTT, serial, Bluetooth, or LAN device communication."
+    },
+    "experienceBuildingConsumerElectronicsSmartHardwareCreation": {
+      "zh": "有消费电子、智能硬件、创作工具或游戏类产品开发经验。",
+      "en": "Experience building consumer electronics, smart hardware, creation tools, or games."
+    },
+    "practicalExperienceUsingAiToImproveTesting": {
+      "zh": "有使用 AI 改进测试、代码审查、文档或 DevOps 流程的实践经验。",
+      "en": "Practical experience using AI to improve testing, code review, documentation, or DevOps workflows."
+    },
+    "fiveDayWorkWeekWithFlexibleHours": {
+      "zh": "周末双休，弹性工作制。",
+      "en": "Five-day work week with flexible hours."
+    },
+    "fullSocialInsuranceAndHousingFundFrom2": {
+      "zh": "入职依法缴纳五险一金。",
+      "en": "Full social insurance and housing fund from day one."
+    },
+    "paidAnnualLeaveAndPublicHolidays2": {
+      "zh": "带薪年假及法定节假日。",
+      "en": "Paid annual leave and public holidays."
+    },
+    "flatCollaborationThatValuesEngineeringAndReal": {
+      "zh": "扁平化协作，重视技术与实际成果。",
+      "en": "Flat collaboration that values engineering and real results."
+    },
+    "smartHardware": {
+      "zh": "智能硬件",
+      "en": "Smart hardware"
+    },
+    "fullStackEngineering": {
+      "zh": "全栈开发",
+      "en": "Full-stack engineering"
+    },
+    "embeddedEngineer": {
+      "zh": "嵌入式工程师",
+      "en": "Embedded Engineer"
+    },
+    "embeddedSystemsRobotics": {
+      "zh": "嵌入式与机器人",
+      "en": "Embedded Systems & Robotics"
+    },
+    "shenzhenFullTime": {
+      "zh": "深圳 · 全职",
+      "en": "Shenzhen · Full-time"
+    },
+    "workOnEmbeddedSoftwareAndHardwareFor": {
+      "zh": "参与电子模块、执行器及机器人系统的嵌入式软硬件开发，负责底层驱动、系统功能、调试验证及产品迭代。",
+      "en": "Work on embedded software and hardware for electronic modules, actuators, and robotic systems, owning low-level drivers, system features, debugging, validation, and iteration."
+    },
+    "designDevelopDebugAndMaintainMcuFirmware": {
+      "zh": "负责 MCU 嵌入式软件的设计、开发、调试与维护，包括底层驱动、外设接口、控制逻辑及系统功能。",
+      "en": "Design, develop, debug, and maintain MCU firmware, including low-level drivers, peripheral interfaces, control logic, and system features."
+    },
+    "developDriversAndRunHardwareSoftwareIntegration": {
+      "zh": "负责传感器、电机、执行器、通信模块等硬件的驱动开发及软硬件联调。",
+      "en": "Develop drivers and run hardware/software integration for sensors, motors, actuators, and communication modules."
+    },
+    "developAndDebugCommonMcuPeripheralsSuch": {
+      "zh": "负责 UART、I²C、SPI、CAN、PWM、ADC、Timer、DMA 等常见 MCU 外设的开发与调试。",
+      "en": "Develop and debug common MCU peripherals such as UART, I²C, SPI, CAN, PWM, ADC, Timer, and DMA."
+    },
+    "bringUpNewHardwarePlatformsAndValidate": {
+      "zh": "根据原理图、芯片 Datasheet、Reference Manual 等技术资料完成新硬件平台的 Bring-up 和功能验证。",
+      "en": "Bring up new hardware platforms and validate functionality using schematics, chip datasheets, and reference manuals."
+    },
+    "useOscilloscopesLogicAnalyzersAndRelatedTools": {
+      "zh": "使用示波器、逻辑分析仪等工具定位通信、时序、信号完整性及软硬件协同问题。",
+      "en": "Use oscilloscopes, logic analyzers, and related tools to isolate communication, timing, signal-integrity, and hardware/software issues."
+    },
+    "takePartInSystemIntegrationPrototypeDebugging": {
+      "zh": "参与电机、传感器及机器人相关模块的系统集成、样机调试和性能优化。",
+      "en": "Take part in system integration, prototype debugging, and performance tuning for motor, sensor, and robotics modules."
+    },
+    "writeTestProgramsAndWhereUsefulAutomated": {
+      "zh": "编写测试程序及必要的自动化测试工具，对问题、测试结果和解决过程进行记录。",
+      "en": "Write test programs and, where useful, automated test tools, documenting issues, results, and resolutions."
+    },
+    "collaborateWithHardwareMechanicalAndApplicationSoftware": {
+      "zh": "与硬件、结构、上层软件等团队协作，完成产品功能验证、问题定位及版本迭代。",
+      "en": "Collaborate with hardware, mechanical, and application-software teams on feature validation, issue isolation, and version iterations."
+    },
+    "bachelorSDegreeOrAboveInElectronics": {
+      "zh": "电子信息、自动化、计算机、机械电子、通信等相关专业本科及以上学历。",
+      "en": "Bachelor's degree or above in electronics, automation, computer science, mechatronics, communications, or a related field."
+    },
+    "solidCFundamentalsAndAGraspOf": {
+      "zh": "扎实的 C 基础，熟悉嵌入式软件开发基本方法。",
+      "en": "Solid C fundamentals and a grasp of core embedded software practices."
+    },
+    "handsOnMcuProjectExperienceAbleTo": {
+      "zh": "具备实际 MCU 项目开发经验，能够独立完成从外设配置、驱动开发到系统调试的基本工作。",
+      "en": "Hands-on MCU project experience, able to independently handle peripheral setup, driver development, and system debugging."
+    },
+    "familiarWithCommonMcuPeripheralsSuchAs": {
+      "zh": "熟悉 GPIO、UART、I²C、SPI、CAN、PWM、ADC、Timer、DMA、Interrupt 等常见 MCU 外设及其基本工作原理。",
+      "en": "Familiar with common MCU peripherals such as GPIO, UART, I²C, SPI, CAN, PWM, ADC, Timer, DMA, and interrupts, and how they work."
+    },
+    "ableToReadSchematicsAndConfigurePeripherals": {
+      "zh": "能够阅读硬件原理图，并根据 Datasheet / Reference Manual 独立完成外设配置和驱动开发，而非仅依赖现成库或示例代码。",
+      "en": "Able to read schematics and configure peripherals and write drivers from datasheets and reference manuals, rather than relying only on existing libraries or sample code."
+    },
+    "skilledWithOscilloscopesLogicAnalyzersAndBasic": {
+      "zh": "能够熟练使用示波器、逻辑分析仪等基本调试工具，结合软件状态与实际波形定位常见问题。",
+      "en": "Skilled with oscilloscopes, logic analyzers, and basic debugging tools, using software state and real waveforms to isolate common issues."
+    },
+    "understandInterruptsDmaMemoryBootFlowLinking": {
+      "zh": "理解中断、DMA、内存、启动流程、链接与基本 MCU 系统架构。",
+      "en": "Understand interrupts, DMA, memory, boot flow, linking, and basic MCU system architecture."
+    },
+    "basicRtosExperienceUnderstandingTasksSchedulingSynchronization": {
+      "zh": "具备基本的 RTOS 使用经验，理解任务、调度、同步、互斥、消息队列等基本机制。",
+      "en": "Basic RTOS experience, understanding tasks, scheduling, synchronization, mutexes, and message queues."
+    },
+    "strongEngineeringDebuggingSkillsReproduceAnalyzeAnd": {
+      "zh": "具备良好的工程调试能力，能够对问题进行复现、分析、验证并形成清晰记录。",
+      "en": "Strong engineering debugging skills: reproduce, analyze, and verify issues, and keep clear records."
+    },
+    "familiarWithEmbeddedToolchainsSuchAsGit": {
+      "zh": "熟悉 Git、CMake、GCC / Clang、GDB / OpenOCD 等嵌入式开发工具链。",
+      "en": "Familiar with embedded toolchains such as Git, CMake, GCC / Clang, and GDB / OpenOCD."
+    },
+    "handsOnExperienceWithMcuSocPlatforms": {
+      "zh": "除 STM32、ESP32、Arduino 等主流成熟生态外，有其他 MCU / SoC 平台实际开发经验。",
+      "en": "Hands-on experience with MCU / SoC platforms beyond mature ecosystems such as STM32, ESP32, and Arduino."
+    },
+    "experienceWithRustEmbeddedNoStdDevelopment": {
+      "zh": "有 Rust Embedded / no_std 嵌入式开发经验。",
+      "en": "Experience with Rust Embedded / no_std development."
+    },
+    "familiarityWithRtosSuchAsFreertosZephyr": {
+      "zh": "熟悉 FreeRTOS、Zephyr、RT-Thread 等 RTOS。",
+      "en": "Familiarity with RTOS such as FreeRTOS, Zephyr, or RT-Thread."
+    },
+    "experienceWithMotorControlRoboticsEncodersSensors": {
+      "zh": "有电机控制、机器人、编码器、传感器、执行器等相关开发经验。",
+      "en": "Experience with motor control, robotics, encoders, sensors, or actuators."
+    },
+    "basicSolderingJumperWireHardwareModificationAnd": {
+      "zh": "有基本焊接、飞线、硬件修改和板级 Debug 能力。",
+      "en": "Basic soldering, jumper-wire, hardware-modification, and board-level debugging skills."
+    },
+    "embeddedSystems": {
+      "zh": "嵌入式系统",
+      "en": "Embedded systems"
+    },
+    "mcuC": {
+      "zh": "MCU / C++",
+      "en": "MCU / C++"
+    },
+    "robotics": {
+      "zh": "机器人",
+      "en": "Robotics"
+    },
+    "testDevelopmentEngineer": {
+      "zh": "测试开发工程师",
+      "en": "Test Development Engineer"
+    },
+    "ownTestDevelopmentAndQualitySystemsFor": {
+      "zh": "负责 Oyscat Web 工作台、QiCore 电子模块及固件的测试开发与质量体系建设，推动软硬件整套系统的稳定交付。",
+      "en": "Own test development and quality systems for the Oyscat web workspace, QiCore electronic modules, and firmware, driving stable delivery of the full hardware and software system."
+    },
+    "testTheOyscatWebWorkspaceQicoreElectronic": {
+      "zh": "负责 Oyscat Web 工作台、QiCore 电子模块及固件的测试，覆盖模块功能、设备通信和软硬件整套系统的使用流程。",
+      "en": "Test the Oyscat web workspace, QiCore electronic modules, and firmware, covering module features, device communication, and full-system workflows."
+    },
+    "joinRequirementReviewsToAdviseOnTestability": {
+      "zh": "参与需求评审，从可测试性、边界条件、异常场景及质量风险角度提出建议，制定测试计划、测试用例和验收标准。",
+      "en": "Join requirement reviews to advise on testability, boundary conditions, exception scenarios, and quality risks, and define test plans, cases, and acceptance criteria."
+    },
+    "driveBuildingTheTestProcessAndQuality": {
+      "zh": "推动测试流程与质量体系从零建设，逐步建立覆盖需求评审、测试设计、缺陷管理、自动化回归和版本验收的工作机制，并与团队协作落地。",
+      "en": "Drive building the test process and quality system from scratch, establishing and rolling out practices for requirement review, test design, defect management, automated regression, and release acceptance."
+    },
+    "writeAndMaintainAutomatedTestScriptsTo": {
+      "zh": "编写和维护自动化测试脚本，建立稳定、可重复执行的自动化回归能力，提高测试效率与覆盖范围。",
+      "en": "Write and maintain automated test scripts to build stable, repeatable regression coverage, improving test efficiency and coverage."
+    },
+    "developAndMaintainTestToolingForTest": {
+      "zh": "开发和维护测试辅助工具，支持测试执行、数据采集、日志分析和问题排查。",
+      "en": "Develop and maintain test tooling for test execution, data collection, log analysis, and troubleshooting."
+    },
+    "workWithProductSoftwareEmbeddedAndHardware": {
+      "zh": "与产品、软件、嵌入式及硬件工程师协作，复现和定位问题，推动缺陷修复、验证及质量问题复盘。",
+      "en": "Work with product, software, embedded, and hardware engineers to reproduce and isolate issues, and to drive fixes, verification, and quality retrospectives."
+    },
+    "asProductsMoveTowardProductionHelpBuild": {
+      "zh": "根据产品及生产阶段的需要，参与产线测试流程、测试用例和相关工具的建设。",
+      "en": "As products move toward production, help build production-line test flows, cases, and tools."
+    },
+    "handsOnTestingOrTestDevelopmentExperience": {
+      "zh": "具备实际的测试或测试开发工作经验，能够独立负责测试工作的规划与执行；本岗位不接受应届生及实习生。",
+      "en": "Hands-on testing or test-development experience with the ability to plan and execute testing independently; this role is not open to new graduates or interns."
+    },
+    "familiarWithTestCaseDesignDefectManagement": {
+      "zh": "熟悉测试用例设计、缺陷管理和回归测试，能够根据需求梳理正常流程、边界条件及异常场景。",
+      "en": "Familiar with test-case design, defect management, and regression testing, able to map requirements to normal flows, boundary conditions, and exception scenarios."
+    },
+    "ableToWriteDebugAndMaintainAutomated": {
+      "zh": "具备自动化脚本编写能力，能够独立编写、调试和维护测试脚本，并判断执行结果是否可靠。",
+      "en": "Able to write, debug, and maintain automated test scripts independently, and to judge whether results are reliable."
+    },
+    "practicalExperienceTestingWebAppsEmbeddedDevices": {
+      "zh": "有 Web 应用、嵌入式设备或软硬件系统的实际测试经验，能够理解不同模块之间的交互与依赖。",
+      "en": "Practical experience testing web apps, embedded devices, or hardware/software systems, with an understanding of module interactions and dependencies."
+    },
+    "troubleshootUsingLogsApiResponsesDeviceState": {
+      "zh": "能结合日志、接口返回、设备状态及复现步骤开展问题排查，清晰记录问题并跟进修复验证。",
+      "en": "Troubleshoot using logs, API responses, device state, and reproduction steps, documenting issues clearly and following up on fix verification."
+    },
+    "comfortableUsingAiCodingToolsAndAgents": {
+      "zh": "熟练使用 AI 编程工具和 Agent 辅助测试分析、脚本开发、调试及文档整理，能够独立判断生成代码和测试结果的质量，对最终结果负责。",
+      "en": "Comfortable using AI coding tools and agents for test analysis, script development, debugging, and documentation, able to judge the quality of generated code and test results, and accountable for the outcome."
+    },
+    "strongQualityMindsetAndCrossTeamCommunication": {
+      "zh": "具备质量意识和跨团队沟通能力，能够主动识别质量风险与流程问题，提出可落地的改进方案并推动实施。",
+      "en": "Strong quality mindset and cross-team communication, able to proactively spot quality risks and process gaps, propose practical improvements, and drive them through."
+    },
+    "experienceBuildingTestProcessesAndQualitySystems": {
+      "zh": "有从零搭建测试流程和质量体系的经验，能够结合团队规模及软硬件产品特点，独立规划并推动落地者优先。",
+      "en": "Experience building test processes and quality systems from scratch, and able to plan and roll them out independently based on team size and hardware/software product traits — a strong plus."
+    },
+    "experienceTestingBothWebSoftwareAndHardware": {
+      "zh": "同时具备 Web 软件与硬件、固件测试经验，参与过软硬件产品的系统联调和版本交付。",
+      "en": "Experience testing both web software and hardware/firmware, with involvement in system integration and release delivery."
+    },
+    "ableToIndependentlyBuildTestPlatformsTools": {
+      "zh": "能够独立开发测试平台、测试工具或设备控制程序。",
+      "en": "Able to independently build test platforms, tools, or device-control programs."
+    },
+    "experienceWithDeviceCommunicationLongRunFault": {
+      "zh": "有设备通信、长时间运行、异常恢复或稳定性测试经验。",
+      "en": "Experience with device communication, long-run, fault-recovery, or stability testing."
+    },
+    "experienceWithProductionLineTestingTestFixtures": {
+      "zh": "有产线测试、测试工装或生产质量数据分析经验。",
+      "en": "Experience with production-line testing, test fixtures, or production-quality data analysis."
+    },
+    "practicalExperienceIntegratingAutomatedTestsIntoCi": {
+      "zh": "有将自动化测试接入持续集成流程，或使用 AI 改进测试效率与覆盖范围的实践经验。",
+      "en": "Practical experience integrating automated tests into CI, or using AI to improve test efficiency and coverage."
+    },
+    "theTeamWillCollaborateToSupportBuilding": {
+      "zh": "团队将协作支持测试流程与质量体系建设。",
+      "en": "The team will collaborate to support building the test process and quality system."
+    },
+    "testDevelopment": {
+      "zh": "测试开发",
+      "en": "Test development"
+    },
+    "qualitySystems": {
+      "zh": "质量体系",
+      "en": "Quality systems"
+    },
+    "productMarketingSpecialistNorthAmerica": {
+      "zh": "北美产品营销",
+      "en": "Product Marketing Specialist - North America"
+    },
+    "marketingGrowth": {
+      "zh": "市场与增长",
+      "en": "Marketing & Growth"
+    },
+    "pmmSummary": {
+      "zh": "面向北美市场，把 QiCore 的产品与系统能力转化为清晰的价值主张，并用数据驱动的投放测试完成从 MVP 验证到上市推广的营销闭环。",
+      "en": "Turn QiCore's product and system capabilities into clear value propositions for North America, and use data-driven ad testing to carry marketing from MVP validation through launch."
+    },
+    "pmmResponsibility1": {
+      "zh": "深入开展海外市场调研，分析目标用户需求、真实使用场景、竞品卖点及圈层渠道生态，为产品定位与差异化切入点提供数据与洞察支撑。",
+      "en": "Run in-depth overseas market research on target user needs, real usage scenarios, competitor selling points, and community and channel ecosystems, providing data and insight for positioning and differentiation."
+    },
+    "pmmResponsibility2": {
+      "zh": "充分理解产品及系统能力，结合北美市场特点，将技术语言转化为对用户有吸引力的产品价值主张，独立搭建 FABE、Message House 等核心营销框架。",
+      "en": "Understand the product and system capabilities deeply, translate technical language into value propositions that resonate with North American users, and independently build core frameworks such as FABE and Message House."
+    },
+    "pmmResponsibility3": {
+      "zh": "撰写并维护全套英文产品营销资料（产品手册、规格表、用户指南等），输出 Experience Guide、KOL Brief 等关键营销材料，统一对外产品叙事口径。",
+      "en": "Write and maintain the full set of English product marketing materials (brochures, spec sheets, user guides), produce key assets such as Experience Guides and KOL Briefs, and keep the external product narrative consistent."
+    },
+    "pmmResponsibility4": {
+      "zh": "运用增长营销思维，主导 Meta、Reddit、Google 等核心渠道的冷启动与广告测试；通过受众、文案和素材的 A/B 测试监控 CTR、CPL、ROI 等指标，以数据闭环驱动卖点表达的持续迭代。",
+      "en": "Apply a growth marketing mindset to lead cold starts and ad testing on core channels such as Meta, Reddit, and Google; A/B test audiences, copy, and creatives while tracking CTR, CPL, and ROI, closing the data loop to keep refining how selling points are expressed."
+    },
+    "pmmResponsibility5": {
+      "zh": "从产品全生命周期视角出发，结合不同阶段的业务目标，制定并调整产品营销策略与内容，协同团队高效推进从 MVP 验证到上市推广的营销衔接。",
+      "en": "Take a full product lifecycle view, set and adjust product marketing strategy and content for each stage's business goals, and work with the team to move smoothly from MVP validation to launch."
+    },
+    "pmmRequirement1": {
+      "zh": "本科及以上学历，1-3年海外产品营销或出海增长相关经验，智能硬件/科技行业经验优先。",
+      "en": "Bachelor's degree or above, with 1–3 years of overseas product marketing or international growth experience; smart hardware or tech industry experience preferred."
+    },
+    "pmmRequirement2": {
+      "zh": "掌握扎实的产品营销方法论，能独立搭建 Message House、FABE 等营销框架，具备优秀的技术语言转化与英文内容撰写能力。",
+      "en": "Solid product marketing methodology, able to independently build frameworks such as Message House and FABE, with excellent skills in translating technical language and writing English content."
+    },
+    "pmmRequirement3": {
+      "zh": "具备扎实的市场调研能力，能针对产品独立开展海外用户研究与竞品分析，并输出高质量调研报告。",
+      "en": "Strong market research skills, able to independently run overseas user research and competitor analysis for a product and deliver high-quality research reports."
+    },
+    "pmmRequirement4": {
+      "zh": "熟悉Meta、Reddit、Google等平台广告投放与测试逻辑，对数据敏感，能够依托数据结论迭代营销卖点与内容。",
+      "en": "Familiar with ad buying and testing on platforms such as Meta, Reddit, and Google; data-sensitive and able to iterate selling points and content based on what the data shows."
+    },
+    "pmmRequirement5": {
+      "zh": "逻辑清晰，做事闭环，拥有项目 Owner 意识；能主动洞察市场变化，高效协同研发、产品、市场等多部门推动产品策略落地。",
+      "en": "Clear thinking, follows work through to completion, and has a project-owner mindset; proactively spots market changes and works efficiently with R&D, product, and marketing teams to put product strategy into practice."
+    },
+    "pmmNiceToHave1": {
+      "zh": "具备海外留学/工作背景，英文可作为日常工作与创作语言者优先",
+      "en": "Overseas study or work background; able to use English as a daily working and writing language"
+    },
+    "pmmNiceToHave2": {
+      "zh": "熟悉北美创客/DIY 硬件/科技文化，具备开源社区或垂直圈层（如 Reddit、Discord）接触经验",
+      "en": "Familiar with North American maker, DIY hardware, and tech culture, with experience in open-source or niche communities such as Reddit and Discord"
+    },
+    "pmmNiceToHave3": {
+      "zh": "会用 GA4 等工具解读数据，对 Landing Page、投放测试有实操经验",
+      "en": "Able to read data with tools such as GA4, with hands-on experience in landing pages and ad testing"
+    },
+    "productMarketing": {
+      "zh": "产品营销",
+      "en": "Product marketing"
+    },
+    "overseasGrowth": {
+      "zh": "出海增长",
+      "en": "International growth"
+    },
+    "northAmericaMarket": {
+      "zh": "北美市场",
+      "en": "North America"
+    }
+  },
+  "homeBrandSections": {
+    "fromIdeaToSomethingReal": {
+      "zh": "从想法，到真实造物",
+      "en": "From idea to something real."
+    },
+    "designStructureDefineMotionAndBringEvery": {
+      "zh": "在 Oyscat 里设计结构、定义动作，再把它们带进真实世界。",
+      "en": "Design structure, define motion, and bring every idea into the physical world with Oyscat."
+    },
+    "creationIsAlreadyInMotion": {
+      "zh": "创造，正在发生。",
+      "en": "Creation is already in motion."
+    },
+    "oyscatFirstClosedBetaIllustration": {
+      "zh": "Oyscat 首批内测线稿插画",
+      "en": "Oyscat first closed beta illustration"
+    },
+    "qicoreOpensItsFirstClosedBeta": {
+      "zh": "气核正式开启首批内测",
+      "en": "QiCore opens its first closed beta"
+    },
+    "twentyNineCreatorsAreNowBuildingTheir": {
+      "zh": "29 位来自工程、建造游戏与创意行业的用户，开始用 Oyscat 搭建自己的项目。",
+      "en": "Twenty-nine creators are now building their own projects with the first closed beta."
+    },
+    "readTheStory": {
+      "zh": "阅读动态",
+      "en": "Read the story"
+    },
+    "fromIdeaToObject": {
+      "zh": "02 / 从想法到实物",
+      "en": "02 / FROM IDEA TO OBJECT"
+    },
+    "designConnectCreate": {
+      "zh": "设计 · 连接 · 创造",
+      "en": "DESIGN · CONNECT · CREATE"
+    },
+    "text05Latest": {
+      "zh": "05 / 最新动态",
+      "en": "05 / LATEST"
+    },
+    "value20260816": {
+      "zh": "2026.08.16",
+      "en": "2026.08.16"
+    }
+  },
+  "homeCarousel": {
+    "oyscatSmartHardware": {
+      "zh": "Oyscat 智能硬件产品展示",
+      "en": "Oyscat smart hardware"
+    },
+    "thinkItMakeIt": {
+      "zh": "气核引领个人造物方式变革",
+      "en": "QiCore leads a transformation in personal creation."
+    },
+    "fromAnIdeaToSomethingRealPut": {
+      "zh": "意图驱动，让物理世界的自由创造属于每个人。",
+      "en": "Driven by intent, bringing everyone the freedom to create in the physical world."
+    },
+    "exploreOyscat": {
+      "zh": "探索 Oyscat",
+      "en": "Explore Oyscat"
+    },
+    "aCreativePixelWorkshop": {
+      "zh": "充满创造力的像素工坊",
+      "en": "A creative pixel workshop"
+    },
+    "createWhatSNext": {
+      "zh": "Oyscat",
+      "en": "Oyscat"
+    },
+    "joinCuriousMakersAndBringNewPossibilities": {
+      "zh": "Oyscat 是 GenPI 体系下的首个落地实现。我们重构造物的全链路，让创作如同游戏一般充满乐趣，任何人都能亲手实现创意，打造专属作品。",
+      "en": "Oyscat is the first practical implementation of GenPI. We reimagine the entire creation process, making it as playful as a game so anyone can bring ideas to life and build something uniquely their own."
+    },
+    "aiDesignAndSimulation": {
+      "zh": "AI 驱动的设计与仿真系统",
+      "en": "An AI-driven design and simulation system"
+    },
+    "reusableElectronicModules": {
+      "zh": "标准化、去中心化且可重复利用的电子模块",
+      "en": "Standardized, decentralized, and reusable electronic modules"
+    },
+    "agileElectrifiedCreation": {
+      "zh": "赋能用户实现极致敏捷的电气化造物",
+      "en": "Empowering users to build electrified creations with exceptional agility"
+    },
+    "joinUs": {
+      "zh": "加入我们",
+      "en": "Join us"
+    },
+    "featuredStories": {
+      "zh": "QiCore 精选",
+      "en": "Featured stories"
+    },
+    "chooseSlide": {
+      "zh": "轮播分页",
+      "en": "Choose slide"
+    },
+    "categoryCreation": {
+      "zh": "QICORE / 气造万物",
+      "en": "QICORE / MAKE SMART"
+    },
+    "categoryTogether": {
+      "zh": "OYSCAT / 产品",
+      "en": "OYSCAT / PRODUCT"
+    }
+  },
+  "homeScreens": {
+    "heroEyebrow": {
+      "zh": "QICORE / 气造万物",
+      "en": "QICORE / MAKE SMART"
+    },
+    "heroTitle": {
+      "zh": "气核引领\n个人造物方式变革",
+      "en": "QiCore leads a transformation in personal creation."
+    },
+    "heroSubtitle": {
+      "zh": "意图驱动，让物理世界的自由创造属于每个人",
+      "en": "Driven by intent, bringing everyone the freedom to create in the physical world"
+    },
+    "scrollHint": {
+      "zh": "向下滚动",
+      "en": "Scroll"
+    },
+    "genpiEyebrow": {
+      "zh": "02 / 技术体系",
+      "en": "02 / TECHNOLOGY"
+    },
+    "genpiTitle": {
+      "zh": "生成式物理具现 (GenPI)",
+      "en": "Generative Physical Instantiation (GenPI)"
+    },
+    "genpiDescription": {
+      "zh": "生成式物理具现是从人类意图直达功能性物理实体的技术体系",
+      "en": "GenPI is the technology system that turns human intent directly into functional physical artifacts."
+    },
+    "genpiIntentStep": {
+      "zh": "01 / 意图",
+      "en": "01 / INTENT"
+    },
+    "genpiIntent": {
+      "zh": "人类意图",
+      "en": "Human intent"
+    },
+    "genpiArtifactStep": {
+      "zh": "02 / 实体",
+      "en": "02 / PHYSICAL"
+    },
+    "genpiArtifact": {
+      "zh": "功能性物理实体",
+      "en": "Functional physical artifact"
+    },
+    "genpiPrompt": {
+      "zh": "帮我搭建一个飞机，然后起飞",
+      "en": "Build me an airplane, then take off"
+    },
+    "genpiPromptPlaceholder": {
+      "zh": "描述你想创造的东西…",
+      "en": "Describe what you want to make…"
+    },
+    "genpiPromptLabel": {
+      "zh": "演示输入框",
+      "en": "Demo prompt"
+    },
+    "genpiBuildToast": {
+      "zh": "开始搭建",
+      "en": "Start building"
+    },
+    "genpiBuildWorking": {
+      "zh": "正在搭建",
+      "en": "Building"
+    },
+    "genpiBuildDone": {
+      "zh": "已起飞，用时",
+      "en": "Airborne in"
+    },
+    "genpiBuildDoneShort": {
+      "zh": "搭建完成",
+      "en": "Built"
+    },
+    "genpiBuildLive": {
+      "zh": "实时搭建",
+      "en": "LIVE BUILD"
+    },
+    "genpiBuildSceneLabel": {
+      "zh": "由方块、长板、玻璃等模块在跑道上逐步搭建并起飞的飞机",
+      "en": "An airplane assembled on the runway from blocks, planks, glass and other modules, then taking off"
+    },
+    "genpiBuildStepFuselage": {
+      "zh": "机身",
+      "en": "Fuselage"
+    },
+    "genpiBuildStepWings": {
+      "zh": "主翼",
+      "en": "Wings"
+    },
+    "genpiBuildStepCockpit": {
+      "zh": "驾驶舱与舷窗",
+      "en": "Cockpit & windows"
+    },
+    "genpiBuildStepTail": {
+      "zh": "尾翼",
+      "en": "Tail"
+    },
+    "genpiBuildStepRotor": {
+      "zh": "主螺旋桨",
+      "en": "Main propeller"
+    },
+    "genpiBuildStepGear": {
+      "zh": "起落架",
+      "en": "Landing gear"
+    },
+    "genpiBuildStepEngines": {
+      "zh": "发动机",
+      "en": "Engines"
+    },
+    "genpiBuildStepDetails": {
+      "zh": "航灯与涂装",
+      "en": "Lights & trim"
+    },
+    "genpiFlightRow": {
+      "zh": "起飞",
+      "en": "Takeoff"
+    },
+    "genpiFlightAlign": {
+      "zh": "启动引擎",
+      "en": "Engine start"
+    },
+    "genpiFlightRoll": {
+      "zh": "滑跑加速",
+      "en": "Takeoff roll"
+    },
+    "genpiFlightLiftoff": {
+      "zh": "抬头离地",
+      "en": "Liftoff"
+    },
+    "genpiFlightGear": {
+      "zh": "收起落架",
+      "en": "Gear up"
+    },
+    "genpiFlightClimb": {
+      "zh": "爬升",
+      "en": "Climbing"
+    },
+    "genpiFlightCruise": {
+      "zh": "巡航",
+      "en": "Cruising"
+    },
+    "genpiThinking": {
+      "zh": "思考中",
+      "en": "Thinking"
+    },
+    "genpiThought": {
+      "zh": "已思考",
+      "en": "Thought for"
+    },
+    "genpiThoughtToggle": {
+      "zh": "思考过程",
+      "en": "Thought process"
+    },
+    "genpiThoughtIntent": {
+      "zh": "用户想要一架飞机，而且搭好之后要真的能起飞，所以结构和起飞都得一起规划。",
+      "en": "They want a plane that actually flies once it's built, so the structure and the takeoff have to be planned together."
+    },
+    "genpiThoughtStructure": {
+      "zh": "先用方块垒出机身当骨架，主翼、驾驶舱、发动机、尾翼、螺旋桨、起落架和航灯依次挂上去：共 {steps} 个步骤、{modules} 个模块。",
+      "en": "Blocks first, to make the fuselage the spine; wings, cockpit, engines, tail, propeller, landing gear and lights attach to it in turn: {steps} steps, {modules} modules."
+    },
+    "genpiThoughtMaterials": {
+      "zh": "主翼和水平尾翼用长板，驾驶舱和舷窗用玻璃；两台动力舱左右对称挂在主翼下方，让重心落在主翼附近。",
+      "en": "Planks for the wings and tailplane, glass for the canopy and windows; two engines hang symmetrically under the wings to keep the balance point near the wing."
+    },
+    "genpiThoughtGear": {
+      "zh": "起落架：两个主轮在主翼下方，前轮靠近机头，滑跑时机身才能保持水平。",
+      "en": "Landing gear: two main wheels under the wings and a nose wheel up front, so the fuselage stays level on the takeoff roll."
+    },
+    "genpiThoughtTakeoff": {
+      "zh": "规划起飞：跑道航向 {heading}°，启动引擎 → 滑跑加速 → 抬头离地 → 收起落架 → 爬升。",
+      "en": "Takeoff: runway {heading}°, engine start → takeoff roll → liftoff → gear up → climb."
+    },
+    "genpiPilotHint": {
+      "zh": "悬停进入飞行视角",
+      "en": "Hover for pilot view"
+    },
+    "genpiPilotActive": {
+      "zh": "飞行视角 · 移开退出",
+      "en": "Pilot view · move away to exit"
+    },
+    "genpiPilotTapHint": {
+      "zh": "点击进入飞行视角",
+      "en": "Tap for pilot view"
+    },
+    "genpiPilotTapActive": {
+      "zh": "飞行视角 · 点击退出",
+      "en": "Pilot view · tap to exit"
+    },
+    "genpiCompassLabel": {
+      "zh": "航向",
+      "en": "HDG"
+    },
+    "genpiBuildWaiting": {
+      "zh": "等待指令",
+      "en": "Waiting for a prompt"
+    },
+    "genpiBuildReceived": {
+      "zh": "已接收指令",
+      "en": "Prompt received"
+    },
+    "genpiBuildTally": {
+      "zh": "模块用量",
+      "en": "MODULES"
+    },
+    "genpiModuleBlock": {
+      "zh": "方块",
+      "en": "Block"
+    },
+    "genpiModulePlank": {
+      "zh": "长板",
+      "en": "Plank"
+    },
+    "genpiModuleGlass": {
+      "zh": "玻璃",
+      "en": "Glass"
+    },
+    "genpiModuleEngine": {
+      "zh": "动力舱",
+      "en": "Engine"
+    },
+    "genpiModuleRotor": {
+      "zh": "桨叶",
+      "en": "Rotor"
+    },
+    "genpiModuleFin": {
+      "zh": "尾翼板",
+      "en": "Fin"
+    },
+    "genpiModuleStrut": {
+      "zh": "支柱",
+      "en": "Strut"
+    },
+    "genpiModuleWheel": {
+      "zh": "轮子",
+      "en": "Wheel"
+    },
+    "genpiModuleLight": {
+      "zh": "航灯",
+      "en": "Light"
+    },
+    "genpiModuleTrim": {
+      "zh": "饰条",
+      "en": "Trim"
+    },
+    "productEyebrow": {
+      "zh": "03 / 产品",
+      "en": "03 / PRODUCT"
+    },
+    "productTitle": {
+      "zh": "Oyscat",
+      "en": "Oyscat"
+    },
+    "productDescription": {
+      "zh": "Oyscat 是 GenPI 体系下的首个落地实现。我们重构造物的全链路，让创作如同游戏一般充满乐趣，任何人都能亲手实现创意，打造专属作品。",
+      "en": "Oyscat is the first practical implementation of GenPI. We reimagine the entire creation process, making it as playful as a game so anyone can bring ideas to life and build something uniquely their own."
+    },
+    "productFeatureDesign": {
+      "zh": "AI 驱动的设计与仿真系统",
+      "en": "An AI-driven design and simulation system"
+    },
+    "productFeatureModules": {
+      "zh": "标准化、去中心化且可重复利用的电子模块",
+      "en": "Standardized, decentralized, and reusable electronic modules"
+    },
+    "productFeatureElectrify": {
+      "zh": "赋能用户实现极致敏捷的电气化造物",
+      "en": "Empowering users to build electrified creations with exceptional agility"
+    },
+    "enterProductPage": {
+      "zh": "进入产品页",
+      "en": "Visit product site"
+    },
+    "imagePlaceholder": {
+      "zh": "图片占位",
+      "en": "IMAGE"
+    },
+    "heroImageAlt": {
+      "zh": "Oyscat 智能硬件模块",
+      "en": "Oyscat smart hardware modules"
+    }
+  },
+  "homeExplorerImage": {
+    "oyscatBinocularExplorationRobot": {
+      "zh": "Oyscat 双目探险机器人",
+      "en": "Oyscat binocular exploration robot"
+    }
+  },
+  "homeLaptopWorkspace": {
+    "bringYourIdeasToLife": {
+      "zh": "让想法，运行起来。",
+      "en": "Bring your ideas to life."
+    },
+    "scrollToOpen": {
+      "zh": "向下滚动，开启创造",
+      "en": "SCROLL TO OPEN"
+    },
+    "designSimulateThenBuild": {
+      "zh": "先设计，再验证。",
+      "en": "Design. Simulate. Then build."
+    },
+    "bringStructureControlAndSimulationIntoOne": {
+      "zh": "把结构、控制与仿真放在同一个工作台。在动手组装之前，先让想法运行起来。",
+      "en": "Bring structure, control and simulation into one workspace. See your idea work before you assemble it."
+    },
+    "shapeDefineTest": {
+      "zh": "搭建想法 · 定义动作 · 验证方案",
+      "en": "SHAPE · DEFINE · TEST"
+    },
+    "exploreOyscatWorkspace": {
+      "zh": "探索 Oyscat 工作台",
+      "en": "Explore Oyscat Workspace"
+    },
+    "text02OyscatWorkspace": {
+      "zh": "02 / OYSCAT 工作台",
+      "en": "02 / OYSCAT WORKSPACE"
+    }
+  },
+  "homeWorkspaceVideo": {
+    "volume": {
+      "zh": "音量",
+      "en": "Volume"
+    },
+    "fullscreen": {
+      "zh": "全屏",
+      "en": "Fullscreen"
+    },
+    "playbackSpeed": {
+      "zh": "播放速度",
+      "en": "Playback speed"
+    },
+    "pauseDemo": {
+      "zh": "暂停演示",
+      "en": "Pause demo"
+    },
+    "playDemo": {
+      "zh": "播放演示",
+      "en": "Play demo"
+    },
+    "oyscatWorkspaceDemo": {
+      "zh": "Oyscat 工作台演示",
+      "en": "Oyscat Workspace demo"
+    },
+    "oyscatWorkspaceDemo2": {
+      "zh": "OYSCAT / 工作台演示",
+      "en": "OYSCAT / WORKSPACE DEMO"
+    }
+  },
+  "homePage": {
+    "joinUs": {
+      "zh": "加入我们",
+      "en": "Join us"
+    },
+    "viewOpenRoles": {
+      "zh": "查看开放岗位",
+      "en": "View open roles"
+    },
+    "closePalette": {
+      "zh": "关闭调色板",
+      "en": "Close palette"
+    },
+    "multicolor": {
+      "zh": "多彩",
+      "en": "Multicolor"
+    },
+    "white": {
+      "zh": "白色",
+      "en": "White"
+    },
+    "black": {
+      "zh": "黑色",
+      "en": "Black"
+    },
+    "qi": {
+      "zh": "Qi",
+      "en": "Qi"
+    },
+    "core": {
+      "zh": "Core",
+      "en": "Core"
+    },
+    "makeSmart": {
+      "zh": "Make Smart ",
+      "en": "Make Smart "
+    },
+    "createAnything": {
+      "zh": " 气造万物",
+      "en": " Create Anything"
+    },
+    "qicoreTechnology": {
+      "zh": "气核科技（QiCore）",
+      "en": "QiCore Technology"
+    },
+    "bringIdeasIntoRealityAndHelpEveryoneGet": {
+      "zh": " 把想法带到现实，让每个人离真实造物更近一步。",
+      "en": " Bring ideas into reality and help everyone get closer to physical creation."
+    },
+    "info": {
+      "zh": "info",
+      "en": "info"
+    },
+    "hr": {
+      "zh": "hr",
+      "en": "hr"
+    },
+    "qicoreAi": {
+      "zh": "@qicore.ai",
+      "en": "@qicore.ai"
+    }
+  },
+  "legacyHome": {
+    "joinUs": {
+      "zh": "加入我们",
+      "en": "Join us"
+    },
+    "viewOpenRoles": {
+      "zh": "查看开放岗位",
+      "en": "View open roles"
+    },
+    "qicoreTechnology": {
+      "zh": "气核科技（QiCore）",
+      "en": "QiCore Technology"
+    },
+    "isBuildingToolsForIntentDrivenPhysical": {
+      "zh": " 专注于生成式物理造物，致力于让每个人实现「所想即所造」。",
+      "en": " is building tools for intent-driven physical creation."
+    },
+    "emailInfoQicoreAi": {
+      "zh": "发送邮件至 info@qicore.ai",
+      "en": "Email info@qicore.ai"
+    },
+    "meetOyscat": {
+      "zh": "认识 Oyscat",
+      "en": "Meet Oyscat"
+    },
+    "oyscat": {
+      "zh": "Oyscat",
+      "en": "Oyscat"
+    },
+    "backToCanvas": {
+      "zh": "返回创造场",
+      "en": "Back to canvas"
+    },
+    "whereCreationBegins": {
+      "zh": "让创造，自然发生。",
+      "en": "Where creation begins."
+    },
+    "theEndToEndWorkspaceForMakers": {
+      "zh": "面向创客与硬件创造者的全链路工作空间",
+      "en": "The end-to-end workspace for makers and hardware creators"
+    },
+    "voxelColorPalette": {
+      "zh": "体素调色板",
+      "en": "Voxel color palette"
+    },
+    "multicolor": {
+      "zh": "多彩",
+      "en": "Multicolor"
+    },
+    "white": {
+      "zh": "白色",
+      "en": "White"
+    },
+    "black": {
+      "zh": "黑色",
+      "en": "Black"
+    },
+    "x0Y0Z0": {
+      "zh": "X: 0 | Y: 0 | Z: 0",
+      "en": "X: 0 | Y: 0 | Z: 0"
+    },
+    "qi": {
+      "zh": "Qi",
+      "en": "Qi"
+    },
+    "core": {
+      "zh": "Core",
+      "en": "Core"
+    },
+    "makeSmart": {
+      "zh": "Make Smart ",
+      "en": "Make Smart "
+    },
+    "createAnything": {
+      "zh": " 气造万物",
+      "en": " Create Anything"
+    },
+    "info": {
+      "zh": "info",
+      "en": "info"
+    },
+    "hr": {
+      "zh": "hr",
+      "en": "hr"
+    },
+    "qicoreAi": {
+      "zh": "@qicore.ai",
+      "en": "@qicore.ai"
+    },
+    "qicoreWorkspace": {
+      "zh": "QiCore 工作台",
+      "en": "QiCore Workspace"
+    },
+    "holdToClear": {
+      "zh": "长按清空",
+      "en": "HOLD TO CLEAR"
+    },
+    "pieceLibrary": {
+      "zh": "积木",
+      "en": "Pieces"
+    },
+    "choosePiece": {
+      "zh": "选择积木",
+      "en": "Choose a piece"
+    },
+    "pieceCube": {
+      "zh": "方块",
+      "en": "Block"
+    },
+    "pieceCubeHint": {
+      "zh": "拖动可拉成长方体",
+      "en": "Drag to stretch"
+    },
+    "piecePlate": {
+      "zh": "板",
+      "en": "Plate"
+    },
+    "piecePlateHint": {
+      "zh": "¼ 格高，拖动铺开",
+      "en": "¼ high, drag to spread"
+    },
+    "pieceGlass": {
+      "zh": "玻璃板",
+      "en": "Glass plate"
+    },
+    "pieceGlassHint": {
+      "zh": "半透明，拖动铺开",
+      "en": "See-through, drag to spread"
+    },
+    "pieceWheel": {
+      "zh": "轮子",
+      "en": "Wheel"
+    },
+    "pieceWheelHint": {
+      "zh": "贴在侧面会立起来",
+      "en": "Stands up on a side"
+    }
+  },
+  "newsEntryInteraction": {
+    "readStory": {
+      "zh": "展开正文",
+      "en": "Read story"
+    },
+    "closeStory": {
+      "zh": "收起正文",
+      "en": "Close story"
+    }
+  },
+  "demoVideo": {
+    "oyscatWorkspaceDemo": {
+      "zh": "Oyscat 工作台演示",
+      "en": "Oyscat Workspace demo"
+    },
+    "pauseDemo": {
+      "zh": "暂停演示",
+      "en": "Pause demo"
+    },
+    "playDemo": {
+      "zh": "播放演示",
+      "en": "Play demo"
+    },
+    "pause": {
+      "zh": "暂停",
+      "en": "Pause"
+    },
+    "play": {
+      "zh": "播放",
+      "en": "Play"
+    }
+  },
+  "oyscatImage": {
+    "close": {
+      "zh": "关闭",
+      "en": "Close"
+    },
+    "viewAgain": {
+      "zh": "再次查看",
+      "en": "View again"
+    },
+    "explore": {
+      "zh": "点击探索",
+      "en": "Explore"
+    }
+  },
+  "oyscatTestimonials": {
+    "linZhiyuan": {
+      "zh": "林知远",
+      "en": "Lin Zhiyuan"
+    },
+    "hardwareMaker": {
+      "zh": "硬件创客",
+      "en": "Hardware maker"
+    },
+    "aPrototypeUsedToMeanSchematicsPart": {
+      "zh": "以前做原型要画原理图、选器件、焊板子。现在把想法拖进工作台，AI 写控制程序、仿真跑通，周末就能把东西做出来。",
+      "en": "A prototype used to mean schematics, part picking and soldering. Now I drop the idea into the workspace, AI writes the control code, the simulation clears, and it exists by the weekend."
+    },
+    "simulationFirst": {
+      "zh": "仿真前置验证",
+      "en": "Simulation first"
+    },
+    "weekendPrototype": {
+      "zh": "周末出原型",
+      "en": "Weekend prototype"
+    },
+    "mayaSheng": {
+      "zh": "盛梦瑶",
+      "en": "Maya Sheng"
+    },
+    "makerEducator": {
+      "zh": "中学创客教师",
+      "en": "Maker educator"
+    },
+    "theBiggestChangeInClassIsThat": {
+      "zh": "课堂上最明显的变化，是学生不再卡在电路和代码上。他们把时间花在“我想让这个机器人做什么”，而不是“为什么它不亮”。",
+      "en": "The biggest change in class is that students stop getting stuck on circuits and code. Their time goes to “what should this robot do”, not “why won't it light up”."
+    },
+    "noCodeStart": {
+      "zh": "零门槛入门",
+      "en": "No-code start"
+    },
+    "classroomReady": {
+      "zh": "课堂友好",
+      "en": "Classroom ready"
+    },
+    "chenMo": {
+      "zh": "陈默",
+      "en": "Chen Mo"
+    },
+    "roboticsHobbyist": {
+      "zh": "机器人爱好者",
+      "en": "Robotics hobbyist"
+    },
+    "theOneToOneMatchBetweenVirtual": {
+      "zh": "虚拟模块和实体模块一一对应这点太关键了。我先在屏幕里把动作调顺，再一键下载到实体模块，装进壳里就能跑，几乎没有落差。",
+      "en": "The one-to-one match between virtual and physical blocks is the key. I tune the motion on screen, download it to the real block, snap it into a shell, and it runs."
+    },
+    "whatYouSeeRuns": {
+      "zh": "所见即所得",
+      "en": "What you see runs"
+    },
+    "lowLatencyLink": {
+      "zh": "低延时联动",
+      "en": "Low-latency link"
+    },
+    "diegoAlvarez": {
+      "zh": "Diego Alvarez",
+      "en": "Diego Alvarez"
+    },
+    "productDesigner": {
+      "zh": "产品设计师",
+      "en": "Product designer"
+    },
+    "whatINeedToValidateIsInteraction": {
+      "zh": "我需要验证的是交互和结构，而不是电子。设计完直接导出 3D 模型打印外壳，和电子模块拼在一起，第二天就能拿到拿在手上的版本。",
+      "en": "What I need to validate is interaction and form, not electronics. I export the 3D shell, print it, snap the blocks in, and hold a real version the next day."
+    },
+    "text3dPrintReady": {
+      "zh": "3D 打印落地",
+      "en": "3D-print ready"
+    },
+    "formValidation": {
+      "zh": "结构验证",
+      "en": "Form validation"
+    },
+    "zhouYutong": {
+      "zh": "周雨桐",
+      "en": "Zhou Yutong"
+    },
+    "indieDeveloper": {
+      "zh": "独立开发者",
+      "en": "Indie developer"
+    },
+    "iterationSpeedIsTheWinIfIt": {
+      "zh": "最省时间的是试错。方案在仿真里跑通了再动手，材料基本不浪费，迭代从“一周一次”变成“一天几次”。",
+      "en": "Iteration speed is the win. If it clears in simulation before I build, I waste almost no material, and my loop goes from once a week to several times a day."
+    },
+    "fastIteration": {
+      "zh": "快速迭代",
+      "en": "Fast iteration"
+    },
+    "lessWaste": {
+      "zh": "少浪费",
+      "en": "Less waste"
+    },
+    "kenSato": {
+      "zh": "佐藤健",
+      "en": "Ken Sato"
+    },
+    "makerspaceLead": {
+      "zh": "创客空间主理人",
+      "en": "Makerspace lead"
+    },
+    "theBlocksCanBeErasedAndRecombined": {
+      "zh": "模块可以反复擦写、重新组合，空间里的物料周转率高了很多。同一批模块，这个月做灯，下个月做小车，孩子们很买账。",
+      "en": "The blocks can be erased and recombined, so our materials turn over much faster. The same set becomes a lamp this month and a rover next month. The kids love it."
+    },
+    "reusableBlocks": {
+      "zh": "模块复用",
+      "en": "Reusable blocks"
+    },
+    "sustainableMaking": {
+      "zh": "可持续造物",
+      "en": "Sustainable making"
+    },
+    "text04LovedByMakers": {
+      "zh": "04 / 创作者喜爱",
+      "en": "04 / LOVED BY MAKERS"
+    },
+    "makersAreAlreadyBuildingWithOyscat": {
+      "zh": "他们已经在用 Oyscat 造物",
+      "en": "Makers are already building with Oyscat"
+    },
+    "fromStudentsAndEducatorsToIndieDevelopers": {
+      "zh": "从学生、教师到独立开发者与创客空间，看看他们如何把想法变成手边的实物。",
+      "en": "From students and educators to indie developers and makerspaces — see how they turn ideas into physical things."
+    },
+    "oyscatMakers": {
+      "zh": "Oyscat 创作者",
+      "en": "Oyscat makers"
+    },
+    "tapAnAvatarToReadTheirReview": {
+      "zh": "点击任意头像，查看 TA 的评价",
+      "en": "Tap an avatar to read their review"
+    },
+    "text5OutOf5Stars": {
+      "zh": "5 分（满分 5 分）",
+      "en": "5 out of 5 stars"
+    },
+    "betaBuilder": {
+      "zh": "内测用户",
+      "en": "BETA BUILDER"
+    },
+    "maker": {
+      "zh": "创作者 ",
+      "en": "MAKER "
+    }
+  },
+  "pageTitles": {
+    "qicoreTechnologyThinkItMakeIt": {
+      "zh": "气核科技 QiCore | 所想，即造",
+      "en": "QiCore Technology | Think It. Make It."
+    },
+    "aboutUsQicore": {
+      "zh": "关于我们 | QiCore",
+      "en": "About Us | QiCore"
+    },
+    "careersQicore": {
+      "zh": "开放岗位 | QiCore",
+      "en": "Careers | QiCore"
+    },
+    "newsQicore": {
+      "zh": "新闻动态 | QiCore",
+      "en": "News | QiCore"
+    },
+    "oyscatProductQicore": {
+      "zh": "Oyscat 产品 | QiCore",
+      "en": "Oyscat Product | QiCore"
+    },
+    "teamQicore": {
+      "zh": "团队 | QiCore",
+      "en": "Team | QiCore"
+    },
+    "relaxQicore": {
+      "zh": "轻松一刻 | QiCore",
+      "en": "Take a break | QiCore"
+    },
+    "styleLabQicore": {
+      "zh": "风格实验室 | QiCore",
+      "en": "Style Lab | QiCore"
+    }
+  },
+  "config": {
+    "switchToChinese": {
+      "zh": "切换为英文",
+      "en": "Switch to Chinese"
+    }
+  },
+  "common": {
+    "companyName": {
+      "zh": "气核科技",
+      "en": "QiCore Technology"
+    },
+    "brand": {
+      "zh": "QiCore",
+      "en": "QiCore"
+    },
+    "productName": {
+      "zh": "Oyscat",
+      "en": "Oyscat"
+    },
+    "close": {
+      "zh": "关闭",
+      "en": "Close"
+    },
+    "imagePreview": {
+      "zh": "图片预览",
+      "en": "Image preview"
+    },
+    "closePreview": {
+      "zh": "关闭 ×",
+      "en": "Close ×"
+    },
+    "filmTitle": {
+      "zh": "气核科技：MAKE SMART",
+      "en": "QiCore Technology: MAKE SMART"
+    },
+    "titleTemplate": {
+      "zh": "%s | QiCore",
+      "en": "%s | QiCore"
+    },
+    "copyright": {
+      "zh": "© {year} QiCore Technology",
+      "en": "© {year} QiCore Technology"
+    },
+    "email": {
+      "zh": "发送邮件至 {email}",
+      "en": "Email {email}"
+    },
+    "languageChinese": {
+      "zh": "中",
+      "en": "中"
+    },
+    "languageEnglish": {
+      "zh": "EN",
+      "en": "EN"
+    },
+    "organizationAliases": [
+      {
+        "zh": "qicore",
+        "en": "qicore"
+      },
+      {
+        "zh": "杭州炁核科技有限公司",
+        "en": "Hangzhou QiCore Technology Co., Ltd."
+      },
+      {
+        "zh": "深圳气核科技有限公司",
+        "en": "Shenzhen QiCore Technology Co., Ltd."
+      }
+    ]
+  },
+  "runtime": {
+    "slideDescription": {
+      "zh": "第 {index} 张，共 {total} 张",
+      "en": "Slide {index} of {total}"
+    },
+    "slideRole": {
+      "zh": "幻灯片",
+      "en": "slide"
+    },
+    "roleCount": {
+      "zh": "{count} 个职位",
+      "en": "{count} roles"
+    },
+    "roleCountOne": {
+      "zh": "{count} 个职位",
+      "en": "{count} role"
+    },
+    "rolesUpdated": {
+      "zh": "最后更新 · {date}",
+      "en": "Updated · {date}"
+    },
+    "rolePosted": {
+      "zh": "发布于 {date}",
+      "en": "Posted {date}"
+    },
+    "reviewLabel": {
+      "zh": "{name}，{role}，查看评价",
+      "en": "{name}, {role}, view testimonial"
+    },
+    "makerIndex": {
+      "zh": "创作者 {index} / {total}",
+      "en": "MAKER {index} / {total}"
+    },
+    "slideLabel": {
+      "zh": "第 {index} 张",
+      "en": "Slide {index}"
+    },
+    "carousel": {
+      "zh": "轮播",
+      "en": "carousel"
+    },
+    "swiperSlide": {
+      "zh": "第 {{index}} 张，共 {{slidesLength}} 张",
+      "en": "{{index}} / {{slidesLength}}"
+    },
+    "swiperPrevious": {
+      "zh": "上一张",
+      "en": "Previous slide"
+    },
+    "swiperNext": {
+      "zh": "下一张",
+      "en": "Next slide"
+    },
+    "swiperFirst": {
+      "zh": "已经是第一张",
+      "en": "This is the first slide"
+    },
+    "swiperLast": {
+      "zh": "已经是最后一张",
+      "en": "This is the last slide"
+    },
+    "swiperBullet": {
+      "zh": "跳转到第 {{index}} 张",
+      "en": "Go to slide {{index}}"
+    },
+    "selectColor": {
+      "zh": "选择{face}颜色",
+      "en": "Select {face} color"
+    },
+    "pauseDemo": {
+      "zh": "暂停演示",
+      "en": "Pause demo"
+    },
+    "playDemo": {
+      "zh": "播放演示",
+      "en": "Play demo"
+    },
+    "volume": {
+      "zh": "音量",
+      "en": "Volume"
+    },
+    "fullscreen": {
+      "zh": "全屏",
+      "en": "Fullscreen"
+    },
+    "playbackSpeed": {
+      "zh": "播放速度",
+      "en": "Playback speed"
+    },
+    "workspaceDemo": {
+      "zh": "Oyscat 工作台演示",
+      "en": "Oyscat Workspace demo"
+    },
+    "explorerAlt": {
+      "zh": "Oyscat 双目探险机器人",
+      "en": "Oyscat binocular exploration robot"
+    },
+    "top": {
+      "zh": "顶部",
+      "en": "top"
+    },
+    "front": {
+      "zh": "正面",
+      "en": "front"
+    },
+    "right": {
+      "zh": "右侧",
+      "en": "right"
+    },
+    "left": {
+      "zh": "左侧",
+      "en": "left"
+    },
+    "back": {
+      "zh": "背面",
+      "en": "back"
+    },
+    "bottom": {
+      "zh": "底部",
+      "en": "bottom"
+    },
+    "wireframe": {
+      "zh": "从线框到物理实体",
+      "en": "From wireframe to physical object"
+    },
+    "assembly": {
+      "zh": "模块装配结构",
+      "en": "Modular assembly"
+    },
+    "partnerLogos": {
+      "zh": "合作伙伴标识",
+      "en": "Partner logos"
+    },
+    "logoLink": {
+      "zh": "标识链接",
+      "en": "Logo link"
+    },
+    "intentFlow": {
+      "zh": "想法  →  设计  →  现实",
+      "en": "idea  →  design  →  reality"
+    },
+    "undo": {
+      "zh": "↶ 撤销",
+      "en": "↶ Undo"
+    },
+    "clear": {
+      "zh": "清空",
+      "en": "Clear"
+    },
+    "clearKicker": {
+      "zh": "QICORE / 画布",
+      "en": "QICORE / CANVAS"
+    },
+    "clearTitle": {
+      "zh": "清空画布，重新搭建？",
+      "en": "Start with a clear canvas?"
+    },
+    "clearDescription": {
+      "zh": "所有积木将被移除，你仍可以在色盘中撤销恢复。",
+      "en": "All blocks will be removed. You can undo this from the palette."
+    },
+    "keepBuilding": {
+      "zh": "继续搭建",
+      "en": "Keep building"
+    },
+    "clearCanvas": {
+      "zh": "清空画布",
+      "en": "Clear canvas"
+    },
+    "multicolor": {
+      "zh": "多彩",
+      "en": "MULTI"
+    },
+    "white": {
+      "zh": "白色",
+      "en": "WHITE"
+    },
+    "black": {
+      "zh": "黑色",
+      "en": "BLACK"
+    }
+  },
+  "cssLabels": {
+    "module": {
+      "zh": "OYSCAT / 01",
+      "en": "OYSCAT / 01"
+    },
+    "creationSystems": {
+      "zh": "QICORE / 造物系统 / 2026",
+      "en": "QICORE / CREATION SYSTEMS / 2026"
+    },
+    "prototype": {
+      "zh": "原型区域 / 比例 1:4",
+      "en": "PROTOTYPE FIELD / SCALE 1:4"
+    },
+    "users": {
+      "zh": "用户",
+      "en": "USERS"
+    },
+    "productNote": {
+      "zh": "产品手记 / 01",
+      "en": "PRODUCT NOTE / 01"
+    },
+    "workspaceLog": {
+      "zh": "工作台记录 / 02",
+      "en": "WORKSPACE LOG / 02"
+    },
+    "productRecord": {
+      "zh": "产品记录 / 03",
+      "en": "PRODUCT RECORD / 03"
+    },
+    "intentObject": {
+      "zh": "意图  →  实物",
+      "en": "INTENT  →  OBJECT"
+    },
+    "fieldNote": {
+      "zh": "QICORE / 实践手记",
+      "en": "QICORE / FIELD NOTE"
+    },
+    "visualOne": {
+      "zh": "图像 / 01",
+      "en": "VISUAL / 01"
+    },
+    "visualTwo": {
+      "zh": "图像 / 02",
+      "en": "VISUAL / 02"
+    },
+    "signalLog": {
+      "zh": "QICORE / 动态记录 / 2026",
+      "en": "QICORE / SIGNAL LOG / 2026"
+    },
+    "makeSmart": {
+      "zh": "QICORE / 气造万物 / 2026",
+      "en": "QICORE / MAKE SMART / 2026"
+    },
+    "careers": {
+      "zh": "QICORE / 招聘 / 2026",
+      "en": "QICORE / CAREERS / 2026"
+    }
+  },
+  "staticArchive": {
+    "companyNote": {
+      "zh": " 把想法带到现实，欢迎了解公司业务。 ",
+      "en": " Bring ideas into reality. Discover what we do. "
+    },
+    "hiring": {
+      "zh": "我们正在招聘",
+      "en": "WE ARE HIRING"
+    },
+    "coordinates": {
+      "zh": "X: {x} | Y: {y} | Z: {z}",
+      "en": "X: {x} | Y: {y} | Z: {z}"
+    }
+  },
+  "feishuCareers": {
+    "tags": [
+      {
+        "zh": "机械 / 结构",
+        "en": "Mechanical design"
+      },
+      {
+        "zh": "产品结构",
+        "en": "Product engineering"
+      },
+      {
+        "zh": "量产 / DFM",
+        "en": "Manufacturing / DFM"
+      },
+      {
+        "zh": "智能硬件",
+        "en": "Smart hardware"
+      },
+      {
+        "zh": "硬件研发",
+        "en": "Hardware engineering"
+      },
+      {
+        "zh": "消费电子",
+        "en": "Consumer electronics"
+      },
+      {
+        "zh": "电路 / PCB",
+        "en": "Circuit / PCB design"
+      },
+      {
+        "zh": "实习",
+        "en": "Internship"
+      },
+      {
+        "zh": "嵌入式系统",
+        "en": "Embedded systems"
+      },
+      {
+        "zh": "机器人",
+        "en": "Robotics"
+      },
+      {
+        "zh": "MCU / C++",
+        "en": "MCU / C++"
+      }
+    ],
+    "places": [
+      {
+        "zh": "深圳",
+        "en": "Shenzhen"
+      }
+    ],
+    "employment": [
+      {
+        "zh": "全职",
+        "en": "Full-time"
+      },
+      {
+        "zh": "实习",
+        "en": "Internship"
+      },
+      {
+        "zh": "兼职",
+        "en": "Part-time"
+      }
+    ],
+    "compensation": {
+      "zh": "薪资面议",
+      "en": "Compensation discussed during the process"
+    },
+    "internshipSuffix": {
+      "zh": " · 提供实习岗位",
+      "en": " · Internships available"
+    },
+    "location": {
+      "zh": "{place} · {employment}{internship}",
+      "en": "{place} · {employment}{internship}"
+    }
+  },
+  "site": {
+    "about": {
+      "companyEyebrow": {
+        "zh": "公司",
+        "en": "Company"
+      },
+      "filmEyebrow": {
+        "zh": "品牌影片",
+        "en": "Brand film"
+      },
+      "teamEyebrow": {
+        "zh": "团队",
+        "en": "Team"
+      },
+      "teamLead": {
+        "zh": "一群来自硬件、软件、设计与制造领域的造物者。",
+        "en": "A team of builders from hardware, software, design and manufacturing."
+      }
+    },
+    "careers": {
+      "heroEyebrow": {
+        "zh": "加入气核",
+        "en": "Join QiCore"
+      },
+      "openRoles": {
+        "zh": "开放职位",
+        "en": "Open roles"
+      },
+      "processEyebrow": {
+        "zh": "招聘流程",
+        "en": "How we hire"
+      },
+      "viewRoles": {
+        "zh": "查看职位",
+        "en": "View roles"
+      }
+    },
+    "news": {
+      "featured": {
+        "zh": "头条",
+        "en": "Featured"
+      },
+      "moreTitle": {
+        "zh": "更多动态，即将发布",
+        "en": "More stories are on the way"
+      },
+      "applyBeta": {
+        "zh": "申请内测",
+        "en": "Apply for beta"
+      }
+    }
+  }
+}

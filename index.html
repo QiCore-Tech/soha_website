@@ -3,33 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>气核科技（qicore）| 所想，即造</title>
-    <meta name="description" content="气核科技（qicore）官方网站。我们正在构建从想法到真实造物的新方式。欢迎了解公司业务、OysCat、最新动态与团队。">
+    <title data-i18n="pageTitles.qicoreTechnologyThinkItMakeIt"></title>
+    <meta name="description" data-i18n-content="layout.qicoreQicoreOyscat">
+    <script defer src="./public/legacy-i18n.js" data-catalog="./i18n/messages.json"></script>
     <meta name="robots" content="index,follow">
     <link rel="canonical" href="https://qicore.ai/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="气核科技（qicore）| 所想，即造">
-    <meta property="og:description" content="气核科技（qicore）官方网站。我们正在构建从想法到真实造物的新方式。欢迎了解公司业务、OysCat、最新动态与团队。">
+    <meta property="og:title" data-i18n-content="pageTitles.qicoreTechnologyThinkItMakeIt">
+    <meta property="og:description" data-i18n-content="layout.qicoreQicoreOyscat">
     <meta property="og:url" content="https://qicore.ai/">
-    <meta property="og:site_name" content="气核科技 qicore">
+    <meta property="og:site_name" data-i18n-content="common.companyName">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="气核科技（qicore）| 所想，即造">
-    <meta name="twitter:description" content="气核科技（qicore）官方网站。我们正在构建从想法到真实造物的新方式。欢迎了解公司业务、OysCat、最新动态与团队。">
+    <meta name="twitter:title" data-i18n-content="pageTitles.qicoreTechnologyThinkItMakeIt">
+    <meta name="twitter:description" data-i18n-content="layout.qicoreQicoreOyscat">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "气核科技",
-      "alternateName": "qicore",
-      "url": "https://qicore.ai"
-    }
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/misans-vf@1.0.0/lib/MiSans.min.css">
+    <script type="application/ld+json" data-i18n-organization></script>
     <style>
+        @font-face {
+            font-family: 'MiSans';
+            src: url('./font/misans/MiSans-Regular.woff2') format('woff2');
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('./font/misans/MiSans-Medium.woff2') format('woff2');
+            font-style: normal;
+            font-weight: 500;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('./font/misans/MiSans-Semibold.woff2') format('woff2');
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('./font/misans/MiSans-Bold.woff2') format('woff2');
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('./font/misans/MiSans-Heavy.woff2') format('woff2');
+            font-style: normal;
+            font-weight: 900;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Outfit';
+            src: url('./font/outfit/Outfit-VariableFont_wght.woff2') format('woff2');
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Geist Mono';
+            src: url('./font/geist-mono/GeistMono-VariableFont_wght.woff2') format('woff2');
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+        }
+        html:not([data-locale="en"]) [data-lang="en"],
+        html[data-locale="en"] [data-lang="zh"] { display: none !important; }
+        .legacy-locale-toggle { position: fixed; top: 16px; right: 16px; z-index: 10000; min-width: 88px; min-height: 44px; border: 1px solid #ffffff44; border-radius: 6px; background: #181818; color: #fff; cursor: pointer; }
         /* ==========================================
            全局变量与基础设定
            ========================================== */
@@ -56,7 +97,7 @@
             width: 100%; height: 100%;
             background-color: var(--frame-bg);
             overflow: hidden;
-            font-family: 'Outfit', 'MiSans', sans-serif;
+            font-family: 'MiSans', 'Outfit', sans-serif;
             cursor: none;
             perspective: 2000px; 
             display: flex; align-items: center; justify-content: center;
@@ -190,7 +231,7 @@
         }
 
         .projection-title {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Outfit', 'MiSans', sans-serif;
             font-size: clamp(5rem, 14vw, 12rem);
             font-weight: 430;
             letter-spacing: -0.02em;
@@ -258,7 +299,7 @@
         }
 
         .brand-title {
-            font-family: 'Outfit', sans-serif; font-size: clamp(5rem, 14vw, 12rem); font-weight: 200; 
+            font-family: 'Outfit', 'MiSans', sans-serif; font-size: clamp(5rem, 14vw, 12rem); font-weight: 200; 
             letter-spacing: -0.02em; line-height: 1; margin-bottom: 5vh; 
             transform: translateZ(80px) translateY(-10vh); will-change: font-weight;
             text-shadow:
@@ -762,6 +803,7 @@
 </head>
 <body>
 
+    <button class="legacy-locale-toggle" type="button" data-legacy-locale-toggle data-i18n-aria-label="config.switchToChinese"><span data-i18n="common.languageChinese"></span> / <span data-i18n="common.languageEnglish"></span></button>
     <div class="emp-flash" id="emp-flash"></div>
     <div class="ambient-glow" id="ambient-glow"></div>
 
@@ -769,40 +811,40 @@
         <div id="grid-plane">
             <div class="axis-h" id="axis-h"></div>
             <div class="axis-v" id="axis-v"></div>
-            <div class="coord-tracker" id="coord-tracker">X: 0 | Y: 0 | Z: 0</div>
+            <div class="coord-tracker" id="coord-tracker" data-i18n="legacyHome.x0Y0Z0"></div>
         </div>
         
         <div id="voxels-container"></div>
         <div id="magnetic-container"></div>
         <div id="preview-container"></div>
         <div class="projection-layer" id="projection-layer">
-            <div class="projection-shadow projection-title" id="title-shadow"><span class="qi">Qi</span><span class="core">Core</span></div>
+            <div class="projection-shadow projection-title" id="title-shadow"><span class="qi" data-i18n="legacyHome.qi"></span><span class="core" data-i18n="legacyHome.core"></span></div>
             <div class="projection-shadow projection-slogan" id="slogan-shadow">
-                <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
+                <p><span data-i18n="legacyHome.makeSmart"></span><span class="slogan-separator"></span><span data-i18n="legacyHome.createAnything"></span></p>
             </div>
             <div class="projection-shadow projection-footer" id="footer-shadow">
                 <div class="icon-indicator"></div>
                 <div class="slot-machine">
                     <div class="slot-track" id="footer-shadow-track">
-                        <span>info</span>
-                        <span>hr</span>
-                        <span>info</span>
+                        <span data-i18n="legacyHome.info"></span>
+                        <span data-i18n="legacyHome.hr"></span>
+                        <span data-i18n="legacyHome.info"></span>
                     </div>
                 </div>
-                <span class="domain">@qicore.ai</span>
+                <span class="domain" data-i18n="legacyHome.qicoreAi"></span>
             </div>
         </div>
 
         <div class="content-layer">
-            <h1 class="brand-title" id="plx-title"><span class="qi">Qi</span><span class="core">Core</span></h1>
+            <h1 class="brand-title" id="plx-title"><span class="qi" data-i18n="legacyHome.qi"></span><span class="core" data-i18n="legacyHome.core"></span></h1>
             <div class="slogan-shell">
                 <div class="slogan-card">
                     <div class="slogan-bar" id="plx-slogan">
-                        <p>Make Smart <span class="slogan-separator"></span> 气造万物</p>
+                        <p><span data-i18n="legacyHome.makeSmart"></span><span class="slogan-separator"></span><span data-i18n="legacyHome.createAnything"></span></p>
                     </div>
                     <div class="slogan-drawer">
                         <div class="slogan-detail">
-                            <p class="company-note"><span class="brand">气核科技（qicore）</span> 把想法带到现实，欢迎了解公司业务，<span class="hiring">WE ARE HIRING</span>。</p>
+                            <p class="company-note"><span class="brand" data-i18n="common.companyName"></span><span data-i18n="staticArchive.companyNote"></span><span class="hiring" data-i18n="staticArchive.hiring"></span></p>
                         </div>
                     </div>
                 </div>
@@ -811,16 +853,16 @@
 
         <div class="footer-signature" id="plx-footer">
             <div class="terminal-footer">
-                <a class="terminal-footer-link" href="mailto:info@qicore.ai" aria-label="Email info@qicore.ai">
+                <a class="terminal-footer-link" href="mailto:info@qicore.ai" data-i18n-aria-label="legacyHome.emailInfoQicoreAi">
                     <div class="icon-indicator"></div>
                     <div class="slot-machine">
                         <div class="slot-track" id="footer-slot-track">
-                            <span>info</span>
-                            <span>hr</span>
-                            <span>info</span>
+                            <span data-i18n="legacyHome.info"></span>
+                            <span data-i18n="legacyHome.hr"></span>
+                            <span data-i18n="legacyHome.info"></span>
                         </div>
                     </div>
-                    <span class="domain">@qicore.ai</span>
+                    <span class="domain" data-i18n="legacyHome.qicoreAi"></span>
                 </a>
             </div>
         </div>
@@ -834,19 +876,19 @@
         <div class="cursor-dot"></div>
         <div class="shockwave" id="shockwave"></div>
         <div class="cube-wrapper" id="cube-wrapper">
-            <div class="cursor-cube-container is-spinning" id="cursor-cube" role="menu" aria-label="Voxel color palette">
+            <div class="cursor-cube-container is-spinning" id="cursor-cube" role="menu" data-i18n-aria-label="legacyHome.voxelColorPalette">
                 <div class="cursor-cube-face face front" data-color-key="front"></div>
                 <div class="cursor-cube-face face back" data-color-key="back"></div>
                 <div class="cursor-cube-face face right" data-color-key="right"></div>
                 <div class="cursor-cube-face face left" data-color-key="left"></div>
                 <div class="cursor-cube-face face top" data-color-key="top"></div>
                 <div class="cursor-cube-face face bottom" data-color-key="bottom"></div>
-                <button class="extra-face multi" type="button" data-color-key="multicolor" aria-label="Multicolor"></button>
-                <button class="extra-face white" type="button" data-color-key="white" aria-label="White"></button>
-                <button class="extra-face black" type="button" data-color-key="black" aria-label="Black"></button>
+                <button class="extra-face multi" type="button" data-color-key="multicolor" data-i18n-aria-label="runtime.multicolor"></button>
+                <button class="extra-face white" type="button" data-color-key="white" data-i18n-aria-label="runtime.white"></button>
+                <button class="extra-face black" type="button" data-color-key="black" data-i18n-aria-label="runtime.black"></button>
             </div>
             <div class="charge-hint" id="charge-hint">
-                <div class="charge-text">HOLD TO CLEAR</div>
+                <div class="charge-text" data-i18n="legacyHome.holdToClear"></div>
                 <div class="charge-bar-container"><div class="charge-bar"></div></div>
             </div>
         </div>
@@ -1630,7 +1672,7 @@
                 axisH.style.transform = `translate3d(0, ${crossY}px, 1px)`; 
                 axisV.style.transform = `translate3d(${crossX}px, 0, 1px)`;
                 coordTracker.style.transform = `translate3d(${crossX + 16}px, ${crossY - 24}px, 1px)`;
-                coordTracker.textContent = `X: ${coords.x} | Y: ${coords.y} | Z: ${coords.z}`;
+                if (window.qicoreMessages) coordTracker.textContent = window.qicoreMessages.staticArchive.coordinates.zh.replace(/\{(\w+)\}/g, (_, key) => String(coords[key]));
                 axisH.style.opacity = '1'; axisV.style.opacity = '1'; coordTracker.style.opacity = '1';
 
                 if (mode === 'none') {
@@ -2072,7 +2114,11 @@
             const alias = footerSlotAliases[footerSlotIndex] || footerSlotAliases[0];
             const email = `${alias}@qicore.ai`;
             footerLink.href = `mailto:${email}`;
-            footerLink.setAttribute('aria-label', `Email ${email}`);
+            if (window.qicoreMessages) {
+                for (const locale of ['zh', 'en']) footerLink.setAttribute(`data-aria-label-${locale}`, window.qicoreMessages.common.email[locale].replace('{email}', email));
+                footerLink.setAttribute('aria-label', footerLink.getAttribute(`data-aria-label-${document.documentElement.dataset.locale === 'en' ? 'en' : 'zh'}`));
+                footerLink.removeAttribute('data-i18n-aria-label');
+            }
         }
 
         function setFooterSlotTransform(index, isResetting = false) {

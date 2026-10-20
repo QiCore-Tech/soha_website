@@ -1,0 +1,123 @@
+.stage {
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #101112;
+  transform-origin: 0 0;
+}
+
+.stage[data-laptop-mode="animated"] {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+/* The animated stage is lifted a full viewport so it can rise over the frozen
+   hero. The pin-spacer still reserves that lifted viewport, so without a
+   correction the chapter copy would sit a whole blank screen below the video.
+   Pull the copy up by the same viewport so "先设计，再验证" follows the video. */
+.workspace:has([data-home-laptop-stage][data-laptop-mode="animated"]) [data-home-workspace-copy] {
+  margin-top: -100dvh;
+}
+
+.stage[data-laptop-mode="animated"] .screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-height: 0;
+  will-change: transform;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.canvas > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.hint {
+  position: absolute;
+  inset: auto 1.5rem max(2rem, env(safe-area-inset-bottom));
+  z-index: 2;
+  pointer-events: none;
+}
+
+.introduction {
+  position: absolute;
+  inset: max(7rem, env(safe-area-inset-top)) 1.5rem auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (max-height: 500px) {
+  .introduction { inset-block-start: 90px; }
+}
+
+/* The fullscreen target is outside the pin-spacer: refresh may move the pin,
+   but never detaches this native fullscreen element. */
+.workspace:fullscreen,
+.workspace[data-home-video-fullscreen="true"] {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden;
+  background: #101112;
+}
+
+.workspace:fullscreen .stage,
+.workspace[data-home-video-fullscreen="true"] .stage,
+.workspace:fullscreen .screen,
+.workspace[data-home-video-fullscreen="true"] .screen {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.workspace:fullscreen :global(.pin-spacer),
+.workspace[data-home-video-fullscreen="true"] :global(.pin-spacer) {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+
+.workspace:fullscreen .canvas,
+.workspace[data-home-video-fullscreen="true"] .canvas,
+.workspace:fullscreen .introduction,
+.workspace[data-home-video-fullscreen="true"] .introduction,
+.workspace:fullscreen .hint,
+.workspace[data-home-video-fullscreen="true"] .hint,
+.workspace:fullscreen [data-home-workspace-copy],
+.workspace[data-home-video-fullscreen="true"] [data-home-workspace-copy] {
+  display: none !important;
+}

@@ -12,7 +12,7 @@
 | About QiCore | 解释 QiCore 为什么存在、要解决什么问题 | 讲愿景和方法，不展开产品说明书 |
 | News | 用一篇真实内测动态建立可信度 | 单篇新闻，默认折叠，点击展开 |
 | Team | 让用户认识团队、使命和工作方式 | 真实、具体、少口号 |
-| OysCat | 详细介绍产品、Workspace 和电子模块 | 产品信息更完整，配合渲染图或真实截图 |
+| Oyscat | 详细介绍产品、Workspace 和电子模块 | 产品信息更完整，配合渲染图或真实截图 |
 | 页脚 | 联系方式、招聘和品牌收束 | 极简，不出现“智能硬件”总定位 |
 
 ## 二、统一规则
@@ -20,17 +20,17 @@
 ### 品牌和术语
 
 - 统一写作 `QiCore`，不使用 `qicore`、`QICORE` 作为正文品牌名。
-- 统一写作 `OysCat`。市场文档中的 `Oyscat`、`OYSCAT` 只做品牌大小写统一，不改变英文语义。
+- 统一写作 `Oyscat`（c 小写）。市场文档中的 `OysCat`、`OYSCAT` 只做品牌大小写统一，不改变英文语义。
 - `Workspace` 作为产品名称保留英文。
-- `E-Modules` 可作为 OysCat 页的视觉标签；正文建议写作 `electronic modules`。
+- `E-Modules` 可作为 Oyscat 页的视觉标签；正文建议写作 `electronic modules`。
 - QiCore 公司定位不使用“智能硬件 / intelligent hardware”。
-- OysCat 产品页可以在具体技术语境中说明电子模块、结构、电子、嵌入式和软件，但不把公司愿景收窄为智能硬件。
+- Oyscat 产品页可以在具体技术语境中说明电子模块、结构、电子、嵌入式和软件，但不把公司愿景收窄为智能硬件。
 
 ### 视觉和排版规则
 
 - QiCore 继续使用明亮纸张画板、留白、细边框、克制的色块和轻量透视。
 - 正式文案不直接整段塞进卡片；每个模块拆成“标题 + 一句解释 + 可展开正文”。
-- 长段落只出现在 About、News 展开正文和 OysCat 产品详情中。
+- 长段落只出现在 About、News 展开正文和 Oyscat 产品详情中。
 - 英文原稿较长时，先保留完整内容，再通过段落、行距和折叠控制阅读负担，不通过擅自改写英文解决。
 
 ## 三、首页 `/`
@@ -50,7 +50,7 @@
 | --- | --- | --- |
 | 返回画板 | 返回创作画板 | Back to canvas |
 | QiCore 公司页 | 关于 QiCore | About QiCore |
-| OysCat 入口 | 认识 OysCat | Discover OysCat |
+| Oyscat 入口 | 认识 Oyscat | Discover Oyscat |
 | Workspace 入口 | 进入 Workspace | Open Workspace |
 
 ## 四、About QiCore `/about`
@@ -117,34 +117,34 @@
 
 这段视频同时承担公司介绍、团队展示和第一款产品介绍，因此不建议在 Team 页面再重复放一张完整视频卡。
 
-### 4.4 OysCat 简介卡
+### 4.4 Oyscat 简介卡
 
 | 中文 | English |
 | --- | --- |
-| OysCat 是 QiCore 推出的首款造物系统，面向所有想把想法做出来的人。 | OysCat is QiCore's first product family, made for anyone who wants to turn an idea into something real. |
-| 认识 OysCat | Explore OysCat |
+| Oyscat 是 QiCore 推出的首款造物系统，面向所有想把想法做出来的人。 | Oyscat is QiCore's first product family, made for anyone who wants to turn an idea into something real. |
+| 认识 Oyscat | Explore Oyscat |
 | 进入产品站 | Enter product site |
 
 About 页面只放这一层介绍。Workspace、电子模块、仿真和模块拼接的详细说明全部进入 `/oyscat`。
 
-## 五、OysCat 产品页 `/oyscat`
+## 五、Oyscat 产品页 `/oyscat`
 
 ### 5.1 产品定位
 
 | 中文 | English |
 | --- | --- |
-| OysCat 是 QiCore 推出的首款造物系统，面向所有想把想法做出来的人。 | OysCat is QiCore's first product family, made for anyone who wants to turn an idea into something real. |
-| 如果你玩过建造类游戏，对 OysCat 的操作模式会很有熟悉感。不一样的是，游戏里搭建的内容只存在于屏幕中，而 OysCat 能让你的设计从虚拟走进现实，变成真正可以运行的物品。 | If you've played Minecraft, you already know how to use OysCat. The difference is this: what you build on screen can be made into real objects that work, move, and respond. |
+| Oyscat 是 QiCore 推出的首款造物系统，面向所有想把想法做出来的人。 | Oyscat is QiCore's first product family, made for anyone who wants to turn an idea into something real. |
+| 如果你玩过建造类游戏，对 Oyscat 的操作模式会很有熟悉感。不一样的是，游戏里搭建的内容只存在于屏幕中，而 Oyscat 能让你的设计从虚拟走进现实，变成真正可以运行的物品。 | If you've played Minecraft, you already know how to use Oyscat. The difference is this: what you build on screen can be made into real objects that work, move, and respond. |
 | 你可以快速制作原型，在投入实体制作前先验证想法。 | You can prototype fast, and validate an idea before you commit to it. |
 | 设计、仿真、制造，在同一条创作流程中完成。 | Design, simulate, build are all in one pass, no iterative back-and-forth. |
 
-英文以市场原稿保留；其中 Minecraft 场景化句子只在 OysCat 产品页使用，不进入 QiCore 公司页。
+英文以市场原稿保留；其中 Minecraft 场景化句子只在 Oyscat 产品页使用，不进入 QiCore 公司页。
 
 ### 5.2 Workspace
 
 | 中文 | English |
 | --- | --- |
-| OysCat 工作台 | OysCat Workspace |
+| Oyscat 工作台 | Oyscat Workspace |
 | 在同一块画布上，同时完成结构与电子系统的搭建。 | This is where you build structure and electronics, together, on one canvas. |
 | 像搭积木一样，用体素搭建结构：立方体、面板、圆柱等。 | Design by stacking voxels: cubes, panels, cylinders, etc. |
 | 直接告诉它作品应该如何工作，AI 会替你生成代码，让设计拥有预期的行为。 | Simply tell it what it should do: “aim at the red balloon and shoot.” The AI writes the code for you, and imbues your design with the intended behaviors. |
@@ -154,19 +154,19 @@ About 页面只放这一层介绍。Workspace、电子模块、仿真和模块�
 
 | 中文 | English |
 | --- | --- |
-| OysCat 电子模块 | OysCat E-Modules |
+| Oyscat 电子模块 | Oyscat E-Modules |
 | Workspace 中放置的每一个电子模块，都对应一个真实的实体模块。 | Every electronics module you place in Workspace maps to a physical one. |
 | 实体模块的表现与仿真中的状态保持一致。 | Its real-world performance exactly matches your simulation. |
 | 模块按功能标准化：运动、灯光、感知、声音和控制，按需拼接即可。 | These are standardized hardware blocks, designed by function: motion, lighting, sensing, sound, control. Snap them together. |
 | 不需要焊接、布线，也不需要手动搭建电路。把模块拼接起来，作品就能运行。 | No soldering, no wiring, no circuits to build by hand. Snap them together, and your creation is complete. |
 
-### 5.4 OysCat 产品页结尾
+### 5.4 Oyscat 产品页结尾
 
 | 中文 | English |
 | --- | --- |
-| OysCat 只是开始。它是 QiCore 迈向更大愿景的第一步：说出想要什么，让它真正被做出来。 | Oyscat is just the beginning. It's the first step on our roadmap toward the full promise: prompt it, and it's made. |
+| Oyscat 只是开始。它是 QiCore 迈向更大愿景的第一步：说出想要什么，让它真正被做出来。 | Oyscat is just the beginning. It's the first step on our roadmap toward the full promise: prompt it, and it's made. |
 
-这句只放在 OysCat 页面结尾，作为产品路线愿景，不放在 QiCore About 页面中作为当前能力承诺。
+这句只放在 Oyscat 页面结尾，作为产品路线愿景，不放在 QiCore About 页面中作为当前能力承诺。
 
 ## 六、News `/news`
 
@@ -183,19 +183,19 @@ About 页面只放这一层介绍。Workspace、电子模块、仿真和模块�
 
 ### 中文正文
 
-> 气核科技（QiCore）宣布，OysCat 已正式进入首批内测阶段，共招募 29 位内测用户，涵盖工程师、Minecraft 等建造经营游戏爱好者、文艺工作者等多元背景。
+> 气核科技（QiCore）宣布，Oyscat 已正式进入首批内测阶段，共招募 29 位内测用户，涵盖工程师、Minecraft 等建造经营游戏爱好者、文艺工作者等多元背景。
 >
-> 内测版本开放了 OysCat Workspace 的核心功能，用户已开始使用 OysCat 搭建各自的项目。
+> 内测版本开放了 Oyscat Workspace 的核心功能，用户已开始使用 Oyscat 搭建各自的项目。
 >
 > 团队将根据实际反馈持续优化 Workspace 的设计流程与模块兼容性，后续将陆续开放更多功能模块，并计划扩大内测规模。
 
 ### English 正文
 
-> QiCore announced that OysCat has officially entered its first closed beta phase.
+> QiCore announced that Oyscat has officially entered its first closed beta phase.
 >
 > The program includes 29 beta users from diverse backgrounds, including engineers, Minecraft fans, and creative professionals.
 >
-> The closed beta opens access to the core capabilities of the OysCat system, covering both the OysCat Workspace and selected hardware modules. Users have started building their own hardware projects with OysCat. Feedback from this first group of users will help QiCore refine the design workflow and improve module compatibility. QiCore will continue to release additional hardware modules and plans to expand the closed beta program in the coming months.
+> The closed beta opens access to the core capabilities of the Oyscat system, covering both the Oyscat Workspace and selected hardware modules. Users have started building their own hardware projects with Oyscat. Feedback from this first group of users will help QiCore refine the design workflow and improve module compatibility. QiCore will continue to release additional hardware modules and plans to expand the closed beta program in the coming months.
 
 ## 七、Team `/team`
 
@@ -228,25 +228,25 @@ About 页面只放这一层介绍。Workspace、电子模块、仿真和模块�
 | --- | --- |
 | 品牌收束 | 气造万物 / MAKE SMART |
 | 招聘 | WE ARE HIRING / 加入 QiCore |
-| 产品入口 | OysCat / Products |
+| 产品入口 | Oyscat / Products |
 | 约束 | 不出现“智能硬件”作为公司总定位 |
 
-## 九、OysCat 是否需要 Workspace 和产品渲染图
+## 九、Oyscat 是否需要 Workspace 和产品渲染图
 
-需要，但不建议把页面做成大量产品图画廊。OysCat 是产品宣发和预告页，图像的任务是帮助用户在几秒内理解“它是什么、怎么工作、最后会变成什么”。建议使用 2–3 张核心视觉，而不是每段文字配一张图。
+需要，但不建议把页面做成大量产品图画廊。Oyscat 是产品宣发和预告页，图像的任务是帮助用户在几秒内理解“它是什么、怎么工作、最后会变成什么”。建议使用 2–3 张核心视觉，而不是每段文字配一张图。
 
 ### 建议的三类视觉
 
 | 视觉 | 适合位置 | 画面任务 |
 | --- | --- | --- |
-| Workspace 场景图 | OysCat 首屏或 Workspace 卡片右侧 | 展示结构、电子模块和同一块画布，不需要塞满 UI 细节 |
+| Workspace 场景图 | Oyscat 首屏或 Workspace 卡片右侧 | 展示结构、电子模块和同一块画布，不需要塞满 UI 细节 |
 | 电子模块产品渲染图 | Electronic Modules 卡片 | 展示真实模块的形态、拼接关系和功能分组 |
 | 虚拟到现实的对应图 | Workspace 与 Electronic Modules 之间 | 左侧是仿真/设计，右侧是对应实体模块，解释“设计可以被做出来” |
 
 ### 视觉制作原则
 
 - 优先使用真实产品结构、真实模块尺寸和已有品牌资产。
-- 渲染图应延续 OysCat 的黑色产品、白色画板和少量绿色信号色。
+- 渲染图应延续 Oyscat 的黑色产品、白色画板和少量绿色信号色。
 - 不需要写实到像电商产品图，也不要继续使用容易画错模块结构的生成图。
 - 可以使用简化线稿、结构分解、低对比阴影和少量标注，保持 QiCore 的克制感。
 - 图片要为标题和按钮留出空白，不要把文字压在复杂背景上。
@@ -268,10 +268,10 @@ About 页面只放这一层介绍。Workspace、电子模块、仿真和模块�
 
 - 首页、About、News、Team、页脚先替换正式映射稿。
 - 保留现有画板、卡片、转场和语言切换逻辑。
-- 不修改 OysCat 页结构，不把产品说明书内容塞进 About。
+- 不修改 Oyscat 页结构，不把产品说明书内容塞进 About。
 - 上线前重点检查中英文切换、卡片高度、长段落折叠和移动端换行。
 
-### 第二阶段：OysCat 产品页
+### 第二阶段：Oyscat 产品页
 
 - 使用本稿中的 Workspace、E-Modules 和产品结尾文案。
 - 根据最终产品结构制作三张核心视觉。
@@ -279,4 +279,4 @@ About 页面只放这一层介绍。Workspace、电子模块、仿真和模块�
 
 ### 当前结论
 
-正式文案的内容框架已经足够进入网页映射阶段，但不建议一次性全文替换。先锁定 QiCore 公司页的层级与术语，再单独打磨 OysCat 产品页和配图，能最大程度保持两个页面既有关联，又不互相挤占内容。
+正式文案的内容框架已经足够进入网页映射阶段，但不建议一次性全文替换。先锁定 QiCore 公司页的层级与术语，再单独打磨 Oyscat 产品页和配图，能最大程度保持两个页面既有关联，又不互相挤占内容。
