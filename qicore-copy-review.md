@@ -23,7 +23,7 @@
 | QiCore turns ideas into real-world creations. We are building a simpler way to make. | **QiCore 想做的，是让你更容易把想法做出来。** |
 | We are hiring. | **加入我们。** |
 | Back to canvas | **返回创作画板** |
-| Discover OysCat | **认识 OysCat** |
+| Discover Oyscat | **认识 Oyscat** |
 | Open Workspace | **进入 Workspace** |
 
 核心口号建议：
@@ -96,13 +96,13 @@
 | Bring electronics, mechanics, embedded systems, and software together around one product. | **让电子、结构、嵌入式和软件，配合着把同一件产品做出来。** |
 | Connect design, prototyping, validation, and manufacturing to make ideas deliverable. | **把设计、原型、验证与制造连起来，让创意真正落地。** |
 
-### OysCat 作为第一款产品
+### Oyscat 作为第一款产品
 
 | English | 中文 |
 | --- | --- |
-| OysCat is our first step. | **OysCat，是我们迈出的第一步。** |
-| OysCat brings electronic modules and an AI workspace together, so you do not have to start from a blank page every time. | **OysCat 把电子模块和 AI 工作空间放在一起，让你不用每次都从一张白纸开始。** |
-| Explore OysCat | **认识 OysCat** |
+| Oyscat is our first step. | **Oyscat，是我们迈出的第一步。** |
+| Oyscat brings electronic modules and an AI workspace together, so you do not have to start from a blank page every time. | **Oyscat 把电子模块和 AI 工作空间放在一起，让你不用每次都从一张白纸开始。** |
+| Explore Oyscat | **认识 Oyscat** |
 | Enter product site | **进入产品站** |
 
 ## News & Updates
@@ -113,7 +113,7 @@
 | --- | --- |
 | News & Notes | **动态与记录** |
 | Notes from the workbench. | **工作台手记。** |
-| Research, beta tests, and new progress from QiCore and OysCat. | **这里记录 QiCore 与 OysCat 的研发、内测和新进展。** |
+| Research, beta tests, and new progress from QiCore and Oyscat. | **这里记录 QiCore 与 Oyscat 的研发、内测和新进展。** |
 | Creation in motion. | **创造，仍在发生。** |
 | Follow QiCore as ideas move from research into the hands of real creators. | **跟着 QiCore，看一个想法如何从研究走到创作者手中。** |
 
@@ -122,13 +122,13 @@
 | English | 中文 |
 | --- | --- |
 | The first beta is now open. | **首期内测，现已开启。** |
-| Twenty-nine beta users are already building their own projects with OysCat. | **首批 29 位用户，已经开始用 OysCat 搭建自己的项目。** |
+| Twenty-nine beta users are already building their own projects with Oyscat. | **首批 29 位用户，已经开始用 Oyscat 搭建自己的项目。** |
 | Read story | **阅读全文** |
 | Close story | **收起正文** |
 
 中文正文建议：
 
-> QiCore 宣布：OysCat 首期封闭内测正式开启。
+> QiCore 宣布：Oyscat 首期封闭内测正式开启。
 >
 > 29 位参与者来自工程领域、建造类游戏社群和创意行业，带着各自的经验、问题和想法而来。
 >
@@ -138,7 +138,7 @@
 
 English copy：
 
-> QiCore has opened the first closed beta for OysCat.
+> QiCore has opened the first closed beta for Oyscat.
 >
 > Twenty-nine participants—from engineers and Minecraft builders to creative professionals—have joined with their own questions and ideas.
 >
@@ -187,7 +187,7 @@ English copy：
 | Open roles will appear here, but if you already have an idea, come find us. | **职位会陆续公开，但如果你已经有想法，欢迎现在就来找我们。** |
 | Send us your work, your story, or the problem you cannot stop thinking about. We care less about a perfect résumé than what drives you and what you want to make. | **把你的作品、经历，或那个让你一直惦记的问题发给我们。我们不太在意简历是不是漂亮，更想知道：你为什么出发，又想把什么做出来。** |
 
-## OysCat 产品页
+## Oyscat 产品页
 
 > 本部分暂不修改。现有提案作废，待 QiCore 公司页文案确认后单独讨论。
 

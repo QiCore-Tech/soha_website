@@ -1,0 +1,181 @@
+.visual {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  color: #111111;
+  isolation: isolate;
+}
+.assembly { aspect-ratio: 1.1; align-self: center; }
+.genpi { aspect-ratio: 6 / 5; }
+.mount { position: absolute; inset: 0; }
+.fallback { width: 100%; height: 100%; display: block; }
+.register, .controls, .caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-geist-mono);
+  font-size: 10px;
+  line-height: 1.6;
+  color: #8a8a8a;
+  letter-spacing: 0;
+}
+.register { top: 0; z-index: 4; border-top: 0; padding-top: 0; letter-spacing: .08em; text-transform: uppercase; }
+.controls, .caption { bottom: 0; }
+.controls > span { max-width: calc(100% - 60px); }
+.toggle { min-width: 44px; min-height: 44px; border: 1px solid rgba(17,17,17,.14); border-radius: 6px; }
+.toggle[aria-pressed="true"] { background: #111111; color: #ffffff; }
+.caption { z-index: 4; border-top: 1px solid rgba(17,17,17,.14); padding-top: 14px; }
+.caption strong { font-family: var(--font-display); font-size: 22px; font-weight: 500; }
+.caption span { text-align: right; }
+
+.genpiArt {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.guides {
+  fill: none;
+  stroke: #111111;
+  stroke-opacity: .075;
+  stroke-width: 1;
+}
+.connector {
+  fill: none;
+  stroke: #8a8a8a;
+  stroke-width: 1.4;
+  stroke-dasharray: 5 5;
+}
+.cube {
+  opacity: max(.65, var(--genpi-surface, 1));
+  transition: opacity .6s ease;
+}
+.cubeTop, .cubeLeft, .cubeRight {
+  stroke: #5e605b;
+  stroke-opacity: .38;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+.cubeTop { fill: #e7e7e3; }
+.cubeLeft { fill: #d1d2cd; }
+.cubeRight { fill: #bdbeb9; }
+.cubeOutline {
+  fill: none;
+  stroke: #5e605b;
+  stroke-opacity: .42;
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+}
+.cubeHighlight {
+  fill: none;
+  stroke: #ffffff;
+  stroke-opacity: .5;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+.intentCard {
+  position: absolute;
+  top: 21%;
+  left: 4%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 37%;
+  height: 27%;
+  padding: clamp(9px, 2.2vw, 15px);
+  border: 1px solid rgba(17,17,17,.22);
+  border-radius: 9px;
+  background: #ffffff;
+  box-shadow: 0 14px 34px -30px rgba(0,0,0,.55);
+}
+.intentPrompt {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(5px, 1vw, 8px);
+  color: #555555;
+  font-size: clamp(9px, 1vw, 10px);
+  font-weight: 500;
+  line-height: 1.5;
+}
+.intentPrompt i {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: .28em;
+  border-radius: 999px;
+  background: #4f632b;
+  box-shadow: 0 0 0 3px rgba(79,99,43,.1);
+}
+.intentRule {
+  display: block;
+  width: 78%;
+  height: 1px;
+  margin-top: clamp(8px, 1.8vw, 13px);
+  background: rgba(17,17,17,.14);
+}
+.intentRuleShort {
+  width: 52%;
+  margin-top: clamp(6px, 1.4vw, 9px);
+}
+
+.flowLabel {
+  position: absolute;
+  top: 37%;
+  left: 43%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid rgba(17,17,17,.12);
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px -18px rgba(0,0,0,.5);
+  line-height: 1;
+  white-space: nowrap;
+}
+.flowDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #4f632b;
+}
+.flowLabel strong {
+  color: #1d1d1f;
+  font-family: var(--font-geist-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .06em;
+}
+.flowLabel small {
+  color: #8a8a8a;
+  font-family: var(--font-geist-mono);
+  font-size: 8px;
+  letter-spacing: .08em;
+}
+.join { position: absolute; inset: 0; opacity: .4; pointer-events: none; }
+.join .fallback { transform: translateX(-38%) scale(.65); }
+@media (hover: hover) and (pointer: fine) {
+  .toggle:hover { background: #f5f5f5; }
+}
+.visual[data-assembly-state="separated"] .fallback .block {
+  translate: calc((var(--block-index) - 1.5) * 12px) calc((var(--block-index) - 1.5) * -10px);
+}
+.block { transition: translate .65s ease; }
+@media (max-width: 899px) {
+  .assembly { max-width: 480px; margin-inline: auto; }
+  .genpi { max-width: 420px; margin-inline: auto; }
+  .join { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .block, .fallback, .cube { transition: none; }
+}

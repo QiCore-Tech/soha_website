@@ -1,0 +1,17 @@
+.git
+node_modules
+.next
+.next.*
+.next-preview
+out
+.env*
+!.env.example
+.artifacts
+.vercel
+artifacts
+test-results
+*.tsbuildinfo
+soha_stack
+soha_website
+soha_website_one
+study.md

@@ -1,0 +1,1094 @@
+/*
+ * Homepage voxel canvas ("拼豆" building), ported from soha_website's
+ * homepage on 2026-10-15.
+ *
+ * Every rule is scoped to .voxel-home so the monochrome content pages stay
+ * untouched. The canvas sits
+ * below the solid site header and stays mounted on content routes
+ * (legacy-home.js binds its DOM once), where it is hidden.
+ * The touch palette and the clear dialog are appended to <body> by
+ * public/legacy-home.js, so they carry their own home-route gate.
+ */
+
+/* legacy-home.js rewrites these on <html>; the defaults colour the first paint. */
+:root {
+  --cursor-top-rgb: 201, 133, 124;
+  --cursor-front-rgb: 210, 160, 110;
+  --cursor-right-rgb: 216, 194, 122;
+  --cursor-left-rgb: 143, 168, 146;
+  --cursor-back-rgb: 126, 152, 183;
+  --cursor-bottom-rgb: 160, 143, 181;
+}
+
+/* ==========================================
+   Stage
+   ========================================== */
+.voxel-home {
+  --frame-bg: #1c1c1c;
+  --paper-bg: #eae8ec;
+  --text-black: #050505;
+  --text-warm-gray: #8b867d;
+  --axis-color: rgba(0, 0, 0, 0.2);
+  --voxel-depth: 40px;
+  position: relative;
+  height: calc(100svh - var(--site-header-h) - var(--header-safe-top));
+  min-height: 320px;
+  overflow: hidden;
+  background-color: var(--frame-bg);
+  color: var(--text-black);
+  font-family: var(--font-site);
+  cursor: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Only the home route shows the canvas; content routes keep it mounted. */
+.qicore-route-shell:not(.is-canvas-interactive) .voxel-home {
+  display: none;
+}
+
+body.is-system-cursor .voxel-home {
+  cursor: auto;
+}
+
+/* Perspective lives on its own layer: on .voxel-home it would become the
+   containing block of the fixed cursor and overlays, which track viewport
+   pixels. */
+.voxel-home-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 2000px;
+}
+
+.voxel-home .ambient-glow {
+  position: absolute;
+  /* legacy-home.js moves the glow in viewport pixels; the stage starts under the header. */
+  top: calc(-1 * (var(--site-header-h) + var(--header-safe-top)));
+  left: 0;
+  z-index: 0;
+  width: 100vmax;
+  height: 100vmax;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* ==========================================
+   Paper canvas: fills the whole stage and tilts gently with the pointer
+   ========================================== */
+.voxel-home .paper-canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: var(--paper-bg);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  touch-action: none;
+}
+
+.voxel-home .transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9996;
+  background-color: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+.voxel-home #scene-luon[hidden] {
+  display: none !important;
+}
+
+.voxel-home #grid-plane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40,0 L40,80 M0,40 L80,40' stroke='rgba(0,0,0,0.12)' stroke-width='1' stroke-dasharray='3 4' fill='none'/%3E%3C/svg%3E"),
+    radial-gradient(circle, rgba(0, 0, 0, 0.12) 1px, transparent 1px);
+  background-size: 80px 80px, 16px 16px;
+  background-position: center center;
+  transform: translateZ(0);
+  pointer-events: auto;
+}
+
+.voxel-home :is(#voxels-container, #preview-container, #magnetic-container) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.voxel-home .canvas-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  color: rgba(17, 17, 17, 0.38);
+  font-size: clamp(1.2rem, 2.8vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-wrap: balance;
+  pointer-events: none;
+  transform: translate(-50%, -50%) translateZ(1px);
+  transition: opacity 220ms ease, transform 220ms ease, visibility 220ms;
+}
+.voxel-home .canvas-hint.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%) translateZ(1px) scale(0.94);
+}
+
+/* ==========================================
+   Voxel geometry
+   ========================================== */
+.voxel-home .voxel {
+  position: absolute;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+}
+
+.voxel-home .voxel .face {
+  position: absolute;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  transition: background 0.1s, opacity 0.2s, filter 0.12s ease;
+}
+
+.voxel-home .voxel .face.top {
+  width: 100%;
+  height: 100%;
+  background: #e8e8eb;
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.8);
+}
+.voxel-home .voxel .face.bottom {
+  width: 100%;
+  height: 100%;
+  background: #222222;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+.voxel-home .voxel .face.front {
+  top: 0;
+  width: 100%;
+  height: var(--voxel-depth);
+  transform-origin: top;
+  transform: rotateX(90deg);
+  background: #c4c4c8;
+}
+.voxel-home .voxel .face.back {
+  bottom: 0;
+  width: 100%;
+  height: var(--voxel-depth);
+  transform-origin: bottom;
+  transform: rotateX(-90deg);
+  background: #a8a8ac;
+}
+.voxel-home .voxel .face.left {
+  left: 0;
+  width: var(--voxel-depth);
+  height: 100%;
+  transform-origin: left;
+  transform: rotateY(-90deg);
+  background: #d0d0d4;
+}
+.voxel-home .voxel .face.right {
+  right: 0;
+  width: var(--voxel-depth);
+  height: 100%;
+  transform-origin: right;
+  transform: rotateY(90deg);
+  background: #b4b4b8;
+}
+
+.voxel-home .voxel.preview { z-index: 999; pointer-events: none; }
+.voxel-home .voxel.preview .face {
+  border: 1.5px dashed rgba(100, 100, 100, 0.6);
+  background: var(--preview-face-bg, rgba(180, 180, 185, 0.4)) !important;
+}
+.voxel-home .voxel.preview .face.top { box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.4); }
+.voxel-home .voxel.preview .face.bottom { border: none; box-shadow: none; }
+
+.voxel-home .voxel:hover :is(.face, .wheel-part) { filter: brightness(1.06); }
+body.is-deleting .voxel-home .voxel:hover :is(.face, .wheel-part) { border-color: #ff4444; background: #ffbaba !important; }
+
+/* Glass plate: legacy-home.js tints the faces with the chosen colour at low alpha. */
+.voxel-home .voxel[data-kind="glass"] .face {
+  border-color: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.voxel-home .voxel[data-kind="glass"] .face.top {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 6px 6px 16px rgba(255, 255, 255, 0.5);
+}
+.voxel-home .voxel[data-kind="glass"] .face.bottom { box-shadow: none; }
+
+/* Wheel: geometry is inline (legacy-home.js); the hub takes the chosen colour. */
+.voxel-home .wheel-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.voxel-home .wheel-part {
+  position: absolute;
+  transition: background 0.1s, opacity 0.2s, filter 0.12s ease;
+}
+.voxel-home .wheel-disc {
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.32) 0 9%, var(--piece-color, #c9857c) 10% 42%, #1d1d20 43% 47%, #303034 48% 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+.voxel-home .wheel-tread { background: #2c2c30; }
+.voxel-home .wheel-tread:nth-child(even) { background: #37373b; }
+.voxel-home .voxel.preview .wheel-part { opacity: 0.5; }
+
+/* ==========================================
+   UI layers floating above the 3D canvas
+   ========================================== */
+.voxel-home :is(.axis-h, .axis-v) {
+  position: absolute;
+  z-index: 5;
+  background: var(--axis-color);
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity 0.2s ease;
+  transform: translateZ(1px);
+}
+.voxel-home .axis-h { top: 0; left: 0; width: 100%; height: 1px; }
+.voxel-home .axis-v { top: 0; left: 0; width: 1px; height: 100%; }
+
+.voxel-home .coord-tracker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  color: rgba(0, 0, 0, 0.4);
+  font-family: var(--font-geist-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  transform: translate3d(16px, -20px, 1px);
+  will-change: transform;
+}
+
+.voxel-home .content-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.voxel-home .projection-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.voxel-home .projection-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.voxel-home .projection-title {
+  color: rgba(14, 14, 18, 0.54);
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 12rem);
+  font-weight: 430;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  text-shadow: none;
+  filter: blur(11px);
+}
+.voxel-home .projection-title :is(.qi, .core) { color: inherit; }
+
+.voxel-home .projection-slogan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 11px 24px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 100px;
+  background: rgba(22, 20, 24, 0.26);
+  color: rgba(16, 16, 18, 0.5);
+  box-shadow: none;
+  backdrop-filter: none;
+  filter: blur(9px);
+}
+.voxel-home .projection-slogan p {
+  color: inherit;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.voxel-home .projection-slogan .slogan-separator { background-color: rgba(0, 0, 0, 0.28); }
+.voxel-home .projection-careers-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+}
+
+.voxel-home .brand-title {
+  margin-bottom: 5vh;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 12rem);
+  /* Fixed weight, matching .projection-title; it no longer follows the cursor. */
+  font-weight: 430;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28),
+    0 18px 28px rgba(0, 0, 0, 0.14),
+    0 34px 52px rgba(0, 0, 0, 0.08);
+  transform: translateZ(80px) translateY(-10vh);
+}
+.voxel-home .brand-title .qi { color: var(--text-black); }
+.voxel-home .brand-title .core { color: var(--text-warm-gray); }
+
+.voxel-home .slogan-shell {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: min(430px, calc(100vw - 44px));
+  height: 188px;
+  pointer-events: none;
+  transform: translateZ(50px) translateY(-10vh);
+}
+.voxel-home .slogan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  pointer-events: auto;
+}
+.voxel-home .slogan-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  padding: 11px 24px;
+  border: 1px solid rgba(0, 0, 0, 0.045);
+  border-radius: 999px;
+  background: rgba(242, 242, 244, 0.82);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.08),
+    0 24px 42px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  text-align: center;
+  cursor: default;
+  transition:
+    border-radius 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 420ms ease;
+}
+.voxel-home .slogan-card.is-expanded .slogan-bar {
+  border-radius: 26px 26px 18px 18px;
+  background: rgba(241, 240, 242, 0.86);
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.05),
+    0 16px 28px rgba(0, 0, 0, 0.045),
+    0 1px 0 rgba(255, 255, 255, 0.36) inset;
+}
+.voxel-home .slogan-drawer {
+  position: relative;
+  width: 100%;
+  max-height: 0;
+  margin-top: -14px;
+  padding: 0 22px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.045);
+  border-top: none;
+  border-radius: 0 0 26px 26px;
+  background: rgba(241, 240, 242, 0.82);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 18px 30px rgba(0, 0, 0, 0.07),
+    0 32px 52px rgba(0, 0, 0, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.3) inset;
+  opacity: 0;
+  transform: translateY(-8px);
+  transform-origin: top center;
+  transition:
+    max-height 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 260ms ease 90ms,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    padding-top 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    padding-bottom 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.voxel-home .slogan-bar p {
+  font-family: var(--font-display);
+  color: rgba(97, 92, 84, 0.92);
+  font-size: 0.95rem;
+  font-weight: 560;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.voxel-home .slogan-separator {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  background-color: rgba(101, 96, 88, 0.34);
+  transform: rotate(45deg);
+}
+.voxel-home .slogan-action-separator {
+  flex: none;
+  width: 1px;
+  height: 16px;
+  background: rgba(83, 78, 71, 0.13);
+}
+.voxel-home .slogan-careers-link {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  color: rgba(97, 92, 84, 0.92);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 560;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+  text-underline-offset: 4px;
+  white-space: nowrap;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+.voxel-home .slogan-careers-link:hover {
+  color: rgba(43, 40, 36, 0.98);
+  text-decoration: underline;
+}
+.voxel-home .slogan-careers-arrow { font-size: 0.9em; letter-spacing: 0; }
+.voxel-home .slogan-card.is-expanded .slogan-drawer {
+  max-height: 132px;
+  padding-top: 24px;
+  padding-bottom: 16px;
+  opacity: 1;
+  transform: translateY(0);
+}
+.voxel-home .slogan-detail { width: 100%; }
+.voxel-home .company-note {
+  max-width: 100%;
+  color: rgba(102, 96, 88, 0.9);
+  font-size: 0.8rem;
+  font-weight: 450;
+  line-height: 1.78;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-wrap: balance;
+}
+.voxel-home .company-note .brand {
+  color: rgba(70, 66, 60, 0.96);
+  font-weight: 600;
+}
+
+/* Isometric stage for the cursor piece preview models. */
+.voxel-home .piece-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+.voxel-home .piece-spin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: rotateZ(-45deg);
+}
+.voxel-home .voxel.piece-model { pointer-events: none; }
+
+/* ==========================================
+   Floating multicolour cursor cube and palette
+   ========================================== */
+.voxel-home #cursor-wrapper {
+  --cursor-cube-size: 46px;
+  --cursor-half-size: 23px;
+  --cursor-gap: 16px;
+  --cursor-span: calc(var(--cursor-cube-size) + var(--cursor-gap));
+  --cursor-palette-size: calc(var(--cursor-cube-size) * 3 + var(--cursor-gap) * 2);
+  --cursor-follow-offset-x: 32px;
+  --cursor-follow-offset-y: 32px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  mix-blend-mode: normal;
+  perspective: 800px;
+  will-change: transform;
+  transition: opacity 160ms ease;
+}
+.voxel-home #cursor-wrapper.is-contrast-text { mix-blend-mode: difference; }
+
+/* The site header/footer keep the native cursor; hide the cube over them. */
+html:has(:is([data-site-header], [data-site-footer]):hover) .voxel-home #cursor-wrapper:not(.is-palette-mode),
+html:has([data-site-header][data-mega-open]) .voxel-home #cursor-wrapper:not(.is-palette-mode),
+html:has(#home-navigation[data-menu-open="true"]) .voxel-home #cursor-wrapper {
+  opacity: 0;
+}
+
+.voxel-home .cursor-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translate(-50%, -50%);
+}
+.voxel-home .emp-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  background-color: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.voxel-home .emp-flash.fire {
+  opacity: 0.6;
+  transition: opacity 0s;
+}
+.voxel-home .shockwave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(192, 142, 161, 0.9);
+  border-radius: 50%;
+  box-shadow: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+}
+.voxel-home .shockwave.fire {
+  animation: pulse-ring 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+@keyframes pulse-ring {
+  0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(80); }
+}
+.voxel-home .cube-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cursor-cube-size);
+  height: var(--cursor-cube-size);
+  overflow: visible;
+  transform: translate(calc(-50% + var(--cursor-follow-offset-x)), calc(-50% + var(--cursor-follow-offset-y)));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.voxel-home .cube-wrapper.is-charging {
+  filter: grayscale(0.85) contrast(1.2);
+  transform: translate(calc(-50% + var(--cursor-follow-offset-x)), calc(-50% + var(--cursor-follow-offset-y))) scale(0.65);
+  transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1), filter 1.2s ease;
+}
+.voxel-home .cube-wrapper.is-charging .face.front { transform: rotateY(0deg) translateZ(48px); }
+.voxel-home .cube-wrapper.is-charging .face.back { transform: rotateY(180deg) translateZ(48px); }
+.voxel-home .cube-wrapper.is-charging .face.left { transform: rotateY(-90deg) translateZ(48px); }
+.voxel-home .cube-wrapper.is-charging .face.right { transform: rotateY(90deg) translateZ(48px); }
+.voxel-home .cube-wrapper.is-charging .face.top { transform: rotateX(90deg) translateZ(48px); }
+.voxel-home .cube-wrapper.is-charging .face.bottom { transform: rotateX(-90deg) translateZ(48px); }
+.voxel-home .cube-wrapper.is-charging .face { backface-visibility: visible; }
+.voxel-home .cube-wrapper.is-imploding {
+  transform: translate(calc(-50% + var(--cursor-follow-offset-x)), calc(-50% + var(--cursor-follow-offset-y))) scale(0);
+  transition: transform 0.15s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}
+.voxel-home #cursor-wrapper.is-palette-mode .cube-wrapper { transform: translate(-50%, -50%); }
+.voxel-home #cursor-wrapper.is-palette-mode .cube-wrapper.is-charging { transform: translate(-50%, -50%) scale(0.65); }
+.voxel-home #cursor-wrapper.is-palette-mode .cube-wrapper.is-imploding { transform: translate(-50%, -50%) scale(0); }
+.voxel-home .charge-hint {
+  position: absolute;
+  bottom: -100px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 28px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(15px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.voxel-home .charge-hint.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.voxel-home .charge-text {
+  margin-bottom: 12px;
+  color: #222222;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+.voxel-home .charge-bar-container {
+  width: 160px;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.voxel-home .charge-bar {
+  width: 0%;
+  height: 100%;
+  background: #222222;
+  transition: width 0s;
+}
+.voxel-home .cube-wrapper.is-charging .charge-bar {
+  width: 100%;
+  transition: width 1.2s linear;
+}
+.voxel-home .cursor-cube-container {
+  position: absolute;
+  inset: 0;
+  width: var(--cursor-cube-size);
+  height: var(--cursor-cube-size);
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes cursorCubeSpin {
+  0% { transform: rotateX(-30deg) rotateY(45deg); }
+  100% { transform: rotateX(-30deg) rotateY(405deg); }
+}
+.voxel-home .cursor-cube-container.is-spinning { animation: cursorCubeSpin 8s linear infinite; }
+
+/* A plate, glass plate or wheel replaces the cursor cube while building;
+   the right-click palette still unfolds from the cube. */
+.voxel-home .cursor-piece {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+.voxel-home #cursor-wrapper.has-piece-cursor:not(.is-palette-mode) .cursor-piece { display: block; }
+.voxel-home #cursor-wrapper.has-piece-cursor:not(.is-palette-mode) .cursor-cube-container { opacity: 0; }
+@keyframes cursorPieceSpin {
+  from { transform: rotateZ(-45deg); }
+  to { transform: rotateZ(315deg); }
+}
+.voxel-home .cursor-piece .piece-spin { animation: cursorPieceSpin 8s linear infinite; }
+.voxel-home .cursor-cube-container.is-opening { transition-duration: 0.7s; }
+.voxel-home .cursor-cube-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(20, 20, 25, 0.7);
+  border-radius: 4px;
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.1), inset 0 -2px 6px rgba(0, 0, 0, 0.05);
+}
+.voxel-home .cursor-cube-face.front { background: rgba(var(--cursor-front-rgb), 0.18); transform: rotateY(0deg) translateZ(var(--cursor-half-size)); }
+.voxel-home .cursor-cube-face.back { background: rgba(var(--cursor-back-rgb), 0.18); transform: rotateY(180deg) translateZ(var(--cursor-half-size)); }
+.voxel-home .cursor-cube-face.right { background: rgba(var(--cursor-right-rgb), 0.18); transform: rotateY(90deg) translateZ(var(--cursor-half-size)); }
+.voxel-home .cursor-cube-face.left { background: rgba(var(--cursor-left-rgb), 0.18); transform: rotateY(-90deg) translateZ(var(--cursor-half-size)); }
+.voxel-home .cursor-cube-face.top { background: rgba(var(--cursor-top-rgb), 0.18); transform: rotateX(90deg) translateZ(var(--cursor-half-size)); }
+.voxel-home .cursor-cube-face.bottom { background: rgba(var(--cursor-bottom-rgb), 0.18); transform: rotateX(-90deg) translateZ(var(--cursor-half-size)); }
+
+.voxel-home #cursor-wrapper.is-palette-mode {
+  mix-blend-mode: normal;
+  pointer-events: auto;
+  perspective: 1400px;
+}
+.voxel-home #cursor-wrapper.is-palette-mode .cursor-dot { opacity: 0; }
+.voxel-home .cursor-cube-container.is-palette-mode {
+  --cube-size: var(--cursor-cube-size);
+  --half-size: var(--cursor-half-size);
+  --span: var(--cursor-span);
+  --selected-color: transparent;
+  top: calc(-1 * var(--cursor-span));
+  left: calc(-1 * var(--cursor-span));
+  width: var(--cursor-palette-size);
+  height: var(--cursor-palette-size);
+}
+.voxel-home .cursor-cube-container :is(.face, .extra-face) {
+  position: absolute;
+  border: 1.5px solid rgba(20, 20, 25, 0.85);
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 4px rgba(255, 255, 255, 0.14),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.08);
+  backface-visibility: hidden;
+  transition:
+    transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.4s ease,
+    background 0.4s ease,
+    opacity 0.6s ease,
+    box-shadow 0.25s ease;
+}
+.voxel-home .cursor-cube-container.is-opening :is(.face, .extra-face) {
+  transition-duration: 0.7s, 0.4s, 0.4s, 0.6s, 0.25s;
+}
+.voxel-home .cursor-cube-container .face { inset: 0; }
+.voxel-home .cursor-cube-container .extra-face {
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  width: var(--cursor-cube-size);
+  height: var(--cursor-cube-size);
+  margin-top: calc(-1 * var(--cursor-half-size));
+  margin-left: calc(-1 * var(--cursor-half-size));
+  padding: 7px;
+  appearance: none;
+  background: transparent;
+  color: rgba(22, 22, 26, 0.78);
+  font-family: var(--font-geist-mono);
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0) scale(0);
+}
+.voxel-home .cursor-cube-container .extra-face span { pointer-events: none; }
+.voxel-home .cursor-cube-container.is-palette-mode :is(.face, .extra-face) {
+  top: var(--span);
+  left: var(--span);
+  width: var(--cube-size);
+  height: var(--cube-size);
+  margin: 0;
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+.voxel-home .cursor-cube-container.is-palette-mode :is(.face, .extra-face):hover {
+  box-shadow:
+    inset 0 2px 6px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.voxel-home .cursor-cube-container.is-palette-mode .face.front { transform: rotateY(0deg) translateZ(var(--half-size)); }
+.voxel-home .cursor-cube-container.is-palette-mode .face.back { transform: rotateY(180deg) translateZ(var(--half-size)); }
+.voxel-home .cursor-cube-container.is-palette-mode .face.left { transform: rotateY(-90deg) translateZ(var(--half-size)); }
+.voxel-home .cursor-cube-container.is-palette-mode .face.right { transform: rotateY(90deg) translateZ(var(--half-size)); }
+.voxel-home .cursor-cube-container.is-palette-mode .face.top { transform: rotateX(90deg) translateZ(var(--half-size)); }
+.voxel-home .cursor-cube-container.is-palette-mode .face.bottom { transform: rotateX(-90deg) translateZ(var(--half-size)); }
+.voxel-home .cursor-cube-container.is-palette-mode .extra-face { opacity: 0; pointer-events: none; transform: translate3d(0, 0, 0) scale(0); }
+.voxel-home .cursor-cube-container.is-palette { transform: rotateX(0deg) rotateY(0deg) !important; }
+.voxel-home .cursor-cube-container.is-palette .extra-face { opacity: 1; pointer-events: auto; }
+.voxel-home .cursor-cube-container.is-palette .face.front { transform: translate3d(calc(-1 * var(--span)), calc(-1 * var(--span)), 0); }
+.voxel-home .cursor-cube-container.is-palette .face.back { transform: translate3d(0, calc(-1 * var(--span)), 0); }
+.voxel-home .cursor-cube-container.is-palette .face.left { transform: translate3d(var(--span), calc(-1 * var(--span)), 0); }
+.voxel-home .cursor-cube-container.is-palette .face.right { transform: translate3d(calc(-1 * var(--span)), 0, 0); }
+.voxel-home .cursor-cube-container.is-palette .extra-face.multi { transform: translate3d(0, 0, 0) scale(1); }
+.voxel-home .cursor-cube-container.is-palette .face.top { transform: translate3d(var(--span), 0, 0); }
+.voxel-home .cursor-cube-container.is-palette .face.bottom { transform: translate3d(calc(-1 * var(--span)), var(--span), 0); }
+.voxel-home .cursor-cube-container.is-palette .extra-face.white { transform: translate3d(0, var(--span), 0) scale(1); }
+.voxel-home .cursor-cube-container.is-palette .extra-face.black { transform: translate3d(var(--span), var(--span), 0) scale(1); }
+.voxel-home .cursor-cube-container.is-colored .face { background: var(--selected-color) !important; }
+.voxel-home .cursor-cube-container.is-colored .face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.voxel-home .palette-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+.voxel-home .palette-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.voxel-home .palette-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.12));
+}
+
+/* ==========================================
+   Reduced quality (chosen at runtime by legacy-home.js)
+   ========================================== */
+html[data-motion-quality="reduced"] .voxel-home .projection-layer { display: none; }
+html[data-motion-quality="reduced"] .voxel-home .ambient-glow { opacity: 0.34; }
+html[data-motion-quality="reduced"] .voxel-home .cursor-cube-container.is-spinning { animation: none !important; }
+html[data-motion-quality="reduced"] .voxel-home .cursor-piece .piece-spin { animation: none; }
+
+/* ==========================================
+   Phones and tablets
+   ========================================== */
+@media (max-width: 768px) {
+  .voxel-home :is(.axis-h, .axis-v, .coord-tracker) { display: none; }
+  /* Only the centre dot is hidden; the coloured cube stays. */
+  .voxel-home .cursor-dot { display: none; }
+  .voxel-home .slogan-shell {
+    width: auto;
+    max-width: calc(100vw - 44px);
+    height: auto;
+    pointer-events: none;
+  }
+  .voxel-home .slogan-card {
+    width: auto;
+    max-width: 100%;
+  }
+  .voxel-home .slogan-bar {
+    gap: 11px;
+    width: auto;
+    max-width: 100%;
+    padding: 10px 16px;
+  }
+  .voxel-home :is(.slogan-bar, .projection-slogan) p {
+    font-size: clamp(0.68rem, 3.15vw, 0.82rem);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+  .voxel-home .projection-slogan {
+    gap: 11px;
+    padding: 10px 16px;
+  }
+  .voxel-home :is(.slogan-careers-link, .projection-careers-link) {
+    gap: 5px;
+    font-size: clamp(0.68rem, 3.15vw, 0.82rem);
+    letter-spacing: 0.08em;
+  }
+  .voxel-home .slogan-action-separator { height: 14px; }
+  .voxel-home .slogan-detail { display: none; }
+  .voxel-home .palette-overlay { display: none; }
+}
+
+/* ==========================================
+   Touch building palette and clear dialog (appended to <body>)
+   ========================================== */
+.touch-builder { display: none; }
+
+/* Same tile size, spacing, sharp borders and order as the desktop palette. */
+@media (pointer: coarse) {
+  body:not(.is-qicore-content-route):has(.qicore-route-shell.is-home) .touch-builder:not([hidden]) {
+    position: fixed;
+    z-index: 110;
+    display: block;
+    width: 168px;
+    color: #292521;
+    font-family: var(--font-site);
+  }
+  .touch-colors {
+    display: grid;
+    grid-template-columns: repeat(3, 48px);
+    gap: 12px;
+  }
+  .touch-colors button {
+    font-family: var(--font-geist-mono);
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    width: 48px;
+    height: 48px;
+    padding: 7px;
+    border: 1.5px solid rgba(20, 20, 25, 0.85);
+    border-radius: 0;
+    box-shadow: inset 0 2px 6px #ffffff1a, inset 0 -2px 6px #0000000d;
+    color: #141419c7;
+    font: 700 8px var(--font-geist-mono);
+    letter-spacing: 0.08em;
+    text-align: left;
+  }
+  .touch-colors button:is([data-color-key="multicolor"], [data-color-key="black"]) {
+    color: #ffffff;
+    text-shadow: 0 1px 2px #0005;
+  }
+  .touch-colors button[aria-pressed="true"] {
+    border-color: #242424;
+    outline: 2px solid #292521;
+    outline-offset: 3px;
+  }
+  .touch-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .touch-actions button {
+    flex: 1;
+    min-height: 44px;
+    border: 1px solid #29252155;
+    border-radius: 0;
+    background: #eae8eced;
+    backdrop-filter: blur(10px);
+    color: inherit;
+    font-size: 12px;
+  }
+  .touch-actions button:disabled { opacity: 0.3; }
+  /* Native pinch zoom stays available; one finger builds. */
+  .qicore-route-shell.is-home #canvas-area {
+    -webkit-touch-callout: none;
+    touch-action: pinch-zoom;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+.clear-confirm {
+  width: min(360px, calc(100vw - 40px));
+  margin: auto;
+  padding: 28px;
+  border: 1px solid rgba(45, 41, 36, 0.22);
+  border-radius: 8px;
+  background: #eae8ec;
+  box-shadow: 0 24px 70px #0003;
+  color: #292521;
+  font-family: var(--font-site);
+}
+.clear-confirm::backdrop {
+  background: rgba(28, 28, 29, 0.3);
+  backdrop-filter: blur(6px);
+}
+.clear-confirm-kicker {
+  font-family: var(--font-geist-mono);
+  color: #77716b;
+  font: 10px var(--font-geist-mono);
+  letter-spacing: 0.14em;
+}
+.clear-confirm h2 {
+  margin: 22px 0 12px;
+  font-size: 24px;
+  font-weight: 450;
+  line-height: 1.35;
+}
+.clear-confirm p {
+  margin: 0;
+  color: #68625d;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.clear-confirm-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+.clear-confirm-actions button {
+  flex: 1;
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid #29252140;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+.clear-confirm-actions [data-confirm] {
+  border-color: #393c3f;
+  background: #393c3f;
+  color: #ffffff;
+}
+.clear-confirm-actions button:focus-visible {
+  outline: 2px solid #292521;
+  outline-offset: 3px;
+}
+
+/* Dedicated /relax route: the voxel homepage fills the space below the fixed
+   site header and owns the viewport, so the shared footer is hidden. */
+body:has(.relax-page) {
+  overflow: hidden;
+  background: #1c1c1c;
+}
+
+body:has(.relax-page) > [data-site-footer] {
+  display: none;
+}
+
+.relax-page {
+  position: relative;
+  height: calc(100svh - var(--site-header-h) - var(--header-safe-top));
+  margin-top: calc(var(--site-header-h) + var(--header-safe-top));
+  overflow: hidden;
+  background: #1c1c1c;
+}
+
+.relax-page > .voxel-home {
+  height: 100%;
+  min-height: 0;
+}
+
+/* Keep the interactive paper board inset from every viewport edge so the
+   pointer tilt reads as a floating card instead of a full-bleed surface. */
+.relax-page .voxel-home .paper-canvas {
+  width: calc(100% - clamp(48px, 10vw, 160px));
+  height: calc(100% - clamp(48px, 10vh, 160px));
+}
+
+/* The /relax page keeps only the slogan capsule; the large QiCore wordmark and
+   its projected shadow remain in the DOM for the canvas calculations but are
+   visually hidden. */
+.relax-page .voxel-home .brand-title,
+.relax-page .voxel-home .projection-title,
+.relax-page .voxel-home .slogan-shell,
+.relax-page .voxel-home .projection-slogan {
+  visibility: hidden !important;
+}

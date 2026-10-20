@@ -1,0 +1,366 @@
+/* About route — page-local composition.
+   The warm home surface, shared hero and film band live in globals.css under
+   `.marketing-page.about-page`; only About-specific layout lives here. */
+
+.page { background: #ffffff; }
+.page:global(.marketing-page.about-page) {
+  --about-header-height: 68px;
+  padding-top: calc(var(--about-header-height) + env(safe-area-inset-top, 0px)) !important;
+}
+.page:global(.marketing-page.about-page) :global(.marketing-board .marketing-hero) {
+  min-height: calc(100svh - var(--about-header-height) - env(safe-area-inset-top, 0px)) !important;
+  /* The bottom padding leaves room for the hero's colophon pseudo-label. */
+  padding-top: clamp(2.5rem, 7vh, 5rem) !important;
+  padding-bottom: clamp(3.75rem, 8vh, 5.5rem) !important;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .page:global(.marketing-page.about-page) { --about-header-height: 56px; }
+}
+.page:global(.marketing-page.about-page) :global(.marketing-board),
+.page:global(.marketing-page.about-page) :global(.marketing-board .marketing-hero),
+.page:global(.marketing-page.about-page) :global(.marketing-board .qicore-film-section) {
+  background: #ffffff !important;
+}
+.page :global(.marketing-hero h1) { font-size: clamp(64px, 6vw, 96px); letter-spacing: 0; }
+.page :global(.marketing-intro) {
+  max-width: 30em;
+  margin-top: clamp(1.5rem, 3vh, 2.25rem);
+  font-size: clamp(1.125rem, 1.35vw, 1.375rem);
+  line-height: 1.7;
+  text-wrap: balance;
+}
+
+.page .narrativeCopy .statement,
+.page .person h3,
+.page .head h2 { letter-spacing: 0; }
+.page :global(.qicore-film-stage),
+.page :global(.qicore-film-section.is-playing) { transform: none !important; }
+.genpiStage {
+  position: relative;
+  width: 100%;
+  max-width: 35rem;
+  align-self: center;
+  justify-self: end;
+}
+
+.chapter,
+.chapterFlush {
+  position: relative;
+  padding-block: clamp(3.5rem, 6.5vw, 7rem);
+  border-top: 1px solid rgba(29, 29, 31, .09);
+}
+
+.chapterFlush {
+  display: grid;
+  align-content: center;
+  min-height: calc(100svh - var(--about-header-height, 56px));
+  border-top: 0;
+  padding-block: clamp(5rem, 10vh, 8rem);
+}
+
+.head {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 46rem;
+}
+
+.head > :last-child {
+  margin: 0;
+}
+
+/* ── 01 / Company narrative ─────────────────────────────── */
+
+.narrativeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 36rem) minmax(0, 28rem);
+  justify-content: space-between;
+  gap: clamp(3rem, 6vw, 7rem);
+  align-items: center;
+}
+
+.narrativeContent { min-width: 0; }
+.narrativeHead { margin-bottom: clamp(2rem, 3vw, 3rem); }
+.page .narrativeHead h2 { font-size: clamp(2.25rem, 3.4vw, 3.25rem); }
+
+.narrativeCopy p {
+  margin: 0 0 1.15em;
+  color: #686860;
+  font-size: clamp(1rem, 1.15vw, 1.0625rem);
+  line-height: 1.9;
+  text-wrap: pretty;
+}
+
+.narrativeCopy p:last-child {
+  margin-bottom: 0;
+}
+
+.narrativeCopy strong {
+  color: #1d1d1f;
+  font-weight: 600;
+}
+
+.narrativeCopy .statement {
+  margin: 2em 0 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid #4f632b;
+  color: #1d1d1f;
+  font-size: clamp(1.125rem, 1.45vw, 1.375rem);
+  font-weight: 450;
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.diagram {
+  margin: 0;
+  padding: clamp(1.15rem, 1.6vw, 1.6rem);
+  border: 1px solid rgba(29, 29, 31, .1);
+  border-radius: 24px;
+  background:
+    #ffffff;
+  background-size: 28px 28px, 28px 28px, auto;
+  box-shadow: 12px 14px 0 rgba(29, 29, 31, .035);
+  color: #1d1d1f;
+}
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.diagram svg text {
+  font-family: var(--font-site);
+}
+
+.diagram figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(29, 29, 31, .12);
+}
+
+.diagram figcaption strong {
+  color: #1d1d1f;
+  font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+  font-weight: 560;
+  letter-spacing: -.045em;
+}
+
+.diagram figcaption span {
+  color: #686860;
+  font-family: var(--font-geist-mono);
+  font-size: .56rem;
+  letter-spacing: .14em;
+  line-height: 1.6;
+  text-align: right;
+}
+
+/* ── 02 / 03 — Focus and mission ────────────────────────── */
+
+.directionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+}
+
+.directionCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 18rem;
+  padding: 2rem;
+  overflow: hidden;
+  border: 1px solid rgba(29, 29, 31, .1);
+  border-radius: 8px;
+  background: #ffffff;
+  transition: border-color .4s ease;
+}
+
+.directionCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: none;
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .directionCard:hover {
+    border-color: rgba(79, 99, 43, .42);
+  }
+}
+
+.directionRule {
+  position: relative;
+  display: block;
+  width: 3rem;
+  height: 1px;
+  margin: clamp(1.5rem, 2.5vw, 2.25rem) 0 1.35rem;
+  background: #4f632b;
+  transform-origin: left center;
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .directionCard:hover .directionRule {
+    transform: scaleX(1.9);
+  }
+}
+
+.directionTitle {
+  position: relative;
+  margin-top: auto;
+  color: #1d1d1f;
+  font-size: 28px;
+  font-weight: 560;
+  letter-spacing: 0;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+/* ── 04 / Team ──────────────────────────────────────────── */
+
+.peopleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 1.8vw, 1.5rem);
+  margin-top: clamp(2rem, 3.5vw, 3.5rem);
+}
+
+.person {
+  min-width: 0;
+}
+
+.personMedia {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(29, 29, 31, .08);
+  border-radius: 24px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.personMedia img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  object-fit: cover;
+  object-position: center 18%;
+  transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .person:hover .personMedia img {
+    transform: scale(1.02);
+  }
+}
+
+.person h3 {
+  margin-top: 1.15rem;
+  color: #1d1d1f;
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+  font-weight: 560;
+  letter-spacing: -.03em;
+  line-height: 1.25;
+}
+
+.personRole {
+  margin-top: .4rem;
+  color: #686860;
+  font-size: .85rem;
+  line-height: 1.6;
+}
+
+.focusDiagram, .missionDiagram {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 60px;
+  margin-bottom: 24px;
+}
+.focusDiagram i, .missionDiagram i {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #6b8879;
+  background: #d8e6dc;
+}
+.focusDiagram i:nth-child(2) { background: #d6c477; }
+.focusDiagram i:last-child { background: #819da9; }
+.missionDiagram { gap: 14px; }
+.missionDiagram::before { content: ""; position: absolute; width: 180px; height: 1px; background: #6b887960; }
+.missionDiagram i { position: relative; width: 22px; height: 22px; rotate: 45deg; }
+.missionDiagram i:nth-child(even) { translate: 0 -16px; background: #e9d99b; }
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (min-width: 680px) {
+  .peopleGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .peopleGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .genpiStage { position: relative; top: auto; justify-self: center; }
+  .page :global(.marketing-hero h1) { font-size: 48px; }
+  .page:global(.marketing-page.about-page) :global(.marketing-board .marketing-hero) {
+    min-height: 0 !important;
+  }
+  .chapterFlush { min-height: 0; padding-block: clamp(3.5rem, 10vw, 5rem); }
+  .narrativeGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .diagram {
+    max-width: 24rem;
+    justify-self: start;
+  }
+
+  .directionGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .narrativeHead { margin-bottom: 2rem; }
+  .page .narrativeHead h2 { font-size: 32px; }
+  .page :global(.marketing-hero h1) { font-size: 38px; }
+  .directionTitle { font-size: 24px; }
+  .diagram {
+    max-width: none;
+  }
+
+  .diagram figcaption {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  .diagram figcaption span {
+    font-family: var(--font-geist-mono);
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .directionRule,
+  .personMedia img {
+    transition: none;
+  }
+}

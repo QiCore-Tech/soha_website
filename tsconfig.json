@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
@@ -13,11 +17,32 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [{ "name": "next" }],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
-      "@/*": ["./*"]
+      "@/i18n/*": [
+        "./i18n/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".next-preview/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    ".next-carousel-check/types/**/*.ts",
+    ".next-preview/types/**/*.ts",
+    ".next.dev-3002/types/**/*.ts",
+    ".next/types/**/*.ts",
+    "i18n/**/*.ts",
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next.dev-verify/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

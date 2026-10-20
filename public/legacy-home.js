@@ -1,6 +1,7 @@
 (() => {
   if (window.__QICORE_LEGACY_INITED__) return;
   window.__QICORE_LEGACY_INITED__ = true;
+  const copy = JSON.parse(document.getElementById('qicore-i18n-data').textContent);
 
         // ==========================================
         // 1. ✨ 设备检测与 IMU (重力感应) 初始化 ✨
@@ -805,7 +806,7 @@
                 axisH.style.transform = `translate3d(0, ${crossY}px, 1px)`; 
                 axisV.style.transform = `translate3d(${crossX}px, 0, 1px)`;
                 coordTracker.style.transform = `translate3d(${crossX + 16}px, ${crossY - 24}px, 1px)`;
-                coordTracker.textContent = `X: ${coords.x} | Y: ${coords.y} | Z: ${coords.z}`;
+                coordTracker.textContent = copy.staticArchive.coordinates.zh.replace(/\{(\w+)\}/g, (_, key) => String(coords[key]));
                 axisH.style.opacity = '1'; axisV.style.opacity = '1'; coordTracker.style.opacity = '1';
 
                 if (mode === 'none') {
@@ -952,7 +953,23 @@
         if (window.location.pathname !== '/') {
             sceneStrengthState = (isMobileView ? 16.5 : 14.5) * (lowPowerMode ? 0.62 : 1);
         }
-        const LUON_TYPE_TEXT = 'idea  →  design  →  reality';
+        const currentLocale = () => document.documentElement.dataset.locale === 'en' ? 'en' : 'zh';
+        const localizedNode = text => {
+            const fragment = document.createDocumentFragment();
+            for (const locale of ['zh', 'en']) {
+                const span = document.createElement('span');
+                span.dataset.lang = locale;
+                span.textContent = text[locale];
+                fragment.append(span);
+            }
+            return fragment;
+        };
+        const syncLabel = (node, text) => {
+            node.dataset.ariaLabelZh = text.zh;
+            node.dataset.ariaLabelEn = text.en;
+            node.setAttribute('aria-label', text[currentLocale()]);
+        };
+        const typeText = () => copy.runtime.intentFlow[currentLocale()];
 
         const footerSlotAliases = ['info', 'hr'];
         const footerSlotLineHeight = 16;
@@ -968,11 +985,16 @@
         }
 
         function runLuonTypewriter() {
-            if (!isLuonTransitioned || luonTypeIndex >= LUON_TYPE_TEXT.length) return;
-            typewriterEl.textContent += LUON_TYPE_TEXT.charAt(luonTypeIndex);
+            if (!isLuonTransitioned || luonTypeIndex >= typeText().length) return;
+            typewriterEl.textContent += typeText().charAt(luonTypeIndex);
             luonTypeIndex += 1;
             luonTypeTimeout = window.setTimeout(runLuonTypewriter, Math.random() * 40 + 30);
         }
+
+        new MutationObserver(() => {
+            clearLuonTypewriter();
+            if (isLuonTransitioned) runLuonTypewriter();
+        }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-locale'] });
 
         function updateLuonParallax(normX, normY) {
             if (!isLuonTransitioned || isLuonAnimating) return;
@@ -1367,7 +1389,10 @@
             const alias = footerSlotAliases[footerSlotIndex] || footerSlotAliases[0];
             const email = `${alias}@qicore.ai`;
             footerLink.href = `mailto:${email}`;
-            footerLink.setAttribute('aria-label', `Email ${email}`);
+            syncLabel(footerLink, {
+                zh: copy.common.email.zh.replace('{email}', email),
+                en: copy.common.email.en.replace('{email}', email)
+            });
         }
 
         function setFooterSlotTransform(index, isResetting = false) {
@@ -1890,8 +1915,8 @@
             button.style.background = getPaletteBlockBackground(key, true);
             button.dataset.colorKey = key;
             button.setAttribute('aria-pressed', String(activeColorMode === key));
-            if (['multicolor', 'white', 'black'].includes(key)) button.textContent = key === 'multicolor' ? 'MULTI' : key.toUpperCase();
-            button.setAttribute('aria-label', key);
+            if (['multicolor', 'white', 'black'].includes(key)) button.append(localizedNode(copy.runtime[key]));
+            syncLabel(button, copy.runtime[key]);
             button.onclick = () => {
                 activeColorMode = key;
                 colors.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
@@ -1900,25 +1925,29 @@
             };
             colors.append(button);
         });
-        function touchAction(zh, en, action) {
+        function touchAction(text, action) {
             const button = document.createElement('button');
-            button.innerHTML = `<span data-lang="zh">${zh}</span><span data-lang="en">${en}</span>`;
+            button.append(localizedNode(text));
             button.onclick = action;
             touchBar.querySelector('.touch-actions').append(button);
         }
-        touchAction('↶ 撤销', '↶ Undo', () => { if (historyStack.length) { touchRedo.push(JSON.parse(JSON.stringify(voxels))); undo(); } closeTouchPalette(); });
-        touchAction('清空', 'Clear', () => {
+        touchAction(copy.runtime.undo, () => { if (historyStack.length) { touchRedo.push(JSON.parse(JSON.stringify(voxels))); undo(); } closeTouchPalette(); });
+        touchAction(copy.runtime.clear, () => {
             closeTouchPalette();
             if (!voxels.length) return;
-            const en = document.documentElement.dataset.locale === 'en';
             const dialog = document.createElement('dialog');
             dialog.className = 'clear-confirm';
             dialog.setAttribute('aria-labelledby', 'clear-confirm-title');
             dialog.setAttribute('aria-describedby', 'clear-confirm-description');
-            dialog.innerHTML = `<span class="clear-confirm-kicker">QICORE / CANVAS</span>
-                <h2 id="clear-confirm-title">${en ? 'Start with a clear canvas?' : '清空画布，重新搭建？'}</h2>
-                <p id="clear-confirm-description">${en ? 'All blocks will be removed. You can undo this from the palette.' : '所有积木将被移除，你仍可以在色盘中撤销恢复。'}</p>
-                <div class="clear-confirm-actions"><button type="button" data-cancel>${en ? 'Keep building' : '继续搭建'}</button><button type="button" data-confirm>${en ? 'Clear canvas' : '清空画布'}</button></div>`;
+            dialog.innerHTML = `<span class="clear-confirm-kicker"></span>
+                <h2 id="clear-confirm-title"></h2>
+                <p id="clear-confirm-description"></p>
+                <div class="clear-confirm-actions"><button type="button" data-cancel></button><button type="button" data-confirm></button></div>`;
+            dialog.querySelector('.clear-confirm-kicker').append(localizedNode(copy.runtime.clearKicker));
+            dialog.querySelector('h2').append(localizedNode(copy.runtime.clearTitle));
+            dialog.querySelector('p').append(localizedNode(copy.runtime.clearDescription));
+            dialog.querySelector('[data-cancel]').append(localizedNode(copy.runtime.keepBuilding));
+            dialog.querySelector('[data-confirm]').append(localizedNode(copy.runtime.clearCanvas));
             document.body.append(dialog);
             interactionLocked = true;
             const close = () => { dialog.close(); dialog.remove(); interactionLocked = false; };
