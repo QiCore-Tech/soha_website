@@ -92,7 +92,7 @@ export default function AboutPage() {
                     className="block aspect-[4/5] w-full object-cover object-top transition-transform duration-500 hover:scale-[1.03] md:aspect-[3/4] lg:aspect-[4/5]"
                   />
                 </div>
-                <h3 className="mt-4 text-[16px] font-semibold text-ink"><Bi zh={person.name} en={person.english} /></h3>
+                <h3 className="mt-4 text-[16px] font-semibold text-ink">{person.english}</h3>
                 <p className="mt-1 font-mono text-[13px] text-ink-3"><Bi zh={person.role} en={person.roleEn} /></p>
               </article>
             ))}
