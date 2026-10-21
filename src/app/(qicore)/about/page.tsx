@@ -14,6 +14,11 @@ const people = [
   { image: "zhong", name: messages.about.zhongWanzhen.zh, english: messages.about.zhongWanzhen.en, role: messages.about.headOfMarketing.zh, roleEn: messages.about.headOfMarketing.en, bio: messages.about.leadsMarketingStrategyBrandAndGrowth.zh, bioEn: messages.about.leadsMarketingStrategyBrandAndGrowth.en },
 ];
 
+const portraitObjectPositions: Record<string, string> = {
+  wenda: "50% 35%",
+  braylen: "50% 55%"
+};
+
 export const metadata: Metadata = createPageMetadata({
   title: seoCopy.aboutTitle.zh,
   description: seoCopy.aboutDescription.zh,
@@ -89,6 +94,7 @@ export default function AboutPage() {
                     alt=""
                     loading="lazy"
                     decoding="async"
+                    style={{ objectPosition: portraitObjectPositions[person.image] ?? "50% 0%" }}
                     className="block aspect-[4/5] w-full object-cover object-top transition-transform duration-500 hover:scale-[1.03] md:aspect-[3/4] lg:aspect-[4/5]"
                   />
                 </div>
