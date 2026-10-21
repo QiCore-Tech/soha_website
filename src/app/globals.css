@@ -146,8 +146,8 @@
         }
 
         /* Unlayered, so it would beat Tailwind spacing utilities; the ported
-           two pages rely on those and get Tailwind's preflight reset instead. */
-        :where(*:not(:is(.news-page, .about-page, .careers-page) *)) { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+           two pages and the 404 rely on those and get Tailwind's preflight reset instead. */
+        :where(*:not(:is(.news-page, .about-page, .careers-page, .not-found-page) *)) { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
         /* body 作为全局摄像机视口 */
         body, html {
@@ -5714,20 +5714,29 @@ html:has([data-home-header]) {
     to { stroke-dashoffset: -8; }
 }
 
+/* 404 pegboard: the missing bead falls once from its seat and settles. */
+@keyframes not-found-bead-drop {
+    from { transform: translate(var(--bead-from-x), var(--bead-from-y)); animation-timing-function: cubic-bezier(.55, 0, 1, .45); }
+    70% { transform: translate(0, 0); animation-timing-function: cubic-bezier(.2, .7, .4, 1); }
+    84% { transform: translate(0, -5px); animation-timing-function: cubic-bezier(.6, 0, .8, .4); }
+    to { transform: translate(0, 0); }
+}
+
 /* ==========================================
-   Inner pages ported from soha_website_two (/news, /about, /careers).
+   Inner pages ported from soha_website_two (/news, /about, /careers), plus
+   the 404, which is built the same way.
    Their markup is Tailwind on the tokens at the top of this file; these rules
    flatten the shared marketing shell for them and carry two's widget styles.
    The old three-only rules for these pages are archived, not imported, in
    src/features/legacy-pages/legacy-inner-pages.css.
    ========================================== */
-html:has(:is(.news-page, .about-page, .careers-page)) {
+html:has(:is(.news-page, .about-page, .careers-page, .not-found-page)) {
     scroll-padding-top: calc(var(--site-header-h) + var(--header-safe-top) + 16px);
 }
 
 /* Content starts right below the fixed header, on the route shell and on the
    standalone /careers page alike. */
-:is(.news-page, .about-page, .careers-page).marketing-page {
+:is(.news-page, .about-page, .careers-page, .not-found-page).marketing-page {
     padding: calc(var(--site-header-h) + var(--header-safe-top)) 0 0 !important;
     background: #ffffff;
     color: var(--color-ink);
@@ -5737,7 +5746,7 @@ html:has(:is(.news-page, .about-page, .careers-page)) {
 }
 
 /* Undo the shared floating-board card: these pages are flat and full-bleed. */
-:is(.news-page, .about-page, .careers-page) .marketing-board {
+:is(.news-page, .about-page, .careers-page, .not-found-page) .marketing-board {
     display: block;
     width: 100% !important;
     max-width: none !important;
@@ -5752,15 +5761,15 @@ html:has(:is(.news-page, .about-page, .careers-page)) {
     transform: none !important;
 }
 
-:is(.news-page, .about-page, .careers-page) :is(h1, h2, h3, h4) { text-wrap: balance; }
-:is(.news-page, .about-page, .careers-page) p { text-wrap: pretty; }
-:is(.news-page, .about-page, .careers-page) ::selection { background: #111111; color: #ffffff; }
-:is(.news-page, .about-page, .careers-page) :where(a, button, summary, input, textarea, select):focus-visible {
+:is(.news-page, .about-page, .careers-page, .not-found-page) :is(h1, h2, h3, h4) { text-wrap: balance; }
+:is(.news-page, .about-page, .careers-page, .not-found-page) p { text-wrap: pretty; }
+:is(.news-page, .about-page, .careers-page, .not-found-page) ::selection { background: #111111; color: #ffffff; }
+:is(.news-page, .about-page, .careers-page, .not-found-page) :where(a, button, summary, input, textarea, select):focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 3px;
 }
-:is(.news-page, .about-page, .careers-page) summary { list-style: none; }
-:is(.news-page, .about-page, .careers-page) summary::-webkit-details-marker { display: none; }
+:is(.news-page, .about-page, .careers-page, .not-found-page) summary { list-style: none; }
+:is(.news-page, .about-page, .careers-page, .not-found-page) summary::-webkit-details-marker { display: none; }
 
 /* Careers hero copy is intentionally more compact than the shared page lead. */
 .careers-page #page-hero-title + p {

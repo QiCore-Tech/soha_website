@@ -12,6 +12,7 @@
 | `src/features/careers/` | 招聘导航、列表、领域类型与本地样例 |
 | `src/features/oyscat/` | 产品/Beta 组件、领域 CSS、图片预览与抵达效果 |
 | `src/features/news/` | 新闻专属交互 |
+| `src/features/not-found/` | 404 页（`src/app/not-found.tsx`）的拼豆板插画与双语标题同步 |
 | `src/features/legacy-voxel/` | 保留旧首页、Three 场景、体素类型/调色板/算法，不删除旧功能 |
 | `src/services/` | 外部系统访问；`server/feishu-careers.ts` 仅服务端/构建期 |
 | `src/stores/` | 跨组件语言状态，React 原生外部订阅，不新增 Zustand |
