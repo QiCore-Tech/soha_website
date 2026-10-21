@@ -37,9 +37,6 @@ export function MarketingFooter() {
               />
             </a>
             <p className="mt-1! font-mono text-xs font-medium text-zinc-500">{messages.about.makeSmart.zh}</p>
-            <p className="mt-4! max-w-xl text-[13px] leading-6 text-zinc-600">
-              <Bi {...messages.seo.footerIntroduction} />
-            </p>
             {/* Temporarily hidden; remove `hidden` to restore the social links. */}
             <div className="mt-3! hidden">
               <p className="font-mono text-xs text-zinc-500"><Bi {...messages.marketingFooter.socialMedia} /></p>

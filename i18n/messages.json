@@ -2885,6 +2885,10 @@
     "styleLabQicore": {
       "zh": "风格实验室 | QiCore",
       "en": "Style Lab | QiCore"
+    },
+    "notFoundQicore": {
+      "zh": "页面不存在 | QiCore",
+      "en": "Page not found | QiCore"
     }
   },
   "config": {
@@ -3340,6 +3344,40 @@
       "applyBeta": {
         "zh": "申请内测",
         "en": "Apply for beta"
+      }
+    },
+    "notFound": {
+      "eyebrow": {
+        "zh": "错误 404",
+        "en": "Error 404"
+      },
+      "title": {
+        "zh": "页面不存在",
+        "en": "Page not found"
+      },
+      "description": {
+        "zh": "你访问的页面可能已经移动、下线，或者地址有误。",
+        "en": "The page you are looking for may have moved, been taken down, or the address may be mistyped."
+      },
+      "backHome": {
+        "zh": "返回首页",
+        "en": "Back to home"
+      },
+      "exploreOyscat": {
+        "zh": "探索 Oyscat",
+        "en": "Explore Oyscat"
+      },
+      "moreLinks": {
+        "zh": "或者前往",
+        "en": "Or head to"
+      },
+      "boardLabel": {
+        "zh": "站点图谱 / 404",
+        "en": "SITE MAP / 404"
+      },
+      "boardMissing": {
+        "zh": "缺失 1 颗",
+        "en": "1 BEAD MISSING"
       }
     }
   }
