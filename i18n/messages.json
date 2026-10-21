@@ -45,8 +45,8 @@
       "en": "Explore our current openings, role details, and how to apply; find your place and bring new ideas into the real world with us"
     },
     "fromHelloToShipped": {
-      "zh": "从投递，到加入。",
-      "en": "From hello to shipped."
+      "zh": "从投递，到加入",
+      "en": "From hello to shipped"
     },
     "nothingThatFits": {
       "zh": "没有看到合适的职位？",
@@ -89,8 +89,8 @@
       "en": "03 / General application"
     },
     "text04GeneralApplication": {
-      "zh": "04 / 主动投递",
-      "en": "04 / General application"
+      "zh": "主动投递",
+      "en": "General application"
     }
   },
   "about": {
@@ -176,23 +176,23 @@
     },
     "qicoreTechnologyIsAnAiNativeCompany": {
       "zh": "气核科技是一家 AI 驱动的智能硬件设计与制造公司",
-      "en": "QiCore Technology is an AI-driven smart hardware design and manufacturing company."
+      "en": "Qicore Technology is an AI-native company for smart hardware design and manufacturing."
     },
     "creationBeginsWithIntent": {
-      "zh": "让造物，始于意图。",
-      "en": "Creation begins with intent."
+      "zh": "让造物，始于意图",
+      "en": "Creation begins with intent"
     },
     "generativeAiCanNowConvertHumanIntent": {
       "zh": "生成式人工智能的革命性突破，已实现人类意图向数字产物的高效生成。然而，从人类意图直达物理实体，依然是一道难以逾越的工程鸿沟。",
-      "en": "Revolutionary breakthroughs in generative AI have enabled human intent to be efficiently translated into digital outputs. Yet turning human intent directly into physical entities remains a formidable engineering gap."
+      "en": "Generative AI can now convert human intent into digital artifacts (text, images, audio, etc.) with remarkable efficiency. However, turning human intent into physical artifacts remains an unsolved engineering challenge."
     },
     "companyPurpose": {
       "zh": "气核科技首创生成式物理具现概念，致力于将人类的造物意图直接转化为功能性物理实体，",
-      "en": "QiCore pioneered the concept of Generative Physical Instantiation, dedicated to translating human creative intent directly into functional physical entities, "
+      "en": "We pioneered the concept of Generative Physical Instantiation (GenPI), turning human intent directly into functional physical artifacts."
     },
     "empowerPersonalizedCreation": {
       "zh": "赋能大众迈向零门槛的个性化智能造物时代。",
-      "en": "empowering everyone to enter an era of personalized smart creation with no barriers to entry."
+      "en": " We aim to make personalized smart hardware creation accessible to everyone."
     },
     "qicoreTechnologyIsAnAiNativeCompany2": {
       "zh": "气核科技是一家 AI 驱动的智能硬件设计与制造公司。",
@@ -232,7 +232,7 @@
     },
     "missionStatement": {
       "zh": "将工程师的能力，变成每个人的标配",
-      "en": "Make an engineer's capabilities part of everyone's toolkit."
+      "en": "Make engineering a built-in capability for everyone."
     },
     "vision": {
       "zh": "愿景",
@@ -240,11 +240,11 @@
     },
     "visionCreation": {
       "zh": "想造就造，所想即所得",
-      "en": "Create whenever inspiration strikes. Bring what you imagine to life."
+      "en": "A world where what you imagine is what you can create."
     },
     "visionIntent": {
       "zh": "意图驱动，万物皆可造",
-      "en": "Driven by intent, anything can be created."
+      "en": "Intent in. Creation out."
     }
   },
   "news": {
@@ -270,11 +270,11 @@
     },
     "qicoreOpensItsFirstClosedBeta": {
       "zh": "气核正式开启首批内测",
-      "en": "QiCore Opens Its First Closed Beta"
+      "en": "Our First Closed Beta Is Now Open"
     },
     "twentyNineCreatorsAreNowBuildingTheir": {
       "zh": "41 位来自不同背景的参与者，开始使用 Oyscat 搭建属于自己的项目。",
-      "en": "Forty-one participants from diverse backgrounds are now building their own projects with Oyscat."
+      "en": "41 participants from diverse backgrounds are building with Oyscat."
     },
     "qicoreAnnouncedThatOyscatHasOfficiallyEntered": {
       "zh": "气核科技（QiCore）宣布，Oyscat 已正式进入首批内测阶段，共招募 41 位内测用户，涵盖工程师、Minecraft 等建造经营游戏爱好者、文艺工作者等多元背景。",
@@ -1992,11 +1992,11 @@
     },
     "thinkItMakeIt": {
       "zh": "气核引领个人造物方式变革",
-      "en": "QiCore leads a transformation in personal creation."
+      "en": "QiCore transforms personal creation."
     },
     "fromAnIdeaToSomethingRealPut": {
       "zh": "意图驱动，让物理世界的自由创造属于每个人。",
-      "en": "Driven by intent, bringing everyone the freedom to create in the physical world."
+      "en": "Driven by intent. Built to give everyone the freedom to create in the physical world."
     },
     "exploreOyscat": {
       "zh": "探索 Oyscat",
@@ -2012,7 +2012,7 @@
     },
     "joinCuriousMakersAndBringNewPossibilities": {
       "zh": "Oyscat 是 GenPI 体系下的首个落地实现。我们重构造物的全链路，让创作如同游戏一般充满乐趣，任何人都能亲手实现创意，打造专属作品。",
-      "en": "Oyscat is the first practical implementation of GenPI. We reimagine the entire creation process, making it as playful as a game so anyone can bring ideas to life and build something uniquely their own."
+      "en": "Oyscat is our first implementation of the GenPI framework. We redefine the entire creation process, making it as engaging as a game so anyone can bring ideas to life and build something uniquely their own."
     },
     "aiDesignAndSimulation": {
       "zh": "AI 驱动的设计与仿真系统",
@@ -2020,11 +2020,11 @@
     },
     "reusableElectronicModules": {
       "zh": "标准化、去中心化且可重复利用的电子模块",
-      "en": "Standardized, decentralized, and reusable electronic modules"
+      "en": "Standardized, decentralized, and reusable electronic blocks"
     },
     "agileElectrifiedCreation": {
       "zh": "赋能用户实现极致敏捷的电气化造物",
-      "en": "Empowering users to build electrified creations with exceptional agility"
+      "en": "Empowering anyone to build electronic creations effortlessly"
     },
     "joinUs": {
       "zh": "加入我们",
@@ -2054,11 +2054,11 @@
     },
     "heroTitle": {
       "zh": "气核引领\n个人造物方式变革",
-      "en": "QiCore leads a transformation in personal creation."
+      "en": "QiCore transforms personal creation."
     },
     "heroSubtitle": {
       "zh": "意图驱动，让物理世界的自由创造属于每个人",
-      "en": "Driven by intent, bringing everyone the freedom to create in the physical world"
+      "en": "Driven by intent. Built to give everyone the freedom to create in the physical world."
     },
     "scrollHint": {
       "zh": "向下滚动",
@@ -2094,7 +2094,7 @@
     },
     "genpiPrompt": {
       "zh": "帮我搭建一个飞机，然后起飞",
-      "en": "Build me an airplane, then take off"
+      "en": "Build an airplane that takes off"
     },
     "genpiPromptPlaceholder": {
       "zh": "描述你想创造的东西…",
@@ -2302,7 +2302,7 @@
     },
     "productDescription": {
       "zh": "Oyscat 是 GenPI 体系下的首个落地实现。我们重构造物的全链路，让创作如同游戏一般充满乐趣，任何人都能亲手实现创意，打造专属作品。",
-      "en": "Oyscat is the first practical implementation of GenPI. We reimagine the entire creation process, making it as playful as a game so anyone can bring ideas to life and build something uniquely their own."
+      "en": "Oyscat is our first implementation of the GenPI framework. We redefine the entire creation process, making it as engaging as a game so anyone can bring ideas to life and build something uniquely their own."
     },
     "productFeatureDesign": {
       "zh": "AI 驱动的设计与仿真系统",
@@ -2310,11 +2310,11 @@
     },
     "productFeatureModules": {
       "zh": "标准化、去中心化且可重复利用的电子模块",
-      "en": "Standardized, decentralized, and reusable electronic modules"
+      "en": "Standardized, decentralized, and reusable electronic blocks"
     },
     "productFeatureElectrify": {
       "zh": "赋能用户实现极致敏捷的电气化造物",
-      "en": "Empowering users to build electrified creations with exceptional agility"
+      "en": "Empowering anyone to build electronic creations effortlessly"
     },
     "enterProductPage": {
       "zh": "进入产品页",
@@ -2801,8 +2801,8 @@
       "en": "Shenzhen QiCore Technology Co., Ltd."
     },
     "defaultTitle": {
-      "zh": "Oyscat 官网｜深圳气核科技有限公司 QiCore",
-      "en": "Oyscat Official | Shenzhen QiCore Technology Co., Ltd."
+      "zh": "QiCore 官网｜深圳气核科技有限公司",
+      "en": "QiCore Official | Shenzhen QiCore Technology Co., Ltd."
     },
     "defaultDescription": {
       "zh": "Oyscat 官网：深圳气核科技有限公司（QiCore）旗下 AI 造物系统。用一句话生成模型，在 Oyscat Workspace 中完成结构设计、实时仿真与电子模块编程，再把作品带入现实。了解 Oyscat 产品、电子模块、气核科技团队与最新动态。",
@@ -2855,8 +2855,8 @@
   },
   "pageTitles": {
     "qicoreTechnologyThinkItMakeIt": {
-      "zh": "Oyscat 官网｜深圳气核科技有限公司 QiCore",
-      "en": "Oyscat Official | Shenzhen QiCore Technology Co., Ltd."
+      "zh": "QiCore 官网｜深圳气核科技有限公司",
+      "en": "QiCore Official | Shenzhen QiCore Technology Co., Ltd."
     },
     "aboutUsQicore": {
       "zh": "关于气核科技｜深圳气核科技有限公司 QiCore",
@@ -3311,7 +3311,7 @@
       },
       "teamLead": {
         "zh": "一群来自硬件、软件、设计与制造领域的造物者。",
-        "en": "A team of builders from hardware, software, design and manufacturing."
+        "en": "A team in pursuit of a shared vision."
       }
     },
     "careers": {

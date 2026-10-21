@@ -51,8 +51,8 @@ export const websiteStructuredData = {
       "@type": "WebSite",
       "@id": WEBSITE_ID,
       url: SEO_ORIGIN,
-      name: "Oyscat 官网｜深圳气核科技有限公司 QiCore",
-      alternateName: ["Oyscat 官网", "Oyscat Official", "气核科技官网", "QiCore"],
+      name: "QiCore 官网｜深圳气核科技有限公司",
+      alternateName: ["QiCore 官网", "QiCore Official", "气核科技官网", "Oyscat 官网"],
       description: seoCopy.defaultDescription.zh,
       publisher: { "@id": ORGANIZATION_ID },
       inLanguage: ["zh-CN", "en"]
