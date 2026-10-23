@@ -17,6 +17,11 @@
   ],
   "redirects": [
     {
+      "source": "/oyscat",
+      "destination": "https://www.oyscat.com/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [
         {
