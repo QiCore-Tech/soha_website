@@ -57,14 +57,14 @@ async function withPage(engine, viewport, run, locale) {
 
 test("static artifacts serve direct deep links, reloads and genuine 404 responses", async () => {
   await withPage(chromium, { width: 1440, height: 900 }, async (page) => {
-    for (const pathname of ["/about", "/news", "/careers"]) {
+    for (const pathname of ["/about", "/news", "/careers", "/relax"]) {
       const response = await page.goto(`${server.baseURL}${pathname}`, { waitUntil: "networkidle" });
       assert.equal(response.status(), 200, pathname);
       assert.equal(response.headers()["x-qicore-preview"], "static-readonly");
       assert.ok((await page.locator("body").innerText()).trim().length > 0, pathname);
       assert.equal((await page.reload({ waitUntil: "networkidle" })).status(), 200, pathname);
     }
-    for (const pathname of ["/oyscat", "/team", "/relax", "/style-lab"]) {
+    for (const pathname of ["/oyscat", "/team", "/style-lab"]) {
       const response = await page.goto(`${server.baseURL}${pathname}`, { waitUntil: "networkidle" });
       assert.equal(response.status(), 404, pathname);
     }

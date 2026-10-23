@@ -13,6 +13,7 @@ export const pageTitles: Record<string, LocalizedText> = {
   "/about": messages.pageTitles.aboutUsQicore,
   "/careers": messages.pageTitles.careersQicore,
   "/news": messages.pageTitles.newsQicore,
+  "/relax": messages.pageTitles.relaxQicore,
 };
 
 export const pageDescriptions: Record<string, LocalizedText> = {
