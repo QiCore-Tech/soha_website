@@ -162,7 +162,7 @@ QiCore 官网把公司介绍做成了一张可以继续工作的画板：
 
 启动：`node src/scripts/local-preview.mjs`，默认地址 http://127.0.0.1:3000（先执行 `npm run build`，端口可用 `PORT` 修改） 。
 
-当前站点仅保留首页、`/news`、`/about`、`/careers` 与 404 页面。原 `/oyscat`、`/team`、`/relax`、`/style-lab` 路由及专用组件已移除，Oyscat 产品入口继续通过首页产品板块和外部产品站提供。
+当前站点保留首页、`/news`、`/about`、`/careers`、内部体验页 `/relax` 与 404 页面。原 `/oyscat`、`/team`、`/style-lab` 路由及专用组件已移除，Oyscat 产品入口继续通过首页产品板块和外部产品站提供。
 
 报名通过 `/api/beta` 写入飞书多维表格，只有飞书确认记录创建成功才返回成功提示。当前 `node src/scripts/local-preview.mjs` 仅只读服务根级 `out/`，拒绝写请求，不运行 API、不连接飞书；普通 `next dev` 同样不运行独立 Vercel API。以下为历史生产集成记录，不代表本次预览会写入外部系统。配置独立的 `FEISHU_BETA_APP_ID`、`FEISHU_BETA_APP_SECRET`、`FEISHU_BETA_BASE_TOKEN`、`FEISHU_BETA_TABLE_ID`，并将目标多维表格授权给该应用。凭据和表标识仅保存在服务端环境变量，不进入客户端。2026-09-16 已通过本地首屏、页尾表单实测应用身份写入并读回核对；Vercel Production 配置已保存，网站尚未推送或部署。
 

@@ -14,6 +14,7 @@ import { seoCopy, SHARE_IMAGE, websiteStructuredData } from "@/configs/seo";
 import "../features/about/components/about-visual.module.css";
 import "../components/image-zoom.module.css";
 import "./globals.css";
+import "../features/legacy-voxel/fun-home.css";
 
 export const viewport: Viewport = {
   width: "device-width",
