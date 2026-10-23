@@ -575,7 +575,7 @@ test("returning from a company page restores an interactive carousel", async () 
 
 test("homepage product and careers links remain available", async () => {
   await withPage(async (page) => {
-    assert.equal(await page.locator('[data-home-section="product"] a[href="https://beta-hk.oyscat.com/"]').first().getAttribute("href"), "https://beta-hk.oyscat.com/");
+    assert.equal(await page.locator('[data-home-section="product"] a[href="https://www.oyscat.com/"]').first().getAttribute("href"), "https://www.oyscat.com/");
     await page.goto(server.baseURL);
     await page.locator(".swiper-initialized").waitFor();
     await page.getByRole("button", { name: /^(?:第 3 张|Slide 3)$/ }).click();

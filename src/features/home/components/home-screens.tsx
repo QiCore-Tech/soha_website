@@ -14,7 +14,7 @@ import { HomeGenpiDiagram } from "./home-genpi-diagram";
 import { HomePlaceholder } from "./home-placeholder";
 import { homeDisplayHeading } from "../lib/home-typography";
 
-const productSiteUrl = "https://beta-hk.oyscat.com/";
+const productSiteUrl = "https://www.oyscat.com/";
 
 // Same workspace demo as the Oyscat page (#system).
 const productVideo = { src: "/media/v3/workspace-demo.mp4", poster: "/media/v3/workspace-poster.jpg", label: messages.oyscat.oyscatWorkspaceDemo };

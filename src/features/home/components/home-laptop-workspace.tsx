@@ -52,7 +52,7 @@ export function HomeLaptopWorkspace() {
         <div>
           <p className="max-w-xl text-base leading-[1.75] text-[#686860] md:text-lg"><Bi zh={messages.homeLaptopWorkspace.bringStructureControlAndSimulationIntoOne.zh} en={messages.homeLaptopWorkspace.bringStructureControlAndSimulationIntoOne.en} /></p>
           <p className="mt-6! text-xs tracking-[0.08em] text-[#686860]"><Bi zh={messages.homeLaptopWorkspace.shapeDefineTest.zh} en={messages.homeLaptopWorkspace.shapeDefineTest.en} /></p>
-          <Button nativeButton={false} render={<a href="https://beta-hk.oyscat.com/" target="_blank" rel="noopener noreferrer" />} variant="outline"
+          <Button nativeButton={false} render={<a href="https://www.oyscat.com/" target="_blank" rel="noopener noreferrer" />} variant="outline"
             className="mt-8! min-h-11 h-auto! max-w-full gap-3 rounded-full! border-black/20! bg-transparent! px-5! py-3! text-sm whitespace-normal text-[#1d1d1f]! no-underline! hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-offset-4">
             <Bi zh={messages.homeLaptopWorkspace.exploreOyscatWorkspace.zh} en={messages.homeLaptopWorkspace.exploreOyscatWorkspace.en} /><ArrowUpRight className="size-4 shrink-0" aria-hidden="true" />
           </Button>

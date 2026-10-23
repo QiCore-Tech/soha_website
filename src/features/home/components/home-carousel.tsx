@@ -27,7 +27,7 @@ const slides = [
     title: messages.homeCarousel.thinkItMakeIt,
     description: messages.homeCarousel.fromAnIdeaToSomethingRealPut,
     features: [],
-    link: "https://beta-hk.oyscat.com/",
+    link: "https://www.oyscat.com/",
     action: messages.homeCarousel.exploreOyscat
   },
   {
@@ -43,7 +43,7 @@ const slides = [
       messages.homeCarousel.reusableElectronicModules,
       messages.homeCarousel.agileElectrifiedCreation,
     ],
-    link: "https://beta-hk.oyscat.com/",
+    link: "https://www.oyscat.com/",
     action: messages.homeCarousel.exploreOyscat
   }
 ];
