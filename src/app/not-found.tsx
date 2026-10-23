@@ -47,9 +47,6 @@ export default function NotFound() {
               <a href="/" className={buttonVariants({ variant: "pill", size: "pill" })}>
                 <Bi zh={copy.backHome.zh} en={copy.backHome.en} />
               </a>
-              <a href="/oyscat" className={buttonVariants({ variant: "pill-outline", size: "pill" })}>
-                <Bi zh={copy.exploreOyscat.zh} en={copy.exploreOyscat.en} />
-              </a>
             </div>
             <div className="mt-12 border-t border-line pt-6">
               <p className="font-mono text-[13px] text-ink-3"><Bi zh={copy.moreLinks.zh} en={copy.moreLinks.en} /></p>

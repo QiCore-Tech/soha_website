@@ -101,9 +101,9 @@ test("every catalog entry supplies both languages and matching template paramete
   assert.ok(count > 300);
 });
 
-test("style lab has a localized document title", () => {
+test("only the published routes have document titles", () => {
   const { pageTitles } = harness().load("i18n/messages");
-  assert.equal(pageTitles["/style-lab"].en, "Style Lab | QiCore");
+  assert.deepEqual(Object.keys(pageTitles).sort(), ["/", "/about", "/careers", "/news"]);
 });
 
 test("CSS-generated labels follow saved and switched locales", () => {

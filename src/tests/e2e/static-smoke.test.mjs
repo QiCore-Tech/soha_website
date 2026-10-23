@@ -57,12 +57,16 @@ async function withPage(engine, viewport, run, locale) {
 
 test("static artifacts serve direct deep links, reloads and genuine 404 responses", async () => {
   await withPage(chromium, { width: 1440, height: 900 }, async (page) => {
-    for (const pathname of ["/about", "/oyscat", "/news", "/team", "/careers", "/style-lab"]) {
+    for (const pathname of ["/about", "/news", "/careers"]) {
       const response = await page.goto(`${server.baseURL}${pathname}`, { waitUntil: "networkidle" });
       assert.equal(response.status(), 200, pathname);
       assert.equal(response.headers()["x-qicore-preview"], "static-readonly");
       assert.ok((await page.locator("body").innerText()).trim().length > 0, pathname);
       assert.equal((await page.reload({ waitUntil: "networkidle" })).status(), 200, pathname);
+    }
+    for (const pathname of ["/oyscat", "/team", "/relax", "/style-lab"]) {
+      const response = await page.goto(`${server.baseURL}${pathname}`, { waitUntil: "networkidle" });
+      assert.equal(response.status(), 404, pathname);
     }
     const missing = await page.goto(`${server.baseURL}/missing/static/deep-link`, { waitUntil: "networkidle" });
     assert.equal(missing.status(), 404);
@@ -153,10 +157,10 @@ for (const [name, engine] of [["Chromium", chromium], ["WebKit", webkit]]) {
 
   test(`${name} saved language and localized navigation`, async () => {
     await withPage(engine, { width: 1440, height: 900 }, async (page) => {
-      await page.goto(`${server.baseURL}/oyscat`, { waitUntil: "networkidle" });
+      await page.goto(`${server.baseURL}/about`, { waitUntil: "networkidle" });
       await page.waitForFunction(() => document.documentElement.dataset.locale === "en");
       assert.equal(await page.locator("html").getAttribute("lang"), "en");
-      assert.match(await page.title(), /Oyscat/);
+      assert.match(await page.title(), /About|QiCore/i);
       // html[data-locale] is initialized before React; wait for the hydrated toggle too.
       await page.waitForFunction(() => document.querySelector(".locale-toggle")?.getAttribute("aria-label") === "Switch to Chinese");
       assert.equal(await page.locator(".locale-toggle").getAttribute("aria-label"), "Switch to Chinese");

@@ -10,7 +10,6 @@
 | `src/components/` | 共享导航、MarketingPage、缓存路由 shell；`ui/` 是 shadcn 基础组件 |
 | `src/features/home/` | 首页三屏纵向展示（`home-screens.tsx`）；旧 Swiper 轮播与品牌区块文件保留但未挂载 |
 | `src/features/careers/` | 招聘导航、列表、领域类型与本地样例 |
-| `src/features/oyscat/` | 产品/Beta 组件、领域 CSS、图片预览与抵达效果 |
 | `src/features/news/` | 新闻专属交互 |
 | `src/features/not-found/` | 404 页（`src/app/not-found.tsx`）的拼豆板插画与双语标题同步 |
 | `src/features/legacy-voxel/` | 保留旧首页、Three 场景、体素类型/调色板/算法，不删除旧功能 |

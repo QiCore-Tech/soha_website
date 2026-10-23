@@ -57,11 +57,9 @@ QiCore 官网的视觉核心不是“大字报”，而是一个持续存在的�
 | `/` | QiCore 创作画板 | 入口、导航和交互首页 |
 | `/about` | About QiCore | 公司介绍、Why QiCore、团队与第一款产品 |
 | `/news` | News & Updates | 产品进展、内测消息与品牌记录 |
-| `/team` | Team | 团队原则、工作方式与开放岗位 |
 | `/careers` | Careers | 飞书同步的开放岗位与公开投递入口 |
-| `/oyscat` | Oyscat Products | 产品介绍、Electronic Modules 与 Workspace |
 
-QiCore 的内容页共享同一块画板；Oyscat 页面则是独立的产品叙事空间。页面之间的跳转关系属于信息架构的一部分，而不是单纯的链接集合。
+QiCore 的内容页共享同一块画板；Oyscat 产品入口由首页产品板块和外部产品站承载，不作为本站独立路由。页面之间的跳转关系属于信息架构的一部分，而不是单纯的链接集合。
 
 ## 技术结构
 
@@ -76,10 +74,10 @@ QiCore 的内容页共享同一块画板；Oyscat 页面则是独立的产品叙
 
 ```text
 src/app/                    # 页面路由与页面级内容
-src/components/             # 导航、画板、产品转场、影片等共享组件
+src/components/             # 导航、画板、影片等共享组件
 src/hooks/                  # 性能等级与交互相关 hooks
 src/lib/                # 基础适配和 QiCore 路由状态
-src/features/           # home/careers/oyscat/news/legacy-voxel 领域
+src/features/           # home/careers/news 等领域
 src/api/                # 独立 API 实现
 api/                    # Vercel 自动发现所需薄入口
 i18n/                   # 根级语言协议与统一 messages.json 文案库
@@ -135,7 +133,7 @@ npm run test:perf
 output: "export"
 ```
 
-构建结果位于 `out/`，Vercel 配置位于 `vercel.json`。其中 `/about`、`/news`、`/team`、`/oyscat` 等路径会重写到对应的静态 HTML，确保直接访问内容页时不会被当成 TXT，也不会因为静态路由缺失而出现 404。
+构建结果位于 `out/`，Vercel 配置位于 `vercel.json`。其中 `/about`、`/news`、`/careers` 等路径会重写到对应的静态 HTML，确保直接访问内容页时不会被当成 TXT，也不会因为静态路由缺失而出现 404。
 
 部署前至少执行：
 
@@ -164,7 +162,7 @@ QiCore 官网把公司介绍做成了一张可以继续工作的画板：
 
 启动：`node src/scripts/local-preview.mjs`，默认地址 http://127.0.0.1:3000（先执行 `npm run build`，端口可用 `PORT` 修改） 。
 
-按用户最新确认，保留原背景、UI 样式、首页、导航栏造型和所有原转场。全局 CSS、MarketingPage、QiCoreRouteShell、ProductTransition 和首页交互脚本未修改。本轮只调整内容与导航文字：产品文案、流程、Demo、FAQ、申请表，公司介绍、近期/长期方向、三位团队与招聘入口。原 /team 地址复用关于内容，不增加新转场。原产品独立入场及背景保留；平整静态背景和独立产品站合并暂不实施。
+当前站点仅保留首页、`/news`、`/about`、`/careers` 与 404 页面。原 `/oyscat`、`/team`、`/relax`、`/style-lab` 路由及专用组件已移除，Oyscat 产品入口继续通过首页产品板块和外部产品站提供。
 
 报名通过 `/api/beta` 写入飞书多维表格，只有飞书确认记录创建成功才返回成功提示。当前 `node src/scripts/local-preview.mjs` 仅只读服务根级 `out/`，拒绝写请求，不运行 API、不连接飞书；普通 `next dev` 同样不运行独立 Vercel API。以下为历史生产集成记录，不代表本次预览会写入外部系统。配置独立的 `FEISHU_BETA_APP_ID`、`FEISHU_BETA_APP_SECRET`、`FEISHU_BETA_BASE_TOKEN`、`FEISHU_BETA_TABLE_ID`，并将目标多维表格授权给该应用。凭据和表标识仅保存在服务端环境变量，不进入客户端。2026-09-16 已通过本地首屏、页尾表单实测应用身份写入并读回核对；Vercel Production 配置已保存，网站尚未推送或部署。
 

@@ -57,7 +57,7 @@ after(async () => {
 
 test("top navigation keeps cached content aligned with the URL after a direct content load", async () => {
   await withPage(async page => {
-    await page.goto(`${server.baseURL}/oyscat`, { waitUntil: "domcontentloaded" });
+    await page.goto(`${server.baseURL}/about`, { waitUntil: "domcontentloaded" });
     await page.locator('[data-header-ready="true"]').waitFor();
     await page.evaluate(() => { window.routeNavigationDocument = "preserved"; });
 
@@ -70,17 +70,17 @@ test("top navigation keeps cached content aligned with the URL after a direct co
       assert.equal(await page.evaluate(() => window.routeNavigationDocument), "preserved");
     };
 
-    for (const pathname of ["/news", "/about", "/oyscat", "/news"]) {
+    for (const pathname of ["/news", "/about", "/news"]) {
       await page.locator(`[data-site-header] nav a[href="${pathname}"]`).click();
       await assertRoute(pathname);
     }
 
     await page.goBack();
-    await assertRoute("/oyscat");
-    await page.goBack();
     await assertRoute("/about");
+    await page.goBack();
+    await assertRoute("/news");
     await page.goForward();
-    await assertRoute("/oyscat");
+    await assertRoute("/about");
     await page.goForward();
     await assertRoute("/news");
   });
@@ -147,7 +147,7 @@ test("site footer matches home on direct loads across locales and viewports", as
         await gotoFreshHomepage(page, server.baseURL);
         assert.equal(await page.locator('html').getAttribute('data-locale'), locale);
         const expected = await assertSiteFooter(page);
-        for (const route of ['/oyscat', '/news', '/about']) {
+        for (const route of ['/news', '/about']) {
           await page.goto(server.baseURL + route, { waitUntil: 'domcontentloaded' });
           await page.locator('[data-header-ready="true"]').waitFor();
           await assertSiteFooter(page, expected);
@@ -160,7 +160,7 @@ test("site footer matches home on direct loads across locales and viewports", as
 test("site footer survives cached navigation and history while careers stays in its board", async () => {
   await withPage(async page => {
     const expected = await assertSiteFooter(page);
-    for (const route of ['/oyscat', '/news', '/about']) {
+    for (const route of ['/news', '/about']) {
       await page.locator(`[data-site-header] nav a[href="${route}"]`).click();
       await page.waitForURL('**' + route);
       await assertSiteFooter(page, expected);
@@ -253,7 +253,7 @@ test("content pages keep a light backdrop on direct loads and cached navigation"
     };
     for (const [width, height] of [[390, 844], [768, 1024], [1440, 900]]) {
       await page.setViewportSize({ width, height });
-      for (const route of ["/news", "/about", "/oyscat"]) {
+      for (const route of ["/news", "/about"]) {
         await page.goto(server.baseURL + route, { waitUntil: "domcontentloaded" });
         await page.locator('[data-header-ready="true"]').waitFor();
         await assertPaperBackground();
@@ -261,7 +261,7 @@ test("content pages keep a light backdrop on direct loads and cached navigation"
     }
     await gotoFreshHomepage(page, server.baseURL);
     const homeBackground = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
-    for (const route of ["/news", "/about", "/oyscat"]) {
+    for (const route of ["/news", "/about"]) {
       await page.locator(`[data-site-header] nav a[href="${route}"]`).click();
       await page.waitForURL("**" + route);
       await assertPaperBackground();
@@ -275,16 +275,16 @@ test("content pages keep a light backdrop on direct loads and cached navigation"
   });
 });
 
-test("Oyscat uses the full-width header on direct loads, scroll and cached navigation", async () => {
+test("About uses the full-width header on direct loads, scroll and cached navigation", async () => {
   await withPage(async page => {
     for (const [width, height] of [[1440, 900], [390, 844], [834, 1194]]) {
       await page.setViewportSize({ width, height });
-      await page.goto(`${server.baseURL}/oyscat`, { waitUntil: "domcontentloaded" });
+      await page.goto(`${server.baseURL}/about`, { waitUntil: "domcontentloaded" });
       const header = page.locator("[data-site-header]");
       await page.locator('[data-header-ready="true"]').waitFor();
       assert.equal(await page.locator("header.marketing-nav").count(), 1);
       assert.equal(await page.locator("[data-home-carousel]").count(), 0);
-      assert.equal(await header.locator('[aria-current="page"]').getAttribute("href"), "/oyscat");
+      assert.equal(await header.locator('[aria-current="page"]').getAttribute("href"), "/about");
       assert.equal(await header.evaluate(el => getComputedStyle(el).borderRadius), "0px");
       const rect = await header.boundingBox();
       assert.equal(rect.x, 0);
@@ -300,15 +300,15 @@ test("Oyscat uses the full-width header on direct loads, scroll and cached navig
       }
       await page.reload({ waitUntil: "domcontentloaded" });
       await page.locator('[data-header-ready="true"]').waitFor();
-      assert.equal(await header.locator('[aria-current="page"]').getAttribute("href"), "/oyscat");
+      assert.equal(await header.locator('[aria-current="page"]').getAttribute("href"), "/about");
     }
     await page.setViewportSize({ width: 1440, height: 900 });
+    await page.locator('.marketing-nav-links a[href="/news"]').click();
+    await page.waitForURL("**/news");
     await page.locator('.marketing-nav-links a[href="/about"]').click();
     await page.waitForURL("**/about");
-    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
-    await page.waitForURL("**/oyscat");
     await page.locator("[data-site-header]").waitFor();
-    assert.equal(await page.locator('[data-site-header] [aria-current="page"]').getAttribute("href"), "/oyscat");
+    assert.equal(await page.locator('[data-site-header] [aria-current="page"]').getAttribute("href"), "/about");
     await page.locator(".locale-toggle").click();
     await page.waitForFunction(() => document.documentElement.dataset.locale === "en");
     await page.locator('.marketing-nav-links a[href="/"]').click();
@@ -316,9 +316,9 @@ test("Oyscat uses the full-width header on direct loads, scroll and cached navig
     await page.locator("[data-home-header]").waitFor();
     assert.equal(await page.locator('[data-site-header] [aria-current="page"]').getAttribute("href"), "/");
     await page.goBack();
-    await page.waitForURL("**/oyscat");
+    await page.waitForURL("**/about");
     await page.locator("[data-site-header]").waitFor();
-    assert.equal(await page.locator('[data-site-header] [aria-current="page"]').getAttribute("href"), "/oyscat");
+    assert.equal(await page.locator('[data-site-header] [aria-current="page"]').getAttribute("href"), "/about");
   });
 });
 
@@ -326,7 +326,7 @@ test("all routes share one responsive header and independent pages navigate back
   await withPage(async page => {
     for (const [width, height] of [[390, 844], [844, 390], [768, 1024], [1440, 900]]) {
       await page.setViewportSize({ width, height });
-      for (const route of ["/", "/oyscat", "/about", "/news", "/team", "/careers", "/style-lab"]) {
+      for (const route of ["/", "/news", "/about", "/careers"]) {
         await page.goto(server.baseURL + route, { waitUntil: "domcontentloaded" });
         const header = page.locator('[data-site-header][data-header-ready="true"]');
         await header.waitFor();
@@ -353,7 +353,7 @@ test("all routes share one responsive header and independent pages navigate back
         }
       }
     }
-    for (const route of ["/careers", "/style-lab"]) {
+    for (const route of ["/careers"]) {
       await page.goto(server.baseURL + route, { waitUntil: "domcontentloaded" });
       await page.locator('[data-header-ready="true"]').waitFor();
       await page.locator('[data-site-header] nav a[href="/about"]').click();
@@ -575,8 +575,7 @@ test("returning from a company page restores an interactive carousel", async () 
 
 test("homepage product and careers links remain available", async () => {
   await withPage(async (page) => {
-    await page.locator('.swiper-slide-active a[href="/oyscat"]').click();
-    await page.waitForURL("**/oyscat");
+    assert.equal(await page.locator('[data-home-section="product"] a[href="https://beta-hk.oyscat.com/"]').first().getAttribute("href"), "https://beta-hk.oyscat.com/");
     await page.goto(server.baseURL);
     await page.locator(".swiper-initialized").waitFor();
     await page.getByRole("button", { name: /^(?:第 3 张|Slide 3)$/ }).click();
@@ -586,7 +585,7 @@ test("homepage product and careers links remain available", async () => {
   });
 });
 
-test("mobile navigation reaches Oyscat content pages", async () => {
+test("mobile navigation reaches company content pages", async () => {
   await withPage(async (page) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.reload();
@@ -762,7 +761,7 @@ test("QiCore film plays inline without leaving the About page", async () => {
   });
 });
 
-test("company and product navigation share the QiCore route shell", async () => {
+test("news and company navigation share the QiCore route shell", async () => {
   await withPage(async (page) => {
     const routeDataRequests = [];
     page.on("request", (request) => {
@@ -800,51 +799,21 @@ test("company and product navigation share the QiCore route shell", async () => 
     await page.evaluate(() => {
       document.documentElement.dataset.navigationDocumentProbe = "stale-company-page";
     });
-    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
-    await page.waitForURL("**/oyscat");
+    await page.locator('.marketing-nav-links a[href="/news"]').click();
+    await page.waitForURL("**/news");
 
     assert.equal(
       await page.evaluate(() => document.documentElement.dataset.navigationDocumentProbe),
       "stale-company-page",
-      "the QiCore document must survive integrated product navigation"
+      "the QiCore document must survive content navigation"
     );
     assert.equal(
       await page.evaluate(() => window.__QICORE_SHELL_NODE_PROBE__ === document.querySelector(".qicore-route-shell")),
       true,
-      "the shared shell must remain mounted on the Oyscat product page",
+      "the shared shell must remain mounted on the news page",
     );
-    assert.equal(await page.locator(".qicore-route-panel.is-active .oyscat-page").count(), 1);
-    assert.equal(await page.locator(".oyscat-nav").count(), 0);
+    assert.equal(await page.locator(".qicore-route-panel.is-active .news-page").count(), 1);
     assert.equal(await page.evaluate(() => document.contentType), "text/html");
-  });
-});
-
-test("integrated Oyscat page keeps its market content", async () => {
-  await withPage(async (page) => {
-    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
-    await page.waitForURL("**/oyscat");
-    const activePage = page.locator(".qicore-route-panel.is-active .oyscat-page");
-    await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
-    assert.match(await activePage.locator("h1").innerText(), /想造就造\s*所想即所得/);
-    assert.equal(await activePage.getByRole("heading", { name: "Oyscat 造物工作台" }).count(), 1);
-    assert.equal(await activePage.getByRole("heading", { name: "Oyscat 电子模块" }).count(), 1);
-    assert.equal(await activePage.locator("#faq details").count(), 5);
-    assert.equal(await activePage.locator("#beta").count(), 0);
-  });
-});
-
-test("Oyscat English mode localizes process labels", async () => {
-  await withPage(async (page) => {
-    await page.locator(".locale-toggle").click();
-    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
-    await page.waitForURL("**/oyscat");
-
-    const activePage = page.locator(".qicore-route-panel.is-active .oyscat-page");
-    await page.waitForFunction(() => document.title === "Oyscat Product | QiCore");
-    await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
-    assert.equal(await page.title(), "Oyscat Product | QiCore");
-    assert.equal(await activePage.locator("#faq-title").innerText(), "FAQ");
-    assert.equal(await activePage.getByText("常见问题", { exact: true }).isVisible(), false);
   });
 });
 
@@ -911,25 +880,6 @@ test("about layout styles survive careers to home navigation", async () => {
   });
 });
 
-test("cached product images open and close without trapping page scroll", async () => {
-  await withPage(async page => {
-    await page.locator('.marketing-nav-links a[href="/about"]').click();
-    await page.waitForURL("**/about");
-    await page.locator('.marketing-nav-links a[href="/oyscat"]').click();
-    await page.waitForURL("**/oyscat");
-    await page.waitForFunction(() => document.querySelector(".qicore-route-content")?.classList.contains("is-idle"));
-    const image = page.locator('.qicore-route-panel.is-active [data-product-image]').first();
-    const previousOverflow = await page.evaluate(() => document.body.style.overflow);
-    await image.click();
-    await page.locator('dialog[open]').waitFor();
-    await page.keyboard.press("Escape");
-    assert.equal(await page.locator('dialog[open]').count(), 0);
-    assert.equal(await page.evaluate(() => document.body.style.overflow), previousOverflow);
-    assert.equal(await image.evaluate(e => e === document.activeElement), true);
-  });
-});
-
-
 test("homepage small wheel inputs remain native instead of forcing a full-screen landing", async () => {
   await withPage(async page => {
     for (const reducedMotion of ["no-preference", "reduce"]) {
@@ -965,7 +915,7 @@ test("homepage native scrolling continues from partial hero positions and suppor
 test("all page headers use the homepage light surface", async () => {
   await withPage(async page => {
     await page.emulateMedia({ reducedMotion: "reduce" });
-    for (const route of ["/", "/oyscat", "/news", "/about"]) {
+    for (const route of ["/", "/news", "/about", "/careers"]) {
       await page.goto(server.baseURL + route, { waitUntil: "domcontentloaded" });
       const header = page.locator("[data-site-header]");
       await header.waitFor();

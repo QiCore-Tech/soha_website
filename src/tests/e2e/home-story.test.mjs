@@ -232,7 +232,7 @@ const news = page.locator('[data-home-section="news"]');
       await waitMode(page, "full");
       await page.evaluate(() => { window.homeStoryDocument = "preserved"; });
       for (let index = 0; index < 10; index++) {
-        const path = ["/about", "/oyscat", "/news"][index % 3];
+        const path = ["/about", "/news"][index % 2];
         await page.evaluate(href => window.dispatchEvent(new CustomEvent("qicore:navigate", { cancelable: true, detail: { href } })), path);
         await page.waitForURL(`**${path}`);
         await page.locator(".qicore-route-panel.is-active").waitFor();

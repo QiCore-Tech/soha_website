@@ -8,7 +8,7 @@ test("mobile header is compact with accessible controls and unchanged desktop si
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
-    for (const route of ["/", "/news", "/about", "/oyscat"]) {
+    for (const route of ["/", "/news", "/about", "/careers"]) {
       await page.goto(server.baseURL + route, { waitUntil: "domcontentloaded" });
       const header = page.locator('[data-header-ready="true"]');
       await header.waitFor();

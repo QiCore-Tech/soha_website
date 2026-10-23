@@ -64,7 +64,7 @@
    16:9 one, where the content cap below already leaves wide margins. */
 :root {
   --site-gutter: max(1.5rem, env(safe-area-inset-left), env(safe-area-inset-right));
-  /* Widest content column (home, /oyscat, footer); --site-content-max adds the gutters. */
+  /* Widest content column (home and content pages); --site-content-max adds the gutters. */
   --site-content-wide: 1552px;
 }
 @media (min-width: 768px) {

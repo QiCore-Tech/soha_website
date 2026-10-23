@@ -60,40 +60,6 @@ export const websiteStructuredData = {
   ]
 } as const;
 
-export const oyscatStructuredData = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Product",
-      "@id": `${SEO_ORIGIN}/oyscat#product`,
-      name: "Oyscat",
-      alternateName: ["Oyscat 官网", "Oyscat Workspace", "Oyscat AI 造物系统"],
-      description: seoCopy.productDescription.zh,
-      image: [`${SEO_ORIGIN}${SHARE_IMAGE.path}`],
-      url: `${SEO_ORIGIN}/oyscat`,
-      category: ["AI 造物系统", "电子模块", "智能硬件", "生成式 AI 设计"],
-      brand: { "@id": ORGANIZATION_ID },
-      manufacturer: { "@id": ORGANIZATION_ID },
-      additionalProperty: [
-        { "@type": "PropertyValue", name: "产品状态", value: "封闭内测" },
-        { "@type": "PropertyValue", name: "运行平台", value: "Web + 实体电子模块" },
-        { "@type": "PropertyValue", name: "核心能力", value: "AI 建模、实时仿真、电子模块编程、3D 打印" }
-      ]
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": `${SEO_ORIGIN}/oyscat#workspace`,
-      name: "Oyscat Workspace",
-      applicationCategory: "DesignApplication",
-      operatingSystem: "Web",
-      description: "Oyscat Workspace 支持自然语言生成模型、结构拼搭、控制程序编写与实时仿真，并可衔接实体电子模块完成造物。",
-      url: `${SEO_ORIGIN}/oyscat`,
-      isPartOf: { "@id": `${SEO_ORIGIN}/oyscat#product` },
-      publisher: { "@id": ORGANIZATION_ID }
-    }
-  ]
-} as const;
-
 type PageMetadataInput = {
   title: string;
   description: string;

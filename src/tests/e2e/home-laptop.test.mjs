@@ -420,8 +420,8 @@ for (const engine of engines) {
     await withPage(engine, async page => {
       await prepare(page);
       await sample(page, 1);
-      await page.locator("[data-home-workspace-copy] a[href='/oyscat']").click();
-      await page.waitForURL("**/oyscat");
+      await page.locator('[data-site-header] nav a[href="/about"]').click();
+      await page.waitForURL("**/about");
       await page.locator('[data-site-header] nav a[href="/"]').click();
       await page.waitForURL(server.baseURL + "/");
       await prepare(page);

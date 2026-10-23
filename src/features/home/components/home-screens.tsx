@@ -53,15 +53,9 @@ function scrollToNextScreen(event: MouseEvent<HTMLAnchorElement>) {
   target.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
 }
 
-function openRelaxPage(event: MouseEvent<HTMLElement>) {
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  if (event.target instanceof Element && event.target.closest("a, button, input, textarea, select, [role='button']")) return;
-  window.location.assign("/relax");
-}
-
 function HeroScreen() {
   return (
-    <section id="home-hero" data-home-section="hero" aria-labelledby="home-hero-heading" className={`${screen} text-white`} onDoubleClick={openRelaxPage}>
+    <section id="home-hero" data-home-section="hero" aria-labelledby="home-hero-heading" className={`${screen} text-white`}>
       <div aria-hidden="true" className="absolute inset-0 bg-[#050705]" />
       <div
         aria-hidden="true"
