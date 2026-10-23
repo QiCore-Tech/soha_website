@@ -12,11 +12,7 @@
   "rewrites": [
     { "source": "/about", "destination": "/about.html" },
     { "source": "/news", "destination": "/news.html" },
-    { "source": "/team", "destination": "/team.html" },
-    { "source": "/careers", "destination": "/careers.html" },
-    { "source": "/oyscat", "destination": "/oyscat.html" },
-    { "source": "/relax", "destination": "/relax.html" },
-    { "source": "/style-lab", "destination": "/style-lab.html" }
+    { "source": "/careers", "destination": "/careers.html" }
   ],
   "redirects": [
     {

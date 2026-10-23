@@ -3,9 +3,6 @@ import { messages } from "@/i18n/messages";
 
 import { syncLocaleDocument } from "@/i18n/dom";
 import { getLocale } from "@/stores/locale-store";
-import { openProductImage } from "@/features/oyscat/lib/product-image-viewer";
-import { prepareOyscatArrival } from "@/features/oyscat/lib/oyscat-arrival";
-import { startLogoLoop } from "@/features/oyscat/lib/logo-loop-controller";
 import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type {
@@ -50,10 +47,6 @@ type TransitionKind =
 
 export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   const pathname = usePathname();
-  const closeImage = useRef<(() => void) | null>(null);
-  useEffect(() => () => { closeImage.current?.(); }, [pathname]);
-  const gatewayArrival = useRef(false);
-  const cancelArrival = useRef<(() => void) | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const transitionTimerRef = useRef<number | null>(null);
   const transitionFrameRef = useRef<number | null>(null);
@@ -72,12 +65,6 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
 
   useLayoutEffect(() => { syncLocaleDocument(getLocale()); }, [activeFrame]);
-  useEffect(() => {
-    if (!activeFrame.html || activeFrame.pathname !== pathname) return;
-    const loops = contentRef.current?.querySelectorAll<HTMLElement>(".qicore-route-panel.is-active [data-logo-loop]");
-    const cleanups = Array.from(loops ?? [], startLogoLoop);
-    return () => cleanups.forEach(cleanup => cleanup());
-  }, [activeFrame.html, activeFrame.pathname, pathname]);
   const [outgoingFrame, setOutgoingFrame] = useState<RouteSnapshot | null>(null);
   const [transitionKind, setTransitionKind] = useState<TransitionKind>("idle");
   const isContentRoute = pathname !== "/";
@@ -143,13 +130,6 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
 
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
 
-    if (gatewayArrival.current && pathname === "/oyscat") {
-      gatewayArrival.current = false;
-      setOutgoingFrame(null);
-      setTransitionKind("idle");
-      return;
-    }
-
     const duration = nextTransition === "from-home" ? 2050 : nextTransition === "between-content" ? 1800 : 850;
     const beginTransition = () => {
       setTransitionKind(nextTransition);
@@ -174,7 +154,6 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     if (transitionTimerRef.current) window.clearTimeout(transitionTimerRef.current);
     if (transitionFrameRef.current) window.cancelAnimationFrame(transitionFrameRef.current);
     if (heroPointerFrameRef.current) window.cancelAnimationFrame(heroPointerFrameRef.current);
-    cancelArrival.current?.();
   }, []);
 
   useEffect(() => {
@@ -241,11 +220,6 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
       if (!href || !isQiCoreRoute(href) || href === window.location.pathname) return;
 
       event.preventDefault();
-      if (routeEvent.detail.gateway) {
-        gatewayArrival.current = true;
-        cancelArrival.current?.();
-        cancelArrival.current = prepareOyscatArrival();
-      }
       void (async () => {
         try {
           if (href !== "/") await loadQiCoreRouteHtml(href);
@@ -422,31 +396,9 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     entry.open = !entry.open;
   }
 
-  function handleTestimonialInteraction(target: EventTarget | null) {
-    if (!(target instanceof Element)) return;
-    const trigger = target.closest<HTMLElement>("[data-review-trigger]");
-    if (!trigger || !trigger.closest(".qicore-route-panel.is-active")) return;
-    const section = trigger.closest<HTMLElement>("[data-testimonials]");
-    const id = trigger.dataset.reviewId;
-    if (!section || !id) return;
-    const panels = Array.from(section.querySelectorAll<HTMLElement>("[data-review-panel]"));
-    const selectedPanel = panels.find(node => node.dataset.reviewPanel === id);
-    if (!selectedPanel) return;
-
-    section.querySelectorAll<HTMLElement>("[data-review-trigger]").forEach(node => {
-      const isSelected = node === trigger;
-      node.dataset.selected = isSelected ? "true" : "false";
-      node.setAttribute("aria-pressed", String(isSelected));
-    });
-    panels.forEach(node => {
-      node.hidden = node !== selectedPanel;
-    });
-  }
-
   function handleContentClick(event: ReactMouseEvent<HTMLDivElement>) {
     handleNewsEntryInteraction(event);
     handleFilmInteraction(event.target);
-    handleTestimonialInteraction(event.target);
     toggleHeroInteraction(event.target);
   }
 
@@ -459,21 +411,13 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
   }
 
   return (
-    <div className={`qicore-route-shell${hasVisibleContent ? " is-content" : " is-home"}${isContentRoute ? "" : " is-canvas-interactive"}${pathname === "/oyscat" ? " is-oyscat-content" : ""}${transitionKind === "to-home" ? " is-returning-home" : ""}`}>
+    <div className={`qicore-route-shell${hasVisibleContent ? " is-content" : " is-home"}${isContentRoute ? "" : " is-canvas-interactive"}${transitionKind === "to-home" ? " is-returning-home" : ""}`}>
       <div className="qicore-persistent-canvas">{canvas}</div>
       <div
         className={`qicore-route-content is-${transitionKind}`}
         ref={contentRef}
         onPointerMove={handlePointerMove}
         onPointerLeave={resetPointerTilt}
-        onClickCapture={event => {
-          const trigger = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-product-image]") : null;
-          if (!trigger) return;
-          event.preventDefault();
-          event.stopPropagation();
-          closeImage.current?.();
-          closeImage.current = openProductImage(trigger);
-        }}
         onClick={handleContentClick}
         onKeyDown={handleContentKeyDown}
       >
