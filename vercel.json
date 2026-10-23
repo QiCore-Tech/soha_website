@@ -12,7 +12,8 @@
   "rewrites": [
     { "source": "/about", "destination": "/about.html" },
     { "source": "/news", "destination": "/news.html" },
-    { "source": "/careers", "destination": "/careers.html" }
+    { "source": "/careers", "destination": "/careers.html" },
+    { "source": "/relax", "destination": "/relax.html" }
   ],
   "redirects": [
     {
