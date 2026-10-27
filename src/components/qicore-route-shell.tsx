@@ -99,6 +99,8 @@ export function QiCoreRouteShell({ canvas, children }: QiCoreRouteShellProps) {
     const activePanel = contentRef.current?.querySelector<HTMLElement>(".qicore-route-panel.is-active");
     if (!activePanel) return;
 
+    // News stories always enter collapsed, so the cached HTML never keeps a reader's expanded entry.
+    activePanel.querySelectorAll<HTMLDetailsElement>(".news-entry[open]").forEach(entry => { entry.open = false; });
     activeSnapshotRef.current = {
       pathname,
       html: activePanel.innerHTML,

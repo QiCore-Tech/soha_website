@@ -323,6 +323,38 @@
     "value29": {
       "zh": "29",
       "en": "29"
+    },
+    "october222026": {
+      "zh": "2026.10.22",
+      "en": "October 22, 2026"
+    },
+    "press": {
+      "zh": "媒体动态",
+      "en": "Press"
+    },
+    "qicoreFeaturedOnTheCoverOfMitTechnologyReviewChina": {
+      "zh": "气核登上《麻省理工科技评论》中文网封面",
+      "en": "QiCore Featured on the Cover of MIT Technology Review China"
+    },
+    "jakeLuoFounderOfQicoreIntroducesGenpi": {
+      "zh": "创始人引领意图驱动的造物新范式，并讲述首款产品 Oyscat 如何帮助人们把想法变为现实。",
+      "en": "Jake Luo, founder of QiCore, introduces Generative Physical Instantiation (GenPI) and explains how Oyscat, the first product built on it, helps people turn their ideas into reality."
+    },
+    "jakeLuoInterviewTitle": {
+      "zh": "对话气核科技罗世豪：他想把钢铁侠的“超能力”，做成人人能用的工具",
+      "en": "In Conversation with QiCore's Jake Luo: He Wants to Turn Iron Man's “Superpower” into a Tool Anyone Can Use"
+    },
+    "readTheFullArticle": {
+      "zh": "阅读原文",
+      "en": "Read the full article"
+    },
+    "deeptechWechatAccount": {
+      "zh": "DeepTech 深科技公众号",
+      "en": "DeepTech on WeChat"
+    },
+    "mitTechnologyReviewChina": {
+      "zh": "《麻省理工科技评论》中文网",
+      "en": "MIT Technology Review China"
     }
   },
   "oyscat": {
