@@ -6,13 +6,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import styles from "./marketing-footer.module.css";
 
 const socialPlatforms = [
-  { platform: "WeChat", label: messages.marketingFooter.weChat, href: "https://mp.weixin.qq.com/s/wSbBTSHUgdm0Ayuk601eRw" },
-  { platform: "Bilibili", label: messages.marketingFooter.bilibili, href: "https://space.bilibili.com/3745036743215474" },
-  { platform: "Xiaohongshu", label: messages.marketingFooter.xiaohongshu, href: "https://xhslink.cn/m/85xQ3j0HIh4" },
   { platform: "Facebook", label: messages.marketingFooter.facebook, href: "https://www.facebook.com/share/1baynW2wi6/" },
   { platform: "Instagram", label: messages.marketingFooter.instagram, href: "https://www.instagram.com/oyscat_official?srtk=MTJjcmYwOWozbDZqeQ==" },
-  { platform: "Twitter / X", label: messages.marketingFooter.twitter, href: "https://x.com/Oyscat" },
   { platform: "YouTube", label: messages.marketingFooter.youTube, href: "https://www.youtube.com/@OyscatOfficial/videos" },
+  { platform: "Twitter / X", label: messages.marketingFooter.twitter, href: "https://x.com/Oyscat" },
 ] as const;
 
 export function MarketingFooter() {
@@ -37,38 +34,28 @@ export function MarketingFooter() {
               />
             </a>
             <p className="mt-1! font-mono text-xs font-medium text-zinc-500">{messages.about.makeSmart.zh}</p>
-            {/* Temporarily hidden; remove `hidden` to restore the social links. */}
-            <div className="mt-3! hidden">
+            <div className="mt-3!">
               <p className="font-mono text-xs text-zinc-500"><Bi {...messages.marketingFooter.socialMedia} /></p>
               <TooltipProvider delay={150}>
                 <ul className="mt-1! flex flex-wrap gap-1">
-                  {socialPlatforms.map((item) => {
-                    const { platform, label } = item;
-                    const href = "href" in item ? item.href : undefined;
-                    // Platforms without an account yet stay as disabled "coming soon" buttons.
-                    const zh = href ? label.zh : `${label.zh} · ${messages.marketingFooter.comingSoon.zh}`;
-                    const en = href ? label.en : `${label.en} · ${messages.marketingFooter.comingSoon.en}`;
-                    return (
-                      <li key={platform}>
-                        <Tooltip>
-                          <TooltipTrigger
-                            {...(href
-                              ? { render: <a href={href} target="_blank" rel="noopener noreferrer" /> }
-                              : { type: "button" as const, "aria-disabled": true })}
-                            aria-label={zh}
-                            data-aria-label-zh={zh}
-                            data-aria-label-en={en}
-                            className={styles.socialButton}>
-                            <FooterSocialIcon platform={platform} />
-                          </TooltipTrigger>
-                          <TooltipContent side="top" sideOffset={8}>
-                            <span data-lang="zh">{zh}</span>
-                            <span data-lang="en">{en}</span>
-                          </TooltipContent>
-                        </Tooltip>
-                      </li>
-                    );
-                  })}
+                  {socialPlatforms.map(({ platform, label, href }) => (
+                    <li key={platform}>
+                      <Tooltip>
+                        <TooltipTrigger
+                          render={<a href={href} target="_blank" rel="noopener noreferrer" />}
+                          aria-label={label.zh}
+                          data-aria-label-zh={label.zh}
+                          data-aria-label-en={label.en}
+                          className={styles.socialButton}>
+                          <FooterSocialIcon platform={platform} />
+                        </TooltipTrigger>
+                        <TooltipContent side="top" sideOffset={8}>
+                          <span data-lang="zh">{label.zh}</span>
+                          <span data-lang="en">{label.en}</span>
+                        </TooltipContent>
+                      </Tooltip>
+                    </li>
+                  ))}
                 </ul>
               </TooltipProvider>
             </div>
