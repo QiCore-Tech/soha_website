@@ -11,8 +11,17 @@ import { useLocale } from "@/hooks/use-locale";
 import { localeLabels } from "@/i18n/config";
 import { pageTitles } from "@/i18n/messages";
 
-const navItems = [
+type NavItem = {
+  href: string;
+  zh: string;
+  en: string;
+  /** Product site lives outside this app; open it in a new tab. */
+  external?: boolean;
+};
+
+const navItems: NavItem[] = [
   { href: "/", zh: messages.marketingNav.home.zh, en: messages.marketingNav.home.en },
+  { href: "https://www.oyscat.com/", zh: messages.marketingNav.product.zh, en: messages.marketingNav.product.en, external: true },
   { href: "/news", zh: messages.marketingNav.news.zh, en: messages.marketingNav.news.en },
   { href: "/about", zh: messages.marketingNav.aboutUs.zh, en: messages.marketingNav.aboutUs.en },
   { href: "/careers", zh: messages.marketingNav.joinUs.zh, en: messages.marketingNav.joinUs.en }
@@ -136,7 +145,7 @@ export function MarketingNav() {
         </a>
         <nav id="home-navigation" data-menu-open={isMenuOpen} aria-label={messages.marketingNav.mainNavigation.zh} data-aria-label-zh={messages.marketingNav.mainNavigation.zh} data-aria-label-en={messages.marketingNav.mainNavigation.en} className={`marketing-nav-links absolute! inset-x-0! top-full! flex-col! items-stretch! gap-1! rounded-none! border-0! bg-black/80! p-4! text-white! opacity-100! shadow-lg! backdrop-blur-xl! transform-none! md:static! md:flex! md:flex-row! md:items-center! md:gap-2! md:bg-transparent! md:p-0! md:shadow-none! md:backdrop-blur-none! ${isMenuOpen ? "flex! pointer-events-auto!" : "hidden! pointer-events-none! md:pointer-events-auto!"}`}>
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} aria-current={pathname === item.href ? "page" : undefined} onClick={(event) => navigateToDocument(event, item.href)} className={`flex min-h-11 items-center justify-center rounded-lg! px-4! py-3! text-sm! md:min-h-10! md:py-2! no-underline! transition hover:bg-white/10! focus-visible:outline-2! focus-visible:outline-white! ${pathname === item.href ? "bg-white/10! font-medium! text-white!" : "text-white/75!"}`}>
+            <a key={item.href} href={item.href} aria-current={!item.external && pathname === item.href ? "page" : undefined} target={item.external ? "_blank" : undefined} rel={item.external ? "noopener noreferrer" : undefined} onClick={item.external ? () => setIsMenuOpen(false) : (event) => navigateToDocument(event, item.href)} className={`flex min-h-11 items-center justify-center rounded-lg! px-4! py-3! text-sm! md:min-h-10! md:py-2! no-underline! transition hover:bg-white/10! focus-visible:outline-2! focus-visible:outline-white! ${!item.external && pathname === item.href ? "bg-white/10! font-medium! text-white!" : "text-white/75!"}`}>
               <span data-lang="zh">{item.zh}</span><span data-lang="en">{item.en}</span>
             </a>
           ))}

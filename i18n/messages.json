@@ -1136,6 +1136,10 @@
     }
   },
   "marketingNav": {
+    "product": {
+      "zh": "产品",
+      "en": "Product"
+    },
     "joinUs": {
       "zh": "加入我们",
       "en": "Join us"

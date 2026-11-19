@@ -1631,6 +1631,7 @@ body.is-luon-active .marketing-nav.is-qicore-home .locale-toggle i { background:
     padding: 10px 14px;
     border-radius: 11px;
     color: rgba(255, 255, 255, 0.68);
+    font-family: var(--font-display);
     font-size: 0.76rem;
     font-weight: 500;
     letter-spacing: 0.02em;

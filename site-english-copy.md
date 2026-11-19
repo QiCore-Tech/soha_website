@@ -16,6 +16,7 @@ Note: Brand names, numbers, dates, and technical terms are preserved as written.
 | Location | English copy |
 | --- | --- |
 | Navigation | Home |
+| Navigation | Product |
 | Navigation | News |
 | Navigation | About us |
 | Navigation | Join us |
@@ -29,9 +30,6 @@ Note: Brand names, numbers, dates, and technical terms are preserved as written.
 | Location | English copy |
 | --- | --- |
 | Column heading | Social media |
-| Social platform label | WeChat |
-| Social platform label | Bilibili |
-| Social platform label | Xiaohongshu |
 | Social platform label | Facebook |
 | Social platform label | Instagram |
 | Social platform label | Twitter / X |
