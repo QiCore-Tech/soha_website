@@ -67,6 +67,7 @@ QiCore 的内容页共享同一块画板；Oyscat 产品入口由首页产品板
 - **TypeScript**：约束页面、交互和视觉组件的边界。
 - **Three.js / React Three Fiber**：用于首页积木画板和部分空间化视觉。
 - **CSS-first visual system**：纸张、网格、卡片、转场和响应式布局主要由 CSS 驱动。
+- **字体角色**：Outfit（英文标题、副标题、章节/板块标题、导航）、Objectivity（英文正文）、HarmonyOS Sans SC（中文正文与中文标题）、Geist Mono（标签、注释、序号与元信息）。角色定义在 `src/app/fonts.css`，网页字体由 `src/scripts/build-fonts.py` 从 `public/font/` 生成子集。
 - **Static Export**：生产环境输出静态页面，适合部署到 Vercel，降低运行时依赖。
 - **In-page bilingual content**：中英文内容共存，通过 `data-lang` 切换，避免语言切换时先闪过另一种语言。
 
